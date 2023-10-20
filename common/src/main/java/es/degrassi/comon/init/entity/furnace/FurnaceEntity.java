@@ -27,7 +27,6 @@ public abstract class FurnaceEntity extends BlockEntity {
   public final ContainerData data;
   public ProgressStorage progressStorage;
   public FurnaceRecipe recipe;
-  public int energyReq = 10;
 
   public FurnaceEntity(
     BlockEntityType<?> blockEntityType,

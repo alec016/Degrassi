@@ -29,8 +29,11 @@ public class JEIDegrassiPlugin implements IModPlugin {
 
   @Override
   public void registerRecipeCatalysts(@NotNull IRecipeCatalystRegistration registration) {
-    registration.addRecipeCatalyst(
-      new ItemStack(BlockRegister.IRON_FURNACE_BLOCK.get()),
+    registerFurnaceCatalysts(registration);
+  }
+
+  private void registerFurnaceCatalysts(@NotNull IRecipeCatalystRegistration registration) {registration.addRecipeCatalyst(
+    new ItemStack(BlockRegister.IRON_FURNACE_BLOCK.get()),
       FURNACE_TYPE,
       RecipeTypes.SMELTING,
       RecipeTypes.BLASTING,

@@ -31,10 +31,21 @@ public class FurnaceRecipe implements Recipe<SimpleContainer> {
     NonNullList<Ingredient> ingredients,
     int time
   ) {
+    this(id, output, ingredients, time, 10);
+  }
+
+  public FurnaceRecipe (
+    ResourceLocation id,
+    ItemStack output,
+    NonNullList<Ingredient> ingredients,
+    int time,
+    int energyRequired
+  ) {
     this.id = id;
     this.output = output;
     this.recipeItems = ingredients;
     this.time = time;
+    this.energyRequired = energyRequired;
   }
 
   @Override
@@ -82,14 +93,21 @@ public class FurnaceRecipe implements Recipe<SimpleContainer> {
     return time;
   }
 
+  public int getEnergyRequired() {
+    return this.energyRequired;
+  }
+
+  public void setEnergyRequired(int energyRequired) {
+    this.energyRequired = energyRequired;
+  }
+
   public boolean isModified() {
     return this.modified;
   }
 
-  public FurnaceRecipe setTime(int time) {
+  public void setTime(int time) {
     this.time = time;
     this.modified = true;
-    return this;
   }
 
   public static class Type implements RecipeType<FurnaceRecipe> {

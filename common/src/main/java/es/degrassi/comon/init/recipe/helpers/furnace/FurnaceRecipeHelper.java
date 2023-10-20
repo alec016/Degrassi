@@ -18,11 +18,11 @@ public class FurnaceRecipeHelper {
   public static final Map<ResourceLocation, FurnaceRecipe> recipesMap = new HashMap<>();
 
   public static void extractEnergy(@NotNull FurnaceEntity entity) {
-    entity.ENERGY_STORAGE.setEnergy(entity.ENERGY_STORAGE.getEnergyStored() - entity.energyReq);
+    entity.ENERGY_STORAGE.setEnergy(entity.ENERGY_STORAGE.getEnergyStored() - entity.recipe.getEnergyRequired());
   }
 
   public static boolean hasEnoughEnergy(@NotNull FurnaceEntity entity) {
-    return entity.ENERGY_STORAGE.getEnergyStored() >= entity.energyReq;
+    return entity.ENERGY_STORAGE.getEnergyStored() >= entity.recipe.getEnergyRequired();
   }
 
   public static boolean canInsertItemIntoOutputSlot(@NotNull SimpleContainer inventory, @NotNull ItemStack stack) {
