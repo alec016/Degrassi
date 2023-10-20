@@ -58,6 +58,17 @@ public class FurnaceRecipeHelper {
             recipe.setTime(recipe.getTime() * 10 / 100);
           }
         }
+        if (!recipe.isEnergyModified()) {
+          if(name.equals(Component.translatable("block.degrassi.gold_furnace").getString())) {
+            recipe.setEnergyRequired(recipe.getEnergyRequired() * 120 / 100);
+          } else if (name.equals(Component.translatable("block.degrassi.diamond_furnace").getString())) {
+            recipe.setEnergyRequired(recipe.getEnergyRequired() * 140 / 100);
+          } else if (name.equals(Component.translatable("block.degrassi.emerald_furnace").getString())) {
+            recipe.setEnergyRequired(recipe.getEnergyRequired() * 160 / 100);
+          } else if (name.equals(Component.translatable("block.degrassi.netherite_furnace").getString())) {
+            recipe.setEnergyRequired(recipe.getEnergyRequired() * 190 / 100);
+          }
+        }
         entity.recipe = recipe;
       }
     });
