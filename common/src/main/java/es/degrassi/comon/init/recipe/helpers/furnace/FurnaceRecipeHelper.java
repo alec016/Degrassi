@@ -45,7 +45,7 @@ public class FurnaceRecipeHelper {
     recipes.forEach(recipe -> {
       if (recipe.getIngredients().get(0).test(inventory.getItem(2))) {
         String name = entity.getName().getString();
-        if (!recipe.isModified()) {
+        if (!recipe.isTimeModified()) {
           if (name.equals(Component.translatable("block.degrassi.iron_furnace").getString())) {
             recipe.setTime(recipe.getTime() * 95 / 100);
           } else if(name.equals(Component.translatable("block.degrassi.gold_furnace").getString())) {

@@ -22,7 +22,8 @@ public class FurnaceRecipe implements Recipe<SimpleContainer> {
   private final ItemStack output;
   private final NonNullList<Ingredient> recipeItems;
   private int time;
-  private boolean modified;
+  private boolean timeModified = false;
+  private boolean energyModified = false;
   private int energyRequired;
 
   public FurnaceRecipe (
@@ -99,15 +100,20 @@ public class FurnaceRecipe implements Recipe<SimpleContainer> {
 
   public void setEnergyRequired(int energyRequired) {
     this.energyRequired = energyRequired;
+    this.energyModified = true;
   }
 
-  public boolean isModified() {
-    return this.modified;
+  public boolean isEnergyModified() {
+    return this.energyModified;
+  }
+
+  public boolean isTimeModified() {
+    return this.timeModified;
   }
 
   public void setTime(int time) {
     this.time = time;
-    this.modified = true;
+    this.timeModified = true;
   }
 
   public static class Type implements RecipeType<FurnaceRecipe> {
