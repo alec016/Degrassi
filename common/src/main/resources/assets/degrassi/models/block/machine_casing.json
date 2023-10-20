@@ -1,0 +1,8 @@
+{
+	"parent": "block/cube_all",
+	"texture_size": [32, 32],
+	"textures": {
+		"all": "degrassi:block/machine_casing"
+	},
+  "render_type": "translucent"
+}

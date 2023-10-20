@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ddd",
+    "dfd",
+    "ddd"
+  ],
+  "key": {
+    "d": {
+      "item": "minecraft:diamond"
+    },
+    "f": {
+      "item": "degrassi:gold_furnace"
+    }
+  },
+  "result": {
+    "item": "degrassi:diamond_furnace"
+  }
+}

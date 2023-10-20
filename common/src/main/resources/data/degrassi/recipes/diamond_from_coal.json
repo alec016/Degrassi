@@ -1,0 +1,12 @@
+{
+  "type": "degrassi:furnace",
+  "ingredients": [
+    {
+      "item": "minecraft:coal"
+    }
+  ],
+  "output": {
+    "item": "minecraft:diamond"
+  },
+  "time": 78
+}

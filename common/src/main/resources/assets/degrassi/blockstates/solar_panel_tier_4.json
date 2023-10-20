@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "degrassi:block/solar_panel_tier_4"
+    },
+    "facing=south": {
+      "model": "degrassi:block/solar_panel_tier_4",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "degrassi:block/solar_panel_tier_4",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "degrassi:block/solar_panel_tier_4",
+      "y": 90
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "itemGroup.degrassi.common": "Degrassi",
+  "itemGroup.degrassi.machines": "Maquinaria Degrassi",
+  "item.degrassi.gold_coin": "Moneda de Oro",
+  "item.degrassi.efficiency_upgrade": "Mejora de Eficiencia",
+  "item.degrassi.transfer_upgrade": "Mejora de Transferencia",
+  "item.degrassi.capacity_upgrade": "Mejora de Capacidad",
+  "item.degrassi.generation_upgrade": "Mejora de Generacion",
+
+  "block.degrassi.machine_casing": "Machine Casing",
+  "block.degrassi.solar_panel_tier_1": "Panel Solar Tier I",
+  "block.degrassi.solar_panel_tier_2": "Panel Solar Tier II",
+  "block.degrassi.solar_panel_tier_3": "Panel Solar Tier III",
+  "block.degrassi.solar_panel_tier_4": "Panel Solar Tier IV",
+  "block.degrassi.solar_panel_tier_5": "Panel Solar Tier V",
+  "block.degrassi.solar_panel_tier_6": "Panel Solar Tier VI",
+  "block.degrassi.solar_panel_tier_7": "Panel Solar Tier VII",
+  "block.degrassi.solar_panel_tier_8": "Panel Solar Tier VIII",
+
+  "block.degrassi.iron_furnace": "Horno de Hierro",
+  "block.degrassi.gold_furnace": "Horno de Oro",
+  "block.degrassi.diamond_furnace": "Horno de Diamante",
+  "block.degrassi.emerald_furnace": "Horno de Esmeralda",
+  "block.degrassi.netherite_furnace": "Horno de Netherite",
+
+  "degrassi.gui.element.energy.tooltip": "Energia: %s%s/%s%s",
+  "degrassi.gui.element.energy.stored": "Almacenada: %s%s/%s%s",
+  "degrassi.gui.element.energy.generation": "Generando: %s%s/t",
+  "degrassi.gui.element.efficiency": "Eficiencia: %s",
+  "degrassi.gui.element.fluid.tooltip": ": %smB/%smB",
+  "degrassi.gui.element.fluid.empty": "Vacio: %smB/%smB",
+  "degrassi.gui.element.transfer": "Capacidad de traspaso: %s%s/t",
+
+  "degrassi.machine.sp.tooltip": "Genera %s%s/t",
+
+  "degrassi.upgrades.capacity.tooltips": "Aumenta la capacidad en x%s",
+  "degrassi.upgrades.efficiency.tooltips": "Aumenta la eficiencia en x%s",
+  "degrassi.upgrades.generation.tooltips": "Aumenta la generacion en x%s",
+  "degrassi.upgrades.transfer.tooltips": "Aumenta la transferencia en x%s",
+  "degrassi.upgrades.type": "Tipo actual: %s",
+
+  "unit.energy.forge": "FE"
+}

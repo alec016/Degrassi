@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ggg",
+    "gfg",
+    "ggg"
+  ],
+  "key": {
+    "g": {
+      "item": "minecraft:gold_ingot"
+    },
+    "f": {
+      "item": "degrassi:iron_furnace"
+    }
+  },
+  "result": {
+    "item": "degrassi:gold_furnace"
+  }
+}

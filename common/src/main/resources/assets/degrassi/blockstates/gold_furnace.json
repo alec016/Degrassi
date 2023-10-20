@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "degrassi:block/gold_furnace"
+    },
+    "facing=south": {
+      "model": "degrassi:block/gold_furnace",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "degrassi:block/gold_furnace",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "degrassi:block/gold_furnace",
+      "y": 90
+    }
+  }
+}
