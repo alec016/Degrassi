@@ -38,6 +38,7 @@ public class IronFurnace extends FurnaceBlock {
   @Override
   public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
     if(this.entity == null) this.entity = new IronFurnaceEntity(pos, state);
+    this.entity.delegate = this;
     return this.entity;
   }
 

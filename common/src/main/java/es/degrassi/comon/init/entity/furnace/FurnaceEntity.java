@@ -1,10 +1,13 @@
 package es.degrassi.comon.init.entity.furnace;
 
+import es.degrassi.comon.init.block.furnace.FurnaceBlock;
 import es.degrassi.comon.init.recipe.furnace.FurnaceRecipe;
 import es.degrassi.comon.init.recipe.helpers.furnace.FurnaceRecipeHelper;
 import es.degrassi.comon.util.storage.AbstractEnergyStorage;
+import es.degrassi.comon.util.storage.ExperienceStorage;
 import es.degrassi.comon.util.storage.ProgressStorage;
 import es.degrassi.network.furnace.FurnaceEnergyPacket;
+import es.degrassi.network.furnace.FurnaceExperiencePacket;
 import es.degrassi.network.furnace.FurnaceProgressPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -12,21 +15,28 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Containers;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public abstract class FurnaceEntity extends BlockEntity {
   public ItemStackHandler itemHandler;
   public AbstractEnergyStorage ENERGY_STORAGE;
   private final Component name;
   public final ContainerData data;
+
+  public FurnaceBlock delegate;
   public ProgressStorage progressStorage;
   public FurnaceRecipe recipe;
+  public ExperienceStorage xp;
 
   public FurnaceEntity(
     BlockEntityType<?> blockEntityType,
@@ -83,6 +93,21 @@ public abstract class FurnaceEntity extends BlockEntity {
         if (level != null && !level.isClientSide())
           new FurnaceProgressPacket(this.progress, this.maxProgress, getBlockPos())
             .sendToChunkListeners(level.getChunkAt(getBlockPos()));
+      }
+    };
+
+    this.xp = new ExperienceStorage() {
+      @Override
+      public void onExperienceChanged() {
+        setChanged();
+        if(level != null && !level.isClientSide() && level.getServer() != null) {
+          if (this.xp >= 9843) {
+            ExperienceOrb.award(Objects.requireNonNull(level.getServer().getLevel(level.dimension())), Vec3.atCenterOf(pos), (int) Math.floor(this.xp));
+            extractXp((float) Math.floor(xp));
+          }
+          new FurnaceExperiencePacket(this.xp, pos)
+            .sendToChunkListeners(level.getChunkAt(getBlockPos()));
+        }
       }
     };
   }
@@ -182,5 +207,9 @@ public abstract class FurnaceEntity extends BlockEntity {
   @Override
   public ClientboundBlockEntityDataPacket getUpdatePacket() {
     return ClientboundBlockEntityDataPacket.create(this);
+  }
+
+  public void setXp(float xp) {
+    this.xp.setXp(xp);
   }
 }

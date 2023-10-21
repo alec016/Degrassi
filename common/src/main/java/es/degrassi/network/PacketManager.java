@@ -4,6 +4,7 @@ import dev.architectury.networking.simple.MessageType;
 import dev.architectury.networking.simple.SimpleNetworkManager;
 import es.degrassi.Degrassi;
 import es.degrassi.network.furnace.FurnaceEnergyPacket;
+import es.degrassi.network.furnace.FurnaceExperiencePacket;
 import es.degrassi.network.furnace.FurnaceItemPacket;
 import es.degrassi.network.furnace.FurnaceProgressPacket;
 import es.degrassi.network.panel.PanelEfficiencyPacket;
@@ -28,6 +29,7 @@ public class PacketManager {
     public static final MessageType FURNACE_ITEM = MANAGER.registerS2C("furnace_items", FurnaceItemPacket::read);
     public static final MessageType FURNACE_ENERGY = MANAGER.registerS2C("furnace_energy", FurnaceEnergyPacket::read);
     public static final MessageType FURNACE_PROGRESS = MANAGER.registerS2C("furnace_progress", FurnaceProgressPacket::read);
+    public static final MessageType FURNACE_EXPERIENCE = MANAGER.registerS2C("furnace_experience", FurnaceExperiencePacket::read);
 
 
     // Client to Server

@@ -8,5 +8,7 @@
   "output": {
     "item": "minecraft:diamond"
   },
-  "time": 78
+  "time": 20,
+  "energy": 10,
+  "xp": 10.0
 }

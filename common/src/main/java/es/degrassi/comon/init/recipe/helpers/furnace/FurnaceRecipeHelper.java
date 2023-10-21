@@ -89,6 +89,8 @@ public class FurnaceRecipeHelper {
       entity.itemHandler.getStackInSlot(3).getCount() + 1
     ));
 
+    entity.xp.addXp(entity.recipe.getExperience());
+
     entity.resetProgress();
   }
 
@@ -102,7 +104,7 @@ public class FurnaceRecipeHelper {
     cookingRecipes.addAll(blasting);
     cookingRecipes.addAll(smoking);
     cookingRecipes.forEach(recipe -> {
-      FurnaceRecipe r = new FurnaceRecipe(recipe.getId(), recipe.getResultItem(), recipe.getIngredients(), recipe.getCookingTime());
+      FurnaceRecipe r = new FurnaceRecipe(recipe.getId(), recipe.getResultItem(), recipe.getIngredients(), recipe.getCookingTime(), recipe.getExperience());
       recipes.add(r);
       recipesMap.put(recipe.getId(), r);
     });

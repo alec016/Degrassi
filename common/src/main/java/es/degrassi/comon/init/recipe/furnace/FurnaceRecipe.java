@@ -24,15 +24,18 @@ public class FurnaceRecipe implements Recipe<SimpleContainer> {
   private int time;
   private boolean timeModified = false;
   private boolean energyModified = false;
+  private boolean xpModified = false;
   private int energyRequired;
+  private float xp;
 
   public FurnaceRecipe (
     ResourceLocation id,
     ItemStack output,
     NonNullList<Ingredient> ingredients,
-    int time
+    int time,
+    float xp
   ) {
-    this(id, output, ingredients, time, 10);
+    this(id, output, ingredients, time, 10, xp);
   }
 
   public FurnaceRecipe (
@@ -40,13 +43,15 @@ public class FurnaceRecipe implements Recipe<SimpleContainer> {
     ItemStack output,
     NonNullList<Ingredient> ingredients,
     int time,
-    int energyRequired
+    int energyRequired,
+    float xp
   ) {
     this.id = id;
     this.output = output;
     this.recipeItems = ingredients;
     this.time = time;
     this.energyRequired = energyRequired;
+    this.xp = xp;
   }
 
   @Override
@@ -116,6 +121,19 @@ public class FurnaceRecipe implements Recipe<SimpleContainer> {
     this.timeModified = true;
   }
 
+  public float getExperience() {
+    return this.xp;
+  }
+
+  public void setExperience(float xp) {
+    this.xp = xp;
+    this.xpModified = true;
+  }
+
+  public boolean isXpModified() {
+    return xpModified;
+  }
+
   public static class Type implements RecipeType<FurnaceRecipe> {
     private Type(){}
     public static final Type INSTANCE = new Type();
@@ -135,13 +153,19 @@ public class FurnaceRecipe implements Recipe<SimpleContainer> {
       }
       ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(pSerializedRecipe, "output"));
       int time = GsonHelper.getAsInt(pSerializedRecipe, "time");
+      int energy = 10;
+      if (pSerializedRecipe.has("energy")) {
+        energy = GsonHelper.getAsInt(pSerializedRecipe, "energy");
+      }
+      // int time = GsonHelper.getAsInt(pSerializedRecipe, "time");
+      float xp = GsonHelper.getAsFloat(pSerializedRecipe, "xp");
       JsonArray ingredients = GsonHelper.getAsJsonArray(pSerializedRecipe, "ingredients");
       NonNullList<Ingredient> input = NonNullList.withSize(1, Ingredient.EMPTY);
 
       for (int i = 0; i < input.size(); i++) {
         input.set(i, Ingredient.fromJson(ingredients.get(i)));
       }
-      FurnaceRecipe recipe = new FurnaceRecipe(pRecipeId, output, input, time);
+      FurnaceRecipe recipe = new FurnaceRecipe(pRecipeId, output, input, time, energy, xp);
       FurnaceRecipeHelper.recipesMap.put(pRecipeId, recipe);
       DegrassiLogger.INSTANCE.info("fromJson: " + recipe);
       return recipe;
@@ -159,8 +183,10 @@ public class FurnaceRecipe implements Recipe<SimpleContainer> {
 
       ItemStack output = pBuffer.readItem();
       int time = pBuffer.readInt();
+      int energy = pBuffer.readInt();
+      float xp = pBuffer.readFloat();
 
-      FurnaceRecipe recipe = new FurnaceRecipe(pRecipeId, output, inputs, time);
+      FurnaceRecipe recipe = new FurnaceRecipe(pRecipeId, output, inputs, time, energy, xp);
       FurnaceRecipeHelper.recipesMap.put(pRecipeId, recipe);
       DegrassiLogger.INSTANCE.info("fromNetwork: " + recipe);
       return recipe;
@@ -177,6 +203,9 @@ public class FurnaceRecipe implements Recipe<SimpleContainer> {
       }
 
       pBuffer.writeItem(recipe.getResultItem());
+      pBuffer.writeInt(recipe.getTime());
+      pBuffer.writeInt(recipe.getEnergyRequired());
+      pBuffer.writeFloat(recipe.getExperience());
     }
   }
 
@@ -187,10 +216,13 @@ public class FurnaceRecipe implements Recipe<SimpleContainer> {
     list.forEach(item -> array.add(item.toString()));
     JsonObject json = GsonHelper.parse(
       "{" +
-        "\"id\": \"" + id.getNamespace() + ":" + id.getPath() +
-        "\", \"ingredients\": " + array +
-        ", \"output\": \"" + output.getDisplayName() +
-        "\"}"
+        "\"id\": \"" + id.getNamespace() + ":" + id.getPath() + "\"" +
+        ", \"ingredients\": " + array +
+        ", \"output\": \"" + output.getDisplayName() + "\"" +
+        ", \"time\": " + time +
+        ", \"energy\": " + energyRequired +
+        ", \"xp\": " + xp +
+        "}"
     );
     return json.toString();
   }
