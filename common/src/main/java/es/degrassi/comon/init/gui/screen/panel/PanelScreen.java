@@ -7,7 +7,6 @@ import es.degrassi.comon.init.gui.container.panel.PanelContainer;
 import es.degrassi.comon.init.gui.screen.IScreen;
 import es.degrassi.comon.init.gui.screen.renderer.EnergyInfoArea;
 import es.degrassi.comon.util.storage.AbstractEnergyStorage;
-import es.degrassi.comon.util.MouseUtil;
 import es.degrassi.comon.util.TextureSizeHelper;
 import es.degrassi.comon.util.Utils;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -52,6 +51,7 @@ public abstract class PanelScreen extends AbstractContainerScreen<PanelContainer
     // IClientHandler.renderProgressArrow(pPoseStack, x, y, false, 24, 16, EMPTY_ARROW, FILLED_ARROW, this.menu);
     // IClientHandler.renderEnergyStorage(pPoseStack, this.leftPos + 156, this.topPos + 19, ENERGY_EMPTY);
     energyInfoArea.draw(pPoseStack, this.leftPos + 25, this.topPos + 20, ENERGY_FILLED, true);
+    renderHover(pPoseStack, this.leftPos, this.topPos, 25, 20, pMouseX, pMouseY, TextureSizeHelper.getTextureWidth(ENERGY_FILLED), TextureSizeHelper.getTextureHeight(ENERGY_FILLED));
   }
 
   @Override
@@ -143,9 +143,5 @@ public abstract class PanelScreen extends AbstractContainerScreen<PanelContainer
   @Override
   public IScreen getScreen() {
     return this;
-  }
-
-  protected boolean isMouseAboveArea(int mouseX, int mouseY, int x, int y, int offsetX, int offsetY, int width, int height) {
-    return MouseUtil.isMouseOver(mouseX, mouseY, x + offsetX, y + offsetY, width, height);
   }
 }

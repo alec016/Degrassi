@@ -46,7 +46,9 @@ public abstract class SolarPanelScreen extends PanelScreen {
     // IClientHandler.renderProgressArrow(pPoseStack, x, y, false, 24, 16, EMPTY_ARROW, FILLED_ARROW, this.menu);
     // IClientHandler.renderEnergyStorage(pPoseStack, this.leftPos + 156, this.topPos + 19, ENERGY_EMPTY);
     energyInfoArea.draw(pPoseStack, this.leftPos + 25, this.topPos + 20, ENERGY_FILLED);
+    renderHover(pPoseStack, this.leftPos, this.topPos, 25, 20, pMouseX, pMouseY, TextureSizeHelper.getTextureWidth(ENERGY_FILLED), TextureSizeHelper.getTextureHeight(ENERGY_FILLED));
     efficiencyInfoArea.draw(pPoseStack, this.leftPos + 43, this.topPos + 20, EFFICIENCY_FILLED);
+    renderHover(pPoseStack, this.leftPos, this.topPos, 43, 20, pMouseX, pMouseY, TextureSizeHelper.getTextureWidth(EFFICIENCY_FILLED), TextureSizeHelper.getTextureHeight(EFFICIENCY_FILLED));
   }
 
   @Override

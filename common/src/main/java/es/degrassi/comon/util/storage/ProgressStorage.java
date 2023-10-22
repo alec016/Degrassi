@@ -83,4 +83,9 @@ public abstract class ProgressStorage implements INBTSerializable<CompoundTag> {
   }
 
   public abstract void onProgressChanged();
+
+  public void resetProgressAndMaxProgress() {
+    this.maxProgress = 0;
+    resetProgress();
+  }
 }

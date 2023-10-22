@@ -1,6 +1,7 @@
 package es.degrassi.comon.init.gui.screen.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import es.degrassi.comon.util.MouseUtil;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.resources.ResourceLocation;

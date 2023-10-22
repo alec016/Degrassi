@@ -44,41 +44,37 @@ public class FurnaceRecipeHelper {
     }
 
     recipes.forEach(recipe -> {
-      if (recipe.getIngredients().get(0).test(inventory.getItem(2))) {
-        String name = entity.getName().getString();
-        if (!recipe.isTimeModified()) {
-          if (name.equals(Component.translatable("block.degrassi.iron_furnace").getString())) {
-            recipe.setTime(recipe.getTime() * 95 / 100);
-          } else if(name.equals(Component.translatable("block.degrassi.gold_furnace").getString())) {
-            recipe.setTime(recipe.getTime() * 80 / 100);
-          } else if (name.equals(Component.translatable("block.degrassi.diamond_furnace").getString())) {
-            recipe.setTime(recipe.getTime() * 60 / 100);
-          } else if (name.equals(Component.translatable("block.degrassi.emerald_furnace").getString())) {
-            recipe.setTime(recipe.getTime() * 40 / 100);
-          } else if (name.equals(Component.translatable("block.degrassi.netherite_furnace").getString())) {
-            recipe.setTime(recipe.getTime() * 10 / 100);
-          }
-        }
-        if (!recipe.isEnergyModified()) {
-          if(name.equals(Component.translatable("block.degrassi.gold_furnace").getString())) {
-            recipe.setEnergyRequired(recipe.getEnergyRequired() * 120 / 100);
-          } else if (name.equals(Component.translatable("block.degrassi.diamond_furnace").getString())) {
-            recipe.setEnergyRequired(recipe.getEnergyRequired() * 140 / 100);
-          } else if (name.equals(Component.translatable("block.degrassi.emerald_furnace").getString())) {
-            recipe.setEnergyRequired(recipe.getEnergyRequired() * 160 / 100);
-          } else if (name.equals(Component.translatable("block.degrassi.netherite_furnace").getString())) {
-            recipe.setEnergyRequired(recipe.getEnergyRequired() * 190 / 100);
-          }
-        }
-        entity.recipe = recipe;
-      }
+      if (recipe.getIngredients().get(0).test(inventory.getItem(2))) entity.recipe = recipe.copy();
     });
 
     if (entity.recipe == null) return false;
 
     boolean can = canInsertAmountIntoOutputSlot(inventory) && canInsertItemIntoOutputSlot(inventory, entity.recipe.getResultItem()) && hasEnoughEnergy(entity);
+    String name = entity.getName().getString();
 
-    if (can) entity.progressStorage.setMaxProgress(entity.recipe.getTime());
+    if (can) {
+      if (name.equals(Component.translatable("block.degrassi.iron_furnace").getString())) {
+        entity.recipe.setTime(entity.recipe.getTime() * 95 / 100);
+        // entity.progressStorage.setMaxProgress(entity.recipe.getTime() * 95 / 100);
+      } else if(name.equals(Component.translatable("block.degrassi.gold_furnace").getString())) {
+        entity.recipe.setTime(entity.recipe.getTime() * 80 / 100);
+        // entity.progressStorage.setMaxProgress(entity.recipe.getTime() * 80 / 100);
+        entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * 120 / 100);
+      } else if (name.equals(Component.translatable("block.degrassi.diamond_furnace").getString())) {
+        entity.recipe.setTime(entity.recipe.getTime() * 60 / 100);
+        // entity.progressStorage.setMaxProgress(entity.recipe.getTime() * 60 / 100);
+        entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * 140 / 100);
+      } else if (name.equals(Component.translatable("block.degrassi.emerald_furnace").getString())) {
+        entity.recipe.setTime(entity.recipe.getTime() * 40 / 100);
+        // entity.progressStorage.setMaxProgress(entity.recipe.getTime() * 40 / 100);
+        entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * 160 / 100);
+      } else if (name.equals(Component.translatable("block.degrassi.netherite_furnace").getString())) {
+        entity.recipe.setTime(entity.recipe.getTime() * 10 / 100);
+        // entity.progressStorage.setMaxProgress(entity.recipe.getTime() * 10 / 100);
+        entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * 190 / 100);
+      }
+      entity.progressStorage.setMaxProgress(entity.recipe.getTime());
+    }
 
     return can;
   }
@@ -96,34 +92,36 @@ public class FurnaceRecipeHelper {
   }
 
   public static void init() {
-    Level level = Objects.requireNonNull(Minecraft.getInstance().level);
-    List<SmeltingRecipe> smelting = level.getRecipeManager().getAllRecipesFor(RecipeType.SMELTING);
-    List<BlastingRecipe> blasting = level.getRecipeManager().getAllRecipesFor(RecipeType.BLASTING);
-    List<SmokingRecipe> smoking = level.getRecipeManager().getAllRecipesFor(RecipeType.SMOKING);
-    List<FurnaceRecipe> furnaceRecipes = level.getRecipeManager().getAllRecipesFor(FurnaceRecipe.Type.INSTANCE);
-    List<AbstractCookingRecipe> cookingRecipes = new LinkedList<>(blasting);
-    smoking.forEach(recipe -> {
-      AtomicBoolean has = new AtomicBoolean(false);
-      cookingRecipes.forEach(recipe2 -> {
-        if (recipe2.getIngredients().get(0).test(recipe.getIngredients().get(0).getItems()[0])) has.set(true);
+    if (recipes.isEmpty()) {
+      Level level = Objects.requireNonNull(Minecraft.getInstance().level);
+      List<SmeltingRecipe> smelting = level.getRecipeManager().getAllRecipesFor(RecipeType.SMELTING);
+      List<BlastingRecipe> blasting = level.getRecipeManager().getAllRecipesFor(RecipeType.BLASTING);
+      List<SmokingRecipe> smoking = level.getRecipeManager().getAllRecipesFor(RecipeType.SMOKING);
+      List<FurnaceRecipe> furnaceRecipes = level.getRecipeManager().getAllRecipesFor(FurnaceRecipe.Type.INSTANCE);
+      List<AbstractCookingRecipe> cookingRecipes = new LinkedList<>(blasting);
+      smoking.forEach(recipe -> {
+        AtomicBoolean has = new AtomicBoolean(false);
+        cookingRecipes.forEach(recipe2 -> {
+          if (recipe2.getIngredients().get(0).test(recipe.getIngredients().get(0).getItems()[0])) has.set(true);
+        });
+        if (!has.get()) cookingRecipes.add(recipe);
       });
-      if (!has.get()) cookingRecipes.add(recipe);
-    });
-    smelting.forEach(recipe -> {
-      AtomicBoolean has = new AtomicBoolean(false);
-      cookingRecipes.forEach(recipe2 -> {
-        if (recipe2.getIngredients().get(0).test(recipe.getIngredients().get(0).getItems()[0])) has.set(true);
+      smelting.forEach(recipe -> {
+        AtomicBoolean has = new AtomicBoolean(false);
+        cookingRecipes.forEach(recipe2 -> {
+          if (recipe2.getIngredients().get(0).test(recipe.getIngredients().get(0).getItems()[0])) has.set(true);
+        });
+        if (!has.get()) cookingRecipes.add(recipe);
       });
-      if (!has.get()) cookingRecipes.add(recipe);
-    });
-    cookingRecipes.forEach(recipe -> {
-      FurnaceRecipe r = new FurnaceRecipe(recipe.getId(), recipe.getResultItem(), recipe.getIngredients(), recipe.getCookingTime(), recipe.getExperience());
-      recipes.add(r);
-      recipesMap.put(recipe.getId(), r);
-    });
-    furnaceRecipes.forEach(recipe -> {
-      recipes.add(recipe);
-      recipesMap.put(recipe.getId(), recipe);
-    });
+      cookingRecipes.forEach(recipe -> {
+        FurnaceRecipe r = new FurnaceRecipe(recipe.getId(), recipe.getResultItem(), recipe.getIngredients(), recipe.getCookingTime(), recipe.getExperience());
+        recipes.add(r);
+        recipesMap.put(recipe.getId(), r);
+      });
+      furnaceRecipes.forEach(recipe -> {
+        recipes.add(recipe);
+        recipesMap.put(recipe.getId(), recipe);
+      });
+    }
   }
 }

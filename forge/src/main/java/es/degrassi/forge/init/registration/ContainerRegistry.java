@@ -4,7 +4,7 @@ import dev.architectury.registry.menu.MenuRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.Degrassi;
-import es.degrassi.forge.init.gui.container.furnace.IronFurnaceContainer;
+import es.degrassi.forge.init.gui.container.furnace.*;
 import es.degrassi.forge.init.gui.container.sp.*;
 import net.minecraft.core.Registry;
 import net.minecraft.world.inventory.MenuType;
@@ -20,6 +20,10 @@ public class ContainerRegistry {
   public static final RegistrySupplier<MenuType<SP7Container>> SP7_CONTAINER = CONTAINERS.register("sp7_container", () -> MenuRegistry.ofExtended(SP7Container::new));
   public static final RegistrySupplier<MenuType<SP8Container>> SP8_CONTAINER = CONTAINERS.register("sp8_container", () -> MenuRegistry.ofExtended(SP8Container::new));
   public static final RegistrySupplier<MenuType<IronFurnaceContainer>> IRON_FURNACE_CONTAINER = CONTAINERS.register("iron_furnace_container", () -> MenuRegistry.ofExtended(IronFurnaceContainer::new));
+  public static final RegistrySupplier<MenuType<GoldFurnaceContainer>> GOLD_FURNACE_CONTAINER = CONTAINERS.register("gold_furnace_container", () -> MenuRegistry.ofExtended(GoldFurnaceContainer::new));
+  public static final RegistrySupplier<MenuType<DiamondFurnaceContainer>> DIAMOND_FURNACE_CONTAINER = CONTAINERS.register("diamond_furnace_container", () -> MenuRegistry.ofExtended(DiamondFurnaceContainer::new));
+  public static final RegistrySupplier<MenuType<EmeraldFurnaceContainer>> EMERALD_FURNACE_CONTAINER = CONTAINERS.register("emerald_furnace_container", () -> MenuRegistry.ofExtended(EmeraldFurnaceContainer::new));
+  public static final RegistrySupplier<MenuType<NetheriteFurnaceContainer>> NETHERITE_FURNACE_CONTAINER = CONTAINERS.register("netherite_furnace_container", () -> MenuRegistry.ofExtended(NetheriteFurnaceContainer::new));
 
   public static void register() {
     CONTAINERS.register();

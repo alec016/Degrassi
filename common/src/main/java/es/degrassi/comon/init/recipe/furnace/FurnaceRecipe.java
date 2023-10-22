@@ -210,6 +210,10 @@ public class FurnaceRecipe implements IDegrassiRecipe {
     }
   }
 
+  public FurnaceRecipe copy() {
+    return new FurnaceRecipe(id, output, recipeItems, time, energyRequired, xp);
+  }
+
   @Override
   public String toString() {
     JsonArray array = new JsonArray(this.recipeItems.toArray().length);

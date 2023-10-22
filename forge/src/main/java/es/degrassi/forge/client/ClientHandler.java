@@ -10,7 +10,7 @@ import es.degrassi.client.IClientHandler;
 import es.degrassi.comon.init.entity.furnace.FurnaceEntity;
 import es.degrassi.comon.init.entity.panel.PanelEntity;
 import es.degrassi.comon.init.registration.ElementRegistry;
-import es.degrassi.forge.init.gui.screen.furnace.IronFurnaceScreen;
+import es.degrassi.forge.init.gui.screen.furnace.*;
 import es.degrassi.forge.init.gui.screen.sp.*;
 import es.degrassi.forge.init.registration.ContainerRegistry;
 import es.degrassi.forge.integration.jei.RegisterGuiElementJEIRendererEvent;
@@ -50,6 +50,10 @@ public class ClientHandler {
     MenuRegistry.registerScreenFactory(ContainerRegistry.SP7_CONTAINER.get(), SP7Screen::new);
     MenuRegistry.registerScreenFactory(ContainerRegistry.SP8_CONTAINER.get(), SP8Screen::new);
     MenuRegistry.registerScreenFactory(ContainerRegistry.IRON_FURNACE_CONTAINER.get(), IronFurnaceScreen::new);
+    MenuRegistry.registerScreenFactory(ContainerRegistry.GOLD_FURNACE_CONTAINER.get(), GoldFurnaceScreen::new);
+    MenuRegistry.registerScreenFactory(ContainerRegistry.DIAMOND_FURNACE_CONTAINER.get(), DiamondFurnaceScreen::new);
+    MenuRegistry.registerScreenFactory(ContainerRegistry.EMERALD_FURNACE_CONTAINER.get(), EmeraldFurnaceScreen::new);
+    MenuRegistry.registerScreenFactory(ContainerRegistry.NETHERITE_FURNACE_CONTAINER.get(), NetheriteFurnaceScreen::new);
   }
 
   private static void registerGuiElementJEIRenderers(final RegisterGuiElementJEIRendererEvent event) {

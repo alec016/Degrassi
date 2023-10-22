@@ -180,7 +180,7 @@ public abstract class FurnaceEntity extends BaseEntity {
   }
 
   public void resetProgress() {
-    this.progressStorage.resetProgress();
+    this.progressStorage.resetProgressAndMaxProgress();
     this.recipe = null;
     setChanged();
   }

@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 public class FurnaceRecipeCategory implements IRecipeCategory<FurnaceRecipe> {
   public static final ResourceLocation UID = new ResourceLocation(Degrassi.MODID, "furnace");
   public static final ResourceLocation TEXTURE = new ResourceLocation(Degrassi.MODID, "textures/gui/furnace_gui.png");
+  // public static final ResourceLocation TEXTURE = new ResourceLocation(Degrassi.MODID, "textures/gui/jei/furnace_gui.png");
   public static final ResourceLocation FILLED_PROGRESS = new ResourceLocation(Degrassi.MODID, "textures/gui/furnace_progress_filled.png");
   public static final ResourceLocation FILLED_ENERGY = new ResourceLocation(Degrassi.MODID, "textures/gui/furnace_energy_storage_filled.png");
 

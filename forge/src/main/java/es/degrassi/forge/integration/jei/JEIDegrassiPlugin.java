@@ -36,6 +36,25 @@ public class JEIDegrassiPlugin implements IModPlugin {
     registerFurnaceCatalysts(registration);
   }
 
+  @Override
+  public void registerCategories(@NotNull IRecipeCategoryRegistration registration) {
+    registration.addRecipeCategories(
+      new FurnaceRecipeCategory(registration.getJeiHelpers())
+    );
+  }
+
+  @Override
+  public void registerRecipes(@NotNull IRecipeRegistration registration) {
+    // RecipeManager manager = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager();
+
+    FurnaceRecipeHelper.init();
+
+    registration.addRecipes(FURNACE_TYPE, FurnaceRecipeHelper.recipes);
+
+    registerPanelInfo(registration);
+    registerUpgradesInfo(registration);
+  }
+
   private void registerFurnaceCatalysts(@NotNull IRecipeCatalystRegistration registration) {
     registration.addRecipeCatalyst(
       new ItemStack(BlockRegister.IRON_FURNACE_BLOCK.get()),
@@ -72,25 +91,6 @@ public class JEIDegrassiPlugin implements IModPlugin {
       RecipeTypes.BLASTING,
       RecipeTypes.SMOKING
     );
-  }
-
-  @Override
-  public void registerCategories(@NotNull IRecipeCategoryRegistration registration) {
-    registration.addRecipeCategories(
-      new FurnaceRecipeCategory(registration.getJeiHelpers())
-    );
-  }
-
-  @Override
-  public void registerRecipes(@NotNull IRecipeRegistration registration) {
-    // RecipeManager manager = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager();
-
-    FurnaceRecipeHelper.init();
-
-    registration.addRecipes(FURNACE_TYPE, FurnaceRecipeHelper.recipes);
-
-    registerPanelInfo(registration);
-    registerUpgradesInfo(registration);
   }
 
   private void registerUpgradesInfo(@NotNull IRecipeRegistration registration) {

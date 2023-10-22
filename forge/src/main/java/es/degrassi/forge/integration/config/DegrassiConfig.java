@@ -82,9 +82,25 @@ public class DegrassiConfig {
   public static final ForgeConfigSpec.ConfigValue<Integer> pp2_loose;
 
   //furnaces
-  //iron_furnace.json
+  //iron furnace
   public static final ForgeConfigSpec.ConfigValue<Integer> iron_furnace_capacity;
   public static final ForgeConfigSpec.ConfigValue<Integer> iron_furnace_transfer;
+
+  //gold furnace
+  public static final ForgeConfigSpec.ConfigValue<Integer> gold_furnace_capacity;
+  public static final ForgeConfigSpec.ConfigValue<Integer> gold_furnace_transfer;
+
+  //diamond furnace
+  public static final ForgeConfigSpec.ConfigValue<Integer> diamond_furnace_capacity;
+  public static final ForgeConfigSpec.ConfigValue<Integer> diamond_furnace_transfer;
+
+  //emerald furnace
+  public static final ForgeConfigSpec.ConfigValue<Integer> emerald_furnace_capacity;
+  public static final ForgeConfigSpec.ConfigValue<Integer> emerald_furnace_transfer;
+
+  //netherite furnace
+  public static final ForgeConfigSpec.ConfigValue<Integer> netherite_furnace_capacity;
+  public static final ForgeConfigSpec.ConfigValue<Integer> netherite_furnace_transfer;
 
   // efficiency upgrade
   public static final ForgeConfigSpec.ConfigValue<Integer> eff_augment;
@@ -306,8 +322,44 @@ public class DegrassiConfig {
       .comment("energy capacity of iron furnace - Default 10000")
       .define("capacity", 10000);
     iron_furnace_transfer = BUILDER
-      .comment("energy transfer of iron_furnace.json - Default 20")
+      .comment("energy transfer of iron furnace - Default 20")
       .define("transfer", 20);
+    BUILDER.pop();
+
+    BUILDER.push("Gold Furnace");
+    gold_furnace_capacity = BUILDER
+      .comment("energy capacity of gold furnace - Default 50000")
+      .define("capacity", 50000);
+    gold_furnace_transfer = BUILDER
+      .comment("energy transfer of gold furnace - Default 20")
+      .define("transfer", 100);
+    BUILDER.pop();
+
+    BUILDER.push("Diamond Furnace");
+    diamond_furnace_capacity = BUILDER
+      .comment("energy capacity of diamond furnace - Default 100000")
+      .define("capacity", 100000);
+    diamond_furnace_transfer = BUILDER
+      .comment("energy transfer of diamond furnace - Default 200")
+      .define("transfer", 200);
+    BUILDER.pop();
+
+    BUILDER.push("emerald Furnace");
+    emerald_furnace_capacity = BUILDER
+      .comment("energy capacity of iron furnace - Default 500000")
+      .define("capacity", 500000);
+    emerald_furnace_transfer = BUILDER
+      .comment("energy transfer of emerald furnace - Default 1000")
+      .define("transfer", 1000);
+    BUILDER.pop();
+
+    BUILDER.push("Netherite Furnace");
+    netherite_furnace_capacity = BUILDER
+      .comment("energy capacity of netherite furnace - Default 1000000")
+      .define("capacity", 1000000);
+    netherite_furnace_transfer = BUILDER
+      .comment("energy transfer of netherite furnace - Default 10000")
+      .define("transfer", 10000);
     BUILDER.pop();
 
     BUILDER.pop();

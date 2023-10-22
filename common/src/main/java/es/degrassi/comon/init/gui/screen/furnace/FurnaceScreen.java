@@ -48,6 +48,7 @@ public abstract class FurnaceScreen extends AbstractContainerScreen<FurnaceConta
     blit(pPoseStack, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight, imageWidth, imageHeight);
 
     energyInfoArea.draw(pPoseStack, this.leftPos + 7, this.topPos + 72, ENERGY_FILLED, false);
+    renderHover(pPoseStack, this.leftPos, this.topPos, 7, 72, pMouseX, pMouseY, TextureSizeHelper.getTextureWidth(ENERGY_FILLED), TextureSizeHelper.getTextureHeight(ENERGY_FILLED));
 
     if(menu.isCrafting()) {
       progressComponent.draw(pPoseStack, this.leftPos + 66, this.topPos + 33, FILLED_ARROW, false);
@@ -132,9 +133,5 @@ public abstract class FurnaceScreen extends AbstractContainerScreen<FurnaceConta
   @Override
   public IScreen getScreen() {
     return this;
-  }
-
-  protected boolean isMouseAboveArea(int mouseX, int mouseY, int x, int y, int offsetX, int offsetY, int width, int height) {
-    return MouseUtil.isMouseOver(mouseX, mouseY, x + offsetX, y + offsetY, width, height);
   }
 }
