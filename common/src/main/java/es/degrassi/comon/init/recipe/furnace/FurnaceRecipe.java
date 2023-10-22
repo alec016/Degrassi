@@ -3,6 +3,7 @@ package es.degrassi.comon.init.recipe.furnace;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import es.degrassi.Degrassi;
+import es.degrassi.comon.init.recipe.IDegrassiRecipe;
 import es.degrassi.comon.init.recipe.helpers.furnace.FurnaceRecipeHelper;
 import es.degrassi.comon.util.DegrassiLogger;
 import net.minecraft.core.NonNullList;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FurnaceRecipe implements Recipe<SimpleContainer> {
+public class FurnaceRecipe implements IDegrassiRecipe {
   private final ResourceLocation id;
   private final ItemStack output;
   private final NonNullList<Ingredient> recipeItems;

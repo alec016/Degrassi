@@ -1,6 +1,5 @@
 package es.degrassi.comon.init.block.furnace;
 
-import es.degrassi.comon.init.entity.furnace.FurnaceEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -19,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
 public abstract class FurnaceBlock extends Block implements EntityBlock {
   public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
-  protected FurnaceEntity entity;
   public FurnaceBlock() {
     super(
       BlockBehaviour.Properties

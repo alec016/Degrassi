@@ -2,8 +2,10 @@ package es.degrassi;
 
 import com.mojang.brigadier.CommandDispatcher;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
+import dev.architectury.registry.registries.Registrar;
 import es.degrassi.command.DegrassiCommand;
-import es.degrassi.comon.init.recipe.helpers.furnace.FurnaceRecipeHelper;
+import es.degrassi.comon.init.gui.screen.renderer.GuiElementType;
+import es.degrassi.comon.init.registration.ElementRegistry;
 import es.degrassi.comon.util.DegrassiLogger;
 import es.degrassi.network.PacketManager;
 import net.minecraft.commands.CommandBuildContext;
@@ -32,5 +34,8 @@ public class Degrassi {
 
   public static void setup() {
     PacketManager.init();
+  }
+  public static Registrar<GuiElementType<?>> guiElementRegistrar() {
+    return ElementRegistry.GUI_ELEMENT_TYPE_REGISTRY;
   }
 }

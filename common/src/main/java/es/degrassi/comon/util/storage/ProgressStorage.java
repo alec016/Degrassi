@@ -46,13 +46,12 @@ public abstract class ProgressStorage implements INBTSerializable<CompoundTag> {
     increment(1);
   }
 
-  public int increment(boolean simulate) {
-    return increment(1, simulate);
+  public void increment(boolean simulate) {
+    increment(1, simulate);
   }
 
-  public int increment(int increment, boolean simulate) {
+  public void increment(int increment, boolean simulate) {
     if (!simulate) increment(increment);
-    return increment;
   }
 
   public void increment(int increment) {

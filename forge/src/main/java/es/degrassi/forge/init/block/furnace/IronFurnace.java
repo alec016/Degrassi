@@ -37,9 +37,9 @@ public class IronFurnace extends FurnaceBlock {
   @Nullable
   @Override
   public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-    if(this.entity == null) this.entity = new IronFurnaceEntity(pos, state);
-    this.entity.delegate = this;
-    return this.entity;
+    FurnaceEntity entity = new IronFurnaceEntity(pos, state);
+    entity.delegate = this;
+    return entity;
   }
 
   @SuppressWarnings("deprecation")
@@ -53,8 +53,7 @@ public class IronFurnace extends FurnaceBlock {
     @NotNull BlockHitResult hit
   ) {
     BlockEntity tile = level.getBlockEntity(pos);
-    if (tile instanceof IronFurnaceEntity) {
-      this.entity = (FurnaceEntity) tile;
+    if (tile instanceof IronFurnaceEntity entity) {
       if (!level.isClientSide()) {
         MenuRegistry.openExtendedMenu((ServerPlayer) player, new MenuProvider() {
           @Override

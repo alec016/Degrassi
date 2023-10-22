@@ -9,9 +9,12 @@ import dev.architectury.registry.menu.MenuRegistry;
 import es.degrassi.client.IClientHandler;
 import es.degrassi.comon.init.entity.furnace.FurnaceEntity;
 import es.degrassi.comon.init.entity.panel.PanelEntity;
+import es.degrassi.comon.init.registration.ElementRegistry;
 import es.degrassi.forge.init.gui.screen.furnace.IronFurnaceScreen;
 import es.degrassi.forge.init.gui.screen.sp.*;
 import es.degrassi.forge.init.registration.ContainerRegistry;
+import es.degrassi.forge.integration.jei.RegisterGuiElementJEIRendererEvent;
+import es.degrassi.forge.integration.jei.renderer.ProgressGuiElementJeiRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
@@ -47,6 +50,10 @@ public class ClientHandler {
     MenuRegistry.registerScreenFactory(ContainerRegistry.SP7_CONTAINER.get(), SP7Screen::new);
     MenuRegistry.registerScreenFactory(ContainerRegistry.SP8_CONTAINER.get(), SP8Screen::new);
     MenuRegistry.registerScreenFactory(ContainerRegistry.IRON_FURNACE_CONTAINER.get(), IronFurnaceScreen::new);
+  }
+
+  private static void registerGuiElementJEIRenderers(final RegisterGuiElementJEIRendererEvent event) {
+    event.register(ElementRegistry.PROGRESS_GUI_ELEMENT.get(), new ProgressGuiElementJeiRenderer());
   }
 
   @NotNull

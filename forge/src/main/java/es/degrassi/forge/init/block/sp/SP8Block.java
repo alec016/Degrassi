@@ -39,8 +39,7 @@ public class SP8Block extends SolarPanelBlock {
   @Nullable
   @Override
   public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-    if(this.entity == null) this.entity = new SP8Entity(pos, state);
-    return this.entity;
+    return new SP8Entity(pos, state);
   }
 
   @SuppressWarnings("deprecation")
@@ -54,8 +53,7 @@ public class SP8Block extends SolarPanelBlock {
     @NotNull BlockHitResult hit
   ) {
     BlockEntity tile = level.getBlockEntity(pos);
-    if (tile instanceof SP8Entity) {
-      this.entity = (SolarPanelEntity) tile;
+    if (tile instanceof SP8Entity entity) {
       if (!level.isClientSide()) {
         MenuRegistry.openExtendedMenu((ServerPlayer) player, new MenuProvider() {
           @Override

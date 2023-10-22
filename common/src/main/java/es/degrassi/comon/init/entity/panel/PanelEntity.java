@@ -1,5 +1,6 @@
 package es.degrassi.comon.init.entity.panel;
 
+import es.degrassi.comon.init.entity.BaseEntity;
 import es.degrassi.comon.util.storage.AbstractEnergyStorage;
 import es.degrassi.comon.util.storage.GenerationStorage;
 import es.degrassi.network.panel.PanelEnergyPacket;
@@ -11,7 +12,6 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Containers;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.ItemStackHandler;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-public abstract class PanelEntity extends BlockEntity {
+public abstract class PanelEntity extends BaseEntity {
   public static final float RAIN_MULTIPLIER = 0.6F, THUNDER_MULTIPLIER = 0.4F;
   public AbstractEnergyStorage ENERGY_STORAGE;
   protected GenerationStorage currentGen;

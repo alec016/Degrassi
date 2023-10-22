@@ -39,5 +39,18 @@
   "degrassi.upgrades.transfer.tooltips": "Augment transfer rate by x%s",
   "degrassi.upgrades.type": "Current type: %s",
 
+  "degrassi.jei.gui.element.sp": "This Solar Panel %s%s",
+  "degrassi.jei.gui.element.energy.generation": "generates up to %s%s/t",
+  "degrassi.jei.gui.element.sp.solar_position": " based in solar position.",
+
+  "degrassi.jei.gui.element.upgrades.transfer": "Modify the transfer rate of the machine by x%s",
+  "degrassi.jei.gui.element.upgrades.generation": "Modify the generation rate of the machine by x%s",
+  "degrassi.jei.gui.element.upgrades.efficiency": "Modify the efficiency rate of the machine by x%s",
+  "degrassi.jei.gui.element.upgrades.capacity": "Modify the energy capacity of the machine by x%s",
+
+  "degrassi.jei.recipe.time": "Duration %sticks",
+  "degrassi.jei.recipe.instant": "Instant craft",
+  "degrassi.jei.recipe.id": "Recipe ID: %s",
+
   "unit.energy.forge": "FE"
 }

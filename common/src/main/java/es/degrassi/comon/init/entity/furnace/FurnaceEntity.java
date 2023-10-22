@@ -1,6 +1,7 @@
 package es.degrassi.comon.init.entity.furnace;
 
 import es.degrassi.comon.init.block.furnace.FurnaceBlock;
+import es.degrassi.comon.init.entity.BaseEntity;
 import es.degrassi.comon.init.recipe.furnace.FurnaceRecipe;
 import es.degrassi.comon.init.recipe.helpers.furnace.FurnaceRecipeHelper;
 import es.degrassi.comon.util.storage.AbstractEnergyStorage;
@@ -27,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public abstract class FurnaceEntity extends BlockEntity {
+public abstract class FurnaceEntity extends BaseEntity {
   public ItemStackHandler itemHandler;
   public AbstractEnergyStorage ENERGY_STORAGE;
   private final Component name;

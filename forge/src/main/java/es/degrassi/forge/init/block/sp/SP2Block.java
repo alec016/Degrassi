@@ -39,8 +39,7 @@ public class SP2Block extends SolarPanelBlock {
   @Nullable
   @Override
   public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-    if(this.entity == null) this.entity = new SP2Entity(pos, state);
-    return this.entity;
+    return new SP2Entity(pos, state);
   }
 
   @SuppressWarnings("deprecation")
@@ -54,8 +53,7 @@ public class SP2Block extends SolarPanelBlock {
     @NotNull BlockHitResult hit
   ) {
     BlockEntity tile = level.getBlockEntity(pos);
-    if (tile instanceof SP2Entity) {
-      this.entity = (SolarPanelEntity) tile;
+    if (tile instanceof SP2Entity entity) {
       if (!level.isClientSide()) {
         MenuRegistry.openExtendedMenu((ServerPlayer) player, new MenuProvider() {
           @Override

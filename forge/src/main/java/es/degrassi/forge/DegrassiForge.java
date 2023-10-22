@@ -2,9 +2,7 @@ package es.degrassi.forge;
 
 import dev.architectury.platform.forge.EventBuses;
 import es.degrassi.Degrassi;
-import es.degrassi.comon.init.recipe.helpers.furnace.FurnaceRecipeHelper;
 import es.degrassi.forge.init.registration.Register;
-import es.degrassi.network.PacketManager;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;

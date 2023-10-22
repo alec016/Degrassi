@@ -1,6 +1,5 @@
 package es.degrassi.comon.init.block.panel;
 
-import es.degrassi.comon.init.entity.panel.PanelEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -19,8 +18,6 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class PanelBlock extends Block implements EntityBlock {
   public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-
-  protected PanelEntity entity;
 
   public PanelBlock() {
     super(

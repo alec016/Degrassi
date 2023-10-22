@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FurnaceRecipeHelper {
   public static final List<FurnaceRecipe> recipes = new LinkedList<>();
@@ -100,9 +101,21 @@ public class FurnaceRecipeHelper {
     List<BlastingRecipe> blasting = level.getRecipeManager().getAllRecipesFor(RecipeType.BLASTING);
     List<SmokingRecipe> smoking = level.getRecipeManager().getAllRecipesFor(RecipeType.SMOKING);
     List<FurnaceRecipe> furnaceRecipes = level.getRecipeManager().getAllRecipesFor(FurnaceRecipe.Type.INSTANCE);
-    List<AbstractCookingRecipe> cookingRecipes = new LinkedList<>(smelting);
-    cookingRecipes.addAll(blasting);
-    cookingRecipes.addAll(smoking);
+    List<AbstractCookingRecipe> cookingRecipes = new LinkedList<>(blasting);
+    smoking.forEach(recipe -> {
+      AtomicBoolean has = new AtomicBoolean(false);
+      cookingRecipes.forEach(recipe2 -> {
+        if (recipe2.getIngredients().get(0).test(recipe.getIngredients().get(0).getItems()[0])) has.set(true);
+      });
+      if (!has.get()) cookingRecipes.add(recipe);
+    });
+    smelting.forEach(recipe -> {
+      AtomicBoolean has = new AtomicBoolean(false);
+      cookingRecipes.forEach(recipe2 -> {
+        if (recipe2.getIngredients().get(0).test(recipe.getIngredients().get(0).getItems()[0])) has.set(true);
+      });
+      if (!has.get()) cookingRecipes.add(recipe);
+    });
     cookingRecipes.forEach(recipe -> {
       FurnaceRecipe r = new FurnaceRecipe(recipe.getId(), recipe.getResultItem(), recipe.getIngredients(), recipe.getCookingTime(), recipe.getExperience());
       recipes.add(r);
