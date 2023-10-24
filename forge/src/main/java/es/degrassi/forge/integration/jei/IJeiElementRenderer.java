@@ -1,12 +1,9 @@
 package es.degrassi.forge.integration.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import es.degrassi.comon.init.entity.BaseEntity;
-import es.degrassi.comon.init.gui.screen.renderer.IGuiElement;
-import es.degrassi.comon.init.recipe.IDegrassiRecipe;
+import es.degrassi.forge.init.gui.renderer.IGuiElement;
+import es.degrassi.forge.init.recipe.IDegrassiRecipe;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import java.util.Collections;
 import java.util.List;

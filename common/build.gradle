@@ -1,34 +1,21 @@
-dependencies {
-    modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
-    modImplementation "net.minecraft:forge-1.19.2-43.3.2-minecraft-merged-project-@forge:1.19.2-loom.mappings.1_19_2.layered+hash.798780882-v2-forge-1.19.2-43.3.2"
-    modImplementation "net.minecraftforge:unsafe:0.2.0"
-    modImplementation "net.minecraftforge:forgespi:6.0.0"
-    modImplementation "net.minecraftforge:javafmllanguage:${project.forge_version}"
-    modImplementation "net.minecraftforge:fmlcore:${project.forge_version}"
-    modApi "net.minecraft:forge-1.19.2-43.3.2-minecraft-merged-project-@forge:1.19.2-loom.mappings.1_19_2.layered+hash.798780882-v2-forge-1.19.2-43.3.2"
-    modApi "dev.architectury:architectury:${project.architectury_version}"
-    // JEI
-    modCompileOnly("mezz.jei:jei-${project.minecraft_version}-common-api:${project.jei_version}")
-}
-
-loom {
-    accessWidenerPath = file("src/main/resources/degrassi.accesswidener")
-}
-
 architectury {
     common("forge")
 }
 
-//publishing {
-//    publications {
-//        mavenCommon(MavenPublication) {
-//            artifactId = rootProject.archives_base_name
-//            from components.java
-//        }
-//    }
-//
-//    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-//    repositories {
-//        // Add repositories to publish to here.
-//    }
-//}
+loom {
+    // accessWidenerPath = file("src/main/resources/degrassi.accesswidener")
+}
+
+dependencies {
+    //Required
+    modImplementation("net.fabricmc:fabric-loader:${project.fabric_loader_version}")
+    modApi("dev.architectury:architectury:${project.architectury_version}")
+}
+
+remapJar {
+    targetNamespace = 'named'
+}
+
+remapSourcesJar {
+    targetNamespace = 'named'
+}

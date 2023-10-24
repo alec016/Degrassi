@@ -1,7 +1,7 @@
 package es.degrassi.forge.init.registration;
 
 import dev.architectury.registry.CreativeTabRegistry;
-import es.degrassi.Degrassi;
+import es.degrassi.forge.Degrassi;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;

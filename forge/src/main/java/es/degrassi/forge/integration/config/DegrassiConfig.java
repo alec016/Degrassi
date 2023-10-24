@@ -1,6 +1,6 @@
 package es.degrassi.forge.integration.config;
 
-import es.degrassi.comon.init.item.upgrade.UpgradeType;
+import es.degrassi.forge.init.item.upgrade.UpgradeType;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class DegrassiConfig {
@@ -118,14 +118,20 @@ public class DegrassiConfig {
   public static final ForgeConfigSpec.ConfigValue<Integer> cap_augment;
   public static final ForgeConfigSpec.EnumValue<UpgradeType> cap_type;
 
+  // speed upgrade
+  public static final ForgeConfigSpec.ConfigValue<Integer> speed_augment;
+
+  // energy upgrade
+  public static final ForgeConfigSpec.ConfigValue<Integer> energy_augment;
+
   // general config
-  static {
+//  static {
 //    BUILDER.push("General");
 //    debugLevel = BUILDER
 //      .comment(" debug level - default info")
 //      .defineEnum("level", LoggingLevel.INFO);
 //    BUILDER.pop();
-  }
+//  }
 
   // solar panels config
   static {
@@ -417,9 +423,20 @@ public class DegrassiConfig {
       .defineEnum("type", UpgradeType.ADD);
     BUILDER.pop();
 
+    BUILDER.push("Speed");
+    speed_augment = BUILDER
+      .comment("speed augment - default 1")
+      .define("augment", 1);
+    BUILDER.pop();
+
+    BUILDER.push("Energy");
+    energy_augment = BUILDER
+      .comment("energy reduction - default 1")
+      .define("reduction", 1);
+    BUILDER.pop();
+
     BUILDER.pop();
   }
-
 
   // creation of spec
   static {

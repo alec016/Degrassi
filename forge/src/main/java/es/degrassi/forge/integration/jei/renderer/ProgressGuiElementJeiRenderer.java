@@ -1,10 +1,10 @@
 package es.degrassi.forge.integration.jei.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import es.degrassi.client.IClientHandler;
-import es.degrassi.comon.init.gui.screen.IScreen;
-import es.degrassi.comon.init.gui.screen.renderer.ProgressComponent;
-import es.degrassi.comon.init.recipe.IDegrassiRecipe;
+import es.degrassi.forge.client.IClientHandler;
+import es.degrassi.forge.init.gui.screen.IScreen;
+import es.degrassi.forge.init.gui.renderer.ProgressComponent;
+import es.degrassi.forge.init.recipe.IDegrassiRecipe;
 import es.degrassi.forge.integration.jei.IJeiElementRenderer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;

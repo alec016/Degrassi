@@ -1,8 +1,8 @@
 package es.degrassi.forge.integration.jei;
 
-import es.degrassi.Degrassi;
-import es.degrassi.comon.init.recipe.furnace.FurnaceRecipe;
-import es.degrassi.comon.init.recipe.helpers.furnace.FurnaceRecipeHelper;
+import es.degrassi.forge.Degrassi;
+import es.degrassi.forge.init.recipe.furnace.FurnaceRecipe;
+import es.degrassi.forge.init.recipe.helpers.furnace.FurnaceRecipeHelper;
 import es.degrassi.forge.init.registration.BlockRegister;
 import es.degrassi.forge.init.registration.ItemRegister;
 import es.degrassi.forge.integration.config.DegrassiConfig;

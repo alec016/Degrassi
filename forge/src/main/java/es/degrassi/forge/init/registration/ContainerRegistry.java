@@ -3,9 +3,9 @@ package es.degrassi.forge.init.registration;
 import dev.architectury.registry.menu.MenuRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import es.degrassi.Degrassi;
+import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.init.gui.container.furnace.*;
-import es.degrassi.forge.init.gui.container.sp.*;
+import es.degrassi.forge.init.gui.container.panel.sp.*;
 import net.minecraft.core.Registry;
 import net.minecraft.world.inventory.MenuType;
 

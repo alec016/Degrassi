@@ -1,0 +1,142 @@
+package es.degrassi.forge.init.gui.screen.panel.sp;
+
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import es.degrassi.forge.Degrassi;
+import es.degrassi.forge.init.entity.panel.sp.SolarPanelEntity;
+import es.degrassi.forge.init.gui.container.panel.PanelContainer;
+import es.degrassi.forge.init.gui.screen.panel.PanelScreen;
+import es.degrassi.forge.init.gui.renderer.EfficiencyInfoArea;
+import es.degrassi.forge.util.storage.AbstractEnergyStorage;
+import es.degrassi.forge.util.TextureSizeHelper;
+import es.degrassi.forge.util.Utils;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
+
+public abstract class SolarPanelScreen extends PanelScreen {
+  private static final ResourceLocation EFFICIENCY_FILLED = new ResourceLocation(Degrassi.MODID, "textures/gui/panel_efficiency_filled.png");
+  protected EfficiencyInfoArea efficiencyInfoArea;
+  public SolarPanelScreen(PanelContainer container, Inventory inventory, Component name) {
+    super(container, inventory, name);
+  }
+
+  @Override
+  public void init() {
+    super.init();
+    assignEfficiencyInfoArea(43, 20);
+  }
+
+  @Override
+  protected void renderBg(@NotNull PoseStack pPoseStack, float pPartialTick, int pMouseX, int pMouseY) {
+    RenderSystem.setShader(GameRenderer::getPositionTexShader);
+    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+    RenderSystem.setShaderTexture(0, BACKGROUND);
+    this.imageWidth = TextureSizeHelper.getTextureWidth(BACKGROUND);
+    this.imageHeight = TextureSizeHelper.getTextureHeight(BACKGROUND);
+    this.leftPos = (this.width - this.imageWidth) / 2;
+    this.topPos = (this.height - this.imageHeight) / 2;
+
+    blit(pPoseStack, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight, imageWidth, imageHeight);
+
+    // IClientHandler.renderInventory(pPoseStack, 8, 85, x, y, BASE_INV, 162, 76);
+    // IClientHandler.renderProgressArrow(pPoseStack, x, y, false, 24, 16, EMPTY_ARROW, FILLED_ARROW, this.menu);
+    // IClientHandler.renderEnergyStorage(pPoseStack, this.leftPos + 156, this.topPos + 19, ENERGY_EMPTY);
+    energyInfoArea.draw(pPoseStack, this.leftPos + 25, this.topPos + 20, ENERGY_FILLED);
+    renderHover(pPoseStack, this.leftPos, this.topPos, 25, 20, pMouseX, pMouseY, TextureSizeHelper.getTextureWidth(ENERGY_FILLED), TextureSizeHelper.getTextureHeight(ENERGY_FILLED));
+    efficiencyInfoArea.draw(pPoseStack, this.leftPos + 43, this.topPos + 20, EFFICIENCY_FILLED);
+    renderHover(pPoseStack, this.leftPos, this.topPos, 43, 20, pMouseX, pMouseY, TextureSizeHelper.getTextureWidth(EFFICIENCY_FILLED), TextureSizeHelper.getTextureHeight(EFFICIENCY_FILLED));
+  }
+
+  @Override
+  protected void renderLabels(@NotNull PoseStack poseStack, int mouseX, int mouseY) {
+    int x = this.leftPos;
+    int y = this.topPos;
+    AbstractEnergyStorage energy = menu.getEntity().getEnergyStorage();
+
+    this.font.draw(poseStack, this.title, (float) this.titleLabelX, (float) this.titleLabelY, 4210752);
+
+    renderEnergyAreaTooltips(poseStack, mouseX, mouseY, x, y);
+    renderEfficiencyAreaTooltips(poseStack, mouseX, mouseY, x, y);
+    poseStack.pushPose();
+    poseStack.scale(0.7F, 0.7F, 0.7F);
+    this.font.draw(
+      poseStack,
+      Component.translatable(
+        "degrassi.gui.element.energy.stored",
+        Utils.format(energy.getEnergyStored()),
+        Component.translatable("unit.energy.forge"),
+        Utils.format(energy.getMaxEnergyStored()),
+        Component.translatable("unit.energy.forge")
+      ),
+      95,
+      35,
+      4210752
+    );
+    this.font.draw(
+      poseStack,
+      Component.translatable(
+        "degrassi.gui.element.energy.generation",
+        Utils.format(menu.getEntity().getCurrentGeneration()),
+        Component.translatable("unit.energy.forge")
+      ),
+      95,
+      55,
+      4210752
+    );
+    this.font.draw(
+      poseStack,
+      Component.translatable(
+        "degrassi.gui.element.transfer",
+        Utils.format(menu.getEntity().getEnergyStorage().getMaxExtract()),
+        Component.translatable("unit.energy.forge")
+      ),
+      95,
+      75,
+      4210752
+    );
+    this.font.draw(
+      poseStack,
+      efficiencyInfoArea.getTooltips().get(0),
+      95,
+      95,
+      4210752
+    );
+    poseStack.popPose();
+    // poseStack.scale(1F, 1F, 1F);
+  }
+
+  protected void assignEfficiencyInfoArea(int xOffset, int yOffset) {
+    int x = this.leftPos;
+    int y = this.topPos;
+    SolarPanelEntity entity = (SolarPanelEntity) menu.getEntity();
+    this.efficiencyInfoArea = new EfficiencyInfoArea(x + xOffset, y + yOffset, entity.getCurrentEfficiency(), 18, 72);
+  }
+
+  private void renderEfficiencyAreaTooltips(PoseStack poseStack, int mouseX, int mouseY, int x, int y) {
+    if (
+      isMouseAboveArea(
+        mouseX,
+        mouseY,
+        x,
+        y,
+        43,
+        20,
+        TextureSizeHelper.getTextureWidth(EFFICIENCY_FILLED),
+        TextureSizeHelper.getTextureHeight(EFFICIENCY_FILLED)
+      )
+    ) {
+      renderTooltip(
+        poseStack,
+        efficiencyInfoArea.getTooltips(),
+        Optional.empty(),
+        mouseX - x,
+        mouseY - y
+      );
+    }
+  }
+}

@@ -1,6 +1,5 @@
 package es.degrassi.forge.init.item.upgrade;
 
-import es.degrassi.comon.init.item.upgrade.PanelUpgrade;
 import es.degrassi.forge.integration.config.DegrassiConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

@@ -2,12 +2,9 @@ package es.degrassi.forge.init.registration;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import es.degrassi.Degrassi;
-import es.degrassi.comon.init.entity.furnace.FurnaceEntity;
-import es.degrassi.comon.init.entity.panel.PanelEntity;
-import es.degrassi.comon.init.entity.panel.SolarPanelEntity;
+import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.init.entity.furnace.*;
-import es.degrassi.forge.init.entity.sp.*;
+import es.degrassi.forge.init.entity.panel.sp.*;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 

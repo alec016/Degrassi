@@ -7,7 +7,7 @@ architectury {
 }
 
 loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
+    accessWidenerPath = file("src/main/resources/degrassi.accesswidener")
 
     forge {
         convertAccessWideners = true
@@ -42,6 +42,9 @@ dependencies {
 
     // Jade
     modRuntimeOnly("curse.maven:jade-324717:4719987")
+
+    // KubeJS
+    modImplementation("dev.latvian.mods:kubejs-forge:${kubejs_version}")
 }
 
 processResources {
@@ -56,7 +59,8 @@ processResources {
                 "author": project.author,
                 "icon": project.icon,
                 "minecraft_version": project.minecraft_version,
-                "architectury_version": project.architectury_version
+                "architectury_version": project.architectury_version,
+                "kubejs_version": project.kubejs_version
     }
 }
 

@@ -3,8 +3,8 @@ package es.degrassi.forge.integration.jei;
 import com.google.common.collect.ImmutableMap;
 import dev.architectury.event.Event;
 import dev.architectury.event.EventFactory;
-import es.degrassi.comon.init.gui.screen.renderer.GuiElementType;
-import es.degrassi.comon.init.gui.screen.renderer.IGuiElement;
+import es.degrassi.forge.init.gui.renderer.GuiElementType;
+import es.degrassi.forge.init.gui.renderer.IGuiElement;
 
 import java.util.HashMap;
 import java.util.Map;

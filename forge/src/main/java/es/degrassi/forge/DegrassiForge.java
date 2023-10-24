@@ -1,7 +1,6 @@
 package es.degrassi.forge;
 
 import dev.architectury.platform.forge.EventBuses;
-import es.degrassi.Degrassi;
 import es.degrassi.forge.init.registration.Register;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;

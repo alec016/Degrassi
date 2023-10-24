@@ -2,11 +2,10 @@ package es.degrassi.forge.init.registration;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import es.degrassi.Degrassi;
-import es.degrassi.comon.init.block.panel.SolarPanelBlock;
+import es.degrassi.forge.Degrassi;
+import es.degrassi.forge.init.block.panel.sp.*;
 import es.degrassi.forge.init.block.*;
 import es.degrassi.forge.init.block.furnace.*;
-import es.degrassi.forge.init.block.sp.*;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;

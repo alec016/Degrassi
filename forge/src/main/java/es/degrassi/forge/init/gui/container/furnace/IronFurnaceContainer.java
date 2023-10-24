@@ -1,7 +1,6 @@
 package es.degrassi.forge.init.gui.container.furnace;
 
-import es.degrassi.comon.init.entity.furnace.FurnaceEntity;
-import es.degrassi.comon.init.gui.container.furnace.FurnaceContainer;
+import es.degrassi.forge.init.entity.furnace.FurnaceEntity;
 import es.degrassi.forge.client.ClientHandler;
 import es.degrassi.forge.init.registration.BlockRegister;
 import es.degrassi.forge.init.registration.ContainerRegistry;

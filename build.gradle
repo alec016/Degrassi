@@ -54,6 +54,27 @@ allprojects {
             name = "ModMaven"
             url = "https://modmaven.dev"
         }
+        //Needed for KubeJS
+        maven {
+            name = "Jitpack Maven"
+            url = "https://jitpack.io"
+        }
+        maven {
+            // Shedaniel's maven (Architectury API)
+            url = "https://maven.architectury.dev"
+            content {
+                includeGroup "dev.architectury"
+            }
+        }
+        maven {
+            // saps.dev Maven (KubeJS and Rhino)
+            name = "Latvian maven"
+            url = "https://maven.saps.dev/releases"
+            content {
+                includeGroup "dev.latvian.mods"
+                includeGroup "dev.ftb.mods"
+            }
+        }
     }
 
     tasks.withType(JavaCompile) {

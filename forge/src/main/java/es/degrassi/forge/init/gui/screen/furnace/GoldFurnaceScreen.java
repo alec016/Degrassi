@@ -1,8 +1,7 @@
 package es.degrassi.forge.init.gui.screen.furnace;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import es.degrassi.comon.init.gui.container.furnace.FurnaceContainer;
-import es.degrassi.comon.init.gui.screen.furnace.FurnaceScreen;
+import es.degrassi.forge.init.gui.container.furnace.FurnaceContainer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;

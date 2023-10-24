@@ -1,17 +1,13 @@
 package es.degrassi.forge.init.block.furnace;
 
 import dev.architectury.registry.menu.MenuRegistry;
-import es.degrassi.comon.init.block.furnace.FurnaceBlock;
-import es.degrassi.comon.init.entity.furnace.FurnaceEntity;
-import es.degrassi.comon.util.Utils;
+import es.degrassi.forge.init.entity.furnace.FurnaceEntity;
+import es.degrassi.forge.util.Utils;
 import es.degrassi.forge.init.entity.furnace.DiamondFurnaceEntity;
-import es.degrassi.forge.init.entity.furnace.GoldFurnaceEntity;
-import es.degrassi.forge.init.entity.furnace.IronFurnaceEntity;
 import es.degrassi.forge.init.gui.container.furnace.DiamondFurnaceContainer;
-import es.degrassi.forge.init.gui.container.furnace.GoldFurnaceContainer;
 import es.degrassi.forge.init.registration.EntityRegister;
-import es.degrassi.network.furnace.FurnaceEnergyPacket;
-import es.degrassi.network.furnace.FurnaceProgressPacket;
+import es.degrassi.forge.network.furnace.FurnaceEnergyPacket;
+import es.degrassi.forge.network.furnace.FurnaceProgressPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;

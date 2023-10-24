@@ -1,11 +1,11 @@
 package es.degrassi.forge.integration.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import es.degrassi.Degrassi;
-import es.degrassi.comon.init.gui.screen.renderer.ProgressComponent;
-import es.degrassi.comon.init.recipe.furnace.FurnaceRecipe;
-import es.degrassi.comon.util.TextureSizeHelper;
-import es.degrassi.comon.util.storage.ProgressStorage;
+import es.degrassi.forge.Degrassi;
+import es.degrassi.forge.init.gui.renderer.ProgressComponent;
+import es.degrassi.forge.init.recipe.furnace.FurnaceRecipe;
+import es.degrassi.forge.util.TextureSizeHelper;
+import es.degrassi.forge.util.storage.ProgressStorage;
 import es.degrassi.forge.init.registration.BlockRegister;
 import es.degrassi.forge.integration.jei.renderer.ProgressGuiElementJeiRenderer;
 import mezz.jei.api.constants.VanillaTypes;
