@@ -1,6 +1,5 @@
 package es.degrassi.forge.init.recipe.furnace;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import es.degrassi.forge.init.recipe.IDegrassiRecipe;
 import es.degrassi.forge.init.registration.RecipeRegistry;
@@ -13,16 +12,13 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import java.util.List;
-import java.util.stream.Stream;
 
+@SuppressWarnings("unused")
 public class FurnaceRecipe implements IDegrassiRecipe {
   private final ResourceLocation id;
   private final ItemStack output;
   private final NonNullList<Ingredient> recipeItems;
   private int time;
-  private boolean timeModified = false;
-  private boolean energyModified = false;
-  private boolean xpModified = false;
   private int energyRequired;
   private float xp;
   private boolean modified = false;
@@ -104,26 +100,20 @@ public class FurnaceRecipe implements IDegrassiRecipe {
     return showInJei;
   }
 
+  public void showInJei(boolean show) {
+    this.showInJei = show;
+  }
+
   public int getEnergyRequired() {
     return this.energyRequired;
   }
 
   public void setEnergyRequired(int energyRequired) {
     this.energyRequired = energyRequired;
-    this.energyModified = true;
-  }
-
-  public boolean isEnergyModified() {
-    return this.energyModified;
-  }
-
-  public boolean isTimeModified() {
-    return this.timeModified;
   }
 
   public void setTime(int time) {
     this.time = time;
-    this.timeModified = true;
   }
 
   public float getExperience() {
@@ -132,11 +122,6 @@ public class FurnaceRecipe implements IDegrassiRecipe {
 
   public void setExperience(float xp) {
     this.xp = xp;
-    this.xpModified = true;
-  }
-
-  public boolean isXpModified() {
-    return xpModified;
   }
 
   public boolean isModified() {
@@ -147,28 +132,24 @@ public class FurnaceRecipe implements IDegrassiRecipe {
     this.modified = true;
   }
 
-  public void unModified() {
-    this.modified = false;
-  }
-
   public FurnaceRecipe copy() {
     return new FurnaceRecipe(id, output, recipeItems, time, energyRequired, xp);
   }
 
   @Override
   public String toString() {
-    JsonArray array = new JsonArray(this.recipeItems.toArray().length);
-    List<Ingredient> list = Stream.of(this.recipeItems.toArray()).map(ingredient -> (Ingredient) ingredient).toList();
-    list.forEach(item -> array.add(item.toString()));
+    List<Ingredient> list = this.recipeItems.stream().toList();
+    List<String> ing = list.stream().map(ingredient -> ingredient.getItems()[0].getDisplayName().getString()).toList();
+    String array = ing.toString();
     JsonObject json = GsonHelper.parse(
       "{" +
-        "\"id\": \"" + id.getNamespace() + ":" + id.getPath() + "\"" +
-        ", \"ingredients\": " + array +
-        ", \"output\": \"" + output.getDisplayName() + "\"" +
-        ", \"time\": " + time +
-        ", \"energy\": " + energyRequired +
-        ", \"xp\": " + xp +
-        "}"
+        "\n\t\"id\": \"" + id.getNamespace() + ":" + id.getPath() + "\"" +
+        ",\n\t\"ingredients\": \"" + array + "\"" +
+        ",\n\t\"output\": \"" + output.getDisplayName().getString() + "\"" +
+        ",\n\t\"time\": " + time +
+        ",\n\t\"energy\": " + energyRequired +
+        ",\n\t\"xp\": " + xp +
+        "\n}"
     );
     return json.toString();
   }

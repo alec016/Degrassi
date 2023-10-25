@@ -11,9 +11,27 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class EfficiencyUpgrade extends PanelUpgrade {
+public class EfficiencyUpgrade extends BaseUpgrade implements IPanelUpgrade {
+  private Integer value;
+  private UpgradeType type;
   public EfficiencyUpgrade(Properties properties) {
     super(properties);
+  }
+
+  public void setValue(Integer value) {
+    this.value = value;
+  }
+
+  public void setType(UpgradeType type) {
+    this.type = type;
+  }
+
+  public Integer getValue() {
+    return value;
+  }
+
+  public UpgradeType getType() {
+    return type;
   }
 
   @Override

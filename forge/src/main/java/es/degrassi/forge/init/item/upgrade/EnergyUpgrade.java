@@ -10,11 +10,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class EnergyUpgrade extends FurnaceUpgrade {
+public class EnergyUpgrade extends BaseUpgrade implements IFurnaceUpgrade {
+  private Integer value;
   public EnergyUpgrade(Properties properties) {
     super(properties);
   }
 
+  public Integer getValue() {
+    return value;
+  }
+
+  public void setValue(Integer value) {
+    this.value = value;
+  }
   @Override
   public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
     if (getValue() == null) setValue(DegrassiConfig.energy_augment.get());

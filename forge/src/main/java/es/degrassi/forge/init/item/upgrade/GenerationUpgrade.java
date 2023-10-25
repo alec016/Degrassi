@@ -11,11 +11,28 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class GenerationUpgrade extends PanelUpgrade {
+public class GenerationUpgrade extends BaseUpgrade implements IPanelUpgrade {
+  private Integer value;
+  private UpgradeType type;
   public GenerationUpgrade(Properties properties) {
     super(properties);
   }
 
+  public void setValue(Integer value) {
+    this.value = value;
+  }
+
+  public void setType(UpgradeType type) {
+    this.type = type;
+  }
+
+  public Integer getValue() {
+    return value;
+  }
+
+  public UpgradeType getType() {
+    return type;
+  }
   @Override
   public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
     if (getType() == null) setType(DegrassiConfig.gen_type.get());

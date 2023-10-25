@@ -118,7 +118,6 @@ public abstract class FurnaceEntity extends BaseEntity {
         return 2;
       }
     };
-
     this.ENERGY_STORAGE = new AbstractEnergyStorage(defaultCapacity, defaultTransfer) {
         @Override
         public boolean canExtract() {
@@ -142,22 +141,19 @@ public abstract class FurnaceEntity extends BaseEntity {
             .sendToChunkListeners(level.getChunkAt(getBlockPos()));
       }
     };
-
-    this.xp = new ExperienceStorage() {
+    this.xp = new ExperienceStorage(0) {
       @Override
       public void onExperienceChanged() {
         setChanged();
         if(level != null && !level.isClientSide() && level.getServer() != null) {
           if (this.xp >= 9843) {
-            ExperienceOrb.award(Objects.requireNonNull(level.getServer().getLevel(level.dimension())), Vec3.atCenterOf(pos), (int) Math.floor(this.xp));
-            extractXp((float) Math.floor(xp));
+            dropExperience();
           }
           new FurnaceExperiencePacket(this.xp, pos)
             .sendToChunkListeners(level.getChunkAt(getBlockPos()));
         }
       }
     };
-
     this.itemHandler = new ItemStackHandler(4) {
       @Override
       protected void onContentsChanged(int slot) {
@@ -262,6 +258,7 @@ public abstract class FurnaceEntity extends BaseEntity {
     nbt.putInt("furnace.capacity", ENERGY_STORAGE.getMaxEnergyStored());
     nbt.putInt("furnace.progress", progressStorage.getProgress());
     nbt.putInt("furnace.maxProgress", progressStorage.getMaxProgress());
+    nbt.putFloat("furnace.xp", xp.getXp());
   }
 
   @Override
@@ -272,6 +269,7 @@ public abstract class FurnaceEntity extends BaseEntity {
     ENERGY_STORAGE.setCapacity(nbt.getInt("furnace.capacity"));
     progressStorage.setProgress(nbt.getInt("furnace.progress"));
     progressStorage.setMaxProgress(nbt.getInt("furnace.maxProgress"));
+    xp.setXp(nbt.getFloat("furnace.xp"));
   }
 
   @Override
@@ -332,5 +330,12 @@ public abstract class FurnaceEntity extends BaseEntity {
   @Override
   public void handleUpdateTag(CompoundTag tag) {
     load(tag);
+  }
+
+  public void dropExperience() {
+    if(level != null && level.getServer() != null) {
+      ExperienceOrb.award(Objects.requireNonNull(level.getServer().getLevel(level.dimension())), Vec3.atCenterOf(getBlockPos()), (int) Math.floor(this.xp.getXp()));
+      this.xp.extractXp((float) Math.floor(this.xp.getXp()));
+    }
   }
 }

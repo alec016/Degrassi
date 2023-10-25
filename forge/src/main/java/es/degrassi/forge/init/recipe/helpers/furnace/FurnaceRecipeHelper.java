@@ -5,7 +5,7 @@ import es.degrassi.forge.init.item.upgrade.EnergyUpgrade;
 import es.degrassi.forge.init.item.upgrade.SpeedUpgrade;
 import es.degrassi.forge.init.recipe.furnace.FurnaceRecipe;
 import es.degrassi.forge.init.registration.RecipeRegistry;
-import es.degrassi.forge.util.DegrassiLogger;
+import es.degrassi.forge.integration.config.DegrassiConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
@@ -52,43 +52,9 @@ public class FurnaceRecipeHelper {
       if (recipe.getIngredients().get(0).test(inventory.getItem(2))) entity.recipe = recipe.copy();
     });
 
-    if (entity.recipe == null) return false;
+    boolean can = entity.recipe != null && canInsertAmountIntoOutputSlot(inventory) && canInsertItemIntoOutputSlot(inventory, entity.recipe.getResultItem()) && hasEnoughEnergy(entity);
 
-    boolean can = canInsertAmountIntoOutputSlot(inventory) && canInsertItemIntoOutputSlot(inventory, entity.recipe.getResultItem()) && hasEnoughEnergy(entity);
-
-    if (can && !entity.recipe.isModified()) {
-      if (entity instanceof IronFurnaceEntity) {
-        entity.recipe.setTime(entity.recipe.getTime() * 95 / 100);
-      } else if(entity instanceof GoldFurnaceEntity) {
-        entity.recipe.setTime(entity.recipe.getTime() * 80 / 100);
-        entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * 120 / 100);
-      } else if (entity instanceof DiamondFurnaceEntity) {
-        entity.recipe.setTime(entity.recipe.getTime() * 60 / 100);
-        entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * 140 / 100);
-      } else if (entity instanceof EmeraldFurnaceEntity) {
-        entity.recipe.setTime(entity.recipe.getTime() * 40 / 100);
-        entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * 160 / 100);
-      } else if (entity instanceof NetheriteFurnaceEntity) {
-        entity.recipe.setTime(entity.recipe.getTime() * 10 / 100);
-        entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * 190 / 100);
-      }
-      ItemStack slot0 = inventory.getItem(0);
-      ItemStack slot1 = inventory.getItem(1);
-      int energyRequired = entity.recipe.getEnergyRequired();
-      if (slot0.getCount() > 0 && slot0.getItem() instanceof SpeedUpgrade upgrade) {
-        double speedModifier = slot0.getCount() * upgrade.getModifier();
-        entity.recipe.setTime(entity.recipe.getTime() - (int) Math.floor(entity.recipe.getTime() * speedModifier));
-        energyRequired += (int) Math.floor(entity.recipe.getEnergyRequired() * 5 * speedModifier);
-      }
-      if (slot1.getCount() > 0 && slot1.getItem() instanceof EnergyUpgrade upgrade) {
-        double energyModifier = Math.min(slot0.getCount(), slot1.getCount()) * upgrade.getModifier();
-        energyRequired -= (int) Math.floor(entity.recipe.getEnergyRequired() * energyModifier);
-      }
-      entity.recipe.setEnergyRequired(energyRequired);
-      entity.recipe.modify();
-      entity.progressStorage.setMaxProgress(entity.recipe.getTime());
-      DegrassiLogger.INSTANCE.info(entity.recipe);
-    }
+    if (can && !entity.recipe.isModified()) modifyRecipe(entity, inventory);
 
     return can;
   }
@@ -147,5 +113,48 @@ public class FurnaceRecipeHelper {
       recipes.add(recipe);
       recipesMap.put(recipe.getId(), recipe);
     });
+  }
+
+  private static void modifyRecipe(FurnaceEntity entity, SimpleContainer inventory) {
+    if (entity instanceof IronFurnaceEntity) {
+      entity.recipe.setTime(entity.recipe.getTime() * (100 - DegrassiConfig.iron_furnace_speed.get()) / 100);
+      entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * (100 + DegrassiConfig.iron_furnace_energy.get()) / 100);
+      entity.recipe.setExperience(entity.recipe.getExperience() * (100 + DegrassiConfig.iron_furnace_xp.get()) / 100);
+    } else if(entity instanceof GoldFurnaceEntity) {
+      entity.recipe.setTime(entity.recipe.getTime() * (100 - DegrassiConfig.gold_furnace_speed.get()) / 100);
+      entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * (100 + DegrassiConfig.gold_furnace_energy.get()) / 100);
+      entity.recipe.setExperience(entity.recipe.getExperience() * (100 + DegrassiConfig.gold_furnace_xp.get()) / 100);
+    } else if (entity instanceof DiamondFurnaceEntity) {
+      entity.recipe.setTime(entity.recipe.getTime() * (100 - DegrassiConfig.diamond_furnace_speed.get()) / 100);
+      entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * (100 + DegrassiConfig.diamond_furnace_energy.get()) / 100);
+      entity.recipe.setExperience(entity.recipe.getExperience() * (100 + DegrassiConfig.diamond_furnace_xp.get()) / 100);
+    } else if (entity instanceof EmeraldFurnaceEntity) {
+      entity.recipe.setTime(entity.recipe.getTime() * (100 - DegrassiConfig.emerald_furnace_speed.get()) / 100);
+      entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * (100 + DegrassiConfig.emerald_furnace_energy.get()) / 100);
+      entity.recipe.setExperience(entity.recipe.getExperience() * (100 + DegrassiConfig.emerald_furnace_xp.get()) / 100);
+    } else if (entity instanceof NetheriteFurnaceEntity) {
+      entity.recipe.setTime(entity.recipe.getTime() * (100 - DegrassiConfig.netherite_furnace_speed.get()) / 100);
+      entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * (100 + DegrassiConfig.netherite_furnace_energy.get()) / 100);
+      entity.recipe.setExperience(entity.recipe.getExperience() * (100 + DegrassiConfig.netherite_furnace_xp.get()) / 100);
+    }
+
+    ItemStack slot0 = inventory.getItem(0);
+    ItemStack slot1 = inventory.getItem(1);
+
+    int energyRequired = entity.recipe.getEnergyRequired();
+    if (slot0.getCount() > 0 && slot0.getItem() instanceof SpeedUpgrade upgrade) {
+      double speedModifier = slot0.getCount() * upgrade.getModifier();
+      entity.recipe.setTime(Math.max(1, entity.recipe.getTime() - (int) Math.floor(entity.recipe.getTime() * speedModifier)));
+      energyRequired += (int) Math.floor(entity.recipe.getEnergyRequired() * 5 * speedModifier);
+    }
+
+    if (slot1.getCount() > 0 && slot1.getItem() instanceof EnergyUpgrade upgrade) {
+      double energyModifier = Math.min(slot0.getCount(), slot1.getCount()) * upgrade.getModifier();
+      energyRequired -= (int) Math.floor(entity.recipe.getEnergyRequired() * energyModifier);
+    }
+
+    entity.recipe.setEnergyRequired(Math.max(1, energyRequired));
+    entity.recipe.modify();
+    entity.progressStorage.setMaxProgress(entity.recipe.getTime());
   }
 }

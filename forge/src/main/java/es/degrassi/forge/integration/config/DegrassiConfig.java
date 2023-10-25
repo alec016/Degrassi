@@ -85,22 +85,37 @@ public class DegrassiConfig {
   //iron furnace
   public static final ForgeConfigSpec.ConfigValue<Integer> iron_furnace_capacity;
   public static final ForgeConfigSpec.ConfigValue<Integer> iron_furnace_transfer;
+  public static final ForgeConfigSpec.ConfigValue<Integer> iron_furnace_xp;
+  public static final ForgeConfigSpec.ConfigValue<Integer> iron_furnace_speed;
+  public static final ForgeConfigSpec.ConfigValue<Integer> iron_furnace_energy;
 
   //gold furnace
   public static final ForgeConfigSpec.ConfigValue<Integer> gold_furnace_capacity;
   public static final ForgeConfigSpec.ConfigValue<Integer> gold_furnace_transfer;
+  public static final ForgeConfigSpec.ConfigValue<Integer> gold_furnace_xp;
+  public static final ForgeConfigSpec.ConfigValue<Integer> gold_furnace_speed;
+  public static final ForgeConfigSpec.ConfigValue<Integer> gold_furnace_energy;
 
   //diamond furnace
   public static final ForgeConfigSpec.ConfigValue<Integer> diamond_furnace_capacity;
   public static final ForgeConfigSpec.ConfigValue<Integer> diamond_furnace_transfer;
+  public static final ForgeConfigSpec.ConfigValue<Integer> diamond_furnace_xp;
+  public static final ForgeConfigSpec.ConfigValue<Integer> diamond_furnace_speed;
+  public static final ForgeConfigSpec.ConfigValue<Integer> diamond_furnace_energy;
 
   //emerald furnace
   public static final ForgeConfigSpec.ConfigValue<Integer> emerald_furnace_capacity;
   public static final ForgeConfigSpec.ConfigValue<Integer> emerald_furnace_transfer;
+  public static final ForgeConfigSpec.ConfigValue<Integer> emerald_furnace_xp;
+  public static final ForgeConfigSpec.ConfigValue<Integer> emerald_furnace_speed;
+  public static final ForgeConfigSpec.ConfigValue<Integer> emerald_furnace_energy;
 
   //netherite furnace
   public static final ForgeConfigSpec.ConfigValue<Integer> netherite_furnace_capacity;
   public static final ForgeConfigSpec.ConfigValue<Integer> netherite_furnace_transfer;
+  public static final ForgeConfigSpec.ConfigValue<Integer> netherite_furnace_xp;
+  public static final ForgeConfigSpec.ConfigValue<Integer> netherite_furnace_speed;
+  public static final ForgeConfigSpec.ConfigValue<Integer> netherite_furnace_energy;
 
   // efficiency upgrade
   public static final ForgeConfigSpec.ConfigValue<Integer> eff_augment;
@@ -120,6 +135,7 @@ public class DegrassiConfig {
 
   // speed upgrade
   public static final ForgeConfigSpec.ConfigValue<Integer> speed_augment;
+  public static final ForgeConfigSpec.ConfigValue<Integer> speed_energy_augment;
 
   // energy upgrade
   public static final ForgeConfigSpec.ConfigValue<Integer> energy_augment;
@@ -330,6 +346,15 @@ public class DegrassiConfig {
     iron_furnace_transfer = BUILDER
       .comment("energy transfer of iron furnace - Default 20")
       .define("transfer", 20);
+    iron_furnace_xp = BUILDER
+      .comment("xp augment production on recipe in percentage - Default 1")
+      .define("xp", 1);
+    iron_furnace_speed = BUILDER
+      .comment("speed recipe reduction in percentage - Default 5")
+      .define("speed", 5);
+    iron_furnace_energy = BUILDER
+      .comment("energy recipe augment in percentage - Default 0")
+      .define("energy", 0);
     BUILDER.pop();
 
     BUILDER.push("Gold Furnace");
@@ -339,6 +364,15 @@ public class DegrassiConfig {
     gold_furnace_transfer = BUILDER
       .comment("energy transfer of gold furnace - Default 20")
       .define("transfer", 100);
+    gold_furnace_xp = BUILDER
+      .comment("xp augment production on recipe in percentage - Default 1")
+      .define("xp", 1);
+    gold_furnace_speed = BUILDER
+      .comment("speed recipe reduction in percentage - Default 20")
+      .define("speed", 20);
+    gold_furnace_energy = BUILDER
+      .comment("energy recipe augment in percentage - Default 20")
+      .define("energy", 20);
     BUILDER.pop();
 
     BUILDER.push("Diamond Furnace");
@@ -348,6 +382,15 @@ public class DegrassiConfig {
     diamond_furnace_transfer = BUILDER
       .comment("energy transfer of diamond furnace - Default 200")
       .define("transfer", 200);
+    diamond_furnace_xp = BUILDER
+      .comment("xp augment production on recipe in percentage - Default 1")
+      .define("xp", 1);
+    diamond_furnace_speed = BUILDER
+      .comment("speed recipe reduction in percentage - Default 40")
+      .define("speed", 40);
+    diamond_furnace_energy = BUILDER
+      .comment("energy recipe augment in percentage - Default 40")
+      .define("energy", 40);
     BUILDER.pop();
 
     BUILDER.push("emerald Furnace");
@@ -357,6 +400,15 @@ public class DegrassiConfig {
     emerald_furnace_transfer = BUILDER
       .comment("energy transfer of emerald furnace - Default 1000")
       .define("transfer", 1000);
+    emerald_furnace_xp = BUILDER
+      .comment("xp augment production on recipe in percentage - Default 1")
+      .define("xp", 1);
+    emerald_furnace_speed = BUILDER
+      .comment("speed recipe reduction in percentage - Default 60")
+      .define("speed", 60);
+    emerald_furnace_energy = BUILDER
+      .comment("energy recipe augment in percentage - Default 60")
+      .define("energy", 60);
     BUILDER.pop();
 
     BUILDER.push("Netherite Furnace");
@@ -366,6 +418,15 @@ public class DegrassiConfig {
     netherite_furnace_transfer = BUILDER
       .comment("energy transfer of netherite furnace - Default 10000")
       .define("transfer", 10000);
+    netherite_furnace_xp = BUILDER
+      .comment("xp augment production on recipe in percentage - Default 1")
+      .define("xp", 1);
+    netherite_furnace_speed = BUILDER
+      .comment("speed recipe reduction in percentage - Default 90")
+      .define("speed", 90);
+    netherite_furnace_energy = BUILDER
+      .comment("energy recipe augment in percentage - Default 90")
+      .define("energy", 90);
     BUILDER.pop();
 
     BUILDER.pop();
@@ -425,13 +486,16 @@ public class DegrassiConfig {
 
     BUILDER.push("Speed");
     speed_augment = BUILDER
-      .comment("speed augment - default 1")
+      .comment("speed augment in percentage - default 1")
       .define("augment", 1);
+    speed_energy_augment = BUILDER
+      .comment("speed energy augment in percentage - default 5")
+      .define("energy augment", 5);
     BUILDER.pop();
 
     BUILDER.push("Energy");
     energy_augment = BUILDER
-      .comment("energy reduction - default 1")
+      .comment("energy reduction in percentage - default 1")
       .define("reduction", 1);
     BUILDER.pop();
 

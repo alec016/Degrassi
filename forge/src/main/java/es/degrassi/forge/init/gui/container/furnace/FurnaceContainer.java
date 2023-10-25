@@ -51,6 +51,7 @@ public abstract class FurnaceContainer extends AbstractContainerMenu implements 
   @Override
   public void clicked(int slotId, int dragType, @NotNull ClickType clickTypeIn, @NotNull Player player) {
     this.entity.setChanged();
+    if (slotId == 3 + VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT && slots.get(slotId).mayPickup(player)) this.entity.dropExperience();
     super.clicked(slotId, dragType, clickTypeIn, player);
   }
 
@@ -71,6 +72,7 @@ public abstract class FurnaceContainer extends AbstractContainerMenu implements 
     } else if (index < TE_INVENTORY_FIRST_SLOT_INDEX + TE_INVENTORY_SLOT_COUNT) {
       // This is a TE slot so merge the stack into the players inventory
       if (!moveItemStackTo(sourceStack, VANILLA_FIRST_SLOT_INDEX, VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT, false)) {
+        if (sourceSlot.index == 3 + VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) this.entity.dropExperience();
         return ItemStack.EMPTY;
       }
     } else {

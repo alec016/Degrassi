@@ -3,8 +3,6 @@ package es.degrassi.forge.init.registration;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.forge.Degrassi;
-import es.degrassi.forge.init.item.upgrade.FurnaceUpgrade;
-import es.degrassi.forge.init.item.upgrade.PanelUpgrade;
 import es.degrassi.forge.init.item.upgrade.*;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.Item;
@@ -18,35 +16,31 @@ public class ItemRegister {
     "gold_coin", () -> new Item(new Item.Properties().tab(CreativeTabs.COMMON))
   );
 
-  public static final RegistrySupplier<PanelUpgrade> EFFICIENCY_UPGRADE = registerPanelUpgrade(
+  public static final RegistrySupplier<BaseUpgrade> EFFICIENCY_UPGRADE = registerUpgrade(
     "efficiency_upgrade", () -> new EfficiencyUpgrade(new Item.Properties().tab(CreativeTabs.COMMON))
   );
 
-  public static final RegistrySupplier<PanelUpgrade> TRANSFER_UPGRADE = registerPanelUpgrade(
+  public static final RegistrySupplier<BaseUpgrade> TRANSFER_UPGRADE = registerUpgrade(
     "transfer_upgrade", () -> new TransferUpgrade(new Item.Properties().tab(CreativeTabs.COMMON))
   );
 
-  public static final RegistrySupplier<PanelUpgrade> GENERATION_UPGRADE = registerPanelUpgrade(
+  public static final RegistrySupplier<BaseUpgrade> GENERATION_UPGRADE = registerUpgrade(
     "generation_upgrade", () -> new GenerationUpgrade(new Item.Properties().tab(CreativeTabs.COMMON))
   );
 
-  public static final RegistrySupplier<PanelUpgrade> CAPACITY_UPGRADE = registerPanelUpgrade(
+  public static final RegistrySupplier<BaseUpgrade> CAPACITY_UPGRADE = registerUpgrade(
     "capacity_upgrade", () -> new CapacityUpgrade(new Item.Properties().tab(CreativeTabs.COMMON))
   );
 
-  public static final RegistrySupplier<FurnaceUpgrade> SPEED_UPGRADE = registerFurnaceUpgrade(
+  public static final RegistrySupplier<BaseUpgrade> SPEED_UPGRADE = registerUpgrade(
     "speed_upgrade", () -> new SpeedUpgrade(new Item.Properties().tab(CreativeTabs.COMMON))
   );
 
-  public static final RegistrySupplier<FurnaceUpgrade> ENERGY_UPGRADE = registerFurnaceUpgrade(
+  public static final RegistrySupplier<BaseUpgrade> ENERGY_UPGRADE = registerUpgrade(
     "energy_upgrade", () -> new EnergyUpgrade(new Item.Properties().tab(CreativeTabs.COMMON))
   );
 
-  private static RegistrySupplier<PanelUpgrade> registerPanelUpgrade(String id, Supplier<? extends PanelUpgrade> supplier) {
-    return ITEMS.register(id, supplier);
-  }
-
-  private static RegistrySupplier<FurnaceUpgrade> registerFurnaceUpgrade(String id, Supplier<? extends FurnaceUpgrade> supplier) {
+  private static RegistrySupplier<BaseUpgrade> registerUpgrade(String id, Supplier<? extends BaseUpgrade> supplier) {
     return ITEMS.register(id, supplier);
   }
 
