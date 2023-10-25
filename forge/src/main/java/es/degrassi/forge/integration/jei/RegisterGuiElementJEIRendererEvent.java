@@ -9,6 +9,7 @@ import es.degrassi.forge.init.gui.renderer.IGuiElement;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class RegisterGuiElementJEIRendererEvent {
 
   public static final Event<Register> EVENT = EventFactory.createLoop();

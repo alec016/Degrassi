@@ -1,5 +1,6 @@
 package es.degrassi.forge.util;
 
+@SuppressWarnings("unused")
 public abstract class MouseUtil {
   public static boolean isMouseOver(double mouseX, double mouseY, int x, int y) {
     return isMouseOver(mouseX, mouseY, x, y, 16);

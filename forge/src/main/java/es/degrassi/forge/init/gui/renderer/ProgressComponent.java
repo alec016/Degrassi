@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class ProgressComponent extends InfoArea implements IDrawableAnimated, IGuiElement {
   private final ProgressStorage progress;
   public ResourceLocation texture;

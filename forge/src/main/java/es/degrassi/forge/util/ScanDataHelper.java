@@ -15,11 +15,10 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public class ScanDataHelper
-{
-  public static <T> List<Class<? extends T>> lookupAnnotatedTypes(Class<? extends Annotation> annotation, Class<T> baseType)
-  {
-    return lookupAnnotatedTypes(annotation, baseType, Predicates.alwaysTrue());
+@SuppressWarnings("unused")
+public class ScanDataHelper {
+  public static <T> List<Class<? extends T>> lookupAnnotatedTypes(Class<? extends Annotation> annotation, Class<T> baseType) {
+    return lookupAnnotatedTypes(annotation, baseType, modAwareAnnotationData -> true);
   }
 
   /**
@@ -37,7 +36,7 @@ public class ScanDataHelper
 
   public static Collection<ModAwareAnnotationData> lookupAnnotatedObjects(Class<? extends Annotation> annotation)
   {
-    return lookupAnnotatedObjects(annotation, Predicates.alwaysTrue());
+    return lookupAnnotatedObjects(annotation, modAwareAnnotationData -> true);
   }
 
   public static Collection<ModAwareAnnotationData> lookupAnnotatedObjects(Class<? extends Annotation> annotation, Predicate<ModAwareAnnotationData> matcher)
@@ -53,7 +52,7 @@ public class ScanDataHelper
 
   public static Collection<ModAwareAnnotationData> lookupAnnotatedObjects(ModFileScanData data, Class<? extends Annotation> annotation)
   {
-    return lookupAnnotatedObjects(data, annotation, Predicates.alwaysTrue());
+    return lookupAnnotatedObjects(data, annotation, modAwareAnnotationData -> true);
   }
 
   public static Collection<ModAwareAnnotationData> lookupAnnotatedObjects(ModFileScanData data, Class<? extends Annotation> annotation, Predicate<ModAwareAnnotationData> matcher)
@@ -73,7 +72,7 @@ public class ScanDataHelper
   }
 
   public static class ScanProperties
-    implements Predicate<ModFileScanData.AnnotationData>
+    implements Predicate<AnnotationData>
   {
     private final Map<String, Object> entries;
 

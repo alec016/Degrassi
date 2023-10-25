@@ -1,4 +1,4 @@
-package es.degrassi.forge.init.entity;
+package es.degrassi.forge.init.entity.type;
 
 import net.minecraftforge.items.ItemStackHandler;
 

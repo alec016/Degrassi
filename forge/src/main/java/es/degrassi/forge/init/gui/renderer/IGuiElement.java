@@ -7,6 +7,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public interface IGuiElement {
   GuiElementType<? extends IGuiElement> getType();
   int getX();

@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("unused")
 public class Range<T extends Comparable<T>> {
 
     private final List<Restriction<T>> restrictions;

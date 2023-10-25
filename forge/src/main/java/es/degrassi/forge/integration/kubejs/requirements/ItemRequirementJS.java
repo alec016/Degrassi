@@ -6,13 +6,15 @@ import es.degrassi.forge.integration.kubejs.recipes.builder.RecipeBuilderJS;
 import es.degrassi.forge.requirements.IRequirement;
 import es.degrassi.forge.requirements.ItemRequirement;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
 public interface ItemRequirementJS extends RecipeBuilderJS {
   default RecipeBuilderJS requireItem(ItemStack item) {
     return this.requireItem(item, 0);
   }
 
-  default RecipeBuilderJS requireItem(ItemStack stack, int slot) {
+  default RecipeBuilderJS requireItem(@NotNull ItemStack stack, int slot) {
     return this.addRequirement(new ItemRequirement(new ItemIngredient(stack.getItem()), stack.getCount(), slot, IRequirement.ModeIO.INPUT));
   }
 

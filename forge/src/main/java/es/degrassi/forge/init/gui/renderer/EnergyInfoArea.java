@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class EnergyInfoArea extends InfoArea {
   private final AbstractEnergyStorage energy;
 

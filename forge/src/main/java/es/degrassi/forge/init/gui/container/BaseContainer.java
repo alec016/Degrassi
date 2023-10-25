@@ -1,6 +1,7 @@
 package es.degrassi.forge.init.gui.container;
 
 import es.degrassi.forge.init.entity.BaseEntity;
+import es.degrassi.forge.init.gui.container.types.IContainer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import org.jetbrains.annotations.Nullable;

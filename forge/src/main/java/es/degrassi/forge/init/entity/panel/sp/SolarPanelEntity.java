@@ -1,7 +1,7 @@
 package es.degrassi.forge.init.entity.panel.sp;
 
 import es.degrassi.forge.init.entity.panel.PanelEntity;
-import es.degrassi.forge.init.item.upgrade.*;
+import es.degrassi.forge.init.item.upgrade.types.IPanelUpgrade;
 import es.degrassi.forge.util.storage.EfficiencyStorage;
 import es.degrassi.forge.network.panel.PanelEfficiencyPacket;
 import net.minecraft.core.BlockPos;

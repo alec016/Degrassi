@@ -4,9 +4,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
-public class Fetcher<T>
-  implements Supplier<T>
-{
+@SuppressWarnings("unused")
+public class Fetcher<T> implements Supplier<T> {
   private final Supplier<T> fetch;
 
   private final BooleanSupplier shouldRefetch;

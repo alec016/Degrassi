@@ -6,6 +6,7 @@ import es.degrassi.forge.init.gui.IComponent;
 import es.degrassi.forge.init.recipe.CraftingResult;
 
 
+@SuppressWarnings("unused")
 public interface IRequirement<T extends IComponent> {
   NamedCodec<IRequirement<?>> CODEC = NamedCodec.record(iRequirementInstance ->
     iRequirementInstance.group(

@@ -3,9 +3,7 @@ package es.degrassi.forge.util;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 
-public class RateTicker
-  implements BooleanSupplier
-{
+public class RateTicker implements BooleanSupplier {
   private final long timerMS;
 
   private boolean called;

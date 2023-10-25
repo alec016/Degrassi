@@ -5,6 +5,7 @@ import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.util.INBTSerializable;
 
+@SuppressWarnings("unused")
 public abstract class EfficiencyStorage implements INBTSerializable<Tag>, IComponent {
   protected double efficiency;
   protected int capacity;

@@ -14,29 +14,24 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class ReflectionUtil
-{
+@SuppressWarnings("unused")
+public class ReflectionUtil {
   private static Field modifiersField;
   private static Object reflectionFactory;
   private static Method newFieldAccessor;
   private static Method fieldAccessorSet;
 
-  public static Class<?> getArrayComponent(Class<?> array)
-  {
+  public static Class<?> getArrayComponent(Class<?> array) {
     return array.isArray() ? getArrayComponent(array.getComponentType()) : array;
   }
 
-  public static <T> Class<?> findCommonSuperClass(Collection<T> coll)
-  {
-    if(coll.isEmpty())
-    {
+  public static <T> Class<?> findCommonSuperClass(Collection<T> coll) {
+    if(coll.isEmpty()) {
       return Void.class;
-    } else
-    {
+    } else {
       Class<?> oclass = null;
 
-      for(T t : coll)
-      {
+      for(T t : coll) {
         if(oclass == null)
           oclass = t.getClass();
         else
@@ -47,13 +42,10 @@ public class ReflectionUtil
     }
   }
 
-  public static <T> Class<?> findCommonSuperClass(Collection<T> coll, Function<T, Class<?>> toClass)
-  {
-    if(coll.isEmpty())
-    {
+  public static <T> Class<?> findCommonSuperClass(Collection<T> coll, Function<T, Class<?>> toClass) {
+    if(coll.isEmpty()) {
       return Void.class;
-    } else
-    {
+    } else {
       Class<?> oclass = null;
       for(T t : coll)
         if(oclass == null)
@@ -64,31 +56,28 @@ public class ReflectionUtil
     }
   }
 
-  public static Class<?> findClosestAncestor(Class<?> a, Class<?> b)
-  {
+  public static Class<?> findClosestAncestor(Class<?> a, Class<?> b) {
     while(!a.isAssignableFrom(b))
       a = a.getSuperclass();
     return a;
   }
 
-  public static boolean doesParameterTypeArgsMatch(Parameter param, Class<?>... baseArgs)
-  {
+  public static boolean doesParameterTypeArgsMatch(Parameter param, Class<?>... baseArgs) {
     java.lang.reflect.Type[] args = getTypeArgs(param.getParameterizedType());
     if(args.length != baseArgs.length)
       return false;
     for(int i = 0; i < args.length; ++i)
-      if(!(args[i] instanceof Class) || !baseArgs[i].isAssignableFrom((Class) args[i]))
+      if(!(args[i] instanceof Class) || !baseArgs[i].isAssignableFrom((Class<?>) args[i]))
         return false;
     return true;
   }
 
-  public static boolean doesParameterTypeArgsMatch(Field field, Class<?>... baseArgs)
-  {
+  public static boolean doesParameterTypeArgsMatch(Field field, Class<?>... baseArgs) {
     java.lang.reflect.Type[] args = getTypeArgs(field.getGenericType());
     if(args.length != baseArgs.length)
       return false;
     for(int i = 0; i < args.length; ++i)
-      if(!(args[i] instanceof Class) || !baseArgs[i].isAssignableFrom((Class) args[i]))
+      if(!(args[i] instanceof Class) || !baseArgs[i].isAssignableFrom((Class<?>) args[i]))
         return false;
     return true;
   }
@@ -96,55 +85,40 @@ public class ReflectionUtil
   /**
    * Examples: For List< String> returns [Type(String)]
    */
-  public static java.lang.reflect.Type[] getTypeArgs(java.lang.reflect.Type type)
-  {
-    if(type instanceof ParameterizedType)
-    {
-      ParameterizedType pt = (ParameterizedType) type;
+  public static java.lang.reflect.Type[] getTypeArgs(java.lang.reflect.Type type) {
+    if(type instanceof ParameterizedType pt) {
       return pt.getActualTypeArguments();
     }
     return new java.lang.reflect.Type[0];
   }
 
-  public static Class<?> fetchClassAny(Type type)
-  {
+  public static Class<?> fetchClassAny(Type type) {
     return fetchClass(type.getSort() < Type.ARRAY ? type.getClassName() : type.getInternalName().replace('/', '.'));
   }
 
-  public static <T> Class<T> fetchClass(Type type)
-  {
+  public static <T> Class<T> fetchClass(Type type) {
     return fetchClass(type.getSort() < Type.ARRAY ? type.getClassName() : type.getInternalName().replace('/', '.'));
   }
 
-  public static <T> Class<T> fetchClass(String name)
-  {
-    try
-    {
+  public static <T> Class<T> fetchClass(String name) {
+    try {
       return Cast.cast(Class.forName(name));
-    } catch(ClassNotFoundException ignored)
-    {
-    } catch(RuntimeException e)
-    {
-      if(e.getMessage().contains("invalid dist"))
-      {
+    } catch(ClassNotFoundException ignored) {
+    } catch(RuntimeException e) {
+      if(e.getMessage().contains("invalid dist")) {
         Degrassi.LOGGER.warn("Attempted to load class from invalid dist: " + name, e);
       }
     }
     return null;
   }
 
-  public static Iterable<Field> getFieldsUpTo(@NonnullDefault Class<?> startClass,
-                                              @Nullable Class<?> exclusiveParent)
-  {
+  public static Iterable<Field> getFieldsUpTo(@NonnullDefault Class<?> startClass, @Nullable Class<?> exclusiveParent) {
 
     List<Field> currentClassFields = Lists.newArrayList(startClass.getDeclaredFields());
     Class<?> parentClass = startClass.getSuperclass();
 
-    if(parentClass != null &&
-      (exclusiveParent == null || !(parentClass.equals(exclusiveParent))))
-    {
-      List<Field> parentClassFields =
-        (List<Field>) getFieldsUpTo(parentClass, exclusiveParent);
+    if(parentClass != null && (!(parentClass.equals(exclusiveParent)))) {
+      List<Field> parentClassFields = (List<Field>) getFieldsUpTo(parentClass, exclusiveParent);
       currentClassFields.addAll(parentClassFields);
     }
 
@@ -152,38 +126,30 @@ public class ReflectionUtil
   }
 
   @Deprecated
-  public static boolean setStaticFinalField(Class<?> cls, String var, Object val)
-  {
-    try
-    {
+  public static boolean setStaticFinalField(Class<?> cls, String var, Object val) {
+    try {
       return setStaticFinalField(cls.getDeclaredField(var), val);
-    } catch(Throwable err)
-    {
-      err.printStackTrace();
+    } catch(Throwable err) {
+      DegrassiLogger.INSTANCE.error(err);
     }
     return false;
   }
 
   @Deprecated
-  public static boolean setStaticFinalField(Field f, Object val)
-  {
-    try
-    {
+  public static boolean setStaticFinalField(Field f, Object val) {
+    try {
       if(Modifier.isStatic(f.getModifiers()))
         return setFinalField(f, null, val);
       return false;
-    } catch(Throwable err)
-    {
-      err.printStackTrace();
+    } catch(Throwable err) {
+      DegrassiLogger.INSTANCE.error(err);
     }
     return false;
   }
 
   @Deprecated
-  public static boolean setFinalField(Field f, @Nullable Object instance, Object thing) throws ReflectiveOperationException
-  {
-    if(Modifier.isFinal(f.getModifiers()))
-    {
+  public static boolean setFinalField(Field f, @Nullable Object instance, Object thing) throws ReflectiveOperationException {
+    if(Modifier.isFinal(f.getModifiers())) {
       makeWritable(f);
       Object fieldAccessor = newFieldAccessor.invoke(reflectionFactory, f, false);
       fieldAccessorSet.invoke(fieldAccessor, instance, thing);
@@ -210,27 +176,21 @@ public class ReflectionUtil
     return f;
   }
 
-  public static Object lookupValue(Object object, Class<?> type)
-  {
+  public static Object lookupValue(Object object, Class<?> type) {
     Field field = lookupField(object.getClass(), type);
     if(field == null)
       return null;
-    try
-    {
+    try {
       return field.get(object);
-    } catch(Exception e)
-    {
+    } catch(Exception e) {
       throw new RuntimeException(e);
     }
   }
 
-  public static Field lookupField(Class<?> clazz, Class<?> type)
-  {
+  public static Field lookupField(Class<?> clazz, Class<?> type) {
     Field ret = null;
-    for(Field field : clazz.getDeclaredFields())
-    {
-      if(type.isAssignableFrom(field.getType()))
-      {
+    for(Field field : clazz.getDeclaredFields()) {
+      if(type.isAssignableFrom(field.getType())) {
         if(ret != null)
           return null;
         field.setAccessible(true);
@@ -240,13 +200,10 @@ public class ReflectionUtil
     return ret;
   }
 
-  public static List<Field> lookupFields(Class<?> clazz, Class<?> type)
-  {
+  public static List<Field> lookupFields(Class<?> clazz, Class<?> type) {
     List<Field> fields = new ArrayList<>();
-    for(Field field : clazz.getDeclaredFields())
-    {
-      if(type.isAssignableFrom(field.getType()))
-      {
+    for(Field field : clazz.getDeclaredFields()) {
+      if(type.isAssignableFrom(field.getType())) {
         field.setAccessible(true);
         fields.add(field);
       }
@@ -254,13 +211,10 @@ public class ReflectionUtil
     return fields;
   }
 
-  public static Field lookupField(Class<?> clazz, String name)
-  {
+  public static Field lookupField(Class<?> clazz, String name) {
     Field ret = null;
-    for(Field field : clazz.getDeclaredFields())
-    {
-      if(name.equals(field.getName()))
-      {
+    for(Field field : clazz.getDeclaredFields()) {
+      if(name.equals(field.getName())) {
         if(ret != null)
           return null;
         field.setAccessible(true);
@@ -270,60 +224,48 @@ public class ReflectionUtil
     return ret;
   }
 
-  public static <T> Optional<T> fetchValue(Field field, Object instance, Class<T> targetType)
-  {
-    try
-    {
+  public static <T> Optional<T> fetchValue(Field field, Object instance, Class<T> targetType) {
+    try {
       field.setAccessible(true);
       return Cast.optionally(field.get(instance), targetType);
-    } catch(Throwable err)
-    {
+    } catch(Throwable err) {
+      DegrassiLogger.INSTANCE.error(err);
     }
     return Optional.empty();
   }
 
-  public static Class<?> getCaller()
-  {
-    try
-    {
+  public static Class<?> getCaller() {
+    try {
       return Class.forName(Thread.currentThread().getStackTrace()[1].getClassName());
-    } catch(ClassNotFoundException e)
-    {
+    } catch(ClassNotFoundException e) {
       return null;
     }
   }
 
-  public static <T> Optional<T> getField(Object anything, int i, Class<T> cast)
-  {
-    try
-    {
+  public static <T> Optional<T> getField(Object anything, int i, Class<T> cast) {
+    try {
       Field f = anything.getClass().getDeclaredFields()[i];
       f.setAccessible(true);
       return Cast.optionally(f.get(anything), cast);
-    } catch(Throwable e)
-    {
-      e.printStackTrace();
+    } catch(Throwable e) {
+      DegrassiLogger.INSTANCE.error(e);
     }
     return Optional.empty();
   }
 
-  public static <T> Optional<T> getStaticFinalField(Class<?> owner, String member)
-  {
-    try
-    {
+  public static <T> Optional<T> getStaticFinalField(Class<?> owner, String member) {
+    try {
       Field f = owner.getDeclaredField(member);
       f.setAccessible(true);
       return Optional.ofNullable(Cast.cast(f.get(null)));
-    } catch(ReflectiveOperationException e)
-    {
+    } catch(ReflectiveOperationException e) {
       if(!(e instanceof NoSuchFieldException))
-        e.printStackTrace();
+        DegrassiLogger.INSTANCE.error(e);
     }
     return Optional.empty();
   }
 
-  public static Method findDeclaredMethod(Class<?> c, String member, Predicate<Method> o) throws NoSuchMethodException
-  {
+  public static Method findDeclaredMethod(Class<?> c, String member, Predicate<Method> o) throws NoSuchMethodException {
     for(Method method : c.getDeclaredMethods())
       if(method.getName().equals(member) && o.test(method))
         return method;

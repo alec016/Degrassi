@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-
+@SuppressWarnings("unused")
 public class BlockRegister {
 
   public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(Degrassi.MODID, Registry.BLOCK_REGISTRY);

@@ -2,9 +2,11 @@ package es.degrassi.forge.api.ingredient;
 
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class ItemIngredient implements IIngredient<Item> {
 
@@ -26,6 +28,6 @@ public class ItemIngredient implements IIngredient<Item> {
 
     @Override
     public String toString() {
-        return Registry.ITEM.getKey(this.item).toString();
+        return Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(this.item)).toString();
     }
 }

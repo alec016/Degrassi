@@ -5,6 +5,7 @@ import net.minecraft.nbt.FloatTag;
 import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.util.INBTSerializable;
 
+@SuppressWarnings("unused")
 public abstract class ExperienceStorage implements INBTSerializable<Tag>, IComponent {
   protected float xp;
 

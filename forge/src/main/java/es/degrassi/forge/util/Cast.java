@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class Cast
-{
+@SuppressWarnings("unused, unchecked, raw use")
+public class Cast {
   public static <T> Supplier<T> staticValue(T value)
   {
     return () -> value;
@@ -61,7 +61,7 @@ public class Cast
     }
   }
 
-  static final Map<Class, Constructor> emptyCtors = new HashMap<>();
+  static final Map<Class<?>, Constructor<?>> emptyCtors = new HashMap<>();
 
   public static <T> Supplier<T> newInstanceSupplier(Class<T> type)
   {
@@ -72,7 +72,7 @@ public class Cast
   {
     try
     {
-      Constructor<T> gen = emptyCtors.get(type);
+      Constructor<T> gen = (Constructor<T>) emptyCtors.get(type);
       if(gen == null)
       {
         gen = type.getDeclaredConstructor();
@@ -90,7 +90,7 @@ public class Cast
   {
     try
     {
-      Constructor<T> gen = emptyCtors.get(type);
+      Constructor<T> gen = (Constructor<T>) emptyCtors.get(type);
       if(gen == null)
       {
         gen = type.getDeclaredConstructor();

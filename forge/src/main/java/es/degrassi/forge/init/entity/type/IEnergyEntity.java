@@ -1,4 +1,4 @@
-package es.degrassi.forge.init.entity;
+package es.degrassi.forge.init.entity.type;
 
 import es.degrassi.forge.util.storage.AbstractEnergyStorage;
 

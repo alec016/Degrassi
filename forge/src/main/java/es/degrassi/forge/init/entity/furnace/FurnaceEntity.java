@@ -2,6 +2,10 @@ package es.degrassi.forge.init.entity.furnace;
 
 import es.degrassi.forge.init.block.furnace.FurnaceBlock;
 import es.degrassi.forge.init.entity.*;
+import es.degrassi.forge.init.entity.type.IEnergyEntity;
+import es.degrassi.forge.init.entity.type.IItemEntity;
+import es.degrassi.forge.init.entity.type.IProgressEntity;
+import es.degrassi.forge.init.entity.type.IRecipeEntity;
 import es.degrassi.forge.init.handlers.ItemWrapperHandler;
 import es.degrassi.forge.init.recipe.IDegrassiRecipe;
 import es.degrassi.forge.init.recipe.recipes.FurnaceRecipe;

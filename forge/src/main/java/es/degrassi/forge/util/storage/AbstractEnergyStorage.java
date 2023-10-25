@@ -2,11 +2,10 @@ package es.degrassi.forge.util.storage;
 
 import es.degrassi.forge.init.gui.IComponent;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.IEnergyStorage;
-import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
 public abstract class AbstractEnergyStorage implements IEnergyStorage, INBTSerializable<CompoundTag>, IComponent {
   protected int energy;
   protected int capacity;

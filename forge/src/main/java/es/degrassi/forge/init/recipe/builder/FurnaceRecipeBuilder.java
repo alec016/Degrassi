@@ -13,6 +13,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 
+@SuppressWarnings("unused")
 public class FurnaceRecipeBuilder extends AbstractRecipeBuilder<FurnaceRecipe> {
   private final int time;
   private float xp;

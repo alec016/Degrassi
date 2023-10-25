@@ -2,7 +2,8 @@ package es.degrassi.forge.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import es.degrassi.forge.init.gui.container.IProgressContainer;
+import es.degrassi.forge.init.entity.BaseEntity;
+import es.degrassi.forge.init.gui.container.types.IProgressContainer;
 import es.degrassi.forge.util.TextureSizeHelper;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.GameRenderer;
@@ -29,7 +30,7 @@ public interface IClientHandler {
     int height,
     ResourceLocation EMPTY_ARROW,
     ResourceLocation FILLED_ARROW,
-    @NotNull IProgressContainer menu
+    @NotNull IProgressContainer<? extends BaseEntity> menu
   ) {
     bindTexture(EMPTY_ARROW);
     GuiComponent.blit(pPoseStack, x, y, 0, 0, width, height, width, height);
@@ -49,7 +50,7 @@ public interface IClientHandler {
     int y,
     boolean vertical,
     ResourceLocation FILLED_ARROW,
-    @NotNull IProgressContainer menu
+    @NotNull IProgressContainer<? extends BaseEntity> menu
   ) {
     final int width = TextureSizeHelper.getTextureWidth(FILLED_ARROW);
     final int height = TextureSizeHelper.getTextureHeight(FILLED_ARROW);

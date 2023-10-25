@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public abstract class AbstractRecipeBuilder<T extends IDegrassiRecipe> {
     private boolean hidden = false;
     protected final List<IRequirement<?>> requirements = new ArrayList<>();

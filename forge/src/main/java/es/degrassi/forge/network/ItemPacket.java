@@ -4,7 +4,7 @@ import dev.architectury.networking.NetworkManager;
 import dev.architectury.networking.simple.BaseS2CMessage;
 import dev.architectury.networking.simple.MessageType;
 import dev.architectury.utils.Env;
-import es.degrassi.forge.init.entity.IItemEntity;
+import es.degrassi.forge.init.entity.type.IItemEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;

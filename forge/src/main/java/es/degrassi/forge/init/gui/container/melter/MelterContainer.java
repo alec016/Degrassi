@@ -3,7 +3,7 @@ package es.degrassi.forge.init.gui.container.melter;
 import es.degrassi.forge.client.ClientHandler;
 import es.degrassi.forge.client.IClientHandler;
 import es.degrassi.forge.init.entity.melter.MelterEntity;
-import es.degrassi.forge.init.gui.container.IProgressContainer;
+import es.degrassi.forge.init.gui.container.types.IProgressContainer;
 import es.degrassi.forge.init.registration.BlockRegister;
 import es.degrassi.forge.init.registration.ContainerRegistry;
 import net.minecraft.network.FriendlyByteBuf;

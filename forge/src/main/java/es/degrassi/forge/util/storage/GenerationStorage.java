@@ -5,6 +5,7 @@ import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.util.INBTSerializable;
 
+@SuppressWarnings("unused")
 public abstract class GenerationStorage implements INBTSerializable<Tag>, IComponent {
   protected int generation;
 

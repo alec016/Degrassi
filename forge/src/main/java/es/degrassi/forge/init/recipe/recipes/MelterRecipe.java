@@ -7,6 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 public class MelterRecipe implements IDegrassiRecipe {
   @Override
@@ -25,12 +26,12 @@ public class MelterRecipe implements IDegrassiRecipe {
   }
 
   @Override
-  public boolean matches(SimpleContainer container, Level level) {
+  public boolean matches(@NotNull SimpleContainer container, @NotNull Level level) {
     return false;
   }
 
   @Override
-  public ItemStack assemble(SimpleContainer container) {
+  public @NotNull ItemStack assemble(@NotNull SimpleContainer container) {
     return null;
   }
 
@@ -40,22 +41,22 @@ public class MelterRecipe implements IDegrassiRecipe {
   }
 
   @Override
-  public ItemStack getResultItem() {
+  public @NotNull ItemStack getResultItem() {
     return null;
   }
 
   @Override
-  public ResourceLocation getId() {
+  public @NotNull ResourceLocation getId() {
     return null;
   }
 
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public @NotNull RecipeSerializer<?> getSerializer() {
     return null;
   }
 
   @Override
-  public RecipeType<?> getType() {
+  public @NotNull RecipeType<?> getType() {
     return null;
   }
 }

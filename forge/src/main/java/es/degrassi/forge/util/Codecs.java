@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.DoubleStream;
 
+@SuppressWarnings("unused")
 public class Codecs {
 
     public static final NamedCodec<CompoundTag> COMPOUND_NBT_CODEC               = NamedCodec.STRING.comapFlatMap(Codecs::decodeCompoundNBT, CompoundTag::toString, "NBT");

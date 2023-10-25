@@ -1,7 +1,7 @@
 package es.degrassi.forge.init.recipe.helpers;
 
 import es.degrassi.forge.init.entity.furnace.*;
-import es.degrassi.forge.init.item.upgrade.IFurnaceUpgrade;
+import es.degrassi.forge.init.item.upgrade.types.IFurnaceUpgrade;
 import es.degrassi.forge.init.recipe.recipes.FurnaceRecipe;
 import es.degrassi.forge.init.registration.RecipeRegistry;
 import es.degrassi.forge.integration.config.DegrassiConfig;

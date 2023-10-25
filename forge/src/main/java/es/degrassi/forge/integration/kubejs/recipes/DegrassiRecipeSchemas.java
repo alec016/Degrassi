@@ -1,7 +1,6 @@
 package es.degrassi.forge.integration.kubejs.recipes;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
 import com.mojang.serialization.JsonOps;
 import dev.latvian.mods.kubejs.recipe.RecipeExceptionJS;
 import dev.latvian.mods.kubejs.recipe.RecipeJS;
@@ -10,7 +9,6 @@ import dev.latvian.mods.kubejs.recipe.component.ArrayRecipeComponent;
 import dev.latvian.mods.kubejs.recipe.component.RecipeComponent;
 import dev.latvian.mods.kubejs.recipe.component.TimeComponent;
 import es.degrassi.forge.requirements.IRequirement;
-import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

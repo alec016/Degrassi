@@ -14,6 +14,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 import java.util.function.Function;
@@ -46,7 +47,7 @@ public interface IIngredient<O> extends Predicate<O> {
                     }
                 }
                 try {
-                    return DataResult.success(Pair.of(new ItemIngredient(Registry.ITEM.get(new ResourceLocation(s))), ops.empty()));
+                    return DataResult.success(Pair.of(new ItemIngredient(ForgeRegistries.ITEMS.getValue(new ResourceLocation(s))), ops.empty()));
                 } catch (ResourceLocationException e) {
                     return DataResult.error("Invalid item ID: " + e.getMessage());
                 }

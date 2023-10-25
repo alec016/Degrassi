@@ -6,9 +6,11 @@ import es.degrassi.forge.api.codec.impl.RegistrarCodec;
 import es.degrassi.forge.util.Codecs;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 public class FluidIngredient implements IIngredient<Fluid> {
@@ -36,6 +38,6 @@ public class FluidIngredient implements IIngredient<Fluid> {
 
     @Override
     public String toString() {
-        return Registry.FLUID.getKey(this.fluid).toString();
+        return Objects.requireNonNull(ForgeRegistries.FLUIDS.getKey(this.fluid)).toString();
     }
 }

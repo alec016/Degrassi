@@ -1,9 +1,9 @@
 package es.degrassi.forge.init.entity.melter;
 
 import es.degrassi.forge.init.entity.BaseEntity;
-import es.degrassi.forge.init.entity.IEnergyEntity;
-import es.degrassi.forge.init.entity.IProgressEntity;
-import es.degrassi.forge.init.entity.IRecipeEntity;
+import es.degrassi.forge.init.entity.type.IEnergyEntity;
+import es.degrassi.forge.init.entity.type.IProgressEntity;
+import es.degrassi.forge.init.entity.type.IRecipeEntity;
 import es.degrassi.forge.init.recipe.IDegrassiRecipe;
 import es.degrassi.forge.init.recipe.helpers.RecipeHelpers;
 import es.degrassi.forge.init.recipe.recipes.MelterRecipe;

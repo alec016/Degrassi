@@ -3,7 +3,7 @@ package es.degrassi.forge.network;
 import dev.architectury.networking.NetworkManager;
 import dev.architectury.networking.simple.BaseS2CMessage;
 import dev.architectury.networking.simple.MessageType;
-import es.degrassi.forge.init.entity.IProgressEntity;
+import es.degrassi.forge.init.entity.type.IProgressEntity;
 import es.degrassi.forge.init.gui.container.BaseContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;

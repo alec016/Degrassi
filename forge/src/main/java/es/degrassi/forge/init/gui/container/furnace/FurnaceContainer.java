@@ -2,7 +2,7 @@ package es.degrassi.forge.init.gui.container.furnace;
 
 import es.degrassi.forge.client.IClientHandler;
 import es.degrassi.forge.init.entity.furnace.FurnaceEntity;
-import es.degrassi.forge.init.gui.container.IProgressContainer;
+import es.degrassi.forge.init.gui.container.types.IProgressContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;

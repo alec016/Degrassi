@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class EfficiencyInfoArea extends InfoArea {
   private final EfficiencyStorage efficiency;
 

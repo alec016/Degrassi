@@ -1,8 +1,8 @@
 package es.degrassi.forge.init.recipe.helpers;
 
 import es.degrassi.forge.init.entity.BaseEntity;
-import es.degrassi.forge.init.entity.IEnergyEntity;
-import es.degrassi.forge.init.entity.IRecipeEntity;
+import es.degrassi.forge.init.entity.type.IEnergyEntity;
+import es.degrassi.forge.init.entity.type.IRecipeEntity;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleContainer;

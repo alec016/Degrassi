@@ -2,6 +2,7 @@ package es.degrassi.forge.init.recipe;
 
 import net.minecraft.network.chat.Component;
 
+@SuppressWarnings("unused")
 public final class CraftingResult {
     private static final CraftingResult SUCCESS = new CraftingResult(RESULT.SUCCESS, Component.literal("success"));
     private static final CraftingResult PASS = new CraftingResult(RESULT.PASS, Component.literal("pass"));

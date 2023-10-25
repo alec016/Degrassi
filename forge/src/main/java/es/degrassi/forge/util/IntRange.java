@@ -2,6 +2,7 @@ package es.degrassi.forge.util;
 
 import java.util.*;
 
+@SuppressWarnings("unused")
 public class IntRange extends Range<Integer> {
 
     private static final Map<String, IntRange> CACHE_SPEC = Collections.synchronizedMap(new WeakHashMap<>());
@@ -78,8 +79,8 @@ public class IntRange extends Range<Integer> {
                 process = process.substring(1).trim();
         }
 
-        if(process.length() > 0) {
-            if(restrictions.size() > 0)
+        if(!process.isEmpty()) {
+            if(!restrictions.isEmpty())
                 throw new IllegalArgumentException("Only fully-qualified sets allowed in multiple set scenario: \"" + spec + "\"");
             else {
                 try {
@@ -134,11 +135,11 @@ public class IntRange extends Range<Integer> {
                 throw new IllegalArgumentException("Range cannot have identical boundaries: " + spec);
 
             Integer lowerVersion = null;
-            if(lowerBound.length() > 0)
+            if(!lowerBound.isEmpty())
                 lowerVersion = Integer.parseInt(lowerBound);
 
             Integer upperVersion = null;
-            if(upperBound.length() > 0)
+            if(!upperBound.isEmpty())
                 upperVersion = Integer.parseInt(upperBound);
 
             if(upperVersion != null && lowerVersion != null && upperVersion.compareTo(lowerVersion) < 0)

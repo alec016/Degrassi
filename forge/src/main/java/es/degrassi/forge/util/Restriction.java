@@ -2,8 +2,7 @@ package es.degrassi.forge.util;
 
 import org.jetbrains.annotations.Nullable;
 
-public record Restriction<T extends Comparable<T>>(@Nullable T lowerBound, boolean lowerBoundInclusive,
-                                                   @Nullable T upperBound, boolean upperBoundInclusive) {
+public record Restriction<T extends Comparable<T>>(@Nullable T lowerBound, boolean lowerBoundInclusive, @Nullable T upperBound, boolean upperBoundInclusive) {
 
     public boolean contains(T thing) {
         if (this.lowerBound != null) {

@@ -12,6 +12,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
 public class FurnaceExperiencePacket extends BaseS2CMessage {
   private final float xp;
   private final BlockPos pos;

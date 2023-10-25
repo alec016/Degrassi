@@ -26,6 +26,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 import java.util.*;
 import java.util.function.Predicate;
 
+@SuppressWarnings("unused, deprecation")
 public class PartialBlockState implements Predicate<BlockInWorld> {
 
     public static final PartialBlockState AIR = new PartialBlockState(Blocks.AIR.defaultBlockState(), Collections.emptyList(), null);

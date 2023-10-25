@@ -1,4 +1,4 @@
-package es.degrassi.forge.init.gui.container;
+package es.degrassi.forge.init.gui.container.types;
 
 import es.degrassi.forge.init.entity.BaseEntity;
 import net.minecraft.network.chat.Component;

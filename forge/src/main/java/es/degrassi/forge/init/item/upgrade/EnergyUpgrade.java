@@ -1,5 +1,7 @@
 package es.degrassi.forge.init.item.upgrade;
 
+import es.degrassi.forge.init.item.upgrade.types.IFurnaceUpgrade;
+import es.degrassi.forge.init.item.upgrade.types.IMelterUpgrade;
 import es.degrassi.forge.integration.config.DegrassiConfig;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;

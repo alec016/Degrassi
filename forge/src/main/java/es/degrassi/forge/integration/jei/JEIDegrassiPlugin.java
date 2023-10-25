@@ -3,7 +3,6 @@ package es.degrassi.forge.integration.jei;
 import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.init.recipe.helpers.RecipeHelpers;
 import es.degrassi.forge.init.recipe.recipes.FurnaceRecipe;
-import es.degrassi.forge.init.recipe.helpers.FurnaceRecipeHelper;
 import es.degrassi.forge.init.registration.BlockRegister;
 import es.degrassi.forge.init.registration.ItemRegister;
 import es.degrassi.forge.integration.config.DegrassiConfig;

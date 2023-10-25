@@ -1,8 +1,8 @@
 package es.degrassi.forge.init.entity.panel;
 
 import es.degrassi.forge.init.entity.BaseEntity;
-import es.degrassi.forge.init.entity.IEnergyEntity;
-import es.degrassi.forge.init.entity.IItemEntity;
+import es.degrassi.forge.init.entity.type.IEnergyEntity;
+import es.degrassi.forge.init.entity.type.IItemEntity;
 import es.degrassi.forge.network.EnergyPacket;
 import es.degrassi.forge.util.storage.AbstractEnergyStorage;
 import es.degrassi.forge.util.storage.GenerationStorage;

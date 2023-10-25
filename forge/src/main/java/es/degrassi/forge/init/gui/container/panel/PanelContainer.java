@@ -2,7 +2,7 @@ package es.degrassi.forge.init.gui.container.panel;
 
 import es.degrassi.forge.client.IClientHandler;
 import es.degrassi.forge.init.entity.panel.PanelEntity;
-import es.degrassi.forge.init.gui.container.IContainer;
+import es.degrassi.forge.init.gui.container.types.IContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;

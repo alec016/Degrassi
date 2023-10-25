@@ -16,6 +16,7 @@ import java.util.Map;
 /**
  * A helper class to find the size of a texture, do not call its methods on a dedicated server as it will immediately crash.
  */
+@SuppressWarnings("unused")
 public class TextureSizeHelper {
 
     private static final Logger LOGGER = LogManager.getLogger();
