@@ -4,6 +4,7 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.init.entity.furnace.*;
+import es.degrassi.forge.init.entity.melter.MelterEntity;
 import es.degrassi.forge.init.entity.panel.sp.*;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -123,6 +124,15 @@ public class EntityRegister {
       new BlockEntityType<>(
         NetheriteFurnaceEntity::new,
         Set.of(BlockRegister.NETHERITE_FURNACE_BLOCK.get()),
+        null
+      )
+    );
+
+  public static final RegistrySupplier<BlockEntityType<MelterEntity>> MELTER =
+    BLOCK_ENTITIES.register("melter", () ->
+      new BlockEntityType<>(
+        MelterEntity::new,
+        Set.of(BlockRegister.MELTER_BLOCK.get()),
         null
       )
     );

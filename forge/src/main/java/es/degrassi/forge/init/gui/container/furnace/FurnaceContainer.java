@@ -11,10 +11,10 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class FurnaceContainer extends AbstractContainerMenu implements IProgressContainer {
+public abstract class FurnaceContainer extends AbstractContainerMenu implements IProgressContainer<FurnaceEntity> {
 
   // THIS YOU HAVE TO DEFINE!
-  private static final int TE_INVENTORY_SLOT_COUNT = 4;  // must be the number of slots you have!
+  protected static final int TE_INVENTORY_SLOT_COUNT = 4;  // must be the number of slots you have!
 
   protected final FurnaceEntity entity;
   protected final Level level;
@@ -23,7 +23,7 @@ public abstract class FurnaceContainer extends AbstractContainerMenu implements 
 
   protected FurnaceContainer(@Nullable MenuType<?> menuType, int i, FurnaceEntity entity, Inventory inv) {
     super(menuType, i);
-    checkContainerSize(inv, 4);
+    checkContainerSize(inv, TE_INVENTORY_SLOT_COUNT);
     this.entity = entity;
     this.level = inv.player.level;
     this.playerInv = inv;

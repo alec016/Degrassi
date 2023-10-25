@@ -31,7 +31,7 @@ public class DiamondFurnaceContainer extends FurnaceContainer {
   }
 
   public DiamondFurnaceContainer(int id, Inventory inv, FurnaceEntity entity) {
-    this(id, inv, entity, new SimpleContainerData(4));
+    this(id, inv, entity, new SimpleContainerData(TE_INVENTORY_SLOT_COUNT));
   }
 
   public DiamondFurnaceContainer(int id, Inventory playerInv, @NotNull FriendlyByteBuf extraData) {

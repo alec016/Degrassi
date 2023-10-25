@@ -1,8 +1,9 @@
 package es.degrassi.forge.integration.jei;
 
 import es.degrassi.forge.Degrassi;
-import es.degrassi.forge.init.recipe.furnace.FurnaceRecipe;
-import es.degrassi.forge.init.recipe.helpers.furnace.FurnaceRecipeHelper;
+import es.degrassi.forge.init.recipe.helpers.RecipeHelpers;
+import es.degrassi.forge.init.recipe.recipes.FurnaceRecipe;
+import es.degrassi.forge.init.recipe.helpers.FurnaceRecipeHelper;
 import es.degrassi.forge.init.registration.BlockRegister;
 import es.degrassi.forge.init.registration.ItemRegister;
 import es.degrassi.forge.integration.config.DegrassiConfig;
@@ -47,9 +48,9 @@ public class JEIDegrassiPlugin implements IModPlugin {
   public void registerRecipes(@NotNull IRecipeRegistration registration) {
     // RecipeManager manager = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager();
 
-    FurnaceRecipeHelper.init();
+    RecipeHelpers.FURNACE.init();
 
-    registration.addRecipes(FURNACE_TYPE, FurnaceRecipeHelper.recipes);
+    registration.addRecipes(FURNACE_TYPE, RecipeHelpers.FURNACE.recipes);
 
     registerPanelInfo(registration);
     registerUpgradesInfo(registration);

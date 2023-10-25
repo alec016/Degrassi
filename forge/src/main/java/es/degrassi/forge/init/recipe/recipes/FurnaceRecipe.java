@@ -1,4 +1,4 @@
-package es.degrassi.forge.init.recipe.furnace;
+package es.degrassi.forge.init.recipe.recipes;
 
 import com.google.gson.JsonObject;
 import es.degrassi.forge.init.recipe.IDegrassiRecipe;

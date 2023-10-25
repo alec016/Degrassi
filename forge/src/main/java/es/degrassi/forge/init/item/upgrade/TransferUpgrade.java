@@ -15,7 +15,7 @@ public class TransferUpgrade extends BaseUpgrade implements IPanelUpgrade {
   private Integer value;
   private UpgradeType type;
   public TransferUpgrade(Properties properties) {
-    super(properties);
+    super(properties, UpgradeUpgradeType.TRANSFER);
   }
 
   public void setValue(Integer value) {

@@ -5,8 +5,8 @@ import es.degrassi.forge.init.entity.panel.sp.SolarPanelEntity;
 import es.degrassi.forge.init.entity.panel.sp.SP1Entity;
 import es.degrassi.forge.init.gui.container.panel.sp.SP1Container;
 import es.degrassi.forge.init.registration.EntityRegister;
+import es.degrassi.forge.network.EnergyPacket;
 import es.degrassi.forge.util.Utils;
-import es.degrassi.forge.network.panel.PanelEnergyPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -59,7 +59,7 @@ public class SP1Block extends SolarPanelBlock {
 
           @Override
           public AbstractContainerMenu createMenu(int id, @NotNull Inventory inv, @NotNull Player player) {
-            new PanelEnergyPacket(entity.ENERGY_STORAGE.getEnergyStored(), entity.ENERGY_STORAGE.getMaxEnergyStored(), entity.ENERGY_STORAGE.getMaxEnergyStored(), pos);
+            new EnergyPacket(entity.ENERGY_STORAGE.getEnergyStored(), entity.ENERGY_STORAGE.getMaxEnergyStored(), entity.ENERGY_STORAGE.getMaxEnergyStored(), pos);
             return new SP1Container(id, inv, entity);
           }
         }, buf -> buf.writeBlockPos(pos));

@@ -3,7 +3,7 @@ package es.degrassi.forge.integration.jei;
 import com.mojang.blaze3d.vertex.PoseStack;
 import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.init.gui.renderer.ProgressComponent;
-import es.degrassi.forge.init.recipe.furnace.FurnaceRecipe;
+import es.degrassi.forge.init.recipe.recipes.FurnaceRecipe;
 import es.degrassi.forge.util.TextureSizeHelper;
 import es.degrassi.forge.util.storage.ProgressStorage;
 import es.degrassi.forge.init.registration.BlockRegister;
@@ -25,22 +25,19 @@ import org.jetbrains.annotations.NotNull;
 
 public class FurnaceRecipeCategory implements IRecipeCategory<FurnaceRecipe> {
   public static final ResourceLocation UID = new ResourceLocation(Degrassi.MODID, "furnace");
-  public static final ResourceLocation TEXTURE = new ResourceLocation(Degrassi.MODID, "textures/gui/furnace_gui.png");
-  // public static final ResourceLocation TEXTURE = new ResourceLocation(Degrassi.MODID, "textures/gui/jei/furnace_gui.png");
-  public static final ResourceLocation FILLED_PROGRESS = new ResourceLocation(Degrassi.MODID, "textures/gui/furnace_progress_filled.png");
-  public static final ResourceLocation FILLED_ENERGY = new ResourceLocation(Degrassi.MODID, "textures/gui/furnace_energy_storage_filled.png");
+  public static final ResourceLocation TEXTURE = new ResourceLocation(Degrassi.MODID, "textures/gui/jei/furnace_gui.png");
+  public static final ResourceLocation FILLED_PROGRESS = new ResourceLocation(Degrassi.MODID, "textures/gui/jei/furnace_progress_filled.png");
 
   private final IDrawable background;
   private final IDrawable icon;
-  private final IGuiHelper helper;
   private ProgressGuiElementJeiRenderer progress;
   private ProgressComponent progressComponent;
   private ProgressStorage progressStorage;
 
   public FurnaceRecipeCategory(@NotNull IJeiHelpers helper) {
-    this.helper = helper.getGuiHelper();
-    this.background = this.helper.drawableBuilder(TEXTURE, 0, 0, 176, 95).setTextureSize(176, 180).build();
-    this.icon = this.helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(BlockRegister.IRON_FURNACE_BLOCK.get()));
+    IGuiHelper helper1 = helper.getGuiHelper();
+    this.background = helper1.drawableBuilder(TEXTURE, 0, 0, 126, 73).setTextureSize(126, 73).build();
+    this.icon = helper1.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(BlockRegister.IRON_FURNACE_BLOCK.get()));
   }
 
   @Override
@@ -65,27 +62,13 @@ public class FurnaceRecipeCategory implements IRecipeCategory<FurnaceRecipe> {
 
   @Override
   public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull FurnaceRecipe recipe, @NotNull IFocusGroup focuses) {
-    builder.addSlot(RecipeIngredientRole.INPUT, 44, 34).addIngredients(recipe.getIngredients().get(0));
-    builder.addSlot(RecipeIngredientRole.OUTPUT, 134, 34).addItemStack(recipe.getResultItem());
+    builder.addSlot(RecipeIngredientRole.INPUT, 31, 19).addIngredients(recipe.getIngredients().get(0));
+    builder.addSlot(RecipeIngredientRole.OUTPUT, 101, 19).addItemStack(recipe.getResultItem());
   }
 
   @Override
   public void draw(@NotNull FurnaceRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, @NotNull PoseStack stack, double mouseX, double mouseY) {
     IRecipeCategory.super.draw(recipe, recipeSlotsView, stack, mouseX, mouseY);
-
-    stack.pushPose();
-    // energy bar
-    helper.drawableBuilder(
-      FILLED_ENERGY,
-      0,
-      0,
-      TextureSizeHelper.getTextureWidth(FILLED_ENERGY),
-      TextureSizeHelper.getTextureHeight(FILLED_ENERGY)
-    ).setTextureSize(
-      TextureSizeHelper.getTextureWidth(FILLED_ENERGY),
-      TextureSizeHelper.getTextureHeight(FILLED_ENERGY)
-    ).build().draw(stack, 7 , 72);
-    stack.popPose();
     stack.pushPose();
     // animated progress bar
     if (progress == null) {
@@ -101,15 +84,15 @@ public class FurnaceRecipeCategory implements IRecipeCategory<FurnaceRecipe> {
     }
     if (progressComponent == null) {
       progressComponent = new ProgressComponent(
-        66,
-        33,
+        56,
+        18,
         progressStorage,
         TextureSizeHelper.getTextureWidth(FILLED_PROGRESS),
         TextureSizeHelper.getTextureHeight(FILLED_PROGRESS),
         FILLED_PROGRESS
       );
     }
-    progress.renderElementInJEI(stack, progressComponent, recipe, mouseX, mouseY, 66, 33);
+    progress.renderElementInJEI(stack, progressComponent, recipe, mouseX, mouseY, 53, 18);
     stack.popPose();
   }
 }

@@ -2,12 +2,12 @@ package es.degrassi.forge.init.block.furnace;
 
 import dev.architectury.registry.menu.MenuRegistry;
 import es.degrassi.forge.init.entity.furnace.FurnaceEntity;
+import es.degrassi.forge.network.EnergyPacket;
+import es.degrassi.forge.network.ProgressPacket;
 import es.degrassi.forge.util.Utils;
 import es.degrassi.forge.init.entity.furnace.NetheriteFurnaceEntity;
 import es.degrassi.forge.init.gui.container.furnace.NetheriteFurnaceContainer;
 import es.degrassi.forge.init.registration.EntityRegister;
-import es.degrassi.forge.network.furnace.FurnaceEnergyPacket;
-import es.degrassi.forge.network.furnace.FurnaceProgressPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -58,8 +58,8 @@ public class NetheriteFurnace extends FurnaceBlock {
 
           @Override
           public AbstractContainerMenu createMenu(int id, @NotNull Inventory inv, @NotNull Player player) {
-            new FurnaceEnergyPacket(entity.ENERGY_STORAGE.getEnergyStored(), entity.ENERGY_STORAGE.getMaxEnergyStored(), entity.ENERGY_STORAGE.getMaxEnergyStored(), pos);
-            new FurnaceProgressPacket(entity.progressStorage.getProgress(), entity.progressStorage.getMaxProgress(), pos);
+            new EnergyPacket(entity.ENERGY_STORAGE.getEnergyStored(), entity.ENERGY_STORAGE.getMaxEnergyStored(), entity.ENERGY_STORAGE.getMaxEnergyStored(), pos);
+            new ProgressPacket(entity.progressStorage.getProgress(), entity.progressStorage.getMaxProgress(), pos);
             return new NetheriteFurnaceContainer(id, inv, entity);
           }
         }, buf -> buf.writeBlockPos(pos));

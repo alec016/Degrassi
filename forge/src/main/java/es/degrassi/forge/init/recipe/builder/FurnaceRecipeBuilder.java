@@ -2,7 +2,7 @@ package es.degrassi.forge.init.recipe.builder;
 
 import es.degrassi.forge.api.codec.NamedCodec;
 import es.degrassi.forge.api.ingredient.IIngredient;
-import es.degrassi.forge.init.recipe.furnace.FurnaceRecipe;
+import es.degrassi.forge.init.recipe.recipes.FurnaceRecipe;
 import es.degrassi.forge.requirements.EnergyRequirement;
 import es.degrassi.forge.requirements.ExperienceRequirement;
 import es.degrassi.forge.requirements.IRequirement;

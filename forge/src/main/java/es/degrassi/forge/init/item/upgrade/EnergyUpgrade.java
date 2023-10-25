@@ -10,10 +10,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class EnergyUpgrade extends BaseUpgrade implements IFurnaceUpgrade {
+public class EnergyUpgrade extends BaseUpgrade implements IFurnaceUpgrade, IMelterUpgrade {
   private Integer value;
   public EnergyUpgrade(Properties properties) {
-    super(properties);
+    super(properties, UpgradeUpgradeType.ENERGY);
   }
 
   public Integer getValue() {

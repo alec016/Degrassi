@@ -8,4 +8,6 @@ public interface IDegrassiRecipe extends Recipe<SimpleContainer> {
   int getTime();
 
   boolean showInJei();
+
+  int getEnergyRequired();
 }

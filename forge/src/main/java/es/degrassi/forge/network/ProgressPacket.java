@@ -1,29 +1,28 @@
-package es.degrassi.forge.network.furnace;
+package es.degrassi.forge.network;
 
 import dev.architectury.networking.NetworkManager;
 import dev.architectury.networking.simple.BaseS2CMessage;
 import dev.architectury.networking.simple.MessageType;
-import es.degrassi.forge.init.entity.furnace.FurnaceEntity;
-import es.degrassi.forge.init.gui.container.furnace.FurnaceContainer;
-import es.degrassi.forge.network.PacketManager;
+import es.degrassi.forge.init.entity.IProgressEntity;
+import es.degrassi.forge.init.gui.container.BaseContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public class FurnaceProgressPacket extends BaseS2CMessage {
+public class ProgressPacket extends BaseS2CMessage {
   protected final int progress;
   protected final int maxProgress;
   private final BlockPos pos;
 
-  public FurnaceProgressPacket(int progress, int maxProgress, BlockPos pos) {
+  public ProgressPacket(int progress, int maxProgress, BlockPos pos) {
     this.progress = progress;
     this.maxProgress = maxProgress;
     this.pos = pos;
   }
 
-  public FurnaceProgressPacket(@NotNull FriendlyByteBuf buf) {
+  public ProgressPacket(@NotNull FriendlyByteBuf buf) {
     this.progress = buf.readInt();
     this.maxProgress = buf.readInt();
     this.pos = buf.readBlockPos();
@@ -31,7 +30,7 @@ public class FurnaceProgressPacket extends BaseS2CMessage {
 
   @Override
   public MessageType getType() {
-    return PacketManager.FURNACE_PROGRESS;
+    return PacketManager.PROGRESS;
   }
 
   @Override
@@ -45,10 +44,10 @@ public class FurnaceProgressPacket extends BaseS2CMessage {
   public void handle(NetworkManager.@NotNull PacketContext context) {
     context.queue(() -> {
       assert Minecraft.getInstance().level != null;
-      if (Minecraft.getInstance().level.getBlockEntity(pos) instanceof FurnaceEntity entity) {
+      if (Minecraft.getInstance().level.getBlockEntity(pos) instanceof IProgressEntity entity) {
         entity.setProgress(progress);
         entity.setMaxProgress(maxProgress);
-        if (Minecraft.getInstance().player.containerMenu instanceof FurnaceContainer menu &&
+        if (Minecraft.getInstance().player.containerMenu instanceof BaseContainer<?> menu &&
           menu.getEntity().getBlockPos().equals(pos)
         ) {
           entity.setProgress(progress);
@@ -59,7 +58,7 @@ public class FurnaceProgressPacket extends BaseS2CMessage {
   }
 
   @Contract("_ -> new")
-  public static @NotNull FurnaceProgressPacket read(@NotNull FriendlyByteBuf buf) {
-    return new FurnaceProgressPacket(buf);
+  public static @NotNull ProgressPacket read(@NotNull FriendlyByteBuf buf) {
+    return new ProgressPacket(buf);
   }
 }

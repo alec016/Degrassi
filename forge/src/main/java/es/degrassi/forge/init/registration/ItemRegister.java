@@ -17,19 +17,19 @@ public class ItemRegister {
   );
 
   public static final RegistrySupplier<BaseUpgrade> EFFICIENCY_UPGRADE = registerUpgrade(
-    "efficiency_upgrade", () -> new EfficiencyUpgrade(new Item.Properties().tab(CreativeTabs.COMMON))
+    "efficiency_upgrade", () -> new EfficiencyUpgrade(new Item.Properties().tab(CreativeTabs.COMMON).stacksTo(1))
   );
 
   public static final RegistrySupplier<BaseUpgrade> TRANSFER_UPGRADE = registerUpgrade(
-    "transfer_upgrade", () -> new TransferUpgrade(new Item.Properties().tab(CreativeTabs.COMMON))
+    "transfer_upgrade", () -> new TransferUpgrade(new Item.Properties().tab(CreativeTabs.COMMON).stacksTo(1))
   );
 
   public static final RegistrySupplier<BaseUpgrade> GENERATION_UPGRADE = registerUpgrade(
-    "generation_upgrade", () -> new GenerationUpgrade(new Item.Properties().tab(CreativeTabs.COMMON))
+    "generation_upgrade", () -> new GenerationUpgrade(new Item.Properties().tab(CreativeTabs.COMMON).stacksTo(1))
   );
 
   public static final RegistrySupplier<BaseUpgrade> CAPACITY_UPGRADE = registerUpgrade(
-    "capacity_upgrade", () -> new CapacityUpgrade(new Item.Properties().tab(CreativeTabs.COMMON))
+    "capacity_upgrade", () -> new CapacityUpgrade(new Item.Properties().tab(CreativeTabs.COMMON).stacksTo(1))
   );
 
   public static final RegistrySupplier<BaseUpgrade> SPEED_UPGRADE = registerUpgrade(

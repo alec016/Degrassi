@@ -1,10 +1,10 @@
 package es.degrassi.forge.init.entity.panel.sp;
 
+import es.degrassi.forge.network.ItemPacket;
 import es.degrassi.forge.util.storage.AbstractEnergyStorage;
 import es.degrassi.forge.init.registration.EntityRegister;
 import es.degrassi.forge.init.registration.ItemRegister;
 import es.degrassi.forge.integration.config.DegrassiConfig;
-import es.degrassi.forge.network.panel.PanelItemPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -37,7 +37,7 @@ public class SP2Entity extends SolarPanelEntity {
       protected void onContentsChanged(int slot) {
         setChanged();
         if (level != null && !level.isClientSide() && level.getServer() != null) {
-          new PanelItemPacket(this, worldPosition)
+          new ItemPacket(this, worldPosition)
             .sendToAll(level.getServer());
           // .sendToChunkListeners(level.getChunkAt(pos));
         }

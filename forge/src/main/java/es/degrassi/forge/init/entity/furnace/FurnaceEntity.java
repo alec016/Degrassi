@@ -1,18 +1,19 @@
 package es.degrassi.forge.init.entity.furnace;
 
 import es.degrassi.forge.init.block.furnace.FurnaceBlock;
-import es.degrassi.forge.init.entity.BaseEntity;
+import es.degrassi.forge.init.entity.*;
 import es.degrassi.forge.init.handlers.ItemWrapperHandler;
-import es.degrassi.forge.init.recipe.furnace.FurnaceRecipe;
-import es.degrassi.forge.init.recipe.helpers.furnace.FurnaceRecipeHelper;
+import es.degrassi.forge.init.recipe.IDegrassiRecipe;
+import es.degrassi.forge.init.recipe.recipes.FurnaceRecipe;
+import es.degrassi.forge.init.recipe.helpers.RecipeHelpers;
 import es.degrassi.forge.init.registration.ItemRegister;
-import es.degrassi.forge.network.furnace.FurnaceItemPacket;
+import es.degrassi.forge.network.EnergyPacket;
+import es.degrassi.forge.network.ItemPacket;
+import es.degrassi.forge.network.ProgressPacket;
 import es.degrassi.forge.util.storage.AbstractEnergyStorage;
 import es.degrassi.forge.util.storage.ExperienceStorage;
 import es.degrassi.forge.util.storage.ProgressStorage;
-import es.degrassi.forge.network.furnace.FurnaceEnergyPacket;
 import es.degrassi.forge.network.furnace.FurnaceExperiencePacket;
-import es.degrassi.forge.network.furnace.FurnaceProgressPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -38,7 +39,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.Objects;
 
-public abstract class FurnaceEntity extends BaseEntity {
+public abstract class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeEntity, IItemEntity, IProgressEntity {
   private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
   private LazyOptional<AbstractEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
 
@@ -128,7 +129,7 @@ public abstract class FurnaceEntity extends BaseEntity {
         public void onEnergyChanged() {
           setChanged();
           if (level != null && level.getServer() != null && !level.isClientSide())
-            new FurnaceEnergyPacket(this.energy, this.capacity, this.maxReceive, getBlockPos())
+            new EnergyPacket(this.energy, this.capacity, this.maxReceive, getBlockPos())
               .sendToChunkListeners(level.getChunkAt(getBlockPos()));
         }
       };
@@ -137,7 +138,7 @@ public abstract class FurnaceEntity extends BaseEntity {
       public void onProgressChanged() {
         setChanged();
         if (level != null && !level.isClientSide())
-          new FurnaceProgressPacket(this.progress, this.maxProgress, getBlockPos())
+          new ProgressPacket(this.progress, this.maxProgress, getBlockPos())
             .sendToChunkListeners(level.getChunkAt(getBlockPos()));
       }
     };
@@ -159,7 +160,7 @@ public abstract class FurnaceEntity extends BaseEntity {
       protected void onContentsChanged(int slot) {
         setChanged();
         if (level != null && !level.isClientSide() && level.getServer() != null) {
-          new FurnaceItemPacket(this, worldPosition)
+          new ItemPacket(this, worldPosition)
             .sendToAll(level.getServer());
           //.sendToChunkListeners(level.getChunkAt(pos));
         }
@@ -234,10 +235,10 @@ public abstract class FurnaceEntity extends BaseEntity {
     @NotNull FurnaceEntity furnaceEntity
   ) {
     if (level.isClientSide()) return;
-    if (FurnaceRecipeHelper.hasRecipe(furnaceEntity)) {
+    if (RecipeHelpers.FURNACE.hasRecipe(furnaceEntity)) {
       furnaceEntity.progressStorage.increment(false);
-      FurnaceRecipeHelper.extractEnergy(furnaceEntity);
-      if (furnaceEntity.progressStorage.getProgress() >= furnaceEntity.progressStorage.getMaxProgress()) FurnaceRecipeHelper.craftItem(furnaceEntity);
+      RecipeHelpers.FURNACE.extractEnergy(furnaceEntity);
+      if (furnaceEntity.progressStorage.getProgress() >= furnaceEntity.progressStorage.getMaxProgress()) RecipeHelpers.FURNACE.craftItem(furnaceEntity);
     } else {
       furnaceEntity.resetProgress();
     }
@@ -337,5 +338,15 @@ public abstract class FurnaceEntity extends BaseEntity {
       ExperienceOrb.award(Objects.requireNonNull(level.getServer().getLevel(level.dimension())), Vec3.atCenterOf(getBlockPos()), (int) Math.floor(this.xp.getXp()));
       this.xp.extractXp((float) Math.floor(this.xp.getXp()));
     }
+  }
+
+  @Override
+  public IDegrassiRecipe getRecipe() {
+    return this.recipe;
+  }
+
+  @Override
+  public ProgressStorage getProgressStorage(){
+    return this.progressStorage;
   }
 }

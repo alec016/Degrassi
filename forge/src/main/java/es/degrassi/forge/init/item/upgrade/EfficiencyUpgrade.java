@@ -15,7 +15,7 @@ public class EfficiencyUpgrade extends BaseUpgrade implements IPanelUpgrade {
   private Integer value;
   private UpgradeType type;
   public EfficiencyUpgrade(Properties properties) {
-    super(properties);
+    super(properties, UpgradeUpgradeType.EFFICIENCY);
   }
 
   public void setValue(Integer value) {

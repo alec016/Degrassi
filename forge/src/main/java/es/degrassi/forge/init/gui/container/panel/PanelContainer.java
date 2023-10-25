@@ -11,7 +11,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class PanelContainer extends AbstractContainerMenu implements IContainer {
+public abstract class PanelContainer extends AbstractContainerMenu implements IContainer<PanelEntity> {
 
   // THIS YOU HAVE TO DEFINE!
   private static final int TE_INVENTORY_SLOT_COUNT = 4;  // must be the number of slots you have!

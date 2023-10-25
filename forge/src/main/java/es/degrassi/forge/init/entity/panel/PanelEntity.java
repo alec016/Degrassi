@@ -1,9 +1,11 @@
 package es.degrassi.forge.init.entity.panel;
 
 import es.degrassi.forge.init.entity.BaseEntity;
+import es.degrassi.forge.init.entity.IEnergyEntity;
+import es.degrassi.forge.init.entity.IItemEntity;
+import es.degrassi.forge.network.EnergyPacket;
 import es.degrassi.forge.util.storage.AbstractEnergyStorage;
 import es.degrassi.forge.util.storage.GenerationStorage;
-import es.degrassi.forge.network.panel.PanelEnergyPacket;
 import es.degrassi.forge.network.panel.PanelGenerationPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -19,7 +21,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-public abstract class PanelEntity extends BaseEntity {
+public abstract class PanelEntity extends BaseEntity implements IEnergyEntity, IItemEntity {
   public static final float RAIN_MULTIPLIER = 0.6F, THUNDER_MULTIPLIER = 0.4F;
   public AbstractEnergyStorage ENERGY_STORAGE;
   protected GenerationStorage currentGen;
@@ -29,6 +31,12 @@ public abstract class PanelEntity extends BaseEntity {
   protected final int defaultTransfer;
   protected int effCacheTime;
   protected double effCache;
+  protected int transferCache;
+  protected int transferCacheTime;
+  protected int genCache;
+  protected int genCacheTime;
+  protected int capacityCache;
+  protected int capacityCacheTime;
   public boolean cache$seeSky;
   public byte cache$seeSkyTimer;
 
@@ -74,7 +82,7 @@ public abstract class PanelEntity extends BaseEntity {
       public void onEnergyChanged() {
         panelEntity.setChanged();
         if (panelEntity.level != null && !panelEntity.level.isClientSide())
-          new PanelEnergyPacket(
+          new EnergyPacket(
             this.energy,
             this.capacity,
             this.maxExtract,
@@ -149,6 +157,7 @@ public abstract class PanelEntity extends BaseEntity {
 
   public void setCapacityLevel(int capacity) {
     ENERGY_STORAGE.setCapacity(capacity);
+    setEnergyToCapacity();
     setChanged();
   }
 

@@ -7,7 +7,9 @@ import com.mojang.blaze3d.vertex.*;
 import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.registry.menu.MenuRegistry;
 import es.degrassi.forge.init.entity.furnace.FurnaceEntity;
+import es.degrassi.forge.init.entity.melter.MelterEntity;
 import es.degrassi.forge.init.entity.panel.PanelEntity;
+import es.degrassi.forge.init.gui.screen.melter.MelterScreen;
 import es.degrassi.forge.init.gui.screen.panel.sp.*;
 import es.degrassi.forge.init.registration.ElementRegistry;
 import es.degrassi.forge.init.gui.screen.furnace.*;
@@ -53,30 +55,11 @@ public class ClientHandler {
     MenuRegistry.registerScreenFactory(ContainerRegistry.DIAMOND_FURNACE_CONTAINER.get(), DiamondFurnaceScreen::new);
     MenuRegistry.registerScreenFactory(ContainerRegistry.EMERALD_FURNACE_CONTAINER.get(), EmeraldFurnaceScreen::new);
     MenuRegistry.registerScreenFactory(ContainerRegistry.NETHERITE_FURNACE_CONTAINER.get(), NetheriteFurnaceScreen::new);
+    MenuRegistry.registerScreenFactory(ContainerRegistry.MELTER_CONTAINER.get(), MelterScreen::new);
   }
 
   private static void registerGuiElementJEIRenderers(final RegisterGuiElementJEIRendererEvent event) {
     event.register(ElementRegistry.PROGRESS_GUI_ELEMENT.get(), new ProgressGuiElementJeiRenderer());
-  }
-
-  @NotNull
-  public static PanelEntity getClientSidePanelEntity(BlockPos pos) {
-    if(Minecraft.getInstance().level != null) {
-      BlockEntity tile = Minecraft.getInstance().level.getBlockEntity(pos);
-      if(tile instanceof PanelEntity panel)
-        return panel;
-    }
-    throw new IllegalStateException("Trying to open a Panel container without clicking on a Panel block");
-  }
-
-  @NotNull
-  public static FurnaceEntity getClientSideFurnaceEntity(BlockPos pos) {
-    if(Minecraft.getInstance().level != null) {
-      BlockEntity tile = Minecraft.getInstance().level.getBlockEntity(pos);
-      if(tile instanceof FurnaceEntity furnace)
-        return furnace;
-    }
-    throw new IllegalStateException("Trying to open a Furnace container without clicking on a Furnace block");
   }
 
   public static void drawSizedString(@NotNull Font font, @NotNull PoseStack matrix, String string, int x, int y, int size, float maxScale, int color) {
@@ -172,5 +155,34 @@ public class ClientHandler {
 
   public static boolean isShiftKeyDown() {
     return Screen.hasShiftDown();
+  }
+
+  @NotNull
+  public static PanelEntity getClientSidePanelEntity(BlockPos pos) {
+    if(Minecraft.getInstance().level != null) {
+      BlockEntity tile = Minecraft.getInstance().level.getBlockEntity(pos);
+      if(tile instanceof PanelEntity panel)
+        return panel;
+    }
+    throw new IllegalStateException("Trying to open a Panel container without clicking on a Panel block");
+  }
+
+  @NotNull
+  public static FurnaceEntity getClientSideFurnaceEntity(BlockPos pos) {
+    if(Minecraft.getInstance().level != null) {
+      BlockEntity tile = Minecraft.getInstance().level.getBlockEntity(pos);
+      if(tile instanceof FurnaceEntity furnace)
+        return furnace;
+    }
+    throw new IllegalStateException("Trying to open a Furnace container without clicking on a Furnace block");
+  }
+
+  public static MelterEntity getClientSideMelterEntity(BlockPos pos) {
+    if(Minecraft.getInstance().level != null) {
+      BlockEntity tile = Minecraft.getInstance().level.getBlockEntity(pos);
+      if(tile instanceof MelterEntity melter)
+        return melter;
+    }
+    throw new IllegalStateException("Trying to open a Melter container without clicking on a Melter block");
   }
 }

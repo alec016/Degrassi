@@ -15,7 +15,7 @@ public class GenerationUpgrade extends BaseUpgrade implements IPanelUpgrade {
   private Integer value;
   private UpgradeType type;
   public GenerationUpgrade(Properties properties) {
-    super(properties);
+    super(properties, UpgradeUpgradeType.GENERATION);
   }
 
   public void setValue(Integer value) {

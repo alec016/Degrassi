@@ -3,6 +3,7 @@ package es.degrassi.forge.init.registration;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.forge.Degrassi;
+import es.degrassi.forge.init.block.melter.Melter;
 import es.degrassi.forge.init.block.panel.sp.*;
 import es.degrassi.forge.init.block.*;
 import es.degrassi.forge.init.block.furnace.*;
@@ -101,6 +102,12 @@ public class BlockRegister {
   public static final RegistrySupplier<Block> NETHERITE_FURNACE_BLOCK = registerBlock(
     "netherite_furnace",
     NetheriteFurnace::new,
+    CreativeTabs.MACHINES
+  );
+
+  public static final RegistrySupplier<Block> MELTER_BLOCK = registerBlock(
+    "melter",
+    Melter::new,
     CreativeTabs.MACHINES
   );
 

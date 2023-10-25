@@ -1,4 +1,4 @@
-package es.degrassi.forge.init.recipe.furnace;
+package es.degrassi.forge.init.recipe.serializers;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -7,7 +7,8 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import es.degrassi.forge.init.recipe.builder.FurnaceRecipeBuilder;
-import es.degrassi.forge.init.recipe.helpers.furnace.FurnaceRecipeHelper;
+import es.degrassi.forge.init.recipe.helpers.RecipeHelpers;
+import es.degrassi.forge.init.recipe.recipes.FurnaceRecipe;
 import es.degrassi.forge.util.DegrassiLogger;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -25,8 +26,8 @@ public class FurnaceRecipeSerializer implements RecipeSerializer<FurnaceRecipe> 
     if(result.result().isPresent()) {
       DegrassiLogger.INSTANCE.info("Successfully read recipe json: {}", recipeId);
       FurnaceRecipe recipe = result.result().get().getFirst().build(recipeId);
-      FurnaceRecipeHelper.recipesMap.put(recipeId, recipe);
-      FurnaceRecipeHelper.recipes.add(recipe);
+      RecipeHelpers.FURNACE.recipesMap.put(recipeId, recipe);
+      RecipeHelpers.FURNACE.recipes.add(recipe);
     } else if(result.error().isPresent()) {
       DegrassiLogger.INSTANCE.error("Error while parsing recipe json: {}, skipping...\n{}", recipeId, result.error().get().message());
       throw new JsonParseException("Error while parsing Custom Machine Recipe json: " + recipeId + " error: " + result.error().get().message());
@@ -41,8 +42,8 @@ public class FurnaceRecipeSerializer implements RecipeSerializer<FurnaceRecipe> 
     if(result.result().isPresent()) {
       DegrassiLogger.INSTANCE.info("Sucessfully received recipe: {} from server.", recipeId);
       FurnaceRecipe recipe = result.result().get().build(recipeId);
-      FurnaceRecipeHelper.recipesMap.put(recipeId, recipe);
-      FurnaceRecipeHelper.recipes.add(recipe);
+      RecipeHelpers.FURNACE.recipesMap.put(recipeId, recipe);
+      RecipeHelpers.FURNACE.recipes.add(recipe);
     } else if(result.error().isPresent()) {
       DegrassiLogger.INSTANCE.error("Error while parsing recipe json: {}, skipping...\n{}", recipeId, result.error().get().message());
       throw new IllegalArgumentException("Error while receiving Custom Machine Recipe from server: " + recipeId + " error: " + result.error().get().message());

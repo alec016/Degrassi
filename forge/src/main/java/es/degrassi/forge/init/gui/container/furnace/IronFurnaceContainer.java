@@ -31,7 +31,7 @@ public class IronFurnaceContainer extends FurnaceContainer {
   }
 
   public IronFurnaceContainer(int id, Inventory inv, FurnaceEntity entity) {
-    this(id, inv, entity, new SimpleContainerData(4));
+    this(id, inv, entity, new SimpleContainerData(TE_INVENTORY_SLOT_COUNT));
   }
 
   public IronFurnaceContainer(int id, Inventory playerInv, @NotNull FriendlyByteBuf extraData) {

@@ -1,6 +1,7 @@
 package es.degrassi.forge.integration.config;
 
 import es.degrassi.forge.init.item.upgrade.UpgradeType;
+import es.degrassi.forge.util.Fetcher;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class DegrassiConfig {
@@ -116,6 +117,10 @@ public class DegrassiConfig {
   public static final ForgeConfigSpec.ConfigValue<Integer> netherite_furnace_xp;
   public static final ForgeConfigSpec.ConfigValue<Integer> netherite_furnace_speed;
   public static final ForgeConfigSpec.ConfigValue<Integer> netherite_furnace_energy;
+
+  // melter
+  public static final ForgeConfigSpec.ConfigValue<Integer> melter_capacity;
+  public static final ForgeConfigSpec.ConfigValue<Integer> melter_transfer;
 
   // efficiency upgrade
   public static final ForgeConfigSpec.ConfigValue<Integer> eff_augment;
@@ -428,6 +433,20 @@ public class DegrassiConfig {
       .comment("energy recipe augment in percentage - Default 90")
       .define("energy", 90);
     BUILDER.pop();
+
+    BUILDER.pop();
+  }
+
+  // melter config
+  static {
+    BUILDER.push("Melter");
+
+    melter_capacity = BUILDER
+      .comment("energy capacity - Default 100000")
+      .define("capacity", 100000);
+    melter_transfer = BUILDER
+      .comment("transfer rate - Default 10000")
+      .define("transfer", 10000);
 
     BUILDER.pop();
   }

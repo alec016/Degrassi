@@ -1,14 +1,11 @@
-package es.degrassi.forge.init.recipe.helpers.furnace;
+package es.degrassi.forge.init.recipe.helpers;
 
 import es.degrassi.forge.init.entity.furnace.*;
-import es.degrassi.forge.init.item.upgrade.EnergyUpgrade;
-import es.degrassi.forge.init.item.upgrade.SpeedUpgrade;
-import es.degrassi.forge.init.recipe.furnace.FurnaceRecipe;
+import es.degrassi.forge.init.item.upgrade.IFurnaceUpgrade;
+import es.degrassi.forge.init.recipe.recipes.FurnaceRecipe;
 import es.degrassi.forge.init.registration.RecipeRegistry;
 import es.degrassi.forge.integration.config.DegrassiConfig;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
@@ -18,27 +15,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class FurnaceRecipeHelper {
-  public static final NonNullList<FurnaceRecipe> recipes = NonNullList.create();
-  public static final Map<ResourceLocation, FurnaceRecipe> recipesMap = new HashMap<>();
+public class FurnaceRecipeHelper extends RecipeHelper<FurnaceRecipe, FurnaceEntity> {
 
-  public static void extractEnergy(@NotNull FurnaceEntity entity) {
-    entity.ENERGY_STORAGE.setEnergy(entity.ENERGY_STORAGE.getEnergyStored() - entity.recipe.getEnergyRequired());
-  }
-
-  public static boolean hasEnoughEnergy(@NotNull FurnaceEntity entity) {
-    return entity.ENERGY_STORAGE.getEnergyStored() >= entity.recipe.getEnergyRequired();
-  }
-
-  public static boolean canInsertItemIntoOutputSlot(@NotNull SimpleContainer inventory, @NotNull ItemStack stack) {
-    return inventory.getItem(3).getItem() == stack.getItem() || inventory.getItem(3).isEmpty();
-  }
-
-  public static boolean canInsertAmountIntoOutputSlot(@NotNull SimpleContainer inventory) {
-    return inventory.getItem(3).getMaxStackSize() > inventory.getItem(3).getCount();
-  }
-
-  public static boolean hasRecipe(@NotNull FurnaceEntity entity) {
+  @Override
+  public boolean hasRecipe(@NotNull FurnaceEntity entity) {
     Level level = entity.getLevel();
     if (level == null) return false;
 
@@ -52,14 +32,15 @@ public class FurnaceRecipeHelper {
       if (recipe.getIngredients().get(0).test(inventory.getItem(2))) entity.recipe = recipe.copy();
     });
 
-    boolean can = entity.recipe != null && canInsertAmountIntoOutputSlot(inventory) && canInsertItemIntoOutputSlot(inventory, entity.recipe.getResultItem()) && hasEnoughEnergy(entity);
+    if (entity.recipe == null) return false;
 
-    if (can && !entity.recipe.isModified()) modifyRecipe(entity, inventory);
+    if (!entity.recipe.isModified()) modifyRecipe(entity, inventory);
 
-    return can;
+    return canInsertAmountIntoOutputSlot(inventory, 3) && canInsertItemIntoOutputSlot(inventory, entity.recipe.getResultItem(), 3) && hasEnoughEnergy(entity);
   }
 
-  public static void craftItem(@NotNull FurnaceEntity entity) {
+  @Override
+  public void craftItem(@NotNull FurnaceEntity entity) {
     entity.itemHandler.extractItem(2, 1, false);
     entity.itemHandler.setStackInSlot(3, new ItemStack(
       entity.recipe.getResultItem().getItem(),
@@ -71,7 +52,8 @@ public class FurnaceRecipeHelper {
     entity.resetProgress();
   }
 
-  public static void init() {
+  @Override
+  public void init() {
     Level level = Objects.requireNonNull(Minecraft.getInstance().level);
     List<SmeltingRecipe> smelting = level.getRecipeManager().getAllRecipesFor(RecipeType.SMELTING);
     List<BlastingRecipe> blasting = level.getRecipeManager().getAllRecipesFor(RecipeType.BLASTING);
@@ -115,7 +97,7 @@ public class FurnaceRecipeHelper {
     });
   }
 
-  private static void modifyRecipe(FurnaceEntity entity, SimpleContainer inventory) {
+  private void modifyRecipe(FurnaceEntity entity, SimpleContainer inventory) {
     if (entity instanceof IronFurnaceEntity) {
       entity.recipe.setTime(entity.recipe.getTime() * (100 - DegrassiConfig.iron_furnace_speed.get()) / 100);
       entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * (100 + DegrassiConfig.iron_furnace_energy.get()) / 100);
@@ -142,15 +124,21 @@ public class FurnaceRecipeHelper {
     ItemStack slot1 = inventory.getItem(1);
 
     int energyRequired = entity.recipe.getEnergyRequired();
-    if (slot0.getCount() > 0 && slot0.getItem() instanceof SpeedUpgrade upgrade) {
-      double speedModifier = slot0.getCount() * upgrade.getModifier();
-      entity.recipe.setTime(Math.max(1, entity.recipe.getTime() - (int) Math.floor(entity.recipe.getTime() * speedModifier)));
-      energyRequired += (int) Math.floor(entity.recipe.getEnergyRequired() * 5 * speedModifier);
-    }
-
-    if (slot1.getCount() > 0 && slot1.getItem() instanceof EnergyUpgrade upgrade) {
-      double energyModifier = Math.min(slot0.getCount(), slot1.getCount()) * upgrade.getModifier();
-      energyRequired -= (int) Math.floor(entity.recipe.getEnergyRequired() * energyModifier);
+    for(int i = 0; i < inventory.getContainerSize(); i++) {
+      ItemStack slot = inventory.getItem(i);
+      if (slot.getCount() > 0 && slot.getItem() instanceof IFurnaceUpgrade upgrade) {
+        switch(upgrade.getUpgradeType()) {
+          case SPEED -> {
+            double speedModifier = slot0.getCount() * upgrade.getModifier();
+            entity.recipe.setTime(Math.max(1, entity.recipe.getTime() - (int) Math.floor(entity.recipe.getTime() * speedModifier)));
+            energyRequired += (int) Math.floor(entity.recipe.getEnergyRequired() * 5 * speedModifier);
+          }
+          case ENERGY -> {
+            double energyModifier = Math.min(slot0.getCount(), slot1.getCount()) * upgrade.getModifier();
+            energyRequired -= (int) Math.floor(entity.recipe.getEnergyRequired() * energyModifier);
+          }
+        }
+      }
     }
 
     entity.recipe.setEnergyRequired(Math.max(1, energyRequired));

@@ -15,7 +15,7 @@ public class CapacityUpgrade extends BaseUpgrade implements IPanelUpgrade {
   private Integer value;
   private UpgradeType type;
   public CapacityUpgrade(Properties properties) {
-    super(properties);
+    super(properties, UpgradeUpgradeType.CAPACITY);
   }
 
   public void setValue(Integer value) {
