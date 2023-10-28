@@ -34,11 +34,11 @@ public abstract class AbstractEnergyStorage implements IEnergyStorage, INBTSeria
     if (!canExtract())
       return 0;
 
-    int energyExtracted = Math.min(energy, Math.min(this.maxExtract, (int) maxExtract));
+    int energyExtracted = Math.min(energy, Math.min(this.maxExtract, maxExtract));
     if (!simulate)
       energy -= energyExtracted;
     onEnergyChanged();
-    return (int) energyExtracted;
+    return energyExtracted;
   }
 
   @Override
@@ -50,7 +50,7 @@ public abstract class AbstractEnergyStorage implements IEnergyStorage, INBTSeria
     if (!simulate)
       energy += energyReceived;
     onEnergyChanged();
-    return (int) energyReceived;
+    return energyReceived;
   }
 
   @Override

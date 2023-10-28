@@ -20,11 +20,11 @@ import java.util.stream.DoubleStream;
 @SuppressWarnings("unused")
 public class Codecs {
 
-    public static final NamedCodec<CompoundTag> COMPOUND_NBT_CODEC               = NamedCodec.STRING.comapFlatMap(Codecs::decodeCompoundNBT, CompoundTag::toString, "NBT");
+    public static final NamedCodec<CompoundTag> COMPOUND_NBT_CODEC = NamedCodec.STRING.comapFlatMap(Codecs::decodeCompoundNBT, CompoundTag::toString, "NBT");
 
-    public static final NamedCodec<BlockPos> BLOCK_POS              = NamedCodec.of(BlockPos.CODEC, "Block Position");
-    public static final NamedCodec<AABB> AABB_CODEC                 = NamedCodec.DOUBLE_STREAM.comapFlatMap(stream -> validateDoubleStreamSize(stream, 6).map(array -> new AABB(array[0], array[1], array[2], array[3], array[4], array[5])), box -> DoubleStream.of(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ), "Box");
-    public static final NamedCodec<AABB> BOX_CODEC                  = either(BLOCK_POS, AABB_CODEC, "Box").xmap(either -> either.map(pos -> new AABB(pos, pos), Function.identity()), Either::right, "Box");
+    public static final NamedCodec<BlockPos> BLOCK_POS = NamedCodec.of(BlockPos.CODEC, "Block Position");
+    public static final NamedCodec<AABB> AABB_CODEC = NamedCodec.DOUBLE_STREAM.comapFlatMap(stream -> validateDoubleStreamSize(stream, 6).map(array -> new AABB(array[0], array[1], array[2], array[3], array[4], array[5])), box -> DoubleStream.of(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ), "Box");
+    public static final NamedCodec<AABB> BOX_CODEC = either(BLOCK_POS, AABB_CODEC, "Box").xmap(either -> either.map(pos -> new AABB(pos, pos), Function.identity()), Either::right, "Box");
 
     public static <E extends Enum<E>> NamedCodec<E> fromEnum(Class<E> enumClass) {
         return EnumCodec.of(enumClass);

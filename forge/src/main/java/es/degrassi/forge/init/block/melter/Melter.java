@@ -6,6 +6,7 @@ import es.degrassi.forge.init.entity.melter.MelterEntity;
 import es.degrassi.forge.init.gui.container.melter.MelterContainer;
 import es.degrassi.forge.init.registration.EntityRegister;
 import es.degrassi.forge.network.EnergyPacket;
+import es.degrassi.forge.network.FluidPacket;
 import es.degrassi.forge.network.ProgressPacket;
 import es.degrassi.forge.util.Utils;
 import net.minecraft.core.BlockPos;
@@ -70,6 +71,7 @@ public class Melter extends BaseBlock {
           public AbstractContainerMenu createMenu(int id, @NotNull Inventory inv, @NotNull Player player) {
             new EnergyPacket(entity.getEnergyStorage().getEnergyStored(), entity.getEnergyStorage().getMaxEnergyStored(), entity.getEnergyStorage().getMaxEnergyStored(), pos);
             new ProgressPacket(entity.getProgressStorage().getProgress(), entity.getProgressStorage().getMaxProgress(), pos);
+            new FluidPacket(entity.getFluidStorage().getFluid(), pos);
             return new MelterContainer(id, inv, entity);
           }
         }, buf -> buf.writeBlockPos(pos));

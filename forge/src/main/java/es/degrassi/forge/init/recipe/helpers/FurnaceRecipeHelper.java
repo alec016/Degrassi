@@ -89,7 +89,7 @@ public class FurnaceRecipeHelper extends RecipeHelper<FurnaceRecipe, FurnaceEnti
       if (recipe == null) return;
       AtomicBoolean has = new AtomicBoolean(false);
       recipes.forEach(r -> {
-        if (r.getId().toString().equals(recipe.getId().toString())) has.set(true);
+        if (r.getId().toString().equals(recipe.getId().toString()) || recipe.getIngredients().get(0).test(r.getIngredients().get(0).getItems()[0])) has.set(true);
       });
       if (has.get()) return;
       recipes.add(recipe);

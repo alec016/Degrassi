@@ -121,6 +121,8 @@ public class DegrassiConfig {
   // melter
   public static final ForgeConfigSpec.ConfigValue<Integer> melter_capacity;
   public static final ForgeConfigSpec.ConfigValue<Integer> melter_transfer;
+  public static final ForgeConfigSpec.ConfigValue<Integer> melter_speed;
+  public static final ForgeConfigSpec.ConfigValue<Integer> melter_energy;
 
   // efficiency upgrade
   public static final ForgeConfigSpec.ConfigValue<Integer> eff_augment;
@@ -447,6 +449,12 @@ public class DegrassiConfig {
     melter_transfer = BUILDER
       .comment("transfer rate - Default 10000")
       .define("transfer", 10000);
+    melter_speed = BUILDER
+      .comment("speed recipe reduction in percentage - Default 5")
+      .define("speed", 5);
+    melter_energy = BUILDER
+      .comment("energy recipe augment in percentage - Default 0")
+      .define("energy", 0);
 
     BUILDER.pop();
   }

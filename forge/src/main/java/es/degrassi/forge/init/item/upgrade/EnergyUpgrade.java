@@ -40,6 +40,7 @@ public class EnergyUpgrade extends BaseUpgrade implements IFurnaceUpgrade, IMelt
 
   @Override
   public double getModifier() {
+    if (getValue() == null) setValue(DegrassiConfig.energy_augment.get());
     return getValue() / 100d;
   }
 }

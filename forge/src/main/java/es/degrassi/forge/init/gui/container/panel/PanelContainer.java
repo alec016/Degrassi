@@ -2,24 +2,19 @@ package es.degrassi.forge.init.gui.container.panel;
 
 import es.degrassi.forge.client.IClientHandler;
 import es.degrassi.forge.init.entity.panel.PanelEntity;
+import es.degrassi.forge.init.gui.container.BaseContainer;
 import es.degrassi.forge.init.gui.container.types.IContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class PanelContainer extends AbstractContainerMenu implements IContainer<PanelEntity> {
+public abstract class PanelContainer extends BaseContainer<PanelEntity> implements IContainer<PanelEntity> {
 
   // THIS YOU HAVE TO DEFINE!
   private static final int TE_INVENTORY_SLOT_COUNT = 4;  // must be the number of slots you have!
-
-  protected final PanelEntity entity;
-  protected final Level level;
-  protected final Inventory playerInv;
-  protected ContainerData data;
 
   protected PanelContainer(@Nullable MenuType<?> menuType, int id, PanelEntity entity, Inventory inv) {
     super(menuType, id);

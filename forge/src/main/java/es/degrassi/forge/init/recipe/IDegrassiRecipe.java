@@ -10,4 +10,14 @@ public interface IDegrassiRecipe extends Recipe<SimpleContainer> {
   boolean showInJei();
 
   int getEnergyRequired();
+
+  boolean isModified();
+
+  void modify();
+
+  IDegrassiRecipe copy();
+
+  void setTime(int i);
+
+  void setEnergyRequired(int i);
 }

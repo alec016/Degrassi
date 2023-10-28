@@ -8,4 +8,6 @@ public interface IProgressEntity {
   void setProgress(int progress);
 
   void setMaxProgress(int maxProgress);
+
+  void resetProgress();
 }

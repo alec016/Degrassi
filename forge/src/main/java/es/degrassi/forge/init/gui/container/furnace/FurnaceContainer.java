@@ -2,24 +2,19 @@ package es.degrassi.forge.init.gui.container.furnace;
 
 import es.degrassi.forge.client.IClientHandler;
 import es.degrassi.forge.init.entity.furnace.FurnaceEntity;
+import es.degrassi.forge.init.gui.container.BaseContainer;
 import es.degrassi.forge.init.gui.container.types.IProgressContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class FurnaceContainer extends AbstractContainerMenu implements IProgressContainer<FurnaceEntity> {
+public abstract class FurnaceContainer extends BaseContainer<FurnaceEntity> implements IProgressContainer<FurnaceEntity> {
 
   // THIS YOU HAVE TO DEFINE!
   protected static final int TE_INVENTORY_SLOT_COUNT = 4;  // must be the number of slots you have!
-
-  protected final FurnaceEntity entity;
-  protected final Level level;
-  protected final Inventory playerInv;
-  protected ContainerData data;
 
   protected FurnaceContainer(@Nullable MenuType<?> menuType, int i, FurnaceEntity entity, Inventory inv) {
     super(menuType, i);

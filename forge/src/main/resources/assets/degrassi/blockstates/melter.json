@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "degrassi:block/melter"
+    },
+    "facing=south": {
+      "model": "degrassi:block/melter",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "degrassi:block/melter",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "degrassi:block/melter",
+      "y": 90
+    }
+  }
+}

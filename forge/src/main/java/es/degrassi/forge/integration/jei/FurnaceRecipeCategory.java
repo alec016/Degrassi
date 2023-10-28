@@ -1,7 +1,7 @@
 package es.degrassi.forge.integration.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import es.degrassi.forge.Degrassi;
+import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.init.gui.renderer.ProgressComponent;
 import es.degrassi.forge.init.recipe.recipes.FurnaceRecipe;
 import es.degrassi.forge.util.TextureSizeHelper;
@@ -24,9 +24,9 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class FurnaceRecipeCategory implements IRecipeCategory<FurnaceRecipe> {
-  public static final ResourceLocation UID = new ResourceLocation(Degrassi.MODID, "furnace");
-  public static final ResourceLocation TEXTURE = new ResourceLocation(Degrassi.MODID, "textures/gui/jei/furnace_gui.png");
-  public static final ResourceLocation FILLED_PROGRESS = new ResourceLocation(Degrassi.MODID, "textures/gui/jei/furnace_progress_filled.png");
+  public static final ResourceLocation UID = new DegrassiLocation("furnace");
+  public static final ResourceLocation TEXTURE = new DegrassiLocation("textures/gui/jei/furnace_gui.png");
+  public static final ResourceLocation FILLED_PROGRESS = new DegrassiLocation("textures/gui/jei/furnace_progress_filled.png");
 
   private final IDrawable background;
   private final IDrawable icon;

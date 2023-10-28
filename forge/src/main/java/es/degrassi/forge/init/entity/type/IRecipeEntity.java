@@ -4,4 +4,6 @@ import es.degrassi.forge.init.recipe.IDegrassiRecipe;
 
 public interface IRecipeEntity {
   IDegrassiRecipe getRecipe();
+
+  void setRecipe(IDegrassiRecipe recipe);
 }

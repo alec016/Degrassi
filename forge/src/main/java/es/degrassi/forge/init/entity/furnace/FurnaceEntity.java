@@ -176,8 +176,7 @@ public abstract class FurnaceEntity extends BaseEntity implements IEnergyEntity,
           case 0 -> stack.is(ItemRegister.SPEED_UPGRADE.get());
           case 1 -> stack.is(ItemRegister.ENERGY_UPGRADE.get());
           case 2 -> true;
-          case 3 -> false;
-          default -> isItemValid(slot, stack);
+          default -> false;
         };
       }
     };
@@ -352,5 +351,10 @@ public abstract class FurnaceEntity extends BaseEntity implements IEnergyEntity,
   @Override
   public ProgressStorage getProgressStorage(){
     return this.progressStorage;
+  }
+
+  @Override
+  public void setRecipe(IDegrassiRecipe recipe) {
+    this.recipe = (FurnaceRecipe) recipe;
   }
 }

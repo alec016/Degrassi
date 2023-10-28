@@ -20,7 +20,8 @@ public class ItemRequirement implements IRequirement<ItemWrapperHandler> {
       NamedCodec.INT.optionalFieldOf("slot", 0).forGetter(requirement -> requirement.slot)
     ).apply(itemRequirementInstance, (mode, item, amount, slot) -> new ItemRequirement(item, amount, slot, mode)), "Item requirement"
   );
-  private final IIngredient<Item> item;
+  private IIngredient<Item> item;
+  private ItemStack itemStack;
   private final int count;
   private final int slot;
   private final ModeIO mode;
@@ -29,6 +30,12 @@ public class ItemRequirement implements IRequirement<ItemWrapperHandler> {
     if(mode == ModeIO.OUTPUT && item instanceof ItemTagIngredient)
       throw new IllegalArgumentException("You can't use a Tag for an Output Item Requirement");
     this.item = item;
+    this.count = count;
+    this.slot = slot;
+    this.mode = mode;
+  }
+  public ItemRequirement(ItemStack item, int count, int slot, ModeIO mode) {
+    this.itemStack = item;
     this.count = count;
     this.slot = slot;
     this.mode = mode;
@@ -97,6 +104,14 @@ public class ItemRequirement implements IRequirement<ItemWrapperHandler> {
   }
 
   public ItemStack getItem() {
-    return new ItemStack(item.getAll().get(0), count);
+    return item != null ? new ItemStack(item.getAll().get(0), count) : itemStack;
+  }
+
+  public IIngredient<Item> getItemIngredient() {
+    return item;
+  }
+
+  public int getItemAmount() {
+    return count;
   }
 }

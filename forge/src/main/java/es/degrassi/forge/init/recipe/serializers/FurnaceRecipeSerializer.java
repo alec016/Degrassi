@@ -28,6 +28,7 @@ public class FurnaceRecipeSerializer implements RecipeSerializer<FurnaceRecipe> 
       FurnaceRecipe recipe = result.result().get().getFirst().build(recipeId);
       RecipeHelpers.FURNACE.recipesMap.put(recipeId, recipe);
       RecipeHelpers.FURNACE.recipes.add(recipe);
+      return recipe;
     } else if(result.error().isPresent()) {
       DegrassiLogger.INSTANCE.error("Error while parsing recipe json: {}, skipping...\n{}", recipeId, result.error().get().message());
       throw new JsonParseException("Error while parsing Custom Machine Recipe json: " + recipeId + " error: " + result.error().get().message());
@@ -44,6 +45,7 @@ public class FurnaceRecipeSerializer implements RecipeSerializer<FurnaceRecipe> 
       FurnaceRecipe recipe = result.result().get().build(recipeId);
       RecipeHelpers.FURNACE.recipesMap.put(recipeId, recipe);
       RecipeHelpers.FURNACE.recipes.add(recipe);
+      return recipe;
     } else if(result.error().isPresent()) {
       DegrassiLogger.INSTANCE.error("Error while parsing recipe json: {}, skipping...\n{}", recipeId, result.error().get().message());
       throw new IllegalArgumentException("Error while receiving Custom Machine Recipe from server: " + recipeId + " error: " + result.error().get().message());

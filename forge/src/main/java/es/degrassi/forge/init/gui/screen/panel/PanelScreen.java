@@ -2,7 +2,7 @@ package es.degrassi.forge.init.gui.screen.panel;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import es.degrassi.forge.Degrassi;
+import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.init.gui.container.panel.PanelContainer;
 import es.degrassi.forge.init.gui.screen.IScreen;
 import es.degrassi.forge.init.gui.renderer.EnergyInfoArea;
@@ -20,8 +20,8 @@ import java.util.Optional;
 
 @SuppressWarnings("unused")
 public abstract class PanelScreen extends AbstractContainerScreen<PanelContainer> implements IScreen {
-  protected static final ResourceLocation BACKGROUND = new ResourceLocation(Degrassi.MODID,"textures/gui/panel_gui.png");
-  protected static final ResourceLocation ENERGY_FILLED = new ResourceLocation(Degrassi.MODID, "textures/gui/panel_energy_storage_filled.png");
+  protected static final ResourceLocation BACKGROUND = new DegrassiLocation("textures/gui/panel_gui.png");
+  protected static final ResourceLocation ENERGY_FILLED = new DegrassiLocation("textures/gui/panel_energy_storage_filled.png");
 
   protected EnergyInfoArea energyInfoArea;
 

@@ -15,6 +15,7 @@ public class PacketManager {
     public static final MessageType OPEN_FILE = MANAGER.registerS2C("open_file", SOpenFilePacket::read);
     public static final MessageType ENERGY = MANAGER.registerS2C("energy", EnergyPacket::read);
     public static final MessageType ITEM = MANAGER.registerS2C("item", ItemPacket::read);
+    public static final MessageType FLUID = MANAGER.registerS2C("fluid", FluidPacket::read);
     public static final MessageType PROGRESS = MANAGER.registerS2C("progress", ProgressPacket::read);
 
     //panel

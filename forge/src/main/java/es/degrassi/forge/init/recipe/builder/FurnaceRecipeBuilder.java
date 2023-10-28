@@ -42,7 +42,7 @@ public class FurnaceRecipeBuilder extends AbstractRecipeBuilder<FurnaceRecipe> {
         .input(new ItemStack(input.getAll().get(0), inputAmount))
         .output(new ItemStack(output.getAll().get(0), outputAmount));
       return builder;
-    }), "Machine recipe builder"
+    }), "Furnace recipe builder"
   );
 
   public FurnaceRecipeBuilder(int time) {

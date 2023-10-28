@@ -5,6 +5,7 @@ import dev.architectury.networking.simple.BaseS2CMessage;
 import dev.architectury.networking.simple.MessageType;
 import dev.architectury.utils.Env;
 import es.degrassi.forge.init.entity.type.IItemEntity;
+import es.degrassi.forge.init.gui.container.BaseContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -49,6 +50,9 @@ public class ItemPacket extends BaseS2CMessage {
         assert Minecraft.getInstance().level != null;
         if (Minecraft.getInstance().level.getBlockEntity(pos) instanceof IItemEntity entity) {
           entity.setHandler(this.itemStackHandler);
+          if (Minecraft.getInstance().player.containerMenu instanceof BaseContainer<?> menu && menu.getEntity().getBlockPos().equals(pos)) {
+            entity.setHandler(this.itemStackHandler);
+          }
         }
       });
   }

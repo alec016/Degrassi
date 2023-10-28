@@ -40,6 +40,7 @@ public class SpeedUpgrade extends BaseUpgrade implements IFurnaceUpgrade, IMelte
 
   @Override
   public double getModifier() {
+    if (getValue() == null) setValue(DegrassiConfig.speed_augment.get());
     return getValue() / 100d;
   }
 }

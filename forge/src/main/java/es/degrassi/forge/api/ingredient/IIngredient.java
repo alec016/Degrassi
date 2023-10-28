@@ -8,7 +8,6 @@ import com.mojang.serialization.MapLike;
 import es.degrassi.forge.api.codec.NamedCodec;
 import es.degrassi.forge.api.codec.impl.DefaultCodecs;
 import es.degrassi.forge.api.codec.impl.RegistrarCodec;
-import es.degrassi.forge.util.PartialBlockState;
 import net.minecraft.ResourceLocationException;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -80,18 +79,6 @@ public interface IIngredient<O> extends Predicate<O> {
                 return DataResult.error(String.format("Fluid Ingredient : %s is not a fluid nor a tag !", ingredient));
             },
             "Fluid ingredient"
-    );
-
-    NamedCodec<IIngredient<PartialBlockState>> BLOCK = NamedCodec.either(BlockIngredient.CODEC, BlockTagIngredient.CODEC, "Block Ingredient").flatComapMap(
-            either -> either.map(Function.identity(), Function.identity()),
-            ingredient -> {
-                if(ingredient instanceof BlockIngredient)
-                    return DataResult.success(Either.left((BlockIngredient)ingredient));
-                else if(ingredient instanceof BlockTagIngredient)
-                    return DataResult.success(Either.right((BlockTagIngredient)ingredient));
-                return DataResult.error(String.format("Block Ingredient : %s is not a block nor a tag !", ingredient));
-            },
-            "Block ingredient"
     );
 
     List<O> getAll();

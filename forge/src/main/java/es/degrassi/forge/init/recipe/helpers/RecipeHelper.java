@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -33,10 +34,14 @@ public abstract class RecipeHelper<T extends Recipe<?>, E extends BaseEntity & I
   }
 
   public boolean canInsertItemIntoOutputSlot(@NotNull SimpleContainer inventory, @NotNull ItemStack stack, int slot) {
-    return inventory.getItem(slot).getItem() == stack.getItem() || inventory.getItem(3).isEmpty();
+    return inventory.getItem(slot).getItem() == stack.getItem() || inventory.getItem(slot).isEmpty();
   }
 
   public boolean canInsertAmountIntoOutputSlot(@NotNull SimpleContainer inventory, int slot) {
     return inventory.getItem(slot).getMaxStackSize() > inventory.getItem(slot).getCount();
+  }
+
+  public boolean canInsertAmountIntoOutputSlot(@NotNull FluidTank storage) {
+    return storage.getCapacity() > storage.getFluidAmount();
   }
 }

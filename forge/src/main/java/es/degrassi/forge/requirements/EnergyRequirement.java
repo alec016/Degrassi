@@ -9,16 +9,30 @@ import net.minecraft.network.chat.Component;
 public class EnergyRequirement implements IRequirement<AbstractEnergyStorage> {
   public static final NamedCodec<EnergyRequirement> CODEC = NamedCodec.record(energyRequirementInstance ->
     energyRequirementInstance.group(
-      ModeIO.CODEC.fieldOf("mode").forGetter(EnergyRequirement::getMode),
+      ModeIO.CODEC.fieldOf("mode").forGetter(requirement -> requirement.mode),
       NamedCodec.INT.fieldOf("amount").forGetter(requirement -> requirement.amount)
     ).apply(energyRequirementInstance, (EnergyRequirement::new)), "Energy requirement"
   );
-  private final ModeIO mode;
-  private final int amount;
 
-  public EnergyRequirement(ModeIO mode, int amount) {
+  private final ModeIO mode;
+  private int amount;
+
+  public EnergyRequirement(ModeIO mode, int energy) {
     this.mode = mode;
-    this.amount = amount;
+    this.amount = energy;
+  }
+
+  public EnergyRequirement(int energy) {
+    this.mode = ModeIO.INPUT;
+    this.amount = energy;
+  }
+
+  public int getAmount() {
+    return amount;
+  }
+
+  public ModeIO getMode() {
+    return mode;
   }
 
   @Override
@@ -28,8 +42,8 @@ public class EnergyRequirement implements IRequirement<AbstractEnergyStorage> {
 
   @Override
   public boolean test(AbstractEnergyStorage energy, ICraftingContext context) {
-    int amount = (int)context.getIntegerModifiedValue(this.amount, this, null);
-    if(getMode() == ModeIO.INPUT)
+    int amount = (int) context.getIntegerModifiedValue(this.amount, this, null);
+    if (mode == ModeIO.INPUT)
       return energy.extractEnergy(amount, false) == amount;
     else
       return energy.receiveEnergy(amount, false) == amount;
@@ -37,10 +51,10 @@ public class EnergyRequirement implements IRequirement<AbstractEnergyStorage> {
 
   @Override
   public CraftingResult processStart(AbstractEnergyStorage energy, ICraftingContext context) {
-    int amount = (int)context.getIntegerModifiedValue(this.amount, this, null);
-    if(getMode() == ModeIO.INPUT) {
+    int amount = (int) context.getIntegerModifiedValue(this.amount, this, null);
+    if (mode == ModeIO.INPUT) {
       int canExtract = energy.extractEnergy(amount, true);
-      if(canExtract == amount) {
+      if (canExtract == amount) {
         energy.extractEnergy(amount, false);
         return CraftingResult.success();
       }
@@ -51,10 +65,10 @@ public class EnergyRequirement implements IRequirement<AbstractEnergyStorage> {
 
   @Override
   public CraftingResult processEnd(AbstractEnergyStorage energy, ICraftingContext context) {
-    int amount = (int)context.getIntegerModifiedValue(this.amount, this, null);
-    if (getMode() == ModeIO.OUTPUT) {
+    int amount = (int) context.getIntegerModifiedValue(this.amount, this, null);
+    if (mode == ModeIO.OUTPUT) {
       int canReceive = energy.receiveEnergy(amount, true);
-      if(canReceive == amount) {
+      if (canReceive == amount) {
         energy.receiveEnergy(amount, false);
         return CraftingResult.success();
       }
@@ -63,11 +77,7 @@ public class EnergyRequirement implements IRequirement<AbstractEnergyStorage> {
     return CraftingResult.pass();
   }
 
-  public ModeIO getMode() {
-    return this.mode;
-  }
-
-  public int getAmount() {
-    return this.amount;
+  public void setEnergy(int i) {
+    this.amount = i;
   }
 }

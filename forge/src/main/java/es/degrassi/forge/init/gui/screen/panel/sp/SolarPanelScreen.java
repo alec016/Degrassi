@@ -2,7 +2,7 @@ package es.degrassi.forge.init.gui.screen.panel.sp;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import es.degrassi.forge.Degrassi;
+import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.init.entity.panel.sp.SolarPanelEntity;
 import es.degrassi.forge.init.gui.container.panel.PanelContainer;
 import es.degrassi.forge.init.gui.screen.panel.PanelScreen;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 
 public abstract class SolarPanelScreen extends PanelScreen {
-  private static final ResourceLocation EFFICIENCY_FILLED = new ResourceLocation(Degrassi.MODID, "textures/gui/panel_efficiency_filled.png");
+  private static final ResourceLocation EFFICIENCY_FILLED = new DegrassiLocation("textures/gui/panel_efficiency_filled.png");
   protected EfficiencyInfoArea efficiencyInfoArea;
   public SolarPanelScreen(PanelContainer container, Inventory inventory, Component name) {
     super(container, inventory, name);

@@ -1,6 +1,7 @@
 package es.degrassi.forge.init.gui.container.types;
 
 import es.degrassi.forge.init.entity.BaseEntity;
+import net.minecraft.network.chat.Component;
 
 public interface IContainer<T extends BaseEntity> {
   int HOTBAR_SLOT_COUNT = 9;

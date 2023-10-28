@@ -2,10 +2,10 @@ package es.degrassi.forge.integration.kubejs.recipes.builder;
 
 import dev.latvian.mods.kubejs.recipe.RecipeExceptionJS;
 import dev.latvian.mods.kubejs.recipe.RecipeJS;
+import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.init.recipe.IDegrassiRecipe;
 import es.degrassi.forge.init.recipe.builder.AbstractRecipeBuilder;
 import es.degrassi.forge.integration.kubejs.recipes.DegrassiRecipeSchemas;
-import es.degrassi.forge.integration.kubejs.recipes.FurnaceRecipeSchema;
 import es.degrassi.forge.requirements.IRequirement;
 import es.degrassi.forge.util.Utils;
 import net.minecraft.resources.ResourceLocation;
@@ -28,7 +28,7 @@ public abstract class AbstractRecipeBuilderJS<T extends AbstractRecipeBuilder<? 
     if(this.newRecipe) {
       int uniqueID = IDS.computeIfAbsent(this.typeID, id -> new ArrayList<>()).size();
       IDS.get(this.typeID).add(uniqueID);
-      this.id = new ResourceLocation("kubejs", this.typeID.getPath() + "/server_scripts/" + uniqueID);
+      this.id = new DegrassiLocation(this.typeID.getPath() + "/server_scripts/" + uniqueID);
     }
   }
   public abstract T makeBuilder();
@@ -40,7 +40,7 @@ public abstract class AbstractRecipeBuilderJS<T extends AbstractRecipeBuilder<? 
 
     T builder = makeBuilder();
 
-    for (IRequirement<?> requirement : getValue(FurnaceRecipeSchema.REQUIREMENTS))
+    for (IRequirement<?> requirement : getValue(DegrassiRecipeSchemas.REQUIREMENTS))
       builder.addRequirement(requirement);
 
     return builder.build(getOrCreateId());

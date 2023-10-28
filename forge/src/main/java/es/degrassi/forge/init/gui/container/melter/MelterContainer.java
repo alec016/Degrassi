@@ -3,6 +3,7 @@ package es.degrassi.forge.init.gui.container.melter;
 import es.degrassi.forge.client.ClientHandler;
 import es.degrassi.forge.client.IClientHandler;
 import es.degrassi.forge.init.entity.melter.MelterEntity;
+import es.degrassi.forge.init.gui.container.BaseContainer;
 import es.degrassi.forge.init.gui.container.types.IProgressContainer;
 import es.degrassi.forge.init.registration.BlockRegister;
 import es.degrassi.forge.init.registration.ContainerRegistry;
@@ -12,18 +13,16 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class MelterContainer extends AbstractContainerMenu implements IProgressContainer<MelterEntity> {
+public class MelterContainer extends BaseContainer<MelterEntity> implements IProgressContainer<MelterEntity> {
 
   // THIS YOU HAVE TO DEFINE!
   private static final int TE_INVENTORY_SLOT_COUNT = 3;  // must be the number of slots you have!
-
-  protected final MelterEntity entity;
-  protected final Level level;
-  protected final Inventory playerInv;
-  protected ContainerData data;
+  public FluidStack fluid;
   public MelterContainer(int i, Inventory inv, MelterEntity entity, ContainerData data) {
     super(ContainerRegistry.MELTER_CONTAINER.get(), i);
     checkContainerSize(inv, TE_INVENTORY_SLOT_COUNT);
@@ -31,8 +30,17 @@ public class MelterContainer extends AbstractContainerMenu implements IProgressC
     this.level = inv.player.level;
     this.playerInv = inv;
     this.data = data;
+    this.fluid = entity.getFluidStorage().getFluid();
 
     IClientHandler.addPlayerInventory(this, playerInv, 8, 98);
+
+    this.entity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
+      this.addSlot(new SlotItemHandler(handler, 0, 35, 31)); // upgrade 1
+      this.addSlot(new SlotItemHandler(handler, 1, 35, 67)); // upgrade 2
+      this.addSlot(new SlotItemHandler(handler, 2, 62, 49)); // input slot
+    });
+
+    addDataSlots(data);
   }
 
   public MelterContainer(int id, Inventory inv, MelterEntity entity) {
@@ -54,12 +62,16 @@ public class MelterContainer extends AbstractContainerMenu implements IProgressC
 
   @Override
   public boolean isCrafting() {
-    return false;
+    return entity.getProgressStorage().getProgress() > 0;
   }
 
   @Override
   public int getScaledProgress(int renderSize) {
-    return 0;
+    int progress = entity.getProgressStorage().getProgress();
+    int maxProgress = entity.getProgressStorage().getMaxProgress();  // Max Progress
+    int progressArrowSize = 26; // This is the height in pixels of your arrow
+
+    return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
   }
 
   @Override
@@ -110,5 +122,14 @@ public class MelterContainer extends AbstractContainerMenu implements IProgressC
   public boolean stillValid(@NotNull Player player) {
     return stillValid(ContainerLevelAccess.create(level, entity.getBlockPos()),
       player, BlockRegister.MELTER_BLOCK.get());
+  }
+
+
+  public void setFluid(FluidStack fluidStack) {
+    this.fluid = fluidStack;
+  }
+
+  public FluidStack getFluid() {
+    return fluid;
   }
 }

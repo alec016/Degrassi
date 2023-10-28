@@ -5,15 +5,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 
+@SuppressWarnings("unused")
 @NBTSerializer(BlockPos.class)
-public class BlockPosSerializer
-  implements INBTSerializer<BlockPos>
-{
+public class BlockPosSerializer implements INBTSerializer<BlockPos> {
   @Override
-  public void serialize(CompoundTag nbt, String key, BlockPos value)
-  {
-    if(value != null)
-    {
+  public void serialize(CompoundTag nbt, String key, BlockPos value) {
+    if(value != null) {
       CompoundTag tag = new CompoundTag();
       tag.putInt("x", value.getX());
       tag.putInt("y", value.getY());
@@ -23,10 +20,8 @@ public class BlockPosSerializer
   }
 
   @Override
-  public BlockPos deserialize(CompoundTag nbt, String key)
-  {
-    if(nbt.contains(key, Tag.TAG_COMPOUND))
-    {
+  public BlockPos deserialize(CompoundTag nbt, String key) {
+    if(nbt.contains(key, Tag.TAG_COMPOUND)) {
       CompoundTag tag = nbt.getCompound(key);
       return new BlockPos(tag.getInt("x"), tag.getInt("y"), tag.getInt("z"));
     }

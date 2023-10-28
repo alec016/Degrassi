@@ -3,6 +3,7 @@ package es.degrassi.forge;
 import com.mojang.brigadier.CommandDispatcher;
 import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.registry.registries.Registrar;
+import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.command.DegrassiCommand;
 import es.degrassi.forge.init.gui.renderer.GuiElementType;
 import es.degrassi.forge.init.registration.ElementRegistry;
@@ -19,6 +20,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class Degrassi {
@@ -55,7 +57,8 @@ public class Degrassi {
     return Register.REGISTRIES.get(registryKey);
   }
 
-  public static ResourceLocation rl(String s) {
-    return new ResourceLocation(Degrassi.MODID, s);
+  @Contract("_ -> new")
+  public static @NotNull ResourceLocation rl(String s) {
+    return new DegrassiLocation(s);
   }
 }

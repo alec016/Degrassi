@@ -6,7 +6,7 @@ import dev.latvian.mods.kubejs.recipe.schema.RegisterRecipeSchemasEvent;
 import dev.latvian.mods.kubejs.script.ScriptType;
 import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
 import es.degrassi.forge.init.registration.RecipeRegistry;
-import es.degrassi.forge.integration.kubejs.recipes.FurnaceRecipeSchema;
+import es.degrassi.forge.integration.kubejs.recipes.DegrassiRecipeSchemas;
 import es.degrassi.forge.integration.kubejs.recipes.builder.AbstractRecipeBuilderJS;
 import es.degrassi.forge.util.IntRange;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +21,8 @@ public class DegrassiKubeJSPlugin extends KubeJSPlugin {
 
   @Override
   public void registerRecipeSchemas(@NotNull RegisterRecipeSchemasEvent event) {
-    event.register(RecipeRegistry.FURNACE_RECIPE_TYPE.getId(), FurnaceRecipeSchema.FURNACE_MACHINE);
+    event.register(RecipeRegistry.FURNACE_RECIPE_TYPE.getId(), DegrassiRecipeSchemas.FURNACE_MACHINE);
+    event.register(RecipeRegistry.MELTER_RECIPE_TYPE.getId(), DegrassiRecipeSchemas.MELTER_MACHINE);
   }
 
   @Override

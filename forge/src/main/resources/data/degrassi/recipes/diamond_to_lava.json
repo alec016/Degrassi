@@ -1,0 +1,12 @@
+{
+  "type": "degrassi:melter",
+  "time": 1000,
+  "energy": 500,
+  "input": {
+    "item": "minecraft:diamond"
+  },
+  "output": {
+    "fluid": "minecraft:lava"
+  },
+  "outputAmount": 200
+}

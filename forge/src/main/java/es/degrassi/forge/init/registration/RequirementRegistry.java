@@ -12,6 +12,8 @@ public class RequirementRegistry {
   public static final RegistrySupplier<RequirementType<ItemRequirement>> ITEM_REQUIREMENT = REQUIREMENTS.register("item", () -> RequirementType.inventory(ItemRequirement.CODEC));
   public static final RegistrySupplier<RequirementType<EnergyRequirement>> ENERGY_REQUIREMENT = REQUIREMENTS.register("energy", () -> RequirementType.inventory(EnergyRequirement.CODEC));
   public static final RegistrySupplier<RequirementType<ExperienceRequirement>> EXPERIENCE_REQUIREMENT = REQUIREMENTS.register("experience", () -> RequirementType.inventory(ExperienceRequirement.CODEC));
+  public static final RegistrySupplier<RequirementType<FluidRequirement>> FLUID_REQUIREMENT = REQUIREMENTS.register("fluid", () -> RequirementType.inventory(FluidRequirement.CODEC));
+  public static final RegistrySupplier<RequirementType<TimeRequirement>> TIME_REQUIREMENT = REQUIREMENTS.register("time", () -> RequirementType.inventory(TimeRequirement.CODEC));
 
   public static void register() {
     REQUIREMENTS.register();
