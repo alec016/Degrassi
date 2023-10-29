@@ -170,8 +170,7 @@ public class FluidRenderer {
   public static void renderTiledFace(Direction dir, float left, float down, float right, float up, float depth,
                                      VertexConsumer builder, PoseStack ms, int light, int color, TextureAtlasSprite texture, float textureScale) {
     boolean positive = dir.getAxisDirection() == Direction.AxisDirection.POSITIVE;
-    boolean horizontal = dir.getAxis()
-      .isHorizontal();
+    boolean horizontal = dir.getAxis().isHorizontal();
     boolean x = dir.getAxis() == Direction.Axis.X;
 
     float shrink = texture.uvShrinkRatio() * 0.25f * textureScale;

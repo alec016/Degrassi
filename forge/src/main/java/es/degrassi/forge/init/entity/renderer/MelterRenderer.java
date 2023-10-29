@@ -7,18 +7,20 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.util.Mth;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
 public class MelterRenderer extends SafeBlockEntityRenderer<MelterEntity> {
   public MelterRenderer(BlockEntityRendererProvider.Context context) {}
 
   @Override
-  protected void renderSafe(MelterEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
+  protected void renderSafe(@NotNull MelterEntity be, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
     LerpedFloat fluidLevel = be.getFluidLevel();
     if (fluidLevel == null)
       return;
 
-    float capHeight = 1 / 4f;
-    float tankHullWidth = 1 / 16f + 1 / 128f;
+    float capHeight = 0f;
+    float tankHullWidth = 1 / 3f + 1 / 24f; // 0,375
     float minPuddleHeight = 1 / 16f;
     float totalHeight = 1 - 2 * capHeight - minPuddleHeight;
 
