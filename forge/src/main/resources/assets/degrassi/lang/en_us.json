@@ -29,8 +29,8 @@
   "degrassi.gui.element.energy.stored": "Stored: %s%s/%s%s",
   "degrassi.gui.element.energy.generation": "Generating: %s%s/t",
   "degrassi.gui.element.efficiency": "Efficiency: %s",
-  "degrassi.gui.element.fluid.tooltip": ": %smB/%smB",
-  "degrassi.gui.element.fluid.tooltip.amount": ": %smB",
+  "degrassi.gui.element.fluid.tooltip": "%smB/%smB",
+  "degrassi.gui.element.fluid.tooltip.amount": "%smB",
   "degrassi.gui.element.fluid.empty": "Empty: %smB/%smB",
   "degrassi.gui.element.transfer": "Transfer rate: %s%s/t",
 

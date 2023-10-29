@@ -27,6 +27,7 @@ dependencies {
     forge "net.minecraftforge:forge:${project.forge_version}"
     // Remove the next line if you don't want to depend on the API
     modApi "dev.architectury:architectury-forge:${project.architectury_version}"
+    modApi "org.joml:joml:1.10.5"
 
     // common module
     common(project(path: ":common", configuration: "namedElements")) { transitive false }

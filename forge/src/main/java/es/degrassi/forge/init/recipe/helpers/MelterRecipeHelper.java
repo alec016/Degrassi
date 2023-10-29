@@ -1,6 +1,7 @@
 package es.degrassi.forge.init.recipe.helpers;
 
 import es.degrassi.forge.init.entity.melter.MelterEntity;
+import es.degrassi.forge.init.entity.renderer.LerpedFloat;
 import es.degrassi.forge.init.item.upgrade.types.IMelterUpgrade;
 import es.degrassi.forge.init.recipe.recipes.MelterRecipe;
 import es.degrassi.forge.init.registration.RecipeRegistry;
@@ -44,6 +45,8 @@ public class MelterRecipeHelper extends RecipeHelper<MelterRecipe, MelterEntity>
     entity.getItemHandler().extractItem(2, 1, false);
     entity.getFluidStorage().fill(recipe.getFluid(), IFluidHandler.FluidAction.EXECUTE);
     entity.resetProgress();
+    if (entity.getFluidLevel() != null) entity.getFluidLevel().tickChaser();
+    else entity.setFluidLevel(LerpedFloat.linear().startWithValue(entity.getFillState()));
   }
 
   @Override

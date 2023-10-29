@@ -4,6 +4,8 @@ import dev.architectury.networking.NetworkManager;
 import dev.architectury.networking.simple.BaseS2CMessage;
 import dev.architectury.networking.simple.MessageType;
 import dev.architectury.utils.Env;
+import es.degrassi.forge.init.entity.melter.MelterEntity;
+import es.degrassi.forge.init.entity.renderer.LerpedFloat;
 import es.degrassi.forge.init.entity.type.IFluidEntity;
 import es.degrassi.forge.init.gui.container.melter.MelterContainer;
 import net.minecraft.client.Minecraft;
@@ -40,8 +42,24 @@ public class FluidPacket extends BaseS2CMessage {
         assert Minecraft.getInstance().level != null;
         if (Minecraft.getInstance().level.getBlockEntity(pos) instanceof IFluidEntity entity) {
           entity.setFluid(this.fluid);
+          if (entity instanceof MelterEntity tank) {
+            float fillState = tank.getFluidStorage().getFluidAmount() / (float) tank.getFluidStorage().getCapacity();
+            if (tank.getFluidLevel() == null)
+              tank.setFluidLevel(LerpedFloat.linear()
+                .startWithValue(fillState));
+            tank.getFluidLevel()
+              .chase(fillState, 0.5, LerpedFloat.Chaser.EXP);
+          }
           if (Minecraft.getInstance().player.containerMenu instanceof MelterContainer menu && menu.getEntity().getBlockPos().equals(pos)) {
             entity.setFluid(this.fluid);
+            if (entity instanceof MelterEntity tank) {
+              float fillState = tank.getFluidStorage().getFluidAmount() / (float) tank.getFluidStorage().getCapacity();
+              if (tank.getFluidLevel() == null)
+                tank.setFluidLevel(LerpedFloat.linear()
+                  .startWithValue(fillState));
+              tank.getFluidLevel()
+                .chase(fillState, 0.5, LerpedFloat.Chaser.EXP);
+            }
           }
         }
       });

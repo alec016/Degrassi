@@ -2,6 +2,7 @@ package es.degrassi.forge.init.entity.melter;
 
 import es.degrassi.forge.init.block.furnace.FurnaceBlock;
 import es.degrassi.forge.init.entity.BaseEntity;
+import es.degrassi.forge.init.entity.renderer.LerpedFloat;
 import es.degrassi.forge.init.entity.type.*;
 import es.degrassi.forge.init.handlers.ItemWrapperHandler;
 import es.degrassi.forge.init.recipe.IDegrassiRecipe;
@@ -40,6 +41,9 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEntity, IProgressEntity, IItemEntity, IFluidEntity {
+  private LerpedFloat fluidLevel;
+  protected boolean forceFluidLevelUpdate;
+  protected boolean queuedSync;
   private MelterRecipe recipe;
   private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
   private LazyOptional<AbstractEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
@@ -97,9 +101,16 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
     @Override
     public void onContentsChanged() {
       setChanged();
-      if (level != null && !level.isClientSide() && level.getServer() != null) {
-        new FluidPacket(this.fluid, worldPosition)
-          .sendToAll(level.getServer());
+      if (level != null && !level.isClientSide()) {
+        if(level.getServer() != null) {
+          new FluidPacket(this.fluid, worldPosition)
+            .sendToAll(level.getServer());
+        }
+      } else if(level != null && level.isClientSide()) {
+        if (fluidLevel == null)
+          fluidLevel = LerpedFloat.linear()
+            .startWithValue(getFillState());
+        fluidLevel.chase(getFillState(), .5f, LerpedFloat.Chaser.EXP);
       }
     }
     @Override
@@ -151,6 +162,8 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
       pos,
       state
     );
+    forceFluidLevelUpdate = true;
+    queuedSync = true;
   }
 
   public Component getName() {
@@ -176,7 +189,11 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
     BlockState state,
     @NotNull MelterEntity entity
   ) {
-    if (level.isClientSide()) return;
+    if (level.isClientSide()) {
+      if (entity.fluidLevel != null)
+        entity.fluidLevel.tickChaser();
+      return;
+    }
     if (RecipeHelpers.MELTER.hasRecipe(entity)) {
       entity.progressStorage.increment(false);
       RecipeHelpers.MELTER.extractEnergy(entity);
@@ -324,6 +341,8 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
     nbt.putInt("melter.progress", progressStorage.getProgress());
     nbt.putInt("melter.maxProgress", progressStorage.getMaxProgress());
     nbt = fluidStorage.writeToNBT(nbt);
+    nbt.putBoolean("ForceFluidLevel", true);
+    nbt.putBoolean("LazySync", true);
     super.saveAdditional(nbt);
   }
 
@@ -336,10 +355,28 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
     progressStorage.setProgress(nbt.getInt("melter.progress"));
     progressStorage.setMaxProgress(nbt.getInt("melter.maxProgress"));
     fluidStorage.readFromNBT(nbt);
+    if (nbt.contains("ForceFluidLevel") || fluidLevel == null)
+      fluidLevel = LerpedFloat.linear()
+        .startWithValue(getFillState());
+    if (nbt.contains("LazySync"))
+      fluidLevel.chase(fluidLevel.getChaseTarget(), 0.125f, LerpedFloat.Chaser.EXP);
   }
 
   @Override
   public void handleUpdateTag(CompoundTag tag) {
     load(tag);
   }
+
+  public float getFillState() {
+    return (float) fluidStorage.getFluidAmount() / fluidStorage.getCapacity();
+  }
+
+  public LerpedFloat getFluidLevel() {
+    return fluidLevel;
+  }
+
+  public void setFluidLevel(LerpedFloat fluidLevel) {
+    this.fluidLevel = fluidLevel;
+  }
+
 }
