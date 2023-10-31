@@ -1,10 +1,12 @@
 package es.degrassi.forge.init.recipe.helpers;
 
 import es.degrassi.forge.init.entity.furnace.*;
+import es.degrassi.forge.init.item.upgrade.SpeedUpgrade;
 import es.degrassi.forge.init.item.upgrade.types.IFurnaceUpgrade;
 import es.degrassi.forge.init.recipe.recipes.FurnaceRecipe;
 import es.degrassi.forge.init.registration.RecipeRegistry;
 import es.degrassi.forge.integration.config.DegrassiConfig;
+import es.degrassi.forge.util.DegrassiLogger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
@@ -80,20 +82,24 @@ public class FurnaceRecipeHelper extends RecipeHelper<FurnaceRecipe, FurnaceEnti
       recipes.forEach(r -> {
         if (r.getId().toString().equals(recipe.getId().toString())) has.set(true);
       });
-      if (has.get()) return;
-      FurnaceRecipe r = new FurnaceRecipe(recipe.getId(), recipe.getResultItem(), recipe.getIngredients(), recipe.getCookingTime(), recipe.getExperience());
-      recipes.add(r);
-      recipesMap.put(recipe.getId(), r);
+      if (!has.get()) {
+        FurnaceRecipe r = new FurnaceRecipe(recipe.getId(), recipe.getResultItem(), recipe.getIngredients(), recipe.getCookingTime(), recipe.getExperience());
+        recipes.add(r);
+        recipesMap.put(recipe.getId(), r);
+      }
     });
+    DegrassiLogger.INSTANCE.info("FurnaceRecipeHelper");
+    furnaceRecipes.forEach(DegrassiLogger.INSTANCE::info);
     furnaceRecipes.forEach(recipe -> {
       if (recipe == null) return;
       AtomicBoolean has = new AtomicBoolean(false);
       recipes.forEach(r -> {
-        if (r.getId().toString().equals(recipe.getId().toString()) || recipe.getIngredients().get(0).test(r.getIngredients().get(0).getItems()[0])) has.set(true);
+        if (r.getId().toString().equals(recipe.getId().toString())) has.set(true);
       });
-      if (has.get()) return;
-      recipes.add(recipe);
-      recipesMap.put(recipe.getId(), recipe);
+      if (!has.get()) {
+        recipes.add(recipe);
+        recipesMap.put(recipe.getId(), recipe);
+      }
     });
   }
 
@@ -124,14 +130,16 @@ public class FurnaceRecipeHelper extends RecipeHelper<FurnaceRecipe, FurnaceEnti
     ItemStack slot1 = inventory.getItem(1);
 
     int energyRequired = entity.recipe.getEnergyRequired();
+    int timeRequired = entity.recipe.getTime();
     for(int i = 0; i < inventory.getContainerSize(); i++) {
       ItemStack slot = inventory.getItem(i);
       if (slot.getCount() > 0 && slot.getItem() instanceof IFurnaceUpgrade upgrade) {
         switch(upgrade.getUpgradeType()) {
           case SPEED -> {
-            double speedModifier = slot0.getCount() * upgrade.getModifier();
-            entity.recipe.setTime(Math.max(1, entity.recipe.getTime() - (int) Math.floor(entity.recipe.getTime() * speedModifier)));
-            energyRequired += (int) Math.floor(entity.recipe.getEnergyRequired() * 5 * speedModifier);
+            SpeedUpgrade up = (SpeedUpgrade) upgrade;
+            double speedModifier = slot0.getCount() * up.getModifier();
+            timeRequired -= (int) Math.max(1, entity.recipe.getTime() * speedModifier);
+            energyRequired += (int) Math.floor(entity.recipe.getEnergyRequired() * up.getEnergyValue() * speedModifier);
           }
           case ENERGY -> {
             double energyModifier = Math.min(slot0.getCount(), slot1.getCount()) * upgrade.getModifier();
@@ -142,6 +150,7 @@ public class FurnaceRecipeHelper extends RecipeHelper<FurnaceRecipe, FurnaceEnti
     }
 
     entity.recipe.setEnergyRequired(Math.max(1, energyRequired));
+    entity.recipe.setTime(Math.max(1, timeRequired));
     entity.recipe.modify();
     entity.progressStorage.setMaxProgress(entity.recipe.getTime());
   }

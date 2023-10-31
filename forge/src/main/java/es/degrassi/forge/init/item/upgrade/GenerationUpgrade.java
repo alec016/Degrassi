@@ -1,5 +1,6 @@
 package es.degrassi.forge.init.item.upgrade;
 
+import es.degrassi.forge.client.ClientHandler;
 import es.degrassi.forge.init.item.upgrade.types.IPanelUpgrade;
 import es.degrassi.forge.integration.config.DegrassiConfig;
 import net.minecraft.ChatFormatting;
@@ -38,19 +39,30 @@ public class GenerationUpgrade extends BaseUpgrade implements IPanelUpgrade {
   public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
     if (getType() == null) setType(DegrassiConfig.gen_type.get());
     if (getValue() == null) setValue(DegrassiConfig.gen_augment.get());
+    if (ClientHandler.isShiftKeyDown()) {
+      components.add(
+        Component.translatable(
+          "degrassi.upgrades.type",
+          getTypeString()
+        ).withStyle(ChatFormatting.AQUA)
+      );
+      components.add(
+        Component.translatable(
+          "degrassi.upgrades.generation.tooltips",
+          getGenerationModifier()
+        ).withStyle(ChatFormatting.YELLOW)
+      );
+    } else {
+      components.add(
+        Component.translatable(
+          "degrassi.upgrades.shift.tooltip",
+          Component.translatable("degrassi.upgrades.shift.press.tooltip").withStyle(ChatFormatting.GRAY),
+          Component.literal("[SHIFT]").withStyle(ChatFormatting.BLUE, ChatFormatting.ITALIC, ChatFormatting.UNDERLINE),
+          Component.translatable("degrassi.upgrades.shift.more.tooltip").withStyle(ChatFormatting.GRAY)
+        )
+      );
+    }
 
-    components.add(
-      Component.translatable(
-        "degrassi.upgrades.type",
-        getTypeString()
-      ).withStyle(ChatFormatting.AQUA)
-    );
-    components.add(
-      Component.translatable(
-        "degrassi.upgrades.generation.tooltips",
-        getGenerationModifier()
-      ).withStyle(ChatFormatting.YELLOW)
-    );
     super.appendHoverText(stack, level, components, isAdvanced);
   }
 

@@ -3,7 +3,6 @@ package es.degrassi.forge.integration.jei;
 import com.mojang.blaze3d.vertex.PoseStack;
 import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.init.gui.renderer.ProgressComponent;
-import es.degrassi.forge.init.gui.screen.IScreen;
 import es.degrassi.forge.init.recipe.recipes.MelterRecipe;
 import es.degrassi.forge.init.registration.BlockRegister;
 import es.degrassi.forge.integration.jei.renderer.ProgressGuiElementJeiRenderer;
@@ -29,9 +28,8 @@ import java.util.List;
 
 public class MelterRecipeCategory implements IRecipeCategory<MelterRecipe> {
   public static final ResourceLocation UID = new DegrassiLocation("melter");
-  private static final ResourceLocation TEXTURE = new DegrassiLocation("textures/gui/melter_gui.png");
-  // public static final ResourceLocation TEXTURE = new DegrassiLocation("textures/gui/jei/melter_gui.png");
-  // public static final ResourceLocation FILLED_PROGRESS = new DegrassiLocation("textures/gui/jei/melter_progress_filled.png");
+   public static final ResourceLocation TEXTURE = new DegrassiLocation("textures/gui/jei/melter_gui.png");
+   public static final ResourceLocation FILLED_PROGRESS = new DegrassiLocation("textures/gui/jei/melter_progress_filled.png");
 
   private final IDrawable background;
   private final IDrawable icon;
@@ -41,7 +39,7 @@ public class MelterRecipeCategory implements IRecipeCategory<MelterRecipe> {
 
   public MelterRecipeCategory(@NotNull IJeiHelpers helper) {
     IGuiHelper helper1 = helper.getGuiHelper();
-    this.background = helper1.drawableBuilder(TEXTURE, 0, 0, 126, 73).setTextureSize(126, 73).build();
+    this.background = helper1.drawableBuilder(TEXTURE, 0, 0, 140, 84).setTextureSize(140, 84).build();
     this.icon = helper1.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(BlockRegister.MELTER_BLOCK.get()));
   }
 
@@ -67,8 +65,8 @@ public class MelterRecipeCategory implements IRecipeCategory<MelterRecipe> {
 
   @Override
   public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull MelterRecipe recipe, @NotNull IFocusGroup focuses) {
-    builder.addSlot(RecipeIngredientRole.INPUT, 31, 19).addIngredients(recipe.getIngredients().get(0));
-    builder.addSlot(RecipeIngredientRole.OUTPUT, 101, 19).addIngredients(ForgeTypes.FLUID_STACK, List.of(recipe.getFluid())).setFluidRenderer(recipe.getFluid().getAmount(), false, 20, 10);
+    builder.addSlot(RecipeIngredientRole.INPUT, 50, 34).addIngredients(recipe.getIngredients().get(0));
+    builder.addSlot(RecipeIngredientRole.OUTPUT, 116, 7).addIngredients(ForgeTypes.FLUID_STACK, List.of(recipe.getFluid())).setFluidRenderer(recipe.getFluid().getAmount(), false, 16, 70);
   }
 
   @Override
@@ -89,15 +87,15 @@ public class MelterRecipeCategory implements IRecipeCategory<MelterRecipe> {
     }
     if (progressComponent == null) {
       progressComponent = new ProgressComponent(
-        56,
-        18,
+        70,
+        33,
         progressStorage,
-        TextureSizeHelper.getTextureWidth(IScreen.FILLED_ARROW),
-        TextureSizeHelper.getTextureHeight(IScreen.FILLED_ARROW),
-        IScreen.FILLED_ARROW
+        TextureSizeHelper.getTextureWidth(FILLED_PROGRESS),
+        TextureSizeHelper.getTextureHeight(FILLED_PROGRESS),
+        FILLED_PROGRESS
       );
     }
-    progress.renderElementInJEI(stack, progressComponent, recipe, mouseX, mouseY, 53, 18);
+    progress.renderElementInJEI(stack, progressComponent, recipe, mouseX, mouseY, 70, 33);
     stack.popPose();
   }
 }

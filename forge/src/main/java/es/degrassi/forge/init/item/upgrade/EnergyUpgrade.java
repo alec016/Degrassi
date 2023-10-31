@@ -1,8 +1,10 @@
 package es.degrassi.forge.init.item.upgrade;
 
+import es.degrassi.forge.client.ClientHandler;
 import es.degrassi.forge.init.item.upgrade.types.IFurnaceUpgrade;
 import es.degrassi.forge.init.item.upgrade.types.IMelterUpgrade;
 import es.degrassi.forge.integration.config.DegrassiConfig;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -29,12 +31,26 @@ public class EnergyUpgrade extends BaseUpgrade implements IFurnaceUpgrade, IMelt
   public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
     if (getValue() == null) setValue(DegrassiConfig.energy_augment.get());
 
-//    components.add(
-//      Component.translatable(
-//        "degrassi.upgrades.type",
-//        getTypeString()
-//      ).withStyle(ChatFormatting.AQUA)
-//    );
+    if (ClientHandler.isShiftKeyDown()) {
+      components.add(
+        Component.literal(
+          Component.translatable(
+            "degrassi.upgrades.energy.tooltip",
+            1 + getModifier()
+          ).getString() + "%"
+        ).withStyle(ChatFormatting.YELLOW)
+      );
+    } else {
+      components.add(
+        Component.translatable(
+          "degrassi.upgrades.shift.tooltip",
+          Component.translatable("degrassi.upgrades.shift.press.tooltip").withStyle(ChatFormatting.GRAY),
+          Component.literal("[SHIFT]").withStyle(ChatFormatting.BLUE, ChatFormatting.ITALIC, ChatFormatting.UNDERLINE),
+          Component.translatable("degrassi.upgrades.shift.more.tooltip").withStyle(ChatFormatting.GRAY)
+        )
+      );
+    }
+
     super.appendHoverText(stack, level, components, isAdvanced);
   }
 

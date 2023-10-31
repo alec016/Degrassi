@@ -40,7 +40,14 @@
   "degrassi.upgrades.efficiency.tooltips": "Augment efficiency by x%s",
   "degrassi.upgrades.generation.tooltips": "Augment generation by x%s",
   "degrassi.upgrades.transfer.tooltips": "Augment transfer rate by x%s",
+  "degrassi.upgrades.speed.tooltip": "Augment machine speed by x%s",
+  "degrassi.upgrades.speed.energy.tooltip": "Augment machine energy by x%s",
+  "degrassi.upgrades.energy.tooltip": "Reduces machine energy requirement by x%s",
   "degrassi.upgrades.type": "Current type: %s",
+
+  "degrassi.upgrades.shift.tooltip": "%s %s %s",
+  "degrassi.upgrades.shift.press.tooltip": "Press",
+  "degrassi.upgrades.shift.more.tooltip": "for more info",
 
   "degrassi.jei.gui.element.sp": "This Solar Panel %s%s",
   "degrassi.jei.gui.element.energy.generation": "generates up to %s%s/t",

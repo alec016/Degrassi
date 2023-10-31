@@ -2,9 +2,11 @@ package es.degrassi.forge.init.recipe.helpers;
 
 import es.degrassi.forge.init.entity.melter.MelterEntity;
 import es.degrassi.forge.init.entity.renderer.LerpedFloat;
+import es.degrassi.forge.init.item.upgrade.SpeedUpgrade;
 import es.degrassi.forge.init.item.upgrade.types.IMelterUpgrade;
 import es.degrassi.forge.init.recipe.recipes.MelterRecipe;
 import es.degrassi.forge.init.registration.RecipeRegistry;
+import es.degrassi.forge.util.DegrassiLogger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
@@ -53,15 +55,18 @@ public class MelterRecipeHelper extends RecipeHelper<MelterRecipe, MelterEntity>
   public void init() {
     Level level = Objects.requireNonNull(Minecraft.getInstance().level);
     List<MelterRecipe> melterRecipes = level.getRecipeManager().getAllRecipesFor(RecipeRegistry.MELTER_RECIPE_TYPE.get());
+    DegrassiLogger.INSTANCE.info("MelterRecipeHelper");
+    melterRecipes.forEach(DegrassiLogger.INSTANCE::info);
     melterRecipes.forEach(recipe -> {
       if (recipe == null) return;
       AtomicBoolean has = new AtomicBoolean(false);
       recipes.forEach(r -> {
         if (r.getId().toString().equals(recipe.getId().toString())) has.set(true);
       });
-      if (has.get()) return;
-      recipes.add(recipe);
-      recipesMap.put(recipe.getId(), recipe);
+      if (!has.get()) {
+        recipes.add(recipe);
+        recipesMap.put(recipe.getId(), recipe);
+      }
     });
   }
 
@@ -70,14 +75,16 @@ public class MelterRecipeHelper extends RecipeHelper<MelterRecipe, MelterEntity>
     ItemStack slot1 = inventory.getItem(1);
 
     int energyRequired = entity.getRecipe().getEnergyRequired();
+    int timeRequired = entity.getRecipe().getTime();
     for(int i = 0; i < inventory.getContainerSize(); i++) {
       ItemStack slot = inventory.getItem(i);
       if (slot.getCount() > 0 && slot.getItem() instanceof IMelterUpgrade upgrade) {
         switch(upgrade.getUpgradeType()) {
           case SPEED -> {
-            double speedModifier = slot0.getCount() * upgrade.getModifier();
-            entity.getRecipe().setTime(Math.max(1, entity.getRecipe().getTime() - (int) Math.floor(entity.getRecipe().getTime() * speedModifier)));
-            energyRequired += (int) Math.floor(entity.getRecipe().getEnergyRequired() * 5 * speedModifier);
+            SpeedUpgrade up = (SpeedUpgrade) upgrade;
+            double speedModifier = slot0.getCount() * up.getModifier();
+            timeRequired -= (int) Math.max(1, entity.getRecipe().getTime() * speedModifier);
+            energyRequired += (int) Math.floor(entity.getRecipe().getEnergyRequired() * up.getEnergyValue() * speedModifier);
           }
           case ENERGY -> {
             double energyModifier = Math.min(slot0.getCount(), slot1.getCount()) * upgrade.getModifier();
@@ -88,6 +95,7 @@ public class MelterRecipeHelper extends RecipeHelper<MelterRecipe, MelterEntity>
     }
 
     entity.getRecipe().setEnergyRequired(Math.max(1, energyRequired));
+    entity.getRecipe().setTime(Math.max(1, timeRequired));
     entity.getRecipe().modify();
     entity.getProgressStorage().setMaxProgress(entity.getRecipe().getTime());
   }

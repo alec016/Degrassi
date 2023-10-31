@@ -1,7 +1,6 @@
 package es.degrassi.forge.integration.config;
 
 import es.degrassi.forge.init.item.upgrade.UpgradeType;
-import es.degrassi.forge.util.Fetcher;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class DegrassiConfig {
@@ -121,8 +120,6 @@ public class DegrassiConfig {
   // melter
   public static final ForgeConfigSpec.ConfigValue<Integer> melter_capacity;
   public static final ForgeConfigSpec.ConfigValue<Integer> melter_transfer;
-  public static final ForgeConfigSpec.ConfigValue<Integer> melter_speed;
-  public static final ForgeConfigSpec.ConfigValue<Integer> melter_energy;
 
   // efficiency upgrade
   public static final ForgeConfigSpec.ConfigValue<Integer> eff_augment;
@@ -449,12 +446,6 @@ public class DegrassiConfig {
     melter_transfer = BUILDER
       .comment("transfer rate - Default 10000")
       .define("transfer", 10000);
-    melter_speed = BUILDER
-      .comment("speed recipe reduction in percentage - Default 5")
-      .define("speed", 5);
-    melter_energy = BUILDER
-      .comment("energy recipe augment in percentage - Default 0")
-      .define("energy", 0);
 
     BUILDER.pop();
   }
@@ -517,7 +508,7 @@ public class DegrassiConfig {
       .define("augment", 1);
     speed_energy_augment = BUILDER
       .comment("speed energy augment in percentage - default 5")
-      .define("energy augment", 5);
+      .define("energy_augment", 5);
     BUILDER.pop();
 
     BUILDER.push("Energy");

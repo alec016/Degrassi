@@ -379,4 +379,12 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
     this.fluidLevel = fluidLevel;
   }
 
+  public ItemStack getRenderStack() {
+//    ItemStack stack = ItemStack.EMPTY;
+//    if (!itemHandler.getStackInSlot(2).isEmpty())  stack = itemHandler.getStackInSlot(2);
+//    return stack;
+
+    return itemHandler.getStackInSlot(2).isEmpty() ? ItemStack.EMPTY : itemHandler.getStackInSlot(2);
+  }
+
 }
