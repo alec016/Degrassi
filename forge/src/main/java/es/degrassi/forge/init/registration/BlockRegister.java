@@ -117,6 +117,12 @@ public class BlockRegister {
     CreativeTabs.COMMON
   );
 
+  public static final RegistrySupplier<Block> UPGRADE_MAKER = registerBlock(
+    "upgrade_maker",
+    UpgradeMaker::new,
+    CreativeTabs.MACHINES
+  );
+
   private static <T extends Block> RegistrySupplier<T> registerBlock(String name, Supplier<T> block, CreativeModeTab tab) {
     RegistrySupplier<T> toReturn = BLOCKS.register(name, block);
     registerBlockItem(name, toReturn, tab);

@@ -8,6 +8,10 @@
   "item.degrassi.generation_upgrade": "Generation Upgrade",
   "item.degrassi.speed_upgrade": "Speed Upgrade",
   "item.degrassi.energy_upgrade": "Energy Upgrade",
+  "item.degrassi.upgrade_base": "Upgrade Base",
+  "item.degrassi.modifier_base": "Modifier Base",
+  "item.degrassi.black_pearl": "Black Pearl",
+  "item.degrassi.red_matter": "Red Matter",
 
   "block.degrassi.machine_casing": "Machine Casing",
   "block.degrassi.solar_panel_tier_1": "Solar Panel Tier I",
@@ -24,6 +28,7 @@
   "block.degrassi.diamond_furnace": "Diamond Furnace",
   "block.degrassi.emerald_furnace": "Emerald Furnace",
   "block.degrassi.netherite_furnace": "Netherite Furnace",
+  "block.degrassi.upgrade_maker": "Upgrade Maker",
 
   "degrassi.gui.element.energy.tooltip": "Energy: %s%s/%s%s",
   "degrassi.gui.element.energy.stored": "Stored: %s%s/%s%s",

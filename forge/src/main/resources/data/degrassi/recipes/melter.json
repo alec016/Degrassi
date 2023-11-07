@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RBR",
+    "LCL",
+    "RBR"
+  ],
+  "key": {
+    "R": {
+      "item": "degrassi:red_matter"
+    },
+    "B": {
+      "item": "degrassi:black_pearl"
+    },
+    "L": {
+      "item": "minecraft:lava_bucket"
+    },
+    "C": {
+      "item": "degrassi:machine_casing"
+    }
+  },
+  "result": {
+    "item": "degrassi:melter"
+  }
+}

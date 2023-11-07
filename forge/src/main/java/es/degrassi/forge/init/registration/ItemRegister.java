@@ -16,6 +16,22 @@ public class ItemRegister {
     "gold_coin", () -> new Item(new Item.Properties().tab(CreativeTabs.COMMON))
   );
 
+  public static final RegistrySupplier<Item> RED_MATTER = ITEMS.register(
+    "red_matter", () -> new Item(new Item.Properties().tab(CreativeTabs.COMMON))
+  );
+
+  public static final RegistrySupplier<Item> BLACK_PEARL = ITEMS.register(
+    "black_pearl", () -> new Item(new Item.Properties().tab(CreativeTabs.COMMON))
+  );
+
+  public static final RegistrySupplier<Item> MODIFIER_BASE = ITEMS.register(
+    "modifier_base", () -> new Item(new Item.Properties().tab(CreativeTabs.COMMON))
+  );
+
+  public static final RegistrySupplier<Item> UPGRADE_BASE = ITEMS.register(
+    "upgrade_base", () -> new Item(new Item.Properties().tab(CreativeTabs.COMMON))
+  );
+
   public static final RegistrySupplier<BaseUpgrade> EFFICIENCY_UPGRADE = registerUpgrade(
     "efficiency_upgrade", () -> new EfficiencyUpgrade(new Item.Properties().tab(CreativeTabs.COMMON).stacksTo(1))
   );

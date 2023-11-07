@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BMB",
+    "MCM",
+    "BMB"
+  ],
+  "key": {
+    "C": {
+      "item": "degrassi:machine_casing"
+    },
+    "B": {
+      "item": "degrassi:upgrade_base"
+    },
+    "M": {
+      "item": "degrassi:modifier_base"
+    }
+  },
+  "result": {
+    "item": "degrassi:upgrade_maker"
+  }
+}
