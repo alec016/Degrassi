@@ -15,8 +15,8 @@ public class EmeraldFurnaceEntity extends FurnaceEntity {
       Component.translatable(
         "block.degrassi.emerald_furnace"
       ),
-      DegrassiConfig.emerald_furnace_capacity.get(),
-      DegrassiConfig.emerald_furnace_transfer.get()
+      DegrassiConfig.get().emerald_furnace_capacity,
+      DegrassiConfig.get().emerald_furnace_transfer
     );
   }
 }

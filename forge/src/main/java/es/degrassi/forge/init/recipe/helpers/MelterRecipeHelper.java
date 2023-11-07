@@ -53,6 +53,7 @@ public class MelterRecipeHelper extends RecipeHelper<MelterRecipe, MelterEntity>
 
   @Override
   public void init() {
+    super.init();
     Level level = Objects.requireNonNull(Minecraft.getInstance().level);
     List<MelterRecipe> melterRecipes = level.getRecipeManager().getAllRecipesFor(RecipeRegistry.MELTER_RECIPE_TYPE.get());
     DegrassiLogger.INSTANCE.info("MelterRecipeHelper");

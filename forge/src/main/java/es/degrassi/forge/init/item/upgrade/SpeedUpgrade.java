@@ -37,8 +37,8 @@ public class SpeedUpgrade extends BaseUpgrade implements IFurnaceUpgrade, IMelte
   }
   @Override
   public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
-    if (getValue() == null) setValue(DegrassiConfig.speed_augment.get());
-    if (getEnergyValue() == null) setEnergyValue(DegrassiConfig.speed_energy_augment.get());
+    if (getValue() == null) setValue(DegrassiConfig.get().speed_augment);
+    if (getEnergyValue() == null) setEnergyValue(DegrassiConfig.get().speed_energy_augment);
     if (ClientHandler.isShiftKeyDown()) {
       components.add(
         Component.literal(
@@ -74,8 +74,8 @@ public class SpeedUpgrade extends BaseUpgrade implements IFurnaceUpgrade, IMelte
 
   @Override
   public double getModifier() {
-    if (getValue() == null) setValue(DegrassiConfig.speed_augment.get());
-    if (getEnergyValue() == null) setEnergyValue(DegrassiConfig.speed_energy_augment.get());
+    if (getValue() == null) setValue(DegrassiConfig.get().speed_augment);
+    if (getEnergyValue() == null) setEnergyValue(DegrassiConfig.get().speed_energy_augment);
     return getValue() / 100d;
   }
 }

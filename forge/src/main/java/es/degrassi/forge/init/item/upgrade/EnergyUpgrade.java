@@ -29,7 +29,7 @@ public class EnergyUpgrade extends BaseUpgrade implements IFurnaceUpgrade, IMelt
   }
   @Override
   public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
-    if (getValue() == null) setValue(DegrassiConfig.energy_augment.get());
+    if (getValue() == null) setValue(DegrassiConfig.get().energy_augment);
 
     if (ClientHandler.isShiftKeyDown()) {
       components.add(
@@ -56,7 +56,7 @@ public class EnergyUpgrade extends BaseUpgrade implements IFurnaceUpgrade, IMelt
 
   @Override
   public double getModifier() {
-    if (getValue() == null) setValue(DegrassiConfig.energy_augment.get());
+    if (getValue() == null) setValue(DegrassiConfig.get().energy_augment);
     return getValue() / 100d;
   }
 }

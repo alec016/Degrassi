@@ -28,8 +28,8 @@ public class SP3Entity extends SolarPanelEntity {
       pos,
       state,
       Component.translatable("block.degrassi.solar_panel_tier_3"),
-      DegrassiConfig.sp3_capacity.get(),
-      DegrassiConfig.sp3_transfer.get()
+      DegrassiConfig.get().sp3_capacity,
+      DegrassiConfig.get().sp3_transfer
     );
 
     this.itemHandler = new ItemStackHandler(4) {
@@ -79,7 +79,7 @@ public class SP3Entity extends SolarPanelEntity {
   }
 
   public int getGeneration() {
-    return DegrassiConfig.sp3_generation.get();
+    return DegrassiConfig.get().sp3_generation;
   }
 
   @Override

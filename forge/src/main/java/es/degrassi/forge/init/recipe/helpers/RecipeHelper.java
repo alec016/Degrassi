@@ -22,7 +22,10 @@ public abstract class RecipeHelper<T extends Recipe<?>, E extends BaseEntity & I
 
   public abstract void craftItem(@NotNull E entity);
 
-  public abstract void init();
+  public void init() {
+    this.recipes.clear();
+    this.recipesMap.clear();
+  }
 
 
   public void extractEnergy(@NotNull E entity) {

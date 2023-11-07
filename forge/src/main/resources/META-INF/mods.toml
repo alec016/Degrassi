@@ -32,3 +32,10 @@ mandatory = true
 versionRange = "[${architectury_version},)"
 ordering = "AFTER"
 side = "BOTH"
+
+[[dependencied.degrassi]]
+modId = "cloth_config"
+mandatory = true
+versionRange = "[${cloth_config_version},)"
+ordering = "NONE"
+side = "BOTH"

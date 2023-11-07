@@ -15,8 +15,8 @@ public class GoldFurnaceEntity extends FurnaceEntity {
       Component.translatable(
         "block.degrassi.gold_furnace"
       ),
-      DegrassiConfig.gold_furnace_capacity.get(),
-      DegrassiConfig.gold_furnace_transfer.get()
+      DegrassiConfig.get().gold_furnace_capacity,
+      DegrassiConfig.get().gold_furnace_transfer
     );
   }
 }

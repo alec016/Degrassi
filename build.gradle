@@ -2,6 +2,7 @@ plugins {
     id "architectury-plugin" version "3.4.146"
     id "dev.architectury.loom" version "1.1.346" apply false
     id "maven-publish"
+    id "me.shedaniel.unified-publishing" version "0.1.+" apply false
 }
 
 architectury {
@@ -85,5 +86,48 @@ allprojects {
     java {
         sourceCompatibility = targetCompatibility = '17'
         withSourcesJar()
+    }
+
+
+    if(project.path != ':common' && project.path != ':') {
+        publishing {
+            publications {
+                maven(MavenPublication) {
+                    groupId = project.group
+                    artifactId = project.archivesBaseName
+                    version = project.version
+                    from components.java
+
+                    pom {
+                        name = project.mod_name
+                        description = project.mod_description
+                        packaging = 'jar'
+                        version = project.version
+                        scm {
+                            url = project.github
+                        }
+                        issueManagement {
+                            system = 'github'
+                            url = project.issues
+                        }
+                        licenses {
+                            license {
+                                name = project.license
+                                distribution = 'repo'
+                            }
+                        }
+                        developers {
+                            developer {
+                                id = project.author
+                                name = project.author
+                                roles = ['developper']
+                            }
+                        }
+                    }
+                }
+            }
+            repositories {
+            }
+        }
     }
 }

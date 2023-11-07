@@ -15,8 +15,8 @@ public class IronFurnaceEntity extends FurnaceEntity {
       Component.translatable(
         "block.degrassi.iron_furnace"
       ),
-      DegrassiConfig.iron_furnace_capacity.get(),
-      DegrassiConfig.iron_furnace_transfer.get()
+      DegrassiConfig.get().iron_furnace_capacity,
+      DegrassiConfig.get().iron_furnace_transfer
     );
   }
 }

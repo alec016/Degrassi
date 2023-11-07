@@ -15,8 +15,8 @@ public class DiamondFurnaceEntity extends FurnaceEntity {
       Component.translatable(
         "block.degrassi.diamond_furnace"
       ),
-      DegrassiConfig.diamond_furnace_capacity.get(),
-      DegrassiConfig.diamond_furnace_transfer.get()
+      DegrassiConfig.get().diamond_furnace_capacity,
+      DegrassiConfig.get().diamond_furnace_transfer
     );
   }
 }

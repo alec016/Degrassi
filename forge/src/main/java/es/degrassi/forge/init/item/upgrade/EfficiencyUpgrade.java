@@ -38,8 +38,8 @@ public class EfficiencyUpgrade extends BaseUpgrade implements IPanelUpgrade {
 
   @Override
   public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
-    if (getType() == null) setType(DegrassiConfig.eff_type.get());
-    if (getValue() == null) setValue(DegrassiConfig.eff_augment.get());
+    if (getType() == null) setType(DegrassiConfig.get().eff_type);
+    if (getValue() == null) setValue(DegrassiConfig.get().eff_augment);
     if (ClientHandler.isShiftKeyDown()) {
       components.add(
         Component.translatable(
