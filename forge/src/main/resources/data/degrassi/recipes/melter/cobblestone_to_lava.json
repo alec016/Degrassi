@@ -1,0 +1,12 @@
+{
+  "type": "degrassi:melter",
+  "time": 1000,
+  "energy": 1000,
+  "input": {
+    "item": "minecraft:cobblestone"
+  },
+  "output": {
+    "fluid": "minecraft:lava"
+  },
+  "outputAmount": 500
+}
