@@ -7,6 +7,7 @@ import es.degrassi.forge.init.block.melter.Melter;
 import es.degrassi.forge.init.block.panel.sp.*;
 import es.degrassi.forge.init.block.*;
 import es.degrassi.forge.init.block.furnace.*;
+import es.degrassi.forge.init.block.upgrade_maker.UpgradeMaker;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;

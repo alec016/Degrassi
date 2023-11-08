@@ -6,6 +6,8 @@ import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.init.entity.furnace.*;
 import es.degrassi.forge.init.entity.melter.MelterEntity;
 import es.degrassi.forge.init.entity.panel.sp.*;
+import es.degrassi.forge.init.entity.upgrade_maker.UpgradeMakerEntity;
+import es.degrassi.forge.integration.config.DegrassiConfig;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
@@ -136,6 +138,14 @@ public class EntityRegister {
         null
       )
     );
+
+  public static final RegistrySupplier<BlockEntityType<UpgradeMakerEntity>> UPGRADE_MAKER = BLOCK_ENTITIES.register("upgrade_maker", () ->
+    new BlockEntityType<>(
+      UpgradeMakerEntity::new,
+      Set.of(BlockRegister.UPGRADE_MAKER.get()),
+      null
+    )
+  );
 
   public static void register() {
     BLOCK_ENTITIES.register();
