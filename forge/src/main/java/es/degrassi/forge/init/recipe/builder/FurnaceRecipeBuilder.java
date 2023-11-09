@@ -7,6 +7,7 @@ import es.degrassi.forge.requirements.EnergyRequirement;
 import es.degrassi.forge.requirements.ExperienceRequirement;
 import es.degrassi.forge.requirements.IRequirement;
 import es.degrassi.forge.requirements.ItemRequirement;
+import es.degrassi.forge.util.DegrassiLogger;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -15,7 +16,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 @SuppressWarnings("unused")
 public class FurnaceRecipeBuilder extends AbstractRecipeBuilder<FurnaceRecipe> {
-  private final int time;
+  private int time;
   private float xp;
   private int energy;
   private IIngredient<Item> outputIngredient;
@@ -35,6 +36,7 @@ public class FurnaceRecipeBuilder extends AbstractRecipeBuilder<FurnaceRecipe> {
       IIngredient.ITEM.fieldOf("output").forGetter(builder -> builder.outputIngredient),
       NamedCodec.INT.optionalFieldOf("outputAmount", 1).forGetter(builder -> builder.outputAmount)
     ).apply(recipeBuilderInstance, (time, xp, energy, input, inputAmount, output, outputAmount) -> {
+      DegrassiLogger.INSTANCE.info("FurnaceRecipeBuilderCODED[ time: " + time + ", energy: " + energy + ", input: " + input + ", amount: " + inputAmount + ", output: " + output + ", amount: " + outputAmount + " ]");
       FurnaceRecipeBuilder builder = new FurnaceRecipeBuilder(time);
       builder
         .xp(xp)
@@ -57,11 +59,18 @@ public class FurnaceRecipeBuilder extends AbstractRecipeBuilder<FurnaceRecipe> {
 
   @Override
   public FurnaceRecipe build(ResourceLocation id) {
-    return new FurnaceRecipe(id, output, NonNullList.withSize(1, Ingredient.of(input)), time, energy, xp);
+    FurnaceRecipe recipe = new FurnaceRecipe(id, output, NonNullList.withSize(1, Ingredient.of(input)), time, energy, xp);
+    DegrassiLogger.INSTANCE.info("FurnaceRecipeBuilder$build: " + recipe);
+    return recipe;
   }
 
   public FurnaceRecipeBuilder xp(float xp) {
     this.xp = xp;
+    return this;
+  }
+
+  public FurnaceRecipeBuilder time (int time) {
+    this.time = time;
     return this;
   }
 

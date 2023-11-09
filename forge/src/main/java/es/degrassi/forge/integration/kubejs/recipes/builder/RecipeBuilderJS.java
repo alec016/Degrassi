@@ -2,9 +2,9 @@ package es.degrassi.forge.integration.kubejs.recipes.builder;
 
 import es.degrassi.forge.requirements.IRequirement;
 
-public interface RecipeBuilderJS {
+public interface RecipeBuilderJS<T extends AbstractRecipeBuilderJS<?, ?>> {
 
-  RecipeBuilderJS addRequirement(IRequirement<?> requirement);
+  T addRequirement(IRequirement<?> requirement);
 
-  RecipeBuilderJS error(String error, Object... args);
+  T error(String error, Object... args);
 }

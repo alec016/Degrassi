@@ -1,13 +1,17 @@
 package es.degrassi.forge.init.recipe.helpers;
 
+import dev.latvian.mods.kubejs.script.ScriptType;
 import es.degrassi.forge.init.entity.BaseEntity;
 import es.degrassi.forge.init.entity.type.IEnergyEntity;
 import es.degrassi.forge.init.entity.type.IRecipeEntity;
+import es.degrassi.forge.integration.kubejs.DegrassiEvents;
+import es.degrassi.forge.integration.kubejs.events.DegrassiRecipesEvents;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class RecipeHelper<T extends Recipe<?>, E extends BaseEntity & IEnergyEntity & IRecipeEntity> {
+
   public final NonNullList<T> recipes = NonNullList.create();
   public final Map<ResourceLocation, T> recipesMap = new HashMap<>();
 
@@ -46,5 +51,15 @@ public abstract class RecipeHelper<T extends Recipe<?>, E extends BaseEntity & I
 
   public boolean canInsertAmountIntoOutputSlot(@NotNull FluidTank storage) {
     return storage.getCapacity() > storage.getFluidAmount();
+  }
+
+  public boolean hasEnoughFluid(@NotNull FluidTank storage, @NotNull E entity) {
+    return entity.getRecipe().getEnergyRequired() <= storage.getFluidAmount();
+  }
+
+  public void extractFluid(@NotNull FluidTank storage, @NotNull E entity) {
+    FluidStack fluid = storage.getFluid();
+    fluid.setAmount(fluid.getAmount() - entity.getRecipe().getFluid().getAmount());
+    storage.setFluid(fluid);
   }
 }

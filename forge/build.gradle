@@ -31,6 +31,7 @@ dependencies {
     modApi "org.joml:joml:1.10.5"
     modApi("me.shedaniel.cloth:cloth-config:${project.cloth_config_version}")
     modApi("me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}")
+    modApi("curse.maven:probejs-585406:4842668")
 
     // common module
     common(project(path: ":common", configuration: "namedElements")) { transitive false }

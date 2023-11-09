@@ -5,8 +5,10 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.init.recipe.recipes.FurnaceRecipe;
 import es.degrassi.forge.init.recipe.recipes.MelterRecipe;
+import es.degrassi.forge.init.recipe.recipes.UpgradeMakerRecipe;
 import es.degrassi.forge.init.recipe.serializers.FurnaceRecipeSerializer;
 import es.degrassi.forge.init.recipe.serializers.MelterRecipeSerializer;
+import es.degrassi.forge.init.recipe.serializers.UpgradeMakerRecipeSerializer;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -27,10 +29,16 @@ public class RecipeRegistry {
       return "furnace";
     }
   });
+  public static final RegistrySupplier<RecipeType<UpgradeMakerRecipe>> UPGRADE_MAKER_RECIPE_TYPE = RECIPE_TYPES.register("upgrade_maker", () -> new RecipeType<>() {
+    public String toString() {
+      return "upgrade_maker";
+    }
+  });
 
   // serializers
   public static final RegistrySupplier<RecipeSerializer<MelterRecipe>> MELTER_SERIALIZER = SERIALIZERS.register("melter", MelterRecipeSerializer::new);
   public static final RegistrySupplier<RecipeSerializer<FurnaceRecipe>> FURNACE_SERIALIZER = SERIALIZERS.register("furnace", FurnaceRecipeSerializer::new);
+  public static final RegistrySupplier<RecipeSerializer<UpgradeMakerRecipe>> UPGRADE_MAKER_SERIALIZER = SERIALIZERS.register("upgrade_maker", UpgradeMakerRecipeSerializer::new);
 
   public static void register() {
     SERIALIZERS.register();

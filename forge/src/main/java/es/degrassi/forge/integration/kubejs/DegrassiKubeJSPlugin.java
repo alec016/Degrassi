@@ -1,28 +1,32 @@
 package es.degrassi.forge.integration.kubejs;
 
 import dev.latvian.mods.kubejs.KubeJSPlugin;
-import dev.latvian.mods.kubejs.event.EventGroup;
+import dev.latvian.mods.kubejs.bindings.event.ServerEvents;
+import dev.latvian.mods.kubejs.bindings.event.StartupEvents;
+import dev.latvian.mods.kubejs.recipe.RecipeSchemaRegistryEventJS;
+import dev.latvian.mods.kubejs.recipe.schema.RecipeNamespace;
 import dev.latvian.mods.kubejs.recipe.schema.RegisterRecipeSchemasEvent;
 import dev.latvian.mods.kubejs.script.ScriptType;
 import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
 import es.degrassi.forge.init.registration.RecipeRegistry;
+import es.degrassi.forge.integration.kubejs.events.DegrassiRecipesEvents;
 import es.degrassi.forge.integration.kubejs.recipes.DegrassiRecipeSchemas;
 import es.degrassi.forge.integration.kubejs.recipes.builder.AbstractRecipeBuilderJS;
 import es.degrassi.forge.util.IntRange;
 import org.jetbrains.annotations.NotNull;
 
 public class DegrassiKubeJSPlugin extends KubeJSPlugin {
-  public static final EventGroup DEGRASSI_EVENTS = EventGroup.of("DegrassiEvents");
 
   @Override
   public void registerEvents() {
-    DEGRASSI_EVENTS.register();
+    DegrassiEvents.register();
   }
 
   @Override
   public void registerRecipeSchemas(@NotNull RegisterRecipeSchemasEvent event) {
     event.register(RecipeRegistry.FURNACE_RECIPE_TYPE.getId(), DegrassiRecipeSchemas.FURNACE_MACHINE);
     event.register(RecipeRegistry.MELTER_RECIPE_TYPE.getId(), DegrassiRecipeSchemas.MELTER_MACHINE);
+    event.register(RecipeRegistry.UPGRADE_MAKER_RECIPE_TYPE.getId(), DegrassiRecipeSchemas.UPGRADE_MACHINE);
   }
 
   @Override
