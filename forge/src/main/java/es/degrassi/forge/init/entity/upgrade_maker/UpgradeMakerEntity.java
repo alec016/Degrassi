@@ -44,7 +44,7 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
   private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
   private LazyOptional<AbstractEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
   private LazyOptional<IFluidHandler> lazyFluidHandler = LazyOptional.empty();
-  private final AbstractEnergyStorage ENERGY_STORAGE = new AbstractEnergyStorage(DegrassiConfig.get().melter_capacity, DegrassiConfig.get().melter_transfer) {
+  private final AbstractEnergyStorage ENERGY_STORAGE = new AbstractEnergyStorage(DegrassiConfig.get().upgrade_maker_capacity, DegrassiConfig.get().upgrade_maker_transfer) {
     @Override
     public boolean canExtract() {
       return false;
@@ -67,7 +67,7 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
           .sendToChunkListeners(level.getChunkAt(getBlockPos()));
     }
   };
-  private final ItemStackHandler itemHandler = new ItemStackHandler(4) {
+  private final ItemStackHandler itemHandler = new ItemStackHandler(5) {
     @Override
     protected void onContentsChanged(int slot) {
       setChanged();
@@ -84,8 +84,15 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
         case 1 -> stack.is(ItemRegister.ENERGY_UPGRADE.get());
         case 2 -> {
           AtomicBoolean has = new AtomicBoolean(false);
-          RecipeHelpers.MELTER.recipes.forEach(recipe -> {
+          RecipeHelpers.UPGRADE_MAKER.recipes.forEach(recipe -> {
             if (recipe.getIngredients().get(0).getItems()[0].is(stack.getItem())) has.set(true);
+          });
+          yield has.get();
+        }
+        case 3 -> {
+          AtomicBoolean has = new AtomicBoolean(false);
+          RecipeHelpers.UPGRADE_MAKER.recipes.forEach(recipe -> {
+            if (recipe.getIngredients().get(1).getItems()[0].is(stack.getItem())) has.set(true);
           });
           yield has.get();
         }
@@ -113,7 +120,7 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
     @Override
     public boolean isFluidValid(FluidStack stack) {
       AtomicBoolean has = new AtomicBoolean(false);
-      RecipeHelpers.MELTER.recipes.forEach(recipe -> {
+      RecipeHelpers.UPGRADE_MAKER.recipes.forEach(recipe -> {
         if (recipe.getFluid().isFluidEqual(stack)) has.set(true);
       });
       return has.get();
@@ -123,33 +130,33 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
   private final Map<Direction, LazyOptional<ItemWrapperHandler>> itemWrapperHandlerMap = Map.of(
     Direction.UP, LazyOptional.of(() -> new ItemWrapperHandler(
       itemHandler,
-      i -> i == 3,
-      (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
+      i -> i == 4,
+      (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
     )),
     Direction.DOWN, LazyOptional.of(() -> new ItemWrapperHandler(
       itemHandler,
-      i -> i == 3,
-      (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
+      i -> i == 4,
+      (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
     )),
     Direction.NORTH, LazyOptional.of(() -> new ItemWrapperHandler(
       itemHandler,
-      i -> i == 3,
-      (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
+      i -> i == 4,
+      (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
     )),
     Direction.SOUTH, LazyOptional.of(() -> new ItemWrapperHandler(
       itemHandler,
-      i -> i == 3,
-      (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
+      i -> i == 4,
+      (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
     )),
     Direction.EAST, LazyOptional.of(() -> new ItemWrapperHandler(
       itemHandler,
-      i -> i == 3,
-      (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
+      i -> i == 4,
+      (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
     )),
     Direction.WEST, LazyOptional.of(() -> new ItemWrapperHandler(
       itemHandler,
-      i -> i == 3,
-      (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
+      i -> i == 4,
+      (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
     ))
   );
 
@@ -179,11 +186,11 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
     BlockState state,
     @NotNull UpgradeMakerEntity entity
   ) {
-//    if (level.isClientSide()) {
+    if (level.isClientSide()) {
 //      if (entity.fluidLevel != null)
 //        entity.fluidLevel.tickChaser();
-//      return;
-//    }
+      return;
+    }
     if (RecipeHelpers.UPGRADE_MAKER.hasRecipe(entity)) {
       entity.progressStorage.increment(false);
       RecipeHelpers.UPGRADE_MAKER.extractEnergy(entity);

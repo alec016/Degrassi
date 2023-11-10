@@ -1,15 +1,10 @@
 package es.degrassi.forge.integration.kubejs;
 
 import dev.latvian.mods.kubejs.KubeJSPlugin;
-import dev.latvian.mods.kubejs.bindings.event.ServerEvents;
-import dev.latvian.mods.kubejs.bindings.event.StartupEvents;
-import dev.latvian.mods.kubejs.recipe.RecipeSchemaRegistryEventJS;
-import dev.latvian.mods.kubejs.recipe.schema.RecipeNamespace;
 import dev.latvian.mods.kubejs.recipe.schema.RegisterRecipeSchemasEvent;
 import dev.latvian.mods.kubejs.script.ScriptType;
 import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
 import es.degrassi.forge.init.registration.RecipeRegistry;
-import es.degrassi.forge.integration.kubejs.events.DegrassiRecipesEvents;
 import es.degrassi.forge.integration.kubejs.recipes.DegrassiRecipeSchemas;
 import es.degrassi.forge.integration.kubejs.recipes.builder.AbstractRecipeBuilderJS;
 import es.degrassi.forge.util.IntRange;

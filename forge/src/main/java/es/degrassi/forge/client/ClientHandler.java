@@ -9,8 +9,10 @@ import dev.architectury.registry.menu.MenuRegistry;
 import es.degrassi.forge.init.entity.furnace.FurnaceEntity;
 import es.degrassi.forge.init.entity.melter.MelterEntity;
 import es.degrassi.forge.init.entity.panel.PanelEntity;
+import es.degrassi.forge.init.entity.upgrade_maker.UpgradeMakerEntity;
 import es.degrassi.forge.init.gui.screen.melter.MelterScreen;
 import es.degrassi.forge.init.gui.screen.panel.sp.*;
+import es.degrassi.forge.init.gui.screen.upgrade_maker.UpgradeMakerScreen;
 import es.degrassi.forge.init.registration.ElementRegistry;
 import es.degrassi.forge.init.gui.screen.furnace.*;
 import es.degrassi.forge.init.registration.ContainerRegistry;
@@ -56,6 +58,7 @@ public class ClientHandler {
     MenuRegistry.registerScreenFactory(ContainerRegistry.EMERALD_FURNACE_CONTAINER.get(), EmeraldFurnaceScreen::new);
     MenuRegistry.registerScreenFactory(ContainerRegistry.NETHERITE_FURNACE_CONTAINER.get(), NetheriteFurnaceScreen::new);
     MenuRegistry.registerScreenFactory(ContainerRegistry.MELTER_CONTAINER.get(), MelterScreen::new);
+    MenuRegistry.registerScreenFactory(ContainerRegistry.UPGRADE_MAKER_CONTAINER.get(), UpgradeMakerScreen::new);
   }
 
   private static void registerGuiElementJEIRenderers(final RegisterGuiElementJEIRendererEvent event) {
@@ -182,6 +185,15 @@ public class ClientHandler {
       BlockEntity tile = Minecraft.getInstance().level.getBlockEntity(pos);
       if(tile instanceof MelterEntity melter)
         return melter;
+    }
+    throw new IllegalStateException("Trying to open a Melter container without clicking on a Melter block");
+  }
+
+  public static UpgradeMakerEntity getClientSideUpgradeMakerEntity(BlockPos pos) {
+    if(Minecraft.getInstance().level != null) {
+      BlockEntity tile = Minecraft.getInstance().level.getBlockEntity(pos);
+      if(tile instanceof UpgradeMakerEntity upgradeMaker)
+        return upgradeMaker;
     }
     throw new IllegalStateException("Trying to open a Melter container without clicking on a Melter block");
   }

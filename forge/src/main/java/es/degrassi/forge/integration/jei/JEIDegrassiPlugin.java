@@ -4,6 +4,7 @@ import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.init.recipe.helpers.RecipeHelpers;
 import es.degrassi.forge.init.recipe.recipes.FurnaceRecipe;
 import es.degrassi.forge.init.recipe.recipes.MelterRecipe;
+import es.degrassi.forge.init.recipe.recipes.UpgradeMakerRecipe;
 import es.degrassi.forge.init.registration.BlockRegister;
 import es.degrassi.forge.init.registration.ItemRegister;
 import es.degrassi.forge.integration.config.DegrassiConfig;
@@ -32,6 +33,11 @@ public class JEIDegrassiPlugin implements IModPlugin {
     MelterRecipe.class
   );
 
+  public static RecipeType<UpgradeMakerRecipe> UPGRADE_MAKER_TYPE = new RecipeType<>(
+    UpgradeMakerRecipeCategory.UID,
+    UpgradeMakerRecipe.class
+  );
+
   @Override
   public @NotNull ResourceLocation getPluginUid() {
     return new DegrassiLocation("jei_plugin");
@@ -41,25 +47,26 @@ public class JEIDegrassiPlugin implements IModPlugin {
   public void registerRecipeCatalysts(@NotNull IRecipeCatalystRegistration registration) {
     registerFurnaceCatalysts(registration);
     registerMelterCatalysts(registration);
+    registerUpgradeMakerCatalysts(registration);
   }
 
   @Override
   public void registerCategories(@NotNull IRecipeCategoryRegistration registration) {
     registration.addRecipeCategories(
       new FurnaceRecipeCategory(registration.getJeiHelpers()),
-      new MelterRecipeCategory(registration.getJeiHelpers())
+      new MelterRecipeCategory(registration.getJeiHelpers()),
+      new UpgradeMakerRecipeCategory(registration.getJeiHelpers())
     );
   }
 
   @Override
   public void registerRecipes(@NotNull IRecipeRegistration registration) {
-    // RecipeManager manager = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager();
 
-    RecipeHelpers.FURNACE.init();
-    RecipeHelpers.MELTER.init();
+    RecipeHelpers.init();
 
     registration.addRecipes(FURNACE_TYPE, RecipeHelpers.FURNACE.recipes);
     registration.addRecipes(MELTER_TYPE, RecipeHelpers.MELTER.recipes);
+    registration.addRecipes(UPGRADE_MAKER_TYPE, RecipeHelpers.UPGRADE_MAKER.recipes);
 
     registerPanelInfo(registration);
     registerUpgradesInfo(registration);
@@ -107,6 +114,13 @@ public class JEIDegrassiPlugin implements IModPlugin {
     registration.addRecipeCatalyst(
       new ItemStack(BlockRegister.MELTER_BLOCK.get()),
       MELTER_TYPE
+    );
+  }
+
+  private void registerUpgradeMakerCatalysts(@NotNull IRecipeCatalystRegistration registration) {
+    registration.addRecipeCatalyst(
+      new ItemStack(BlockRegister.UPGRADE_MAKER.get()),
+      UPGRADE_MAKER_TYPE
     );
   }
 

@@ -1,5 +1,6 @@
 package es.degrassi.forge.integration.kubejs.recipes.builder;
 
+import dev.latvian.mods.kubejs.fluid.FluidStackJS;
 import dev.latvian.mods.rhino.util.HideFromJS;
 import es.degrassi.forge.init.recipe.builder.UpgradeMakerRecipeBuilder;
 import es.degrassi.forge.init.registration.RecipeRegistry;
@@ -8,6 +9,7 @@ import es.degrassi.forge.integration.kubejs.requirements.EnergyRequirementJS;
 import es.degrassi.forge.integration.kubejs.requirements.FluidRequirementJS;
 import es.degrassi.forge.integration.kubejs.requirements.ItemRequirementJS;
 import net.minecraft.world.item.crafting.Recipe;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -51,6 +53,12 @@ public class UpgradeMakerRecipeBuilderJS extends AbstractRecipeBuilderJS<Upgrade
   @Override
   @HideFromJS
   public UpgradeMakerRecipeBuilderJS produceEnergy(int energy) {
+    return this;
+  }
+
+  @Override
+  @HideFromJS
+  public UpgradeMakerRecipeBuilderJS produceFluid(@NotNull FluidStackJS stack) {
     return this;
   }
 }

@@ -57,9 +57,9 @@ public class MelterRecipeHelper extends RecipeHelper<MelterRecipe, MelterEntity>
     Level level = Objects.requireNonNull(Minecraft.getInstance().level);
     List<MelterRecipe> melterRecipes = level.getRecipeManager().getAllRecipesFor(RecipeRegistry.MELTER_RECIPE_TYPE.get());
     DegrassiLogger.INSTANCE.info("MelterRecipeHelper");
-    melterRecipes.forEach(DegrassiLogger.INSTANCE::info);
     melterRecipes.forEach(recipe -> {
       if (recipe == null) return;
+      DegrassiLogger.INSTANCE.info(recipe);
       AtomicBoolean has = new AtomicBoolean(false);
       recipes.forEach(r -> {
         if (r.getId().toString().equals(recipe.getId().toString())) has.set(true);

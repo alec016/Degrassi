@@ -62,4 +62,9 @@ public abstract class RecipeHelper<T extends Recipe<?>, E extends BaseEntity & I
     fluid.setAmount(fluid.getAmount() - entity.getRecipe().getFluid().getAmount());
     storage.setFluid(fluid);
   }
+
+
+  public boolean hasSameFluidInTank(@NotNull FluidTank storage, @NotNull E entity) {
+    return entity.getRecipe().getFluid().equals(storage.getFluid());
+  }
 }

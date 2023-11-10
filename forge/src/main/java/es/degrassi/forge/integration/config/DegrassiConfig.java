@@ -250,6 +250,15 @@ public class DegrassiConfig implements ConfigData {
   @Comment("transfer rate - Default 10000")
   public int melter_transfer = 10000;
 
+  // upgrade maker
+  @Category("Upgrade Maker")
+  @Comment("energy capacity - Default 1000000")
+  public int upgrade_maker_capacity = 1000000;
+
+  @Category("Upgrade Maker")
+  @Comment("transfer rate - Default 50000")
+  public int upgrade_maker_transfer = 50000;
+
   // upgrades
   @Category("Efficiency Upgrade")
   @Comment("efficiency augment - default 5")

@@ -120,4 +120,37 @@ public class UpgradeMakerRecipe implements IDegrassiRecipe {
   public FluidStack getFluid() {
     return fluidInput;
   }
+
+  @Override
+  public @NotNull NonNullList<Ingredient> getIngredients() {
+    return recipeItems;
+  }
+
+  @Override
+  public String toString() {
+    return "UpgradeMakerRecipe [ " + "id: " +
+      id +
+      ", requirements: { input1: { item: " +
+      recipeItems.get(0).getItems()[0].getDisplayName().getString() +
+      ", amount: " +
+      recipeItems.get(0).getItems()[0].getCount() +
+      " }, input2: { item: " +
+      recipeItems.get(1).getItems()[0].getDisplayName().getString() +
+      ", amount: " +
+      recipeItems.get(1).getItems()[0].getCount() +
+      " }, input3: { fluid: " +
+      fluidInput.getDisplayName().getString() +
+      ", amount: " +
+      fluidInput.getAmount() +
+      "}, time: " +
+      time +
+      ", energy: " +
+      energy +
+      ", output: { item: " +
+      output.getDisplayName().getString() +
+      ", amount: " +
+      output.getCount() +
+      " }" +
+      " } ]";
+  }
 }

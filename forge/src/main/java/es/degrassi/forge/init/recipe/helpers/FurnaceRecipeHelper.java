@@ -90,8 +90,8 @@ public class FurnaceRecipeHelper extends RecipeHelper<FurnaceRecipe, FurnaceEnti
       }
     });
     DegrassiLogger.INSTANCE.info("FurnaceRecipeHelper");
-    furnaceRecipes.forEach(DegrassiLogger.INSTANCE::info);
     furnaceRecipes.forEach(recipe -> {
+      DegrassiLogger.INSTANCE.info(recipe);
       if (recipe == null) return;
       AtomicBoolean has = new AtomicBoolean(false);
       recipes.forEach(r -> {

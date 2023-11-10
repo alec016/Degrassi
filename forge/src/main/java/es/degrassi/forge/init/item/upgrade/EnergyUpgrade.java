@@ -3,6 +3,7 @@ package es.degrassi.forge.init.item.upgrade;
 import es.degrassi.forge.client.ClientHandler;
 import es.degrassi.forge.init.item.upgrade.types.IFurnaceUpgrade;
 import es.degrassi.forge.init.item.upgrade.types.IMelterUpgrade;
+import es.degrassi.forge.init.item.upgrade.types.IUpgradeMakerUpgrade;
 import es.degrassi.forge.integration.config.DegrassiConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class EnergyUpgrade extends BaseUpgrade implements IFurnaceUpgrade, IMelterUpgrade {
+public class EnergyUpgrade extends BaseUpgrade implements IFurnaceUpgrade, IMelterUpgrade, IUpgradeMakerUpgrade {
   private Integer value;
   public EnergyUpgrade(Properties properties) {
     super(properties, UpgradeUpgradeType.ENERGY);

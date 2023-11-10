@@ -105,6 +105,11 @@ public class UpgradeMakerRecipeBuilder extends AbstractRecipeBuilder<UpgradeMake
   }
 
   public NonNullList<Ingredient> ingredients() {
+    if (this.ingredients == null || this.ingredients.size() < 2) {
+      this.ingredients = NonNullList.create();
+      this.ingredients.add(Ingredient.of(new ItemStack(inputItemIngredient1.getAll().get(0), inputItemAmount1)));
+      this.ingredients.add(Ingredient.of(new ItemStack(inputItemIngredient2.getAll().get(0), inputItemAmount2)));
+    }
     return ingredients;
   }
 

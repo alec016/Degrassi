@@ -7,6 +7,7 @@ import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.init.gui.container.furnace.*;
 import es.degrassi.forge.init.gui.container.melter.MelterContainer;
 import es.degrassi.forge.init.gui.container.panel.sp.*;
+import es.degrassi.forge.init.gui.container.upgrade_maker.UpgradeMakerContainer;
 import net.minecraft.core.Registry;
 import net.minecraft.world.inventory.MenuType;
 
@@ -32,6 +33,9 @@ public class ContainerRegistry {
 
   // melter
   public static final RegistrySupplier<MenuType<MelterContainer>> MELTER_CONTAINER = CONTAINERS.register("melter_container", () -> MenuRegistry.ofExtended(MelterContainer::new));
+
+  // upgrade maker
+  public static final RegistrySupplier<MenuType<UpgradeMakerContainer>> UPGRADE_MAKER_CONTAINER = CONTAINERS.register("upgrade_maker_container", () -> MenuRegistry.ofExtended(UpgradeMakerContainer::new));
 
   public static void register() {
     CONTAINERS.register();
