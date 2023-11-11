@@ -1,6 +1,7 @@
 package es.degrassi.forge.init.block.panel;
 
 import es.degrassi.forge.init.block.BaseBlock;
+import es.degrassi.forge.init.registration.TagRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
@@ -12,6 +13,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public abstract class PanelBlock extends BaseBlock {
 

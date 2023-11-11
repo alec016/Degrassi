@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GLG",
+    "LGL",
+    "MPM"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:clay_ball"
+    },
+    "L": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "P": {
+      "item": "degrassi:photovoltaic_cell_2"
+    },
+    "M": {
+      "item": "degrassi:photovoltaic_cell_1"
+    }
+  },
+  "result": {
+    "item": "degrassi:photovoltaic_cell_3"
+  }
+}

@@ -5,6 +5,7 @@ import es.degrassi.forge.init.block.BaseBlock;
 import es.degrassi.forge.init.entity.melter.MelterEntity;
 import es.degrassi.forge.init.gui.container.melter.MelterContainer;
 import es.degrassi.forge.init.registration.EntityRegister;
+import es.degrassi.forge.init.registration.TagRegistry;
 import es.degrassi.forge.network.EnergyPacket;
 import es.degrassi.forge.network.FluidPacket;
 import es.degrassi.forge.network.ProgressPacket;
@@ -36,6 +37,8 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 public class Melter extends BaseBlock {
   public Melter() {

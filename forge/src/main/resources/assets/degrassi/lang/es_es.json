@@ -13,6 +13,15 @@
   "item.degrassi.black_pearl": "Perla Negra",
   "item.degrassi.red_matter": "Materia Roja",
 
+  "item.degrassi.photovoltaic_cell_1": "Placa Fotovoltaica I",
+  "item.degrassi.photovoltaic_cell_2": "Placa Fotovoltaica II",
+  "item.degrassi.photovoltaic_cell_3": "Placa Fotovoltaica III",
+  "item.degrassi.photovoltaic_cell_4": "Placa Fotovoltaica IV",
+  "item.degrassi.photovoltaic_cell_5": "Placa Fotovoltaica V",
+  "item.degrassi.photovoltaic_cell_6": "Placa Fotovoltaica VI",
+  "item.degrassi.photovoltaic_cell_7": "Placa Fotovoltaica VII",
+  "item.degrassi.photovoltaic_cell_8": "Placa Fotovoltaica VIII",
+
   "block.degrassi.machine_casing": "Machine Casing",
   "block.degrassi.solar_panel_tier_1": "Panel Solar Tier I",
   "block.degrassi.solar_panel_tier_2": "Panel Solar Tier II",

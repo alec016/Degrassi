@@ -1,16 +1,26 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "   ",
-    " S ",
-    "   "
+    "PPP",
+    "SRS",
+    "SIS"
   ],
   "key": {
     "S": {
       "item": "degrassi:solar_panel_tier_2"
+    },
+    "P": {
+      "item": "degrassi:photovoltaic_cell_3"
+    },
+    "I": {
+      "tag": "forge:storage_blocks/iron"
+    },
+    "R": {
+      "item": "minecraft:repeater"
     }
   },
   "result": {
+    "count": 2,
     "item": "degrassi:solar_panel_tier_3"
   }
 }

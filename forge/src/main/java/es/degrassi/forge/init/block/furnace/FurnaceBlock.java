@@ -1,6 +1,7 @@
 package es.degrassi.forge.init.block.furnace;
 
 import es.degrassi.forge.init.block.BaseBlock;
+import es.degrassi.forge.init.registration.TagRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
@@ -11,6 +12,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public abstract class FurnaceBlock extends BaseBlock {
 

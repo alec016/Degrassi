@@ -14,6 +14,8 @@
     "degrassi:diamond_furnace",
     "degrassi:emerald_furnace",
     "degrassi:netherite_furnace",
+    "degrassi:melter",
+    "degrassi:upgrade_maker",
     "degrassi:machine_casing"
   ]
 }

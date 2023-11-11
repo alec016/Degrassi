@@ -16,10 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
@@ -31,96 +28,200 @@ public class BlockRegister {
   public static final RegistrySupplier<Block> SP1_BLOCK = registerBlock(
     "solar_panel_tier_1",
     SP1Block::new,
+//    () -> Objects.requireNonNull(new SP1Block().kjs$getBlockBuilder())
+//      .tag(TagRegistry.AllBlockTags.BLOCKS.tag.location())
+//      .tag(TagRegistry.AllBlockTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllBlockTags.SOLAR_PANELS.tag.location())
+//      .tag(TagRegistry.AllItemTags.SOLAR_PANELS.tag.location())
+//      .tag(TagRegistry.AllItemTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllItemTags.ITEMS.tag.location()).get(),
     CreativeTabs.MACHINES
   );
 
   public static final RegistrySupplier<Block> SP2_BLOCK = registerBlock(
     "solar_panel_tier_2",
     SP2Block::new,
+//    () -> Objects.requireNonNull(new SP2Block().kjs$getBlockBuilder())
+//      .tag(TagRegistry.AllBlockTags.BLOCKS.tag.location())
+//      .tag(TagRegistry.AllBlockTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllBlockTags.SOLAR_PANELS.tag.location())
+//      .tag(TagRegistry.AllItemTags.SOLAR_PANELS.tag.location())
+//      .tag(TagRegistry.AllItemTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllItemTags.ITEMS.tag.location()).get(),
     CreativeTabs.MACHINES
   );
 
   public static final RegistrySupplier<Block> SP3_BLOCK = registerBlock(
     "solar_panel_tier_3",
     SP3Block::new,
+//    () -> Objects.requireNonNull(new SP3Block().kjs$getBlockBuilder())
+//      .tag(TagRegistry.AllBlockTags.BLOCKS.tag.location())
+//      .tag(TagRegistry.AllBlockTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllBlockTags.SOLAR_PANELS.tag.location())
+//      .tag(TagRegistry.AllItemTags.SOLAR_PANELS.tag.location())
+//      .tag(TagRegistry.AllItemTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllItemTags.ITEMS.tag.location()).get(),
     CreativeTabs.MACHINES
   );
 
   public static final RegistrySupplier<Block> SP4_BLOCK = registerBlock(
     "solar_panel_tier_4",
     SP4Block::new,
+//    () -> Objects.requireNonNull(new SP4Block().kjs$getBlockBuilder())
+//      .tag(TagRegistry.AllBlockTags.BLOCKS.tag.location())
+//      .tag(TagRegistry.AllBlockTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllBlockTags.SOLAR_PANELS.tag.location())
+//      .tag(TagRegistry.AllItemTags.SOLAR_PANELS.tag.location())
+//      .tag(TagRegistry.AllItemTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllItemTags.ITEMS.tag.location()).get(),
     CreativeTabs.MACHINES
   );
 
   public static final RegistrySupplier<Block> SP5_BLOCK = registerBlock(
     "solar_panel_tier_5",
     SP5Block::new,
+//    () -> Objects.requireNonNull(new SP5Block().kjs$getBlockBuilder())
+//      .tag(TagRegistry.AllBlockTags.BLOCKS.tag.location())
+//      .tag(TagRegistry.AllBlockTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllBlockTags.SOLAR_PANELS.tag.location())
+//      .tag(TagRegistry.AllItemTags.SOLAR_PANELS.tag.location())
+//      .tag(TagRegistry.AllItemTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllItemTags.ITEMS.tag.location()).get(),
     CreativeTabs.MACHINES
   );
 
   public static final RegistrySupplier<Block> SP6_BLOCK = registerBlock(
     "solar_panel_tier_6",
     SP6Block::new,
+//    () -> Objects.requireNonNull(new SP6Block().kjs$getBlockBuilder())
+//      .tag(TagRegistry.AllBlockTags.BLOCKS.tag.location())
+//      .tag(TagRegistry.AllBlockTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllBlockTags.SOLAR_PANELS.tag.location())
+//      .tag(TagRegistry.AllItemTags.SOLAR_PANELS.tag.location())
+//      .tag(TagRegistry.AllItemTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllItemTags.ITEMS.tag.location()).get(),
     CreativeTabs.MACHINES
   );
 
   public static final RegistrySupplier<Block> SP7_BLOCK = registerBlock(
     "solar_panel_tier_7",
     SP7Block::new,
+//    () -> Objects.requireNonNull(new SP7Block().kjs$getBlockBuilder())
+//      .tag(TagRegistry.AllBlockTags.BLOCKS.tag.location())
+//      .tag(TagRegistry.AllBlockTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllBlockTags.SOLAR_PANELS.tag.location())
+//      .tag(TagRegistry.AllItemTags.SOLAR_PANELS.tag.location())
+//      .tag(TagRegistry.AllItemTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllItemTags.ITEMS.tag.location()).get(),
     CreativeTabs.MACHINES
   );
 
   public static final RegistrySupplier<Block> SP8_BLOCK = registerBlock(
     "solar_panel_tier_8",
     SP8Block::new,
+//    () -> Objects.requireNonNull(new SP8Block().kjs$getBlockBuilder())
+//      .tag(TagRegistry.AllBlockTags.BLOCKS.tag.location())
+//      .tag(TagRegistry.AllBlockTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllBlockTags.SOLAR_PANELS.tag.location())
+//      .tag(TagRegistry.AllItemTags.SOLAR_PANELS.tag.location())
+//      .tag(TagRegistry.AllItemTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllItemTags.ITEMS.tag.location()).get(),
     CreativeTabs.MACHINES
   );
 
   public static final RegistrySupplier<Block> IRON_FURNACE_BLOCK = registerBlock(
     "iron_furnace",
     IronFurnace::new,
+//    () -> Objects.requireNonNull(new IronFurnace().kjs$getBlockBuilder())
+//      .tag(TagRegistry.AllBlockTags.BLOCKS.tag.location())
+//      .tag(TagRegistry.AllBlockTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllBlockTags.FURNACES.tag.location())
+//      .tag(TagRegistry.AllItemTags.FURNACES.tag.location())
+//      .tag(TagRegistry.AllItemTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllItemTags.ITEMS.tag.location()).get(),
     CreativeTabs.MACHINES
   );
 
   public static final RegistrySupplier<Block> GOLD_FURNACE_BLOCK = registerBlock(
     "gold_furnace",
     GoldFurnace::new,
+//    () -> Objects.requireNonNull(new GoldFurnace().kjs$getBlockBuilder())
+//      .tag(TagRegistry.AllBlockTags.BLOCKS.tag.location())
+//      .tag(TagRegistry.AllBlockTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllBlockTags.FURNACES.tag.location())
+//      .tag(TagRegistry.AllItemTags.FURNACES.tag.location())
+//      .tag(TagRegistry.AllItemTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllItemTags.ITEMS.tag.location()).get(),
     CreativeTabs.MACHINES
   );
 
   public static final RegistrySupplier<Block> DIAMOND_FURNACE_BLOCK = registerBlock(
     "diamond_furnace",
     DiamondFurnace::new,
+//    () -> Objects.requireNonNull(new DiamondFurnace().kjs$getBlockBuilder())
+//      .tag(TagRegistry.AllBlockTags.BLOCKS.tag.location())
+//      .tag(TagRegistry.AllBlockTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllBlockTags.FURNACES.tag.location())
+//      .tag(TagRegistry.AllItemTags.FURNACES.tag.location())
+//      .tag(TagRegistry.AllItemTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllItemTags.ITEMS.tag.location()).get(),
     CreativeTabs.MACHINES
   );
 
   public static final RegistrySupplier<Block> EMERALD_FURNACE_BLOCK = registerBlock(
     "emerald_furnace",
     EmeraldFurnace::new,
+//    () -> Objects.requireNonNull(new EmeraldFurnace().kjs$getBlockBuilder())
+//      .tag(TagRegistry.AllBlockTags.BLOCKS.tag.location())
+//      .tag(TagRegistry.AllBlockTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllBlockTags.FURNACES.tag.location())
+//      .tag(TagRegistry.AllItemTags.FURNACES.tag.location())
+//      .tag(TagRegistry.AllItemTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllItemTags.ITEMS.tag.location()).get(),
     CreativeTabs.MACHINES
   );
 
   public static final RegistrySupplier<Block> NETHERITE_FURNACE_BLOCK = registerBlock(
     "netherite_furnace",
     NetheriteFurnace::new,
+//    () -> Objects.requireNonNull(new NetheriteFurnace().kjs$getBlockBuilder())
+//      .tag(TagRegistry.AllBlockTags.BLOCKS.tag.location())
+//      .tag(TagRegistry.AllBlockTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllBlockTags.FURNACES.tag.location())
+//      .tag(TagRegistry.AllItemTags.FURNACES.tag.location())
+//      .tag(TagRegistry.AllItemTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllItemTags.ITEMS.tag.location()).get(),
     CreativeTabs.MACHINES
   );
 
   public static final RegistrySupplier<Block> MELTER_BLOCK = registerBlock(
     "melter",
     Melter::new,
+//    () -> Objects.requireNonNull(new Melter().kjs$getBlockBuilder())
+//      .tag(TagRegistry.AllBlockTags.BLOCKS.tag.location())
+//      .tag(TagRegistry.AllBlockTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllItemTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllItemTags.ITEMS.tag.location()).get(),
     CreativeTabs.MACHINES
   );
 
   public static final RegistrySupplier<Block> MACHINE_CASING = registerBlock(
     "machine_casing",
     MachineCasing::new,
+//    () -> Objects.requireNonNull(new MachineCasing().kjs$getBlockBuilder())
+//      .tag(TagRegistry.AllBlockTags.BLOCKS.tag.location())
+//      .tag(TagRegistry.AllItemTags.ITEMS.tag.location()).get(),
     CreativeTabs.COMMON
   );
 
   public static final RegistrySupplier<Block> UPGRADE_MAKER = registerBlock(
     "upgrade_maker",
     UpgradeMaker::new,
+//    () -> Objects.requireNonNull(new UpgradeMaker().kjs$getBlockBuilder())
+//      .tag(TagRegistry.AllBlockTags.BLOCKS.tag.location())
+//      .tag(TagRegistry.AllBlockTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllItemTags.MACHINES.tag.location())
+//      .tag(TagRegistry.AllItemTags.ITEMS.tag.location()).get(),
     CreativeTabs.MACHINES
   );
 

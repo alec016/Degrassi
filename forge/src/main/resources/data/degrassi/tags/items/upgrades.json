@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "degrassi:upgrade_base",
+    "degrassi:speed_upgrade",
+    "degrassi:energy_upgrade",
+    "degrassi:efficiency_upgrade",
+    "degrassi:transfer_upgrade",
+    "degrassi:generation_upgrade",
+    "degrassi:capacity_upgrade"
+  ]
+}

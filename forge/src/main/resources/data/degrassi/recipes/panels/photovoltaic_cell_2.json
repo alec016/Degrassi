@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GGG",
+    "LLL",
+    "PPP"
+  ],
+  "key": {
+    "G": {
+      "tag": "forge:glass"
+    },
+    "L": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "P": {
+      "item": "degrassi:photovoltaic_cell_1"
+    }
+  },
+  "result": {
+    "item": "degrassi:photovoltaic_cell_2"
+  }
+}

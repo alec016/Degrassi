@@ -12,6 +12,8 @@ public class Register {
 
   public static final Registries REGISTRIES = Registries.get(Degrassi.MODID);
   public static void register() {
+    TagRegistry.register();
+
     BlockRegister.register();
     ItemRegister.register();
     EntityRegister.register();
