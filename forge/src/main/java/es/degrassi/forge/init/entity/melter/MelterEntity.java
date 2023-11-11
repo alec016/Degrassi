@@ -48,7 +48,7 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
   private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
   private LazyOptional<AbstractEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
   private LazyOptional<IFluidHandler> lazyFluidHandler = LazyOptional.empty();
-  private final AbstractEnergyStorage ENERGY_STORAGE = new AbstractEnergyStorage(DegrassiConfig.get().melter_capacity, DegrassiConfig.get().melter_transfer) {
+  private final AbstractEnergyStorage ENERGY_STORAGE = new AbstractEnergyStorage(DegrassiConfig.get().melterConfig.melter_capacity, DegrassiConfig.get().melterConfig.melter_transfer) {
     @Override
     public boolean canExtract() {
       return false;

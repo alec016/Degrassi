@@ -15,8 +15,8 @@ public class NetheriteFurnaceEntity extends FurnaceEntity {
       Component.translatable(
         "block.degrassi.netherite_furnace"
       ),
-      DegrassiConfig.get().netherite_furnace_capacity,
-      DegrassiConfig.get().netherite_furnace_transfer
+      DegrassiConfig.get().furnaceConfig.netherite_furnace_capacity,
+      DegrassiConfig.get().furnaceConfig.netherite_furnace_transfer
     );
   }
 }

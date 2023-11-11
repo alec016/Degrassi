@@ -38,8 +38,8 @@ public class CapacityUpgrade extends BaseUpgrade implements IPanelUpgrade {
 
   @Override
   public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
-    if (getType() == null) setType(DegrassiConfig.get().cap_type);
-    if (getValue() == null) setValue(DegrassiConfig.get().cap_augment);
+    if (getType() == null) setType(DegrassiConfig.get().upgradeConfig.cap_type);
+    if (getValue() == null) setValue(DegrassiConfig.get().upgradeConfig.cap_augment);
     if (ClientHandler.isShiftKeyDown()) {
       components.add(
         Component.translatable(

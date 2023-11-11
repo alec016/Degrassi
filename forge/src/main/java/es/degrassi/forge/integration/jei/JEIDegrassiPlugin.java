@@ -175,7 +175,7 @@ public class JEIDegrassiPlugin implements IModPlugin {
         "degrassi.jei.gui.element.sp",
         Component.translatable(
           "degrassi.jei.gui.element.energy.generation",
-          DegrassiConfig.get().sp1_generation,
+          DegrassiConfig.get().solarPanelConfig.sp1_generation,
           Component.translatable("unit.energy.forge")
         ),
         Component.translatable("degrassi.jei.gui.element.sp.solar_position")
@@ -188,7 +188,7 @@ public class JEIDegrassiPlugin implements IModPlugin {
         "degrassi.jei.gui.element.sp",
         Component.translatable(
           "degrassi.jei.gui.element.energy.generation",
-          DegrassiConfig.get().sp2_generation,
+          DegrassiConfig.get().solarPanelConfig.sp2_generation,
           Component.translatable("unit.energy.forge")
         ),
         Component.translatable("degrassi.jei.gui.element.sp.solar_position")
@@ -201,7 +201,7 @@ public class JEIDegrassiPlugin implements IModPlugin {
         "degrassi.jei.gui.element.sp",
         Component.translatable(
           "degrassi.jei.gui.element.energy.generation",
-          DegrassiConfig.get().sp3_generation,
+          DegrassiConfig.get().solarPanelConfig.sp3_generation,
           Component.translatable("unit.energy.forge")
         ),
         Component.translatable("degrassi.jei.gui.element.sp.solar_position")
@@ -214,7 +214,7 @@ public class JEIDegrassiPlugin implements IModPlugin {
         "degrassi.jei.gui.element.sp",
         Component.translatable(
           "degrassi.jei.gui.element.energy.generation",
-          DegrassiConfig.get().sp4_generation,
+          DegrassiConfig.get().solarPanelConfig.sp4_generation,
           Component.translatable("unit.energy.forge")
         ),
         Component.translatable("degrassi.jei.gui.element.sp.solar_position")
@@ -227,7 +227,7 @@ public class JEIDegrassiPlugin implements IModPlugin {
         "degrassi.jei.gui.element.sp",
         Component.translatable(
           "degrassi.jei.gui.element.energy.generation",
-          DegrassiConfig.get().sp5_generation,
+          DegrassiConfig.get().solarPanelConfig.sp5_generation,
           Component.translatable("unit.energy.forge")
         ),
         Component.translatable("degrassi.jei.gui.element.sp.solar_position")
@@ -240,7 +240,7 @@ public class JEIDegrassiPlugin implements IModPlugin {
         "degrassi.jei.gui.element.sp",
         Component.translatable(
           "degrassi.jei.gui.element.energy.generation",
-          DegrassiConfig.get().sp6_generation,
+          DegrassiConfig.get().solarPanelConfig.sp6_generation,
           Component.translatable("unit.energy.forge")
         ),
         Component.translatable("degrassi.jei.gui.element.sp.solar_position")
@@ -253,7 +253,7 @@ public class JEIDegrassiPlugin implements IModPlugin {
         "degrassi.jei.gui.element.sp",
         Component.translatable(
           "degrassi.jei.gui.element.energy.generation",
-          DegrassiConfig.get().sp7_generation,
+          DegrassiConfig.get().solarPanelConfig.sp7_generation,
           Component.translatable("unit.energy.forge")
         ),
         Component.translatable("degrassi.jei.gui.element.sp.solar_position")
@@ -266,7 +266,7 @@ public class JEIDegrassiPlugin implements IModPlugin {
         "degrassi.jei.gui.element.sp",
         Component.translatable(
           "degrassi.jei.gui.element.energy.generation",
-          DegrassiConfig.get().sp8_generation,
+          DegrassiConfig.get().solarPanelConfig.sp8_generation,
           Component.translatable("unit.energy.forge")
         ),
         Component.translatable("degrassi.jei.gui.element.sp.solar_position")

@@ -37,8 +37,8 @@ public class GenerationUpgrade extends BaseUpgrade implements IPanelUpgrade {
   }
   @Override
   public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
-    if (getType() == null) setType(DegrassiConfig.get().gen_type);
-    if (getValue() == null) setValue(DegrassiConfig.get().gen_augment);
+    if (getType() == null) setType(DegrassiConfig.get().upgradeConfig.gen_type);
+    if (getValue() == null) setValue(DegrassiConfig.get().upgradeConfig.gen_augment);
     if (ClientHandler.isShiftKeyDown()) {
       components.add(
         Component.translatable(

@@ -44,7 +44,7 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
   private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
   private LazyOptional<AbstractEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
   private LazyOptional<IFluidHandler> lazyFluidHandler = LazyOptional.empty();
-  private final AbstractEnergyStorage ENERGY_STORAGE = new AbstractEnergyStorage(DegrassiConfig.get().upgrade_maker_capacity, DegrassiConfig.get().upgrade_maker_transfer) {
+  private final AbstractEnergyStorage ENERGY_STORAGE = new AbstractEnergyStorage(DegrassiConfig.get().upgradeMakerConfig.upgrade_maker_capacity, DegrassiConfig.get().upgradeMakerConfig.upgrade_maker_transfer) {
     @Override
     public boolean canExtract() {
       return false;

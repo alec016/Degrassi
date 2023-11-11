@@ -8,6 +8,7 @@ import es.degrassi.forge.integration.config.DegrassiConfig;
 import es.degrassi.forge.util.DegrassiLogger;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
+import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -23,7 +24,7 @@ public class DegrassiForge {
   public DegrassiForge() {
     EventBuses.registerModEventBus(Degrassi.MODID, FMLJavaModLoadingContext.get().getModEventBus());
 
-    AutoConfig.register(DegrassiConfig.class, JanksonConfigSerializer::new);
+    AutoConfig.register(DegrassiConfig.class, PartitioningSerializer.wrap(JanksonConfigSerializer::new));
 
     Degrassi.init();
     Register.register();

@@ -37,8 +37,8 @@ public class TransferUpgrade extends BaseUpgrade implements IPanelUpgrade {
   }
   @Override
   public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components, @NotNull TooltipFlag isAdvanced) {
-    if (getType() == null) setType(DegrassiConfig.get().trans_type);
-    if (getValue() == null) setValue(DegrassiConfig.get().trans_augment);
+    if (getType() == null) setType(DegrassiConfig.get().upgradeConfig.trans_type);
+    if (getValue() == null) setValue(DegrassiConfig.get().upgradeConfig.trans_augment);
     if (ClientHandler.isShiftKeyDown()) {
       components.add(
         Component.translatable(
