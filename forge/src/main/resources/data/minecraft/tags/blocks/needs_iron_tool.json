@@ -12,6 +12,7 @@
     "degrassi:gold_furnace",
     "degrassi:diamond_furnace",
     "degrassi:melter",
-    "degrassi:upgrade_maker"
+    "degrassi:upgrade_maker",
+    "degrassi:jewelry_generator"
   ]
 }

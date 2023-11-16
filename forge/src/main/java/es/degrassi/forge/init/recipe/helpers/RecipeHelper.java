@@ -1,11 +1,8 @@
 package es.degrassi.forge.init.recipe.helpers;
 
-import dev.latvian.mods.kubejs.script.ScriptType;
 import es.degrassi.forge.init.entity.BaseEntity;
 import es.degrassi.forge.init.entity.type.IEnergyEntity;
 import es.degrassi.forge.init.entity.type.IRecipeEntity;
-import es.degrassi.forge.integration.kubejs.DegrassiEvents;
-import es.degrassi.forge.integration.kubejs.events.DegrassiRecipesEvents;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleContainer;
@@ -54,7 +51,7 @@ public abstract class RecipeHelper<T extends Recipe<?>, E extends BaseEntity & I
   }
 
   public boolean hasEnoughFluid(@NotNull FluidTank storage, @NotNull E entity) {
-    return entity.getRecipe().getEnergyRequired() <= storage.getFluidAmount();
+    return entity.getRecipe().getFluid().getAmount() <= storage.getFluidAmount();
   }
 
   public void extractFluid(@NotNull FluidTank storage, @NotNull E entity) {

@@ -6,15 +6,15 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.registry.menu.MenuRegistry;
-import es.degrassi.forge.init.entity.furnace.FurnaceEntity;
-import es.degrassi.forge.init.entity.melter.MelterEntity;
-import es.degrassi.forge.init.entity.panel.PanelEntity;
-import es.degrassi.forge.init.entity.upgrade_maker.UpgradeMakerEntity;
-import es.degrassi.forge.init.gui.screen.melter.MelterScreen;
-import es.degrassi.forge.init.gui.screen.panel.sp.*;
-import es.degrassi.forge.init.gui.screen.upgrade_maker.UpgradeMakerScreen;
+import es.degrassi.forge.init.entity.FurnaceEntity;
+import es.degrassi.forge.init.entity.MelterEntity;
+import es.degrassi.forge.init.entity.UpgradeMakerEntity;
+import es.degrassi.forge.init.entity.panel.SolarPanelEntity;
+import es.degrassi.forge.init.gui.screen.FurnaceScreen;
+import es.degrassi.forge.init.gui.screen.MelterScreen;
+import es.degrassi.forge.init.gui.screen.UpgradeMakerScreen;
+import es.degrassi.forge.init.gui.screen.panel.SolarPanelScreen;
 import es.degrassi.forge.init.registration.ElementRegistry;
-import es.degrassi.forge.init.gui.screen.furnace.*;
 import es.degrassi.forge.init.registration.ContainerRegistry;
 import es.degrassi.forge.integration.jei.RegisterGuiElementJEIRendererEvent;
 import es.degrassi.forge.integration.jei.renderer.ProgressGuiElementJeiRenderer;
@@ -44,19 +44,8 @@ public class ClientHandler {
   }
 
   private static void clientSetup() {
-    MenuRegistry.registerScreenFactory(ContainerRegistry.SP1_CONTAINER.get(), SP1Screen::new);
-    MenuRegistry.registerScreenFactory(ContainerRegistry.SP2_CONTAINER.get(), SP2Screen::new);
-    MenuRegistry.registerScreenFactory(ContainerRegistry.SP3_CONTAINER.get(), SP3Screen::new);
-    MenuRegistry.registerScreenFactory(ContainerRegistry.SP4_CONTAINER.get(), SP4Screen::new);
-    MenuRegistry.registerScreenFactory(ContainerRegistry.SP5_CONTAINER.get(), SP5Screen::new);
-    MenuRegistry.registerScreenFactory(ContainerRegistry.SP6_CONTAINER.get(), SP6Screen::new);
-    MenuRegistry.registerScreenFactory(ContainerRegistry.SP7_CONTAINER.get(), SP7Screen::new);
-    MenuRegistry.registerScreenFactory(ContainerRegistry.SP8_CONTAINER.get(), SP8Screen::new);
-    MenuRegistry.registerScreenFactory(ContainerRegistry.IRON_FURNACE_CONTAINER.get(), IronFurnaceScreen::new);
-    MenuRegistry.registerScreenFactory(ContainerRegistry.GOLD_FURNACE_CONTAINER.get(), GoldFurnaceScreen::new);
-    MenuRegistry.registerScreenFactory(ContainerRegistry.DIAMOND_FURNACE_CONTAINER.get(), DiamondFurnaceScreen::new);
-    MenuRegistry.registerScreenFactory(ContainerRegistry.EMERALD_FURNACE_CONTAINER.get(), EmeraldFurnaceScreen::new);
-    MenuRegistry.registerScreenFactory(ContainerRegistry.NETHERITE_FURNACE_CONTAINER.get(), NetheriteFurnaceScreen::new);
+    MenuRegistry.registerScreenFactory(ContainerRegistry.SP_CONTAINER.get(), SolarPanelScreen::new);
+    MenuRegistry.registerScreenFactory(ContainerRegistry.FURNACE_CONTAINER.get(), FurnaceScreen::new);
     MenuRegistry.registerScreenFactory(ContainerRegistry.MELTER_CONTAINER.get(), MelterScreen::new);
     MenuRegistry.registerScreenFactory(ContainerRegistry.UPGRADE_MAKER_CONTAINER.get(), UpgradeMakerScreen::new);
   }
@@ -161,10 +150,10 @@ public class ClientHandler {
   }
 
   @NotNull
-  public static PanelEntity getClientSidePanelEntity(BlockPos pos) {
+  public static SolarPanelEntity getClientSideSolarPanelEntity(BlockPos pos) {
     if(Minecraft.getInstance().level != null) {
       BlockEntity tile = Minecraft.getInstance().level.getBlockEntity(pos);
-      if(tile instanceof PanelEntity panel)
+      if(tile instanceof SolarPanelEntity panel)
         return panel;
     }
     throw new IllegalStateException("Trying to open a Panel container without clicking on a Panel block");

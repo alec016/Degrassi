@@ -9,12 +9,9 @@ import es.degrassi.forge.init.gui.renderer.GuiElementType;
 import es.degrassi.forge.init.registration.ElementRegistry;
 import es.degrassi.forge.init.registration.Register;
 import es.degrassi.forge.init.registration.RequirementRegistry;
-import es.degrassi.forge.integration.config.DegrassiConfig;
 import es.degrassi.forge.requirements.RequirementType;
 import es.degrassi.forge.util.DegrassiLogger;
 import es.degrassi.forge.network.PacketManager;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -65,4 +62,5 @@ public class Degrassi {
   public static @NotNull ResourceLocation rl(String s) {
     return new DegrassiLocation(s);
   }
+
 }

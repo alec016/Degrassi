@@ -1,6 +1,6 @@
 package es.degrassi.forge.init.recipe.helpers;
 
-import es.degrassi.forge.init.entity.melter.MelterEntity;
+import es.degrassi.forge.init.entity.MelterEntity;
 import es.degrassi.forge.init.entity.renderer.LerpedFloat;
 import es.degrassi.forge.init.item.upgrade.SpeedUpgrade;
 import es.degrassi.forge.init.item.upgrade.types.IMelterUpgrade;
@@ -78,6 +78,7 @@ public class MelterRecipeHelper extends RecipeHelper<MelterRecipe, MelterEntity>
     int energyRequired = entity.getRecipe().getEnergyRequired();
     int timeRequired = entity.getRecipe().getTime();
     for(int i = 0; i < inventory.getContainerSize(); i++) {
+      if (i >= 2) continue;
       ItemStack slot = inventory.getItem(i);
       if (slot.getCount() > 0 && slot.getItem() instanceof IMelterUpgrade upgrade) {
         switch(upgrade.getUpgradeType()) {

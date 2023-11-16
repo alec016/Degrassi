@@ -30,7 +30,7 @@ public class FluidTagIngredient implements IIngredient<Fluid> {
     public  static FluidTagIngredient create(String s) throws IllegalArgumentException {
         if(s.startsWith("#"))
             s = s.substring(1);
-        if(!Utils.isResourceNameValid(s))
+        if(Utils.isResourceNameValid(s))
             throw new IllegalArgumentException(String.format("Invalid tag id : %s", s));
         TagKey<Fluid> tag = TagKey.create(Registry.FLUID_REGISTRY, new ResourceLocation(s));
         return new FluidTagIngredient(tag);

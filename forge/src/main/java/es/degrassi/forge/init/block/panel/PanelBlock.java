@@ -27,7 +27,6 @@ public abstract class PanelBlock extends BaseBlock {
         .noOcclusion()
     );
   }
-
   private static final VoxelShape SHAPE = createVoxelShape();
 
   @SuppressWarnings("deprecation")

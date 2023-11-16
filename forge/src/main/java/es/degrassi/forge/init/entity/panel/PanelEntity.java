@@ -1,12 +1,14 @@
 package es.degrassi.forge.init.entity.panel;
 
 import es.degrassi.forge.init.entity.BaseEntity;
+import es.degrassi.forge.init.entity.type.IEfficiencyEntity;
 import es.degrassi.forge.init.entity.type.IEnergyEntity;
+import es.degrassi.forge.init.entity.type.IEnergyEntity.IGenerationEntity;
 import es.degrassi.forge.init.entity.type.IItemEntity;
 import es.degrassi.forge.network.EnergyPacket;
 import es.degrassi.forge.util.storage.AbstractEnergyStorage;
 import es.degrassi.forge.util.storage.GenerationStorage;
-import es.degrassi.forge.network.panel.PanelGenerationPacket;
+import es.degrassi.forge.network.GenerationPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -21,7 +23,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-public abstract class PanelEntity extends BaseEntity implements IEnergyEntity, IItemEntity {
+public abstract class PanelEntity extends BaseEntity implements IEnergyEntity, IItemEntity, IGenerationEntity, IEfficiencyEntity {
   public static final float RAIN_MULTIPLIER = 0.6F, THUNDER_MULTIPLIER = 0.4F;
   public AbstractEnergyStorage ENERGY_STORAGE;
   protected GenerationStorage currentGen;
@@ -63,7 +65,7 @@ public abstract class PanelEntity extends BaseEntity implements IEnergyEntity, I
       public void onGenerationChanged() {
         entity.setChanged();
         if (entity.level != null && !entity.level.isClientSide()) {
-          new PanelGenerationPacket(this.getGeneration(), entity.worldPosition)
+          new GenerationPacket(this.getGeneration(), entity.worldPosition)
             .sendToChunkListeners(entity.level.getChunkAt(entity.getBlockPos()));
         }
       }

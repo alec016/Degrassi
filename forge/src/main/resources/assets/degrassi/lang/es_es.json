@@ -38,6 +38,7 @@
   "block.degrassi.emerald_furnace": "Horno de Esmeralda",
   "block.degrassi.netherite_furnace": "Horno de Netherite",
   "block.degrassi.upgrade_maker": "Fábrica de Mejoras",
+  "block.degrassi.jewelry_generator": "Generador por Joyas",
 
   "degrassi.gui.element.energy.tooltip": "Energía: %s%s/%s%s",
   "degrassi.gui.element.energy.stored": "Almacenada: %s%s/%s%s",

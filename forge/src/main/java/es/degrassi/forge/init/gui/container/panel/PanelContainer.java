@@ -11,12 +11,12 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class PanelContainer extends BaseContainer<PanelEntity> implements IContainer<PanelEntity> {
+public abstract class PanelContainer<T extends PanelEntity> extends BaseContainer<T> implements IContainer<T> {
 
   // THIS YOU HAVE TO DEFINE!
   private static final int TE_INVENTORY_SLOT_COUNT = 4;  // must be the number of slots you have!
 
-  protected PanelContainer(@Nullable MenuType<?> menuType, int id, PanelEntity entity, Inventory inv) {
+  protected PanelContainer(@Nullable MenuType<?> menuType, int id, T entity, Inventory inv) {
     super(menuType, id);
     checkContainerSize(inv, 4);
     this.entity = entity;
@@ -26,7 +26,7 @@ public abstract class PanelContainer extends BaseContainer<PanelEntity> implemen
     IClientHandler.addPlayerInventory(this, playerInv, 8, 98);
   }
 
-  public PanelEntity getEntity() {
+  public T getEntity() {
     return this.entity;
   }
 

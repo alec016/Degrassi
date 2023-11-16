@@ -60,10 +60,20 @@ public class Utils {
 
   public static boolean isResourceNameValid(String resourceLocation) {
     try {
-      ResourceLocation location = new ResourceLocation(resourceLocation);
-    } catch (ResourceLocationException e) {
-      return false;
+      new ResourceLocation(resourceLocation);
+      return Validate.VALID.validation;
+    } catch (ResourceLocationException ignored) {}
+    return Validate.INVALID.validation;
+  }
+
+  private enum Validate {
+    VALID (true),
+    INVALID (false);
+
+    private final boolean validation;
+
+    Validate(boolean valid) {
+      this.validation = valid;
     }
-    return true;
   }
 }

@@ -14,6 +14,35 @@ loom {
         convertAccessWideners = true
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
     }
+
+    def generatedResources = file("src/generated")
+
+    sourceSets {
+        main {
+            resources {
+                srcDirs += generatedResources
+            }
+        }
+    }
+
+    runs {
+        data {
+            data()
+
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+
+            programArgs "--mod", "degrassi"
+            programArgs "--output", generatedResources.absolutePath
+            programArgs "--existing", generatedResources.absolutePath
+
+            mods {
+                degrassi {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
 }
 
 configurations {
@@ -28,33 +57,35 @@ dependencies {
     forge "net.minecraftforge:forge:${project.forge_version}"
     modApi "dev.architectury:architectury-forge:${project.architectury_version}"
     modApi "org.joml:joml:1.10.5"
-    modApi("me.shedaniel.cloth:cloth-config:${project.cloth_config_version}")
-    modApi("me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}")
-    modApi("curse.maven:probejs-585406:4842668")
+    modApi "me.shedaniel.cloth:cloth-config:${project.cloth_config_version}"
+    modApi "me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}"
+    modApi "curse.maven:probejs-585406:4842668"
+
+    modApi "dev.architectury:architectury:${project.architectury_version}"
 
     // common module
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 
     //JEI 10
-    modCompileOnly("mezz.jei:jei-${project.minecraft_version}-common-api:${project.jei_version}")
-    modCompileOnly("mezz.jei:jei-${project.minecraft_version}-forge-api:${project.jei_version}")
+    modCompileOnly "mezz.jei:jei-${project.minecraft_version}-common-api:${project.jei_version}"
+    modCompileOnly "mezz.jei:jei-${project.minecraft_version}-forge-api:${project.jei_version}"
     modLocalRuntime("mezz.jei:jei-${project.minecraft_version}-forge:${project.jei_version}") { transitive = false }
 
     // Mekanism
-    modRuntimeOnly("curse.maven:mekanism-268560:3922056")
+    modLocalRuntime "curse.maven:mekanism-268560:3922056"
 
     // Jade
-    modRuntimeOnly("curse.maven:jade-324717:4719987")
+    modLocalRuntime "curse.maven:jade-324717:4719987"
 
     // KubeJS
-    modImplementation("dev.latvian.mods:kubejs-forge:${kubejs_version}")
+    modImplementation "dev.latvian.mods:kubejs-forge:${kubejs_version}"
 }
 
 processResources {
     inputs.property "version", project.version
 
-    filesMatching("META-INF/mods.toml") {
+    filesMatching(["META-INF/mods.toml", "fabric.mod.json"]) {
         expand "version": project.version,
                 "modid": project.modid,
                 "mod_version": project.mod_version,
@@ -65,7 +96,9 @@ processResources {
                 "minecraft_version": project.minecraft_version,
                 "architectury_version": project.architectury_version,
                 "kubejs_version": project.kubejs_version,
-                "cloth_config_version": project.cloth_config_version
+                "cloth_config_version": project.cloth_config_version,
+                "fabric_api_version": project.fabric_api_version,
+                "fabric_loader_version": project.fabric_loader_version
     }
 }
 
@@ -95,7 +128,7 @@ jar {
 
 unifiedPublishing {
     project {
-        displayName = "Degrassi-${project.minecraft_version}-${project.mod_version}"
+        displayName = "[Forge]Degrassi-${project.minecraft_version}-${project.mod_version}"
         releaseType = "beta"
         if (rootProject.file("CHANGELOG.md").exists()) {
             changelog = rootProject.file("CHANGELOG.md").text

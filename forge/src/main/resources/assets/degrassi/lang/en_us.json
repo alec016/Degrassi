@@ -38,6 +38,7 @@
   "block.degrassi.emerald_furnace": "Emerald Furnace",
   "block.degrassi.netherite_furnace": "Netherite Furnace",
   "block.degrassi.upgrade_maker": "Upgrade Maker",
+  "block.degrassi.jewelry_generator": "Jewelry Generator",
 
   "degrassi.gui.element.energy.tooltip": "Energy: %s%s/%s%s",
   "degrassi.gui.element.energy.stored": "Stored: %s%s/%s%s",

@@ -30,11 +30,8 @@ public class TextureSizeHelper {
         else {
             try {
                 BufferedImage image = ImageIO.read(Minecraft.getInstance().getResourceManager().open(texture));
-                int width = image.getWidth();
-                int height = image.getHeight();
-                Pair<Integer, Integer> sizes = Pair.of(width, height);
-                SIZES.put(texture, sizes);
-                return width;
+                SIZES.put(texture, Pair.of(image.getWidth(), image.getHeight()));
+                return image.getWidth();
             } catch (IOException e) {
                 LOGGER.warn("No texture found for location: " + texture);
             }
@@ -50,11 +47,8 @@ public class TextureSizeHelper {
         else {
             try {
                 BufferedImage image = ImageIO.read(Minecraft.getInstance().getResourceManager().open(texture));
-                int width = image.getWidth();
-                int height = image.getHeight();
-                Pair<Integer, Integer> sizes = Pair.of(width, height);
-                SIZES.put(texture, sizes);
-                return height;
+                SIZES.put(texture, Pair.of(image.getWidth(), image.getHeight()));
+                return image.getHeight();
             } catch (IOException e) {
                 LOGGER.warn("No texture found for location: " + texture);
             }

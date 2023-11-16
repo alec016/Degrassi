@@ -27,3 +27,7 @@ accessible field net/minecraft/world/level/block/entity/BlockEntityType validBlo
 
 #AbstractContainerMenu
 accessible method net/minecraft/world/inventory/AbstractContainerMenu addSlot (Lnet/minecraft/world/inventory/Slot;)Lnet/minecraft/world/inventory/Slot;
+
+accessible method net/minecraftforge/client/model/generators/BlockStateProvider name (Lnet/minecraft/world/level/block/Block;)Ljava/lang/String;
+accessible method net/minecraftforge/client/model/generators/BlockStateProvider key (Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/resources/ResourceLocation;
+accessible field net/minecraftforge/client/model/generators/BlockStateProvider$ConfiguredModelList models Ljava/util/List;

@@ -1,6 +1,6 @@
 package es.degrassi.forge.init.recipe.helpers;
 
-import es.degrassi.forge.init.entity.upgrade_maker.UpgradeMakerEntity;
+import es.degrassi.forge.init.entity.UpgradeMakerEntity;
 import es.degrassi.forge.init.item.upgrade.SpeedUpgrade;
 import es.degrassi.forge.init.item.upgrade.types.IUpgradeMakerUpgrade;
 import es.degrassi.forge.init.recipe.recipes.UpgradeMakerRecipe;
@@ -20,7 +20,7 @@ public class UpgradeMakerRecipeHelper extends RecipeHelper<UpgradeMakerRecipe, U
   @Override
   public boolean hasRecipe(@NotNull UpgradeMakerEntity entity) {
     Level level = entity.getLevel();
-    if (level == null) return false;
+    if (level == null || level.isClientSide()) return false;
 
     SimpleContainer inventory = new SimpleContainer(entity.getItemHandler().getSlots());
     for (int i = 0; i < entity.getItemHandler().getSlots(); i++) {
@@ -30,8 +30,7 @@ public class UpgradeMakerRecipeHelper extends RecipeHelper<UpgradeMakerRecipe, U
     recipes.forEach(recipe -> {
       if (recipe == null) return;
       if (
-        recipe.getIngredients().get(0).test(inventory.getItem(2)) &&
-        recipe.getIngredients().get(1).test(inventory.getItem(3))
+        recipe.matches(inventory, level)
       ) entity.setRecipe(recipe.copy());
     });
 
@@ -40,8 +39,8 @@ public class UpgradeMakerRecipeHelper extends RecipeHelper<UpgradeMakerRecipe, U
     if (!entity.getRecipe().isModified()) modifyRecipe(entity, inventory);
 
     return
-      canInsertAmountIntoOutputSlot(inventory, 4) &&
       canInsertItemIntoOutputSlot(inventory, entity.getRecipe().getResultItem(), 4) &&
+      canInsertAmountIntoOutputSlot(inventory, 4) &&
       hasSameFluidInTank(entity.getFluidStorage(), entity) &&
       hasEnoughFluid(entity.getFluidStorage(), entity) &&
       hasEnoughEnergy(entity);
@@ -88,6 +87,7 @@ public class UpgradeMakerRecipeHelper extends RecipeHelper<UpgradeMakerRecipe, U
     int energyRequired = entity.getRecipe().getEnergyRequired();
     int timeRequired = entity.getRecipe().getTime();
     for(int i = 0; i < inventory.getContainerSize(); i++) {
+      if (i >= 2) continue;
       ItemStack slot = inventory.getItem(i);
       if (slot.getCount() > 0 && slot.getItem() instanceof IUpgradeMakerUpgrade upgrade) {
         switch(upgrade.getUpgradeType()) {

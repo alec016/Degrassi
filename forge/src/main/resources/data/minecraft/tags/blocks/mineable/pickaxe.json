@@ -16,6 +16,7 @@
     "degrassi:netherite_furnace",
     "degrassi:melter",
     "degrassi:upgrade_maker",
-    "degrassi:machine_casing"
+    "degrassi:machine_casing",
+    "degrassi:jewelry_generator"
   ]
 }

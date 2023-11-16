@@ -2,8 +2,8 @@ package es.degrassi.forge.init.entity.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
-import es.degrassi.forge.init.block.melter.Melter;
-import es.degrassi.forge.init.entity.melter.MelterEntity;
+import es.degrassi.forge.init.block.Melter;
+import es.degrassi.forge.init.entity.MelterEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;

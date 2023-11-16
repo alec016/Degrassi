@@ -1,6 +1,6 @@
 package es.degrassi.forge.init.recipe.helpers;
 
-import es.degrassi.forge.init.entity.furnace.*;
+import es.degrassi.forge.init.entity.FurnaceEntity;
 import es.degrassi.forge.init.item.upgrade.SpeedUpgrade;
 import es.degrassi.forge.init.item.upgrade.types.IFurnaceUpgrade;
 import es.degrassi.forge.init.recipe.recipes.FurnaceRecipe;
@@ -22,7 +22,7 @@ public class FurnaceRecipeHelper extends RecipeHelper<FurnaceRecipe, FurnaceEnti
   @Override
   public boolean hasRecipe(@NotNull FurnaceEntity entity) {
     Level level = entity.getLevel();
-    if (level == null) return false;
+    if (level == null || level.isClientSide()) return false;
 
     SimpleContainer inventory = new SimpleContainer(entity.itemHandler.getSlots());
     for (int i = 0; i < entity.itemHandler.getSlots(); i++) {
@@ -31,14 +31,16 @@ public class FurnaceRecipeHelper extends RecipeHelper<FurnaceRecipe, FurnaceEnti
 
     recipes.forEach(recipe -> {
       if (recipe == null) return;
-      if (recipe.getIngredients().get(0).test(inventory.getItem(2))) entity.recipe = recipe.copy();
+      if (recipe.matches(inventory, level)) entity.recipe = recipe.copy();
     });
 
     if (entity.recipe == null) return false;
 
     if (!entity.recipe.isModified()) modifyRecipe(entity, inventory);
 
-    return canInsertAmountIntoOutputSlot(inventory, 3) && canInsertItemIntoOutputSlot(inventory, entity.recipe.getResultItem(), 3) && hasEnoughEnergy(entity);
+    return canInsertAmountIntoOutputSlot(inventory, 3) &&
+      canInsertItemIntoOutputSlot(inventory, entity.recipe.getResultItem(), 3) &&
+      hasEnoughEnergy(entity);
   }
 
   @Override
@@ -105,26 +107,32 @@ public class FurnaceRecipeHelper extends RecipeHelper<FurnaceRecipe, FurnaceEnti
   }
 
   private void modifyRecipe(FurnaceEntity entity, SimpleContainer inventory) {
-    if (entity instanceof IronFurnaceEntity) {
-      entity.recipe.setTime(entity.recipe.getTime() * (100 - DegrassiConfig.get().furnaceConfig.iron_furnace_speed) / 100);
-      entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * (100 + DegrassiConfig.get().furnaceConfig.iron_furnace_energy) / 100);
-      entity.recipe.setExperience(entity.recipe.getExperience() * (100 + DegrassiConfig.get().furnaceConfig.iron_furnace_xp) / 100);
-    } else if(entity instanceof GoldFurnaceEntity) {
-      entity.recipe.setTime(entity.recipe.getTime() * (100 - DegrassiConfig.get().furnaceConfig.gold_furnace_speed) / 100);
-      entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * (100 + DegrassiConfig.get().furnaceConfig.gold_furnace_energy) / 100);
-      entity.recipe.setExperience(entity.recipe.getExperience() * (100 + DegrassiConfig.get().furnaceConfig.gold_furnace_xp) / 100);
-    } else if (entity instanceof DiamondFurnaceEntity) {
-      entity.recipe.setTime(entity.recipe.getTime() * (100 - DegrassiConfig.get().furnaceConfig.diamond_furnace_speed) / 100);
-      entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * (100 + DegrassiConfig.get().furnaceConfig.diamond_furnace_energy) / 100);
-      entity.recipe.setExperience(entity.recipe.getExperience() * (100 + DegrassiConfig.get().furnaceConfig.diamond_furnace_xp) / 100);
-    } else if (entity instanceof EmeraldFurnaceEntity) {
-      entity.recipe.setTime(entity.recipe.getTime() * (100 - DegrassiConfig.get().furnaceConfig.emerald_furnace_speed) / 100);
-      entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * (100 + DegrassiConfig.get().furnaceConfig.emerald_furnace_energy) / 100);
-      entity.recipe.setExperience(entity.recipe.getExperience() * (100 + DegrassiConfig.get().furnaceConfig.emerald_furnace_xp) / 100);
-    } else if (entity instanceof NetheriteFurnaceEntity) {
-      entity.recipe.setTime(entity.recipe.getTime() * (100 - DegrassiConfig.get().furnaceConfig.netherite_furnace_speed) / 100);
-      entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * (100 + DegrassiConfig.get().furnaceConfig.netherite_furnace_energy) / 100);
-      entity.recipe.setExperience(entity.recipe.getExperience() * (100 + DegrassiConfig.get().furnaceConfig.netherite_furnace_xp) / 100);
+    switch(entity.tier()) {
+      case IRON -> {
+        entity.recipe.setTime(entity.recipe.getTime() * (100 - DegrassiConfig.get().furnaceConfig.iron_furnace_speed) / 100);
+        entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * (100 + DegrassiConfig.get().furnaceConfig.iron_furnace_energy) / 100);
+        entity.recipe.setExperience(entity.recipe.getExperience() * (100 + DegrassiConfig.get().furnaceConfig.iron_furnace_xp) / 100);
+      }
+      case GOLD -> {
+        entity.recipe.setTime(entity.recipe.getTime() * (100 - DegrassiConfig.get().furnaceConfig.gold_furnace_speed) / 100);
+        entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * (100 + DegrassiConfig.get().furnaceConfig.gold_furnace_energy) / 100);
+        entity.recipe.setExperience(entity.recipe.getExperience() * (100 + DegrassiConfig.get().furnaceConfig.gold_furnace_xp) / 100);
+      }
+      case DIAMOND -> {
+        entity.recipe.setTime(entity.recipe.getTime() * (100 - DegrassiConfig.get().furnaceConfig.diamond_furnace_speed) / 100);
+        entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * (100 + DegrassiConfig.get().furnaceConfig.diamond_furnace_energy) / 100);
+        entity.recipe.setExperience(entity.recipe.getExperience() * (100 + DegrassiConfig.get().furnaceConfig.diamond_furnace_xp) / 100);
+      }
+      case EMERALD -> {
+        entity.recipe.setTime(entity.recipe.getTime() * (100 - DegrassiConfig.get().furnaceConfig.emerald_furnace_speed) / 100);
+        entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * (100 + DegrassiConfig.get().furnaceConfig.emerald_furnace_energy) / 100);
+        entity.recipe.setExperience(entity.recipe.getExperience() * (100 + DegrassiConfig.get().furnaceConfig.emerald_furnace_xp) / 100);
+      }
+      case NETHERITE -> {
+        entity.recipe.setTime(entity.recipe.getTime() * (100 - DegrassiConfig.get().furnaceConfig.netherite_furnace_speed) / 100);
+        entity.recipe.setEnergyRequired(entity.recipe.getEnergyRequired() * (100 + DegrassiConfig.get().furnaceConfig.netherite_furnace_energy) / 100);
+        entity.recipe.setExperience(entity.recipe.getExperience() * (100 + DegrassiConfig.get().furnaceConfig.netherite_furnace_xp) / 100);
+      }
     }
 
     ItemStack slot0 = inventory.getItem(0);
