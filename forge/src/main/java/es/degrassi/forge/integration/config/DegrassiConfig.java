@@ -1,6 +1,7 @@
 package es.degrassi.forge.integration.config;
 
 import es.degrassi.forge.Degrassi;
+import es.degrassi.forge.integration.config.generators.GeneratorsConfig;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Category;
@@ -23,6 +24,9 @@ public class DegrassiConfig extends PartitioningSerializer.GlobalData {
 
   @Category("upgrades")
   public UpgradesConfig upgradeConfig = new UpgradesConfig();
+
+  @Category("generators")
+  public GeneratorsConfig generatorsConfig = new GeneratorsConfig();
 
   public static DegrassiConfig get() {
     return AutoConfig.getConfigHolder(DegrassiConfig.class).getConfig();

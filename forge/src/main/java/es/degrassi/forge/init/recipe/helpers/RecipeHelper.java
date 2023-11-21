@@ -3,6 +3,7 @@ package es.degrassi.forge.init.recipe.helpers;
 import es.degrassi.forge.init.entity.BaseEntity;
 import es.degrassi.forge.init.entity.type.IEnergyEntity;
 import es.degrassi.forge.init.entity.type.IRecipeEntity;
+import es.degrassi.forge.util.storage.AbstractEnergyStorage;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleContainer;
@@ -44,6 +45,10 @@ public abstract class RecipeHelper<T extends Recipe<?>, E extends BaseEntity & I
 
   public boolean canInsertAmountIntoOutputSlot(@NotNull SimpleContainer inventory, int slot) {
     return inventory.getItem(slot).getMaxStackSize() > inventory.getItem(slot).getCount();
+  }
+
+  public boolean canInsertAmountIntoOutputSlot(@NotNull AbstractEnergyStorage inventory, int energyProduced) {
+    return inventory.getEnergyStored() + energyProduced <= inventory.getMaxEnergyStored();
   }
 
   public boolean canInsertAmountIntoOutputSlot(@NotNull FluidTank storage) {

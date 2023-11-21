@@ -3,8 +3,10 @@ package es.degrassi.forge.init.registration;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.forge.Degrassi;
+import es.degrassi.forge.init.block.generators.JewelryGenerator;
 import es.degrassi.forge.init.entity.FurnaceEntity;
 import es.degrassi.forge.init.entity.MelterEntity;
+import es.degrassi.forge.init.entity.generators.JewelryGeneratorEntity;
 import es.degrassi.forge.init.entity.panel.SolarPanelEntity;
 import es.degrassi.forge.init.entity.UpgradeMakerEntity;
 import es.degrassi.forge.init.tiers.FurnaceTier;
@@ -19,15 +21,6 @@ import java.util.Set;
 public class EntityRegister {
   public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
     DeferredRegister.create(Degrassi.MODID, Registry.BLOCK_ENTITY_TYPE_REGISTRY);
-
-//  public static final RegistrySupplier<BlockEntityType<SP1Entity>> SP_TIER_1 =
-//    BLOCK_ENTITIES.register("solar_panel_tier_1", () ->
-//      new BlockEntityType<>(
-//        SP1Entity::new,
-//        Set.of(BlockRegister.SP1_BLOCK.get()),
-//        null
-//      )
-//    );
 
   public static final RegistrySupplier<BlockEntityType<SolarPanelEntity>> SP_TIER_1 =
     BLOCK_ENTITIES.register("solar_panel_tier_1", () ->
@@ -245,6 +238,14 @@ public class EntityRegister {
     new BlockEntityType<>(
       UpgradeMakerEntity::new,
       Set.of(BlockRegister.UPGRADE_MAKER.get()),
+      null
+    )
+  );
+
+  public static final RegistrySupplier<BlockEntityType<JewelryGeneratorEntity>> JEWELRY_GENERATOR = BLOCK_ENTITIES.register("jewelry_generator", () ->
+    new BlockEntityType<>(
+      JewelryGeneratorEntity::new,
+      Set.of(BlockRegister.JEWELRY_GENERATOR.get()),
       null
     )
   );

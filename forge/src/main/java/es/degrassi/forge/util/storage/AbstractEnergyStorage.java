@@ -5,6 +5,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.IEnergyStorage;
 
+import java.util.List;
+
 @SuppressWarnings("unused")
 public abstract class AbstractEnergyStorage implements IEnergyStorage, INBTSerializable<CompoundTag>, IComponent {
   protected int energy;

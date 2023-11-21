@@ -2,7 +2,7 @@ package es.degrassi.forge.init.entity.type;
 
 import es.degrassi.forge.init.recipe.IDegrassiRecipe;
 
-public interface IRecipeEntity {
+public interface IRecipeEntity extends IDegrassiEntity {
   IDegrassiRecipe getRecipe();
 
   void setRecipe(IDegrassiRecipe recipe);

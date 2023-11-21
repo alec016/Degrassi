@@ -3,6 +3,7 @@ package es.degrassi.forge.init.gui.screen.panel;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import es.degrassi.common.DegrassiLocation;
+import es.degrassi.forge.init.entity.panel.PanelEntity;
 import es.degrassi.forge.init.gui.container.panel.PanelContainer;
 import es.degrassi.forge.init.gui.screen.IScreen;
 import es.degrassi.forge.init.gui.renderer.EnergyInfoArea;
@@ -16,16 +17,17 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Optional;
 
 @SuppressWarnings("unused")
-public abstract class PanelScreen extends AbstractContainerScreen<PanelContainer> implements IScreen {
+public abstract class PanelScreen extends AbstractContainerScreen<PanelContainer<? extends PanelEntity>> implements IScreen {
   protected static final ResourceLocation BACKGROUND = new DegrassiLocation("textures/gui/panel_gui.png");
   protected static final ResourceLocation ENERGY_FILLED = new DegrassiLocation("textures/gui/panel_energy_storage_filled.png");
 
   protected EnergyInfoArea energyInfoArea;
 
-  public PanelScreen(PanelContainer container, Inventory inventory, Component name) {
+  public PanelScreen(PanelContainer<? extends PanelEntity> container, Inventory inventory, Component name) {
     super(container, inventory, name);
   }
 
@@ -47,9 +49,6 @@ public abstract class PanelScreen extends AbstractContainerScreen<PanelContainer
 
     blit(pPoseStack, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight, imageWidth, imageHeight);
 
-    // IClientHandler.renderInventory(pPoseStack, 8, 85, x, y, BASE_INV, 162, 76);
-    // IClientHandler.renderProgressArrow(pPoseStack, x, y, false, 24, 16, EMPTY_ARROW, FILLED_ARROW, this.menu);
-    // IClientHandler.renderEnergyStorage(pPoseStack, this.leftPos + 156, this.topPos + 19, ENERGY_EMPTY);
     energyInfoArea.draw(pPoseStack, this.leftPos + 25, this.topPos + 20, ENERGY_FILLED, true);
     renderHover(pPoseStack, this.leftPos, this.topPos, 25, 20, pMouseX, pMouseY, TextureSizeHelper.getTextureWidth(ENERGY_FILLED), TextureSizeHelper.getTextureHeight(ENERGY_FILLED));
   }
@@ -134,14 +133,25 @@ public abstract class PanelScreen extends AbstractContainerScreen<PanelContainer
     }
   }
 
-  protected void assignEnergyInfoArea(int xOffset, int yOffset) {
-    int x = this.leftPos;
-    int y = this.topPos;
-    this.energyInfoArea = new EnergyInfoArea(x + xOffset, y + yOffset, menu.getEntity().getEnergyStorage(), 18, 72);
-  }
-
   @Override
   public IScreen getScreen() {
     return this;
+  }
+
+  @Override
+  public void drawTooltips(PoseStack poseStack, @NotNull List<Component> tooltips, int mouseX, int mouseY) {
+    tooltips.forEach(tooltip -> {
+      renderTooltip(poseStack, mouseX, mouseY);
+    });
+  }
+
+  @Override
+  public int getX() {
+    return topPos;
+  }
+
+  @Override
+  public int getY() {
+    return leftPos;
   }
 }

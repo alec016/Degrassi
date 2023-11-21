@@ -4,6 +4,7 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.Registrar;
 import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.forge.Degrassi;
+import es.degrassi.forge.init.gui.renderer.EnergyInfoArea;
 import es.degrassi.forge.init.gui.renderer.GuiElementType;
 import es.degrassi.forge.init.gui.renderer.IGuiElement;
 import es.degrassi.forge.init.gui.renderer.ProgressComponent;
@@ -14,6 +15,7 @@ public class ElementRegistry {
 
 
   public static final RegistrySupplier<GuiElementType<ProgressComponent>> PROGRESS_GUI_ELEMENT = GUI_ELEMENTS.register("progress", GuiElementType::create);
+  public static final RegistrySupplier<GuiElementType<EnergyInfoArea>> ENERGY_GUI_ELEMENT = GUI_ELEMENTS.register("energy", GuiElementType::create);
 
   public static void register() {
     GUI_ELEMENTS.register();

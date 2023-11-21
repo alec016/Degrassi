@@ -1,5 +1,5 @@
 package es.degrassi.forge.init.entity.type;
 
-public interface IExperienceEntity {
+public interface IExperienceEntity extends IDegrassiEntity {
   void setXp(float xp);
 }

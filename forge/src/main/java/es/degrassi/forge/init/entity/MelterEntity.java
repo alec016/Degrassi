@@ -1,6 +1,7 @@
 package es.degrassi.forge.init.entity;
 
 import es.degrassi.forge.init.block.FurnaceBlock;
+import es.degrassi.forge.init.block.Melter;
 import es.degrassi.forge.init.entity.renderer.LerpedFloat;
 import es.degrassi.forge.init.entity.type.*;
 import es.degrassi.forge.init.handlers.ItemWrapperHandler;
@@ -22,8 +23,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Containers;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -40,6 +43,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEntity, IProgressEntity, IItemEntity, IFluidEntity {
+  public Melter delegate;
   private LerpedFloat fluidLevel;
   protected boolean forceFluidLevelUpdate;
   protected boolean queuedSync;

@@ -4,24 +4,28 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.init.gui.container.MelterContainer;
+import es.degrassi.forge.init.gui.renderer.EfficiencyInfoArea;
 import es.degrassi.forge.init.gui.renderer.EnergyInfoArea;
 import es.degrassi.forge.init.gui.renderer.FluidTankRenderer;
 import es.degrassi.forge.init.gui.renderer.ProgressComponent;
 import es.degrassi.forge.util.TextureSizeHelper;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Optional;
 
 public class MelterScreen extends AbstractContainerScreen<MelterContainer> implements IScreen {
-  protected static final ResourceLocation ENERGY_FILLED = new DegrassiLocation("textures/gui/melter_energy_filled.png");
-  private static final ResourceLocation TEXTURE = new DegrassiLocation("textures/gui/melter_gui.png");
+  public static final ResourceLocation ENERGY_FILLED = new DegrassiLocation("textures/gui/melter_energy_filled.png");
+  public static final ResourceLocation TEXTURE = new DegrassiLocation("textures/gui/melter_gui.png");
   private EnergyInfoArea energyInfoArea;
   private ProgressComponent progressComponent;
+  private FluidTankRenderer fluidComponent;
   public MelterScreen(MelterContainer container, Inventory inv, Component name) {
     super(container, inv, name);
   }
@@ -31,6 +35,7 @@ public class MelterScreen extends AbstractContainerScreen<MelterContainer> imple
     super.init();
     assignEnergyInfoArea(7, 21);
     assignProgressComponent(84, 48);
+    assignFluidComponent(152, 22, 16, 70);
   }
 
   @Override
@@ -55,7 +60,7 @@ public class MelterScreen extends AbstractContainerScreen<MelterContainer> imple
     if(this.menu.isCrafting()) {
       this.progressComponent.draw(poseStack, this.leftPos + 84, this.topPos + 48, this.FILLED_ARROW, false);
     }
-    FluidTankRenderer.renderFluid(poseStack, this.leftPos + 152, this.topPos + 22, 16, 70, this.menu.getEntity().getFluidStorage().getFluid(), this.menu.getEntity().getFluidStorage().getCapacity());
+    fluidComponent.renderFluid(poseStack, this.leftPos + 152, this.topPos + 22);
     renderHover(poseStack, this.leftPos, this.topPos, 152, 22, mouseX, mouseY, 16, 70);
   }
 
@@ -125,7 +130,7 @@ public class MelterScreen extends AbstractContainerScreen<MelterContainer> imple
     if (isMouseAboveArea(mouseX, mouseY, x, y, 152, 22, 16, 70)) {
       renderTooltip(
         poseStack,
-        FluidTankRenderer.getTooltip(this.menu.getEntity().getFluidStorage().getFluid(), FluidTankRenderer.TooltipMode.SHOW_AMOUNT_AND_CAPACITY, this.menu.getEntity().getFluidStorage().getCapacity()),
+        fluidComponent.getTooltips(),
         Optional.empty(),
         mouseX - x,
         mouseY - y
@@ -133,11 +138,43 @@ public class MelterScreen extends AbstractContainerScreen<MelterContainer> imple
     }
   }
 
-  protected void assignEnergyInfoArea(int xOffset, int yOffset) {
-    this.energyInfoArea = new EnergyInfoArea(this.leftPos + xOffset, this.topPos + yOffset, this.menu.getEntity().getEnergyStorage());
+  public ProgressComponent getComponent() {
+    return progressComponent;
   }
 
-  protected void assignProgressComponent(int xOffset, int yOffset) {
-    this.progressComponent = new ProgressComponent(this.leftPos + xOffset, this.topPos + yOffset, this.menu.getEntity().getProgressStorage(), TextureSizeHelper.getTextureWidth(FILLED_ARROW), TextureSizeHelper.getTextureHeight(FILLED_ARROW));
+  @Override
+  public void drawTooltips(PoseStack poseStack, List<Component> tooltips, int mouseX, int mouseY) {
+    tooltips.forEach(tooltip -> {
+      renderTooltip(poseStack, mouseX, mouseY);
+    });
   }
+
+  @Override
+  public int getX() {
+    return topPos;
+  }
+
+  @Override
+  public int getY() {
+    return leftPos;
+  }
+
+
+  @Override
+  public void setProgressComponent(ProgressComponent progress) {
+    this.progressComponent = progress;
+  }
+
+  @Override
+  public void setEnergyComponent(EnergyInfoArea energy) {
+    this.energyInfoArea = energy;
+  }
+
+  @Override
+  public void setFluidComponent(FluidTankRenderer fluid) {
+    this.fluidComponent = fluid;
+  }
+
+  @Override
+  public void setEfficiencyComponent(EfficiencyInfoArea efficiency) {}
 }

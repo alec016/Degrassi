@@ -3,9 +3,10 @@ package es.degrassi.forge.init.gui.screen.panel;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import es.degrassi.common.DegrassiLocation;
-import es.degrassi.forge.init.entity.panel.SolarPanelEntity;
 import es.degrassi.forge.init.gui.container.panel.PanelContainer;
-import es.degrassi.forge.init.gui.screen.panel.PanelScreen;
+import es.degrassi.forge.init.gui.renderer.EnergyInfoArea;
+import es.degrassi.forge.init.gui.renderer.FluidTankRenderer;
+import es.degrassi.forge.init.gui.renderer.ProgressComponent;
 import es.degrassi.forge.init.gui.renderer.EfficiencyInfoArea;
 import es.degrassi.forge.util.storage.AbstractEnergyStorage;
 import es.degrassi.forge.util.TextureSizeHelper;
@@ -21,7 +22,7 @@ import java.util.Optional;
 public class SolarPanelScreen extends PanelScreen {
   private static final ResourceLocation EFFICIENCY_FILLED = new DegrassiLocation("textures/gui/panel_efficiency_filled.png");
   protected EfficiencyInfoArea efficiencyInfoArea;
-  public SolarPanelScreen(PanelContainer container, Inventory inventory, Component name) {
+  public SolarPanelScreen(PanelContainer<?> container, Inventory inventory, Component name) {
     super(container, inventory, name);
   }
 
@@ -104,15 +105,9 @@ public class SolarPanelScreen extends PanelScreen {
       4210752
     );
     poseStack.popPose();
-    // poseStack.scale(1F, 1F, 1F);
   }
 
-  protected void assignEfficiencyInfoArea(int xOffset, int yOffset) {
-    int x = this.leftPos;
-    int y = this.topPos;
-    SolarPanelEntity entity = (SolarPanelEntity) menu.getEntity();
-    this.efficiencyInfoArea = new EfficiencyInfoArea(x + xOffset, y + yOffset, entity.getCurrentEfficiency(), 18, 72);
-  }
+
 
   private void renderEfficiencyAreaTooltips(PoseStack poseStack, int mouseX, int mouseY, int x, int y) {
     if (
@@ -135,5 +130,22 @@ public class SolarPanelScreen extends PanelScreen {
         mouseY - y
       );
     }
+  }
+
+  @Override
+  public void setProgressComponent(ProgressComponent progress) {
+  }
+
+  @Override
+  public void setEnergyComponent(EnergyInfoArea energy) {
+    this.energyInfoArea = energy;
+  }
+
+  @Override
+  public void setFluidComponent(FluidTankRenderer fluid) {}
+
+  @Override
+  public void setEfficiencyComponent(EfficiencyInfoArea efficiency) {
+    this.efficiencyInfoArea = efficiency;
   }
 }

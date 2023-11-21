@@ -43,11 +43,17 @@
   "degrassi.gui.element.energy.tooltip": "Energía: %s%s/%s%s",
   "degrassi.gui.element.energy.stored": "Almacenada: %s%s/%s%s",
   "degrassi.gui.element.energy.generation": "Generando: %s%s/t",
+  "degrassi.gui.element.energy.input": "Requiere",
+  "degrassi.gui.element.energy.output": "Produce",
+  "degrassi.gui.element.energy.jei": "%s%s%s",
+  "degrassi.gui.element.energy.jei.total": "%s%s",
+  "degrassi.gui.element.energy.jei.perTick": "%s%s%s",
   "degrassi.gui.element.efficiency": "Eficiencia: %s",
   "degrassi.gui.element.fluid.tooltip": "%smB/%smB",
   "degrassi.gui.element.fluid.tooltip.amount": "%smB",
   "degrassi.gui.element.fluid.empty": "Vacío: %smB/%smB",
   "degrassi.gui.element.transfer": "Capacidad de traspaso: %s%s/t",
+  "degrassi.gui.element.progress": "Mostrar Recetas",
 
   "degrassi.machine.sp.tooltip": "Genera %s%s/t",
 
@@ -73,7 +79,7 @@
   "degrassi.jei.gui.element.upgrades.efficiency": "Modifica la eficiencia de la máquina por x%s",
   "degrassi.jei.gui.element.upgrades.capacity": "Modifica la capacidad de energía de la máquina por  x%s",
 
-  "degrassi.jei.recipe.time": "Duración %sticks",
+  "degrassi.jei.recipe.time": "Duración: %s ticks",
   "degrassi.jei.recipe.instant": "Crafteo instantaneo",
   "degrassi.jei.recipe.id": "ID de la Receta: %s",
 

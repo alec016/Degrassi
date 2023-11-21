@@ -3,7 +3,7 @@ package es.degrassi.forge.init.entity.type;
 import es.degrassi.forge.util.storage.AbstractEnergyStorage;
 import es.degrassi.forge.util.storage.GenerationStorage;
 
-public interface IEnergyEntity {
+public interface IEnergyEntity extends IDegrassiEntity {
   AbstractEnergyStorage getEnergyStorage();
 
   void setEnergyLevel(int energy);
@@ -12,7 +12,7 @@ public interface IEnergyEntity {
 
   void setTransferRate(int transfer);
 
-  interface IGenerationEntity {
+  interface IGenerationEntity extends IDegrassiEntity {
     GenerationStorage getGenerationStorage();
   }
 }

@@ -4,6 +4,8 @@ import es.degrassi.forge.init.gui.IComponent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.util.INBTSerializable;
 
+import java.io.DataOutput;
+
 @SuppressWarnings("unused")
 public abstract class ProgressStorage implements INBTSerializable<CompoundTag>, IComponent {
   protected int progress;
@@ -36,6 +38,18 @@ public abstract class ProgressStorage implements INBTSerializable<CompoundTag>, 
       throw new IllegalArgumentException("Can not deserialize to an instance that isn't the default implementation");
     this.progress = nbt.getInt("progress");
     this.maxProgress = nbt.getInt("maxProgress");
+  }
+
+  public static ProgressStorage fromNBT(CompoundTag nbt) {
+    if (nbt == null)
+      throw new IllegalArgumentException("Can not deserialize to an instance that isn't the default implementation");
+    int progress = nbt.getInt("progress");
+    int maxProgress = nbt.getInt("maxProgress");
+    return new ProgressStorage(progress, maxProgress) {
+      @Override
+      public void onProgressChanged() {
+      }
+    };
   }
 
   public void resetProgress() {

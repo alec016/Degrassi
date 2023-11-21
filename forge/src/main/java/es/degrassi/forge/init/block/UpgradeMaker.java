@@ -43,7 +43,9 @@ public class UpgradeMaker extends BaseBlock {
   @Nullable
   @Override
   public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-    return new UpgradeMakerEntity(pos, state);
+    UpgradeMakerEntity entity = new UpgradeMakerEntity(pos, state);
+    entity.delegate = this;
+    return entity;
   }
 
   @SuppressWarnings("deprecation")

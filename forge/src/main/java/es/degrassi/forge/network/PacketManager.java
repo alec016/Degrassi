@@ -20,6 +20,7 @@ public class PacketManager {
 
 
     // Client to Server
+    public static final MessageType ELEMENT_CLICKED = MANAGER.registerC2S("element_clicked", GuiElementClickPacket::read);
 
     public static void init() {
     }

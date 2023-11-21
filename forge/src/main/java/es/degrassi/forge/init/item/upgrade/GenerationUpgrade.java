@@ -1,6 +1,7 @@
 package es.degrassi.forge.init.item.upgrade;
 
 import es.degrassi.forge.client.ClientHandler;
+import es.degrassi.forge.init.item.upgrade.types.IJewelryUpgrade;
 import es.degrassi.forge.init.item.upgrade.types.IPanelUpgrade;
 import es.degrassi.forge.integration.config.DegrassiConfig;
 import net.minecraft.ChatFormatting;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class GenerationUpgrade extends BaseUpgrade implements IPanelUpgrade {
+public class GenerationUpgrade extends BaseUpgrade implements IPanelUpgrade, IJewelryUpgrade {
   private Integer value;
   private UpgradeType type;
   public GenerationUpgrade(Properties properties) {

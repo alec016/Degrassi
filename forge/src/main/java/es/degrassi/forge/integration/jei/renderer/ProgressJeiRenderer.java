@@ -6,16 +6,28 @@ import es.degrassi.forge.init.gui.screen.IScreen;
 import es.degrassi.forge.init.gui.renderer.ProgressComponent;
 import es.degrassi.forge.init.recipe.IDegrassiRecipe;
 import es.degrassi.forge.integration.jei.IJeiElementRenderer;
+import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProgressGuiElementJeiRenderer implements IJeiElementRenderer<ProgressComponent> {
+public class ProgressJeiRenderer implements IJeiElementRenderer<ProgressComponent>, IIngredientRenderer<ProgressComponent> {
+  private final int width, height;
+  public ProgressJeiRenderer(int width, int height) {
+    this.width = width;
+    this.height = height;
+  }
+
+  public ProgressJeiRenderer() {
+    this(16, 16);
+  }
+
   @Override
   public void renderElementInJEI(PoseStack matrix, @NotNull ProgressComponent element, IDegrassiRecipe recipe, double mouseX, double mouseY, int x, int y) {
     int width = element.getWidth();
@@ -58,5 +70,22 @@ public class ProgressGuiElementJeiRenderer implements IJeiElementRenderer<Progre
     if(Minecraft.getInstance().options.advancedItemTooltips)
       tooltips.add(Component.translatable("degrassi.jei.recipe.id", recipe.getId().toString()).withStyle(ChatFormatting.DARK_GRAY));
     return tooltips;
+  }
+
+  @Override
+  public void render(@NotNull PoseStack stack, @NotNull ProgressComponent ingredient) {
+    ingredient.draw(stack, ingredient.getX(), ingredient.getY());
+  }
+
+  public int getWidth() {
+    return width;
+  }
+
+  public int getHeight() {
+    return height;
+  }
+  @Override
+  public @NotNull List<Component> getTooltip(@NotNull ProgressComponent ingredient, @NotNull TooltipFlag tooltipFlag) {
+    return ingredient.getTooltips();
   }
 }

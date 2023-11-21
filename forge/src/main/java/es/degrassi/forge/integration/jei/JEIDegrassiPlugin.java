@@ -1,49 +1,48 @@
 package es.degrassi.forge.integration.jei;
 
 import es.degrassi.common.DegrassiLocation;
+import es.degrassi.forge.init.gui.screen.FurnaceScreen;
+import es.degrassi.forge.init.gui.screen.MelterScreen;
+import es.degrassi.forge.init.gui.screen.UpgradeMakerScreen;
 import es.degrassi.forge.init.recipe.helpers.RecipeHelpers;
-import es.degrassi.forge.init.recipe.recipes.FurnaceRecipe;
-import es.degrassi.forge.init.recipe.recipes.MelterRecipe;
-import es.degrassi.forge.init.recipe.recipes.UpgradeMakerRecipe;
 import es.degrassi.forge.init.registration.BlockRegister;
 import es.degrassi.forge.init.registration.ItemRegister;
 import es.degrassi.forge.integration.config.DegrassiConfig;
 import es.degrassi.forge.integration.jei.categories.FurnaceRecipeCategory;
 import es.degrassi.forge.integration.jei.categories.MelterRecipeCategory;
 import es.degrassi.forge.integration.jei.categories.UpgradeMakerRecipeCategory;
+import es.degrassi.forge.integration.jei.ingredients.DegrassiTypes;
+import es.degrassi.forge.integration.jei.renderer.EnergyJeiRenderer;
+import es.degrassi.forge.integration.jei.renderer.ProgressJeiRenderer;
+import es.degrassi.forge.integration.jei.renderer.helpers.EnergyIngredientHelper;
+import es.degrassi.forge.integration.jei.renderer.helpers.ProgressIngredientHelper;
+import es.degrassi.forge.util.TextureSizeHelper;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.recipe.RecipeType;
-import mezz.jei.api.registration.IRecipeCatalystRegistration;
-import mezz.jei.api.registration.IRecipeCategoryRegistration;
-import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.registration.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import static es.degrassi.forge.integration.jei.DegrassiJEIRecipeTypes.*;
+
 @JeiPlugin
+@SuppressWarnings("unused")
 public class JEIDegrassiPlugin implements IModPlugin {
-  public static RecipeType<FurnaceRecipe> FURNACE_TYPE = new RecipeType<>(
-    FurnaceRecipeCategory.UID,
-    FurnaceRecipe.class
-  );
-
-  public static RecipeType<MelterRecipe> MELTER_TYPE = new RecipeType<>(
-    MelterRecipeCategory.UID,
-    MelterRecipe.class
-  );
-
-  public static RecipeType<UpgradeMakerRecipe> UPGRADE_MAKER_TYPE = new RecipeType<>(
-    UpgradeMakerRecipeCategory.UID,
-    UpgradeMakerRecipe.class
-  );
 
   @Override
   public @NotNull ResourceLocation getPluginUid() {
     return new DegrassiLocation("jei_plugin");
+  }
+
+  @Override
+  public void registerIngredients(@NotNull IModIngredientRegistration registry) {
+    registry.register(DegrassiTypes.ENERGY, new ArrayList<>(), new EnergyIngredientHelper(), new EnergyJeiRenderer(16, 16));
+    registry.register(DegrassiTypes.PROGRESS, new ArrayList<>(), new ProgressIngredientHelper(), new ProgressJeiRenderer(16, 16));
   }
 
   @Override
@@ -73,6 +72,46 @@ public class JEIDegrassiPlugin implements IModPlugin {
 
     registerPanelInfo(registration);
     registerUpgradesInfo(registration);
+  }
+
+  @Override
+  public void registerGuiHandlers(@NotNull IGuiHandlerRegistration registration) {
+    registerFurnaceHandler(registration);
+    registerMelterHandler(registration);
+    registerUpgradeMakerHandler(registration);
+  }
+
+  private void registerUpgradeMakerHandler(@NotNull IGuiHandlerRegistration registration) {
+    registration.addRecipeClickArea(
+      UpgradeMakerScreen.class,
+      77,
+      49,
+      TextureSizeHelper.getTextureWidth(UpgradeMakerScreen.FILLED_ARROW),
+      TextureSizeHelper.getTextureHeight(UpgradeMakerScreen.FILLED_ARROW),
+      UPGRADE_MAKER_TYPE
+    );
+  }
+
+  private void registerMelterHandler(@NotNull IGuiHandlerRegistration registration) {
+    registration.addRecipeClickArea(
+      MelterScreen.class,
+      84,
+      48,
+      TextureSizeHelper.getTextureWidth(MelterScreen.FILLED_ARROW),
+      TextureSizeHelper.getTextureHeight(MelterScreen.FILLED_ARROW),
+      MELTER_TYPE
+    );
+  }
+
+  private void registerFurnaceHandler(@NotNull IGuiHandlerRegistration registration) {
+    registration.addRecipeClickArea(
+      FurnaceScreen.class,
+      66,
+      33,
+      TextureSizeHelper.getTextureWidth(FurnaceScreen.FILLED_ARROW),
+      TextureSizeHelper.getTextureHeight(FurnaceScreen.FILLED_ARROW),
+      FURNACE_TYPE
+    );
   }
 
   private void registerFurnaceCatalysts(@NotNull IRecipeCatalystRegistration registration) {

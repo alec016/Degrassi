@@ -23,7 +23,7 @@ public class EfficiencyInfoArea extends InfoArea {
   }
 
   public EfficiencyInfoArea(int xMin, int yMin, EfficiencyStorage efficiency, int width, int height) {
-    super(new Rect2i(xMin, yMin, width, height));
+    super(new Rect2i(xMin, yMin, width, height), Component.literal("Efficiency"));
     this.efficiency = efficiency;
   }
   public List<Component> getTooltips() {

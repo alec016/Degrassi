@@ -17,7 +17,8 @@ import es.degrassi.forge.init.gui.screen.panel.SolarPanelScreen;
 import es.degrassi.forge.init.registration.ElementRegistry;
 import es.degrassi.forge.init.registration.ContainerRegistry;
 import es.degrassi.forge.integration.jei.RegisterGuiElementJEIRendererEvent;
-import es.degrassi.forge.integration.jei.renderer.ProgressGuiElementJeiRenderer;
+import es.degrassi.forge.integration.jei.renderer.EnergyJeiRenderer;
+import es.degrassi.forge.integration.jei.renderer.ProgressJeiRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
@@ -51,7 +52,8 @@ public class ClientHandler {
   }
 
   private static void registerGuiElementJEIRenderers(final RegisterGuiElementJEIRendererEvent event) {
-    event.register(ElementRegistry.PROGRESS_GUI_ELEMENT.get(), new ProgressGuiElementJeiRenderer());
+    event.register(ElementRegistry.PROGRESS_GUI_ELEMENT.get(), new ProgressJeiRenderer());
+    event.register(ElementRegistry.ENERGY_GUI_ELEMENT.get(), new EnergyJeiRenderer());
   }
 
   public static void drawSizedString(@NotNull Font font, @NotNull PoseStack matrix, String string, int x, int y, int size, float maxScale, int color) {

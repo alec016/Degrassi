@@ -3,12 +3,13 @@ package es.degrassi.forge.init.gui.container;
 import es.degrassi.forge.client.ClientHandler;
 import es.degrassi.forge.client.IClientHandler;
 import es.degrassi.forge.init.entity.UpgradeMakerEntity;
-import es.degrassi.forge.init.gui.container.BaseContainer;
 import es.degrassi.forge.init.gui.container.types.IProgressContainer;
+import es.degrassi.forge.init.gui.renderer.ProgressComponent;
 import es.degrassi.forge.init.registration.BlockRegister;
 import es.degrassi.forge.init.registration.ContainerRegistry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
@@ -123,7 +124,6 @@ public class UpgradeMakerContainer extends BaseContainer<UpgradeMakerEntity> imp
     return stillValid(ContainerLevelAccess.create(level, entity.getBlockPos()),
       player, BlockRegister.UPGRADE_MAKER.get());
   }
-
 
   public void setFluid(FluidStack fluidStack) {
     this.fluid = fluidStack;

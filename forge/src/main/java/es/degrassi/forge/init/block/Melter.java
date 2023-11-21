@@ -50,7 +50,9 @@ public class Melter extends BaseBlock {
   @Nullable
   @Override
   public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-    return new MelterEntity(pos, state);
+    MelterEntity entity = new MelterEntity(pos, state);
+    entity.delegate = this;
+    return entity;
   }
 
   @SuppressWarnings("deprecation")

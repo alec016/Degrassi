@@ -31,9 +31,13 @@ import java.util.List;
 public class FluidTankRenderer extends InfoArea {
   private static final int MIN_FLUID_HEIGHT = 1;
   private static final int TEXTURE_SIZE = 16;
+  private final FluidStack fluid;
+  private final int capacity;
 
-  protected FluidTankRenderer(Rect2i area) {
-    super(area);
+  public FluidTankRenderer(Rect2i area, FluidStack fluid, int capacity) {
+    super(area, Component.literal("Fluid Tank"));
+    this.fluid = fluid;
+    this.capacity = capacity;
   }
 
   @Override
@@ -42,25 +46,30 @@ public class FluidTankRenderer extends InfoArea {
   @Override
   public void draw(PoseStack transform, int x, int y, ResourceLocation texture, boolean vertical) {}
 
+  @Override
+  public List<Component> getTooltips() {
+    return getTooltip(TooltipMode.SHOW_AMOUNT_AND_CAPACITY);
+  }
+
   public enum TooltipMode {
     SHOW_AMOUNT,
     SHOW_AMOUNT_AND_CAPACITY
   }
 
-  public static void renderFluid(PoseStack poseStack, int posX, int posY, int width, int height, @NotNull FluidStack fluidStack, long capacity) {
-    Fluid fluid = fluidStack.getFluid();
+  public void renderFluid(PoseStack poseStack, int x, int y) {
+    Fluid fluid = this.fluid.getFluid();
     if (fluid == null || fluid == Fluids.EMPTY)
       return;
 
     RenderSystem.enableBlend();
 
     poseStack.pushPose();
-    poseStack.translate(posX, posY, 0);
+    poseStack.translate(x, y, 0);
 
-    TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(fluidStack.getFluid()).getStillTexture(fluidStack));
-    int fluidColor = IClientFluidTypeExtensions.of(fluidStack.getFluid()).getTintColor(fluidStack);
+    TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(this.fluid.getFluid()).getStillTexture(this.fluid));
+    int fluidColor = IClientFluidTypeExtensions.of(this.fluid.getFluid()).getTintColor(this.fluid);
 
-    long amount = fluidStack.getAmount();
+    long amount = this.fluid.getAmount();
     int scaledAmount = (int) ((amount * height) / capacity);
     if (amount > 0 && scaledAmount < MIN_FLUID_HEIGHT) {
       scaledAmount = MIN_FLUID_HEIGHT;
@@ -76,7 +85,7 @@ public class FluidTankRenderer extends InfoArea {
     RenderSystem.disableBlend();
   }
 
-  private static void drawTiledSprite(@NotNull PoseStack poseStack, final int tiledWidth, final int tiledHeight, int color, int scaledAmount, TextureAtlasSprite sprite) {
+  private void drawTiledSprite(@NotNull PoseStack poseStack, final int tiledWidth, final int tiledHeight, int color, int scaledAmount, TextureAtlasSprite sprite) {
     RenderSystem.setShader(GameRenderer::getPositionTexShader);
     RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
     Matrix4f matrix = poseStack.last().pose();
@@ -105,7 +114,7 @@ public class FluidTankRenderer extends InfoArea {
     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
   }
 
-  private static void setGLColorFromInt(int color) {
+  private void setGLColorFromInt(int color) {
     float red = (color >> 16 & 0xFF) / 255.0F;
     float green = (color >> 8 & 0xFF) / 255.0F;
     float blue = (color & 0xFF) / 255.0F;
@@ -115,7 +124,7 @@ public class FluidTankRenderer extends InfoArea {
     RenderSystem.setShaderColor(red, green, blue, alpha);
   }
 
-  private static void drawTextureWithMasking(Matrix4f matrix, float xCoord, float yCoord, @NotNull TextureAtlasSprite textureSprite, int maskTop, int maskRight) {
+  private void drawTextureWithMasking(Matrix4f matrix, float xCoord, float yCoord, @NotNull TextureAtlasSprite textureSprite, int maskTop, int maskRight) {
     float uMin = textureSprite.getU0();
     float uMax = textureSprite.getU1();
     float vMin = textureSprite.getV0();
@@ -133,19 +142,20 @@ public class FluidTankRenderer extends InfoArea {
     tesselator.end();
   }
 
-  public static List<Component> getTooltip(@NotNull FluidStack fluidStack, TooltipMode mode, int capacity) {
+  public List<Component> getTooltip(TooltipMode mode) {
     List<Component> tooltip = new ArrayList<>();
 
-    Fluid fluidType = fluidStack.getFluid();
+    Fluid fluidType = fluid.getFluid();
     try {
       if (fluidType.isSame(Fluids.EMPTY)) {
+        tooltip.add(Component.translatable("degrassi.gui.element.fluid.empty", 0, capacity));
         return tooltip;
       }
 
-      Component displayName = fluidStack.getDisplayName();
+      Component displayName = fluid.getDisplayName();
       tooltip.add(displayName);
 
-      long amount = fluidStack.getAmount();
+      long amount = fluid.getAmount();
       long milliBuckets = (amount * 1000) / FluidType.BUCKET_VOLUME;
 
       if (mode == TooltipMode.SHOW_AMOUNT_AND_CAPACITY) {

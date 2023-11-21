@@ -34,7 +34,7 @@ public class DegrassiForge {
 
   @SubscribeEvent
   public static void registerRenderers(final EntityRenderersEvent.@NotNull RegisterRenderers event){
-    DegrassiLogger.INSTANCE.info("registering melter renderer");
+    DegrassiLogger.INSTANCE.info("Registering melter renderer");
     event.registerBlockEntityRenderer(EntityRegister.MELTER.get(), MelterRenderer::new);
   }
 }
