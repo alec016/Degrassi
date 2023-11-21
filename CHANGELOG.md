@@ -1,7 +1,5 @@
 # [<u>Degrassi v1.1.0</u>][degrassi]
 
----
-
 > ### <u>Added:</u>
 > - Upgrade Maker machine
 > - Speed Upgrade
