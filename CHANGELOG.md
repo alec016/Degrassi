@@ -10,6 +10,7 @@
 > - Red Matter
 > - Black Pearl
 > - Photovoltaic cells tier 1-8
+> - Circuit
 
 > ### <u>Fixed:</u>
 > - Processing time with upgrades

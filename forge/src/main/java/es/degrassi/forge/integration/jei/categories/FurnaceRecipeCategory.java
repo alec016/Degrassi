@@ -90,7 +90,7 @@ public class FurnaceRecipeCategory implements IRecipeCategory<FurnaceRecipe> {
         }
       );
     IDrawable overlay = helper.getGuiHelper().createBlankDrawable(42, 18);
-    builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 52, 18)
+    builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 53, 18)
       .setCustomRenderer(DegrassiTypes.PROGRESS, progress)
       .addIngredient(DegrassiTypes.PROGRESS, progressComponents.get(recipe))
       .addTooltipCallback(

@@ -107,6 +107,11 @@ public class ItemRegister {
     () -> new Item(new Item.Properties().tab(CreativeTabs.COMMON))
   );
 
+  public static final RegistrySupplier<Item> CIRCUIT = ITEMS.register(
+    "circuit",
+    () -> new Item(new Item.Properties().tab(CreativeTabs.COMMON))
+  );
+
   private static RegistrySupplier<BaseUpgrade> registerUpgrade(String id, Supplier<? extends BaseUpgrade> supplier) {
     return ITEMS.register(id, supplier);
   }

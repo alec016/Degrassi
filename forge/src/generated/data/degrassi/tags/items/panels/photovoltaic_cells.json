@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "degrassi:photovoltaic_cell_1",
+    "degrassi:photovoltaic_cell_2",
+    "degrassi:photovoltaic_cell_3",
+    "degrassi:photovoltaic_cell_6",
+    "degrassi:photovoltaic_cell_5",
+    "degrassi:photovoltaic_cell_6",
+    "degrassi:photovoltaic_cell_7",
+    "degrassi:photovoltaic_cell_8"
+  ]
+}
