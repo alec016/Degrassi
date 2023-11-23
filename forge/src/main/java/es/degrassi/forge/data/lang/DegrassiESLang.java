@@ -38,7 +38,7 @@ public class DegrassiESLang extends DegrassiLangProvider {
     add(BlockRegister.SP1_BLOCK.get(), "Panel Solar Tier I");
     add(BlockRegister.SP2_BLOCK.get(), "Panel Solar Tier II");
     add(BlockRegister.SP3_BLOCK.get(), "Panel Solar Tier III");
-    add(BlockRegister.SP4_BLOCK.get(), "Panel Solar Tier VI");
+    add(BlockRegister.SP4_BLOCK.get(), "Panel Solar Tier IV");
     add(BlockRegister.SP5_BLOCK.get(), "Panel Solar Tier V");
     add(BlockRegister.SP6_BLOCK.get(), "Panel Solar Tier VI");
     add(BlockRegister.SP7_BLOCK.get(), "Panel Solar Tier VII");
@@ -68,8 +68,8 @@ public class DegrassiESLang extends DegrassiLangProvider {
     addGuiElement("energy.input","Requiere");
     addGuiElement("energy.output","Produce");
     addGuiElement("energy.jei", "%s%s%s");
-    addGuiElement("jei.total", "%s%s");
-    addGuiElement("jei.perTick", "%s%s%s");
+    addGuiElement("energy.jei.total", "%s%s");
+    addGuiElement("energy.jei.perTick", "%s%s%s");
     addGuiElement("efficiency", "Eficiencia: %s");
     addGuiElement("fluid.tooltip", "%smB/%smB");
     addGuiElement("fluid.tooltip.amount", "%smB");

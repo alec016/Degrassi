@@ -1,11 +1,10 @@
 package es.degrassi.forge.data.tags;
 
-import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.data.DegrassiTagProvider;
 import es.degrassi.forge.init.registration.BlockRegister;
+import es.degrassi.forge.init.registration.TagRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -27,10 +26,12 @@ public final class DegrassiBlockTags extends DegrassiTagProvider<Block> {
   }
 
   private void addForgeTags() {
-    tag(BlockTags.create(new ResourceLocation("forge", "pistons")))
+    tag(TagRegistry.AllBlockTags.PISTONS.tag)
       .replace(false)
-      .add(Blocks.PISTON)
-      .add(Blocks.STICKY_PISTON);
+      .add(
+        Blocks.PISTON,
+        Blocks.STICKY_PISTON
+      );
   }
 
   private void addCustomTags() {
@@ -45,7 +46,7 @@ public final class DegrassiBlockTags extends DegrassiTagProvider<Block> {
   }
 
   private void addSolarPanels() {
-    tag(BlockTags.create(new DegrassiLocation("panels/solar_panels")))
+    tag(TagRegistry.AllBlockTags.SOLAR_PANELS.tag)
       .replace(false)
       .add(
         BlockRegister.SP1_BLOCK.get(),
@@ -60,7 +61,7 @@ public final class DegrassiBlockTags extends DegrassiTagProvider<Block> {
   }
 
   private void addMachines() {
-    tag(BlockTags.create(new DegrassiLocation("machines")))
+    tag(TagRegistry.AllBlockTags.MACHINES.tag)
       .replace(false)
       .add(
         BlockRegister.SP1_BLOCK.get(),
@@ -83,7 +84,7 @@ public final class DegrassiBlockTags extends DegrassiTagProvider<Block> {
   }
 
   private void addFurnaces() {
-    tag(BlockTags.create(new DegrassiLocation("furnaces")))
+    tag(TagRegistry.AllBlockTags.FURNACES.tag)
       .replace(false)
       .add(
         BlockRegister.IRON_FURNACE_BLOCK.get(),
@@ -95,7 +96,7 @@ public final class DegrassiBlockTags extends DegrassiTagProvider<Block> {
   }
 
   private void addBlocks() {
-    tag(BlockTags.create(new DegrassiLocation("blocks")))
+    tag(TagRegistry.AllBlockTags.BLOCKS.tag)
       .replace(false)
       .add(
         BlockRegister.MACHINE_CASING.get(),
@@ -134,33 +135,39 @@ public final class DegrassiBlockTags extends DegrassiTagProvider<Block> {
   private void addIronNeedsTags() {
     tag(BlockTags.NEEDS_IRON_TOOL)
       .replace(false)
-      .add(BlockRegister.SP1_BLOCK.get())
-      .add(BlockRegister.SP2_BLOCK.get())
-      .add(BlockRegister.SP3_BLOCK.get())
-      .add(BlockRegister.SP4_BLOCK.get())
-      .add(BlockRegister.SP5_BLOCK.get())
-      .add(BlockRegister.SP6_BLOCK.get())
-      .add(BlockRegister.SP7_BLOCK.get())
-      .add(BlockRegister.SP8_BLOCK.get())
-      .add(BlockRegister.GOLD_FURNACE_BLOCK.get())
-      .add(BlockRegister.DIAMOND_FURNACE_BLOCK.get())
-      .add(BlockRegister.MELTER_BLOCK.get())
-      .add(BlockRegister.UPGRADE_MAKER.get())
-      .add(BlockRegister.JEWELRY_GENERATOR.get());
+      .add(
+        BlockRegister.SP1_BLOCK.get(),
+        BlockRegister.SP2_BLOCK.get(),
+        BlockRegister.SP3_BLOCK.get(),
+        BlockRegister.SP4_BLOCK.get(),
+        BlockRegister.SP5_BLOCK.get(),
+        BlockRegister.SP6_BLOCK.get(),
+        BlockRegister.SP7_BLOCK.get(),
+        BlockRegister.SP8_BLOCK.get(),
+        BlockRegister.GOLD_FURNACE_BLOCK.get(),
+        BlockRegister.DIAMOND_FURNACE_BLOCK.get(),
+        BlockRegister.MELTER_BLOCK.get(),
+        BlockRegister.UPGRADE_MAKER.get(),
+        BlockRegister.JEWELRY_GENERATOR.get()
+      );
   }
 
   private void addDiamondNeedsTags() {
     tag(BlockTags.NEEDS_DIAMOND_TOOL)
       .replace(false)
-      .add(BlockRegister.EMERALD_FURNACE_BLOCK.get())
-      .add(BlockRegister.NETHERITE_FURNACE_BLOCK.get());
+      .add(
+        BlockRegister.EMERALD_FURNACE_BLOCK.get(),
+        BlockRegister.NETHERITE_FURNACE_BLOCK.get()
+      );
   }
 
   private void addStoneNeedsTags() {
     tag(BlockTags.NEEDS_STONE_TOOL)
       .replace(false)
-      .add(BlockRegister.MACHINE_CASING.get())
-      .add(BlockRegister.IRON_FURNACE_BLOCK.get());
+      .add(
+        BlockRegister.MACHINE_CASING.get(),
+        BlockRegister.IRON_FURNACE_BLOCK.get()
+      );
   }
 
   private void addAxeMineableTags() {
@@ -182,22 +189,24 @@ public final class DegrassiBlockTags extends DegrassiTagProvider<Block> {
   private void addPickaxeMineableTags() {
     tag(BlockTags.MINEABLE_WITH_PICKAXE)
       .replace(false)
-      .add(BlockRegister.SP1_BLOCK.get())
-      .add(BlockRegister.SP2_BLOCK.get())
-      .add(BlockRegister.SP3_BLOCK.get())
-      .add(BlockRegister.SP4_BLOCK.get())
-      .add(BlockRegister.SP5_BLOCK.get())
-      .add(BlockRegister.SP6_BLOCK.get())
-      .add(BlockRegister.SP7_BLOCK.get())
-      .add(BlockRegister.SP8_BLOCK.get())
-      .add(BlockRegister.IRON_FURNACE_BLOCK.get())
-      .add(BlockRegister.GOLD_FURNACE_BLOCK.get())
-      .add(BlockRegister.DIAMOND_FURNACE_BLOCK.get())
-      .add(BlockRegister.EMERALD_FURNACE_BLOCK.get())
-      .add(BlockRegister.NETHERITE_FURNACE_BLOCK.get())
-      .add(BlockRegister.MELTER_BLOCK.get())
-      .add(BlockRegister.UPGRADE_MAKER.get())
-      .add(BlockRegister.MACHINE_CASING.get())
-      .add(BlockRegister.JEWELRY_GENERATOR.get());
+      .add(
+        BlockRegister.SP1_BLOCK.get(),
+        BlockRegister.SP2_BLOCK.get(),
+        BlockRegister.SP3_BLOCK.get(),
+        BlockRegister.SP4_BLOCK.get(),
+        BlockRegister.SP5_BLOCK.get(),
+        BlockRegister.SP6_BLOCK.get(),
+        BlockRegister.SP7_BLOCK.get(),
+        BlockRegister.SP8_BLOCK.get(),
+        BlockRegister.IRON_FURNACE_BLOCK.get(),
+        BlockRegister.GOLD_FURNACE_BLOCK.get(),
+        BlockRegister.DIAMOND_FURNACE_BLOCK.get(),
+        BlockRegister.EMERALD_FURNACE_BLOCK.get(),
+        BlockRegister.NETHERITE_FURNACE_BLOCK.get(),
+        BlockRegister.MELTER_BLOCK.get(),
+        BlockRegister.UPGRADE_MAKER.get(),
+        BlockRegister.MACHINE_CASING.get(),
+        BlockRegister.JEWELRY_GENERATOR.get()
+      );
   }
 }

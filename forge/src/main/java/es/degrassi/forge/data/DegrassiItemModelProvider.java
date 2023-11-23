@@ -39,21 +39,26 @@ public class DegrassiItemModelProvider extends ItemModelProvider {
     simpleItem(ItemRegister.SPEED_UPGRADE);
 
     itemsWithPath();
-  }
-
-  private void itemsWithPath() {
+    itemsWithTexture();
     itemsWithPathAndTexture();
   }
 
+  private void itemsWithPath() {
+
+  }
+
+  private void itemsWithTexture() {
+  }
+
   private void itemsWithPathAndTexture() {
-    simpleItem(ItemRegister.PHOTOVOLTAIC_CELL_I, "panel", "sp1");
-    simpleItem(ItemRegister.PHOTOVOLTAIC_CELL_II, "panel", "sp2");
-    simpleItem(ItemRegister.PHOTOVOLTAIC_CELL_III, "panel", "sp3");
-    simpleItem(ItemRegister.PHOTOVOLTAIC_CELL_IV, "panel", "sp4");
-    simpleItem(ItemRegister.PHOTOVOLTAIC_CELL_V, "panel", "sp5");
-    simpleItem(ItemRegister.PHOTOVOLTAIC_CELL_VI, "panel", "sp6");
-    simpleItem(ItemRegister.PHOTOVOLTAIC_CELL_VII, "panel", "sp7");
-    simpleItem(ItemRegister.PHOTOVOLTAIC_CELL_VIII, "panel", "sp8");
+    simpleItem(ItemRegister.PHOTOVOLTAIC_CELL_I, "panel", "pc1");
+    simpleItem(ItemRegister.PHOTOVOLTAIC_CELL_II, "panel", "pc2");
+    simpleItem(ItemRegister.PHOTOVOLTAIC_CELL_III, "panel", "pc3");
+    simpleItem(ItemRegister.PHOTOVOLTAIC_CELL_IV, "panel", "pc4");
+    simpleItem(ItemRegister.PHOTOVOLTAIC_CELL_V, "panel", "pc5");
+    simpleItem(ItemRegister.PHOTOVOLTAIC_CELL_VI, "panel", "pc6");
+    simpleItem(ItemRegister.PHOTOVOLTAIC_CELL_VII, "panel", "pc7");
+    simpleItem(ItemRegister.PHOTOVOLTAIC_CELL_VIII, "panel", "pc8");
   }
 
   private void blockItems() {
@@ -85,6 +90,10 @@ public class DegrassiItemModelProvider extends ItemModelProvider {
 
   private ItemModelBuilder simpleItem(@NotNull RegistrySupplier<? extends Item> item, String path) {
     return simpleItem(item, path, null);
+  }
+
+  private ItemModelBuilder simpleItemTextured(RegistrySupplier<? extends Item> item, String texture) {
+    return simpleItem(item, null, texture);
   }
 
   private ItemModelBuilder simpleItem(@NotNull RegistrySupplier<? extends Item> item, String path, String texture) {

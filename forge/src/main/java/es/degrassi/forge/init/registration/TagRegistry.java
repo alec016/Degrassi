@@ -25,40 +25,26 @@ import static es.degrassi.forge.init.registration.TagRegistry.NameSpace.MOD;
 
 @SuppressWarnings("unused")
 public class TagRegistry {
-  public static <T> TagKey<T> optionalTag(IForgeRegistry<T> registry,
-                                          ResourceLocation id) {
+  public static <T> @NotNull TagKey<T> optionalTag(@NotNull IForgeRegistry<T> registry, ResourceLocation id) {
     return Objects.requireNonNull(registry.tags())
       .createOptionalTagKey(id, Collections.emptySet());
   }
 
-  public static <T> TagKey<T> forgeTag(IForgeRegistry<T> registry, String path) {
+  public static <T> @NotNull TagKey<T> forgeTag(IForgeRegistry<T> registry, String path) {
     return optionalTag(registry, new ResourceLocation("forge", path));
   }
 
-  public static TagKey<Block> forgeBlockTag(String path) {
+  public static @NotNull TagKey<Block> forgeBlockTag(String path) {
     return forgeTag(ForgeRegistries.BLOCKS, path);
   }
 
-  public static TagKey<Item> forgeItemTag(String path) {
+  public static @NotNull TagKey<Item> forgeItemTag(String path) {
     return forgeTag(ForgeRegistries.ITEMS, path);
   }
 
-  public static TagKey<Fluid> forgeFluidTag(String path) {
+  public static @NotNull TagKey<Fluid> forgeFluidTag(String path) {
     return forgeTag(ForgeRegistries.FLUIDS, path);
   }
-
-//  public static final TagKey<Item> I_ITEMS = ItemTags.create(new DegrassiLocation("items"));
-//  public static final TagKey<Item> I_BLOCKS = ItemTags.create(new DegrassiLocation("blocks"));
-//  public static final TagKey<Item> I_PANELS = ItemTags.create(new DegrassiLocation("panels"));
-//  public static final TagKey<Item> I_MACHINES = ItemTags.create(new DegrassiLocation("machines"));
-//  public static final TagKey<Item> I_FURNACES = ItemTags.create(new DegrassiLocation("furnaces"));
-//  public static final TagKey<Item> I_UPGRADES = ItemTags.create(new DegrassiLocation("upgrades"));
-//
-//  public static final TagKey<Block> B_BLOCKS = BlockTags.create(new DegrassiLocation("blocks"));
-//  public static final TagKey<Block> B_PANELS = BlockTags.create(new DegrassiLocation("panels"));
-//  public static final TagKey<Block> B_MACHINES = BlockTags.create(new DegrassiLocation("machines"));
-//  public static final TagKey<Block> B_FURNACES = BlockTags.create(new DegrassiLocation("furnaces"));
-//  public static final TagKey<Block> B_UPGRADES = BlockTags.create(new DegrassiLocation("upgrades"));
 
   public enum NameSpace {
     MOD(Degrassi.MODID, false, true),
@@ -78,6 +64,7 @@ public class TagRegistry {
   }
 
   public enum AllBlockTags {
+    PISTONS(NameSpace.FORGE),
     BLOCKS,
     FURNACES,
     MACHINES,
@@ -124,6 +111,7 @@ public class TagRegistry {
   }
 
   public enum AllItemTags {
+    PISTONS(NameSpace.FORGE),
     ITEMS,
     PHOTOVOLTAIC_CELLS(MOD, "panels/photovoltaic_cells"),
     UPGRADES,
@@ -150,7 +138,7 @@ public class TagRegistry {
       this(namespace, null, optional, alwaysDatagen);
     }
 
-    AllItemTags(NameSpace namespace, String path, boolean optional, boolean alwaysDatagen) {
+    AllItemTags(@NotNull NameSpace namespace, String path, boolean optional, boolean alwaysDatagen) {
       ResourceLocation id = new ResourceLocation(namespace.id, path == null ? name().toLowerCase(Locale.ROOT) : path);
       if (optional) {
         tag = optionalTag(ForgeRegistries.ITEMS, id);
@@ -161,12 +149,12 @@ public class TagRegistry {
     }
 
     @SuppressWarnings("deprecation")
-    public boolean matches(Item item) {
+    public boolean matches(@NotNull Item item) {
       return item.builtInRegistryHolder()
         .is(tag);
     }
 
-    public boolean matches(ItemStack stack) {
+    public boolean matches(@NotNull ItemStack stack) {
       return stack.is(tag);
     }
     private static void init() {
@@ -175,7 +163,7 @@ public class TagRegistry {
   }
 
   public enum AllFluidTags {
-    ;
+    FLUIDS;
 
     public final TagKey<Fluid> tag;
     public final boolean alwaysDatagen;
@@ -196,7 +184,7 @@ public class TagRegistry {
       this(namespace, null, optional, alwaysDatagen);
     }
 
-    AllFluidTags(NameSpace namespace, String path, boolean optional, boolean alwaysDatagen) {
+    AllFluidTags(@NotNull NameSpace namespace, String path, boolean optional, boolean alwaysDatagen) {
       ResourceLocation id = new ResourceLocation(namespace.id, path == null ? name().toLowerCase(Locale.ROOT) : path);
       if (optional) {
         tag = optionalTag(ForgeRegistries.FLUIDS, id);
@@ -207,11 +195,11 @@ public class TagRegistry {
     }
 
     @SuppressWarnings("deprecation")
-    public boolean matches(Fluid fluid) {
+    public boolean matches(@NotNull Fluid fluid) {
       return fluid.is(tag);
     }
 
-    public boolean matches(FluidState state) {
+    public boolean matches(@NotNull FluidState state) {
       return state.is(tag);
     }
 

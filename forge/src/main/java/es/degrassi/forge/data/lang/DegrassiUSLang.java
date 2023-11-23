@@ -42,7 +42,7 @@ public class DegrassiUSLang extends DegrassiLangProvider {
     add(BlockRegister.SP1_BLOCK.get(), "Solar Panel Tier I");
     add(BlockRegister.SP2_BLOCK.get(), "Solar Panel Tier II");
     add(BlockRegister.SP3_BLOCK.get(), "Solar Panel Tier III");
-    add(BlockRegister.SP4_BLOCK.get(), "Solar Panel Tier VI");
+    add(BlockRegister.SP4_BLOCK.get(), "Solar Panel Tier IV");
     add(BlockRegister.SP5_BLOCK.get(), "Solar Panel Tier V");
     add(BlockRegister.SP6_BLOCK.get(), "Solar Panel Tier VI");
     add(BlockRegister.SP7_BLOCK.get(), "Solar Panel Tier VII");

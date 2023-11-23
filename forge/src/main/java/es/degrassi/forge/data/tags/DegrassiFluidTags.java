@@ -1,12 +1,9 @@
 package es.degrassi.forge.data.tags;
 
-import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.data.DegrassiTagProvider;
+import es.degrassi.forge.init.registration.TagRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
@@ -27,7 +24,7 @@ public final class DegrassiFluidTags extends DegrassiTagProvider<Fluid> {
   }
 
   private void addFluids() {
-    tag(FluidTags.create(new ResourceLocation(Degrassi.MODID, "fluids")))
+    tag(TagRegistry.AllFluidTags.FLUIDS.tag)
       .replace(false);
   }
 }

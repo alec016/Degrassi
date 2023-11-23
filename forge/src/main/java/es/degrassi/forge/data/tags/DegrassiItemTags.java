@@ -1,15 +1,13 @@
 package es.degrassi.forge.data.tags;
 
-import es.degrassi.common.DegrassiLocation;
-import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.data.DegrassiTagProvider;
 import es.degrassi.forge.init.registration.BlockRegister;
 import es.degrassi.forge.init.registration.ItemRegister;
+import es.degrassi.forge.init.registration.TagRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +19,17 @@ public final class DegrassiItemTags extends DegrassiTagProvider<Item> {
 
   @Override
   protected void addTags() {
+    addForgeTags();
     addCustomTags();
+  }
+
+  private void addForgeTags() {
+    tag(TagRegistry.AllItemTags.PISTONS.tag)
+      .replace(false)
+      .add(
+        Blocks.PISTON.asItem(),
+        Blocks.STICKY_PISTON.asItem()
+      );
   }
 
   private void addCustomTags() {
@@ -33,7 +41,7 @@ public final class DegrassiItemTags extends DegrassiTagProvider<Item> {
   }
 
   private void addItems(){
-    tag(ItemTags.create(new ResourceLocation(Degrassi.MODID, "items")))
+    tag(TagRegistry.AllItemTags.ITEMS.tag)
       .replace(false)
       .add(
         ItemRegister.GOLD_COIN.get(),
@@ -55,6 +63,7 @@ public final class DegrassiItemTags extends DegrassiTagProvider<Item> {
         ItemRegister.PHOTOVOLTAIC_CELL_VI.get(),
         ItemRegister.PHOTOVOLTAIC_CELL_VII.get(),
         ItemRegister.PHOTOVOLTAIC_CELL_VIII.get(),
+        ItemRegister.CIRCUIT.get(),
 
         BlockRegister.MACHINE_CASING.get().asItem(),
         BlockRegister.SP1_BLOCK.get().asItem(),
@@ -77,7 +86,7 @@ public final class DegrassiItemTags extends DegrassiTagProvider<Item> {
   }
 
   private void addMachines() {
-    tag(ItemTags.create(new DegrassiLocation("machines")))
+    tag(TagRegistry.AllItemTags.MACHINES.tag)
       .replace(false)
       .add(
         BlockRegister.SP1_BLOCK.get().asItem(),
@@ -100,7 +109,7 @@ public final class DegrassiItemTags extends DegrassiTagProvider<Item> {
   }
 
   private void addUpgrades() {
-    tag(ItemTags.create(new DegrassiLocation("upgrades")))
+    tag(TagRegistry.AllItemTags.UPGRADES.tag)
       .replace(false)
       .add(
         ItemRegister.UPGRADE_BASE.get(),
@@ -114,7 +123,7 @@ public final class DegrassiItemTags extends DegrassiTagProvider<Item> {
   }
 
   private void addFurnaces() {
-    tag(ItemTags.create(new DegrassiLocation("furnaces")))
+    tag(TagRegistry.AllItemTags.FURNACES.tag)
       .replace(false)
       .add(
         BlockRegister.IRON_FURNACE_BLOCK.get().asItem(),
@@ -131,7 +140,7 @@ public final class DegrassiItemTags extends DegrassiTagProvider<Item> {
   }
 
   private void addPhotovoltaicCells() {
-    tag(ItemTags.create(new DegrassiLocation("panels/photovoltaic_cells")))
+    tag(TagRegistry.AllItemTags.PHOTOVOLTAIC_CELLS.tag)
       .replace(false)
       .add(
         ItemRegister.PHOTOVOLTAIC_CELL_I.get(),
@@ -146,7 +155,7 @@ public final class DegrassiItemTags extends DegrassiTagProvider<Item> {
   }
 
   private void addSolarPanels() {
-    tag(ItemTags.create(new DegrassiLocation("panels/solar_panels")))
+    tag(TagRegistry.AllItemTags.SOLAR_PANELS.tag)
       .replace(false)
       .add(
         BlockRegister.SP1_BLOCK.get().asItem(),

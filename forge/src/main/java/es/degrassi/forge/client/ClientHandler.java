@@ -9,6 +9,7 @@ import dev.architectury.registry.menu.MenuRegistry;
 import es.degrassi.forge.init.entity.FurnaceEntity;
 import es.degrassi.forge.init.entity.MelterEntity;
 import es.degrassi.forge.init.entity.UpgradeMakerEntity;
+import es.degrassi.forge.init.entity.generators.JewelryGeneratorEntity;
 import es.degrassi.forge.init.entity.panel.SolarPanelEntity;
 import es.degrassi.forge.init.gui.screen.FurnaceScreen;
 import es.degrassi.forge.init.gui.screen.MelterScreen;
@@ -187,5 +188,13 @@ public class ClientHandler {
         return upgradeMaker;
     }
     throw new IllegalStateException("Trying to open a Melter container without clicking on a Melter block");
+  }
+
+  public static JewelryGeneratorEntity getClientSideJewelryGeneratorEntity(BlockPos pos) {
+    if (Minecraft.getInstance().level != null) {
+      BlockEntity tile = Minecraft.getInstance().level.getBlockEntity(pos);
+      if (tile instanceof JewelryGeneratorEntity jewelryGenerator) return jewelryGenerator;
+    }
+    throw new IllegalStateException("Trying to open a Jewelry Generator container without clicking on a Jewelry Generator block");
   }
 }

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "degrassi:item/panel/sp4"
+    "layer0": "degrassi:item/panel/pc4"
   }
 }
