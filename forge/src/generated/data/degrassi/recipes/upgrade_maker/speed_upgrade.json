@@ -1,16 +1,17 @@
 {
   "type": "degrassi:upgrade_maker",
-  "time": 2000,
   "energy": 5000,
+  "fluidInput": {
+    "fluid": "minecraft:lava"
+  },
   "input1": {
     "item": "degrassi:upgrade_base"
   },
   "input2": {
     "item": "degrassi:gold_coin"
   },
-  "fluidInput": {
-    "fluid": "minecraft:lava"
+  "output": {
+    "item": "degrassi:speed_upgrade"
   },
-  "inputFluidAmount": 1000,
-  "output": "degrassi:speed_upgrade"
+  "time": 2000
 }

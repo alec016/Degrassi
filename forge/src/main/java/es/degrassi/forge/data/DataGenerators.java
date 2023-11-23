@@ -21,6 +21,7 @@ public class DataGenerators {
     ExistingFileHelper fileHelper = event.getExistingFileHelper();
 
     generator.addProvider(event.includeServer(), new DegrassiLootTableProvider(generator));
+    generator.addProvider(event.includeServer(), new DegrassiRecipeProvider(generator));
     generator.addProvider(event.includeClient(), new DegrassiBlocksStateProvider(generator, fileHelper));
     generator.addProvider(event.includeClient(), new DegrassiItemModelProvider(generator, fileHelper));
     DegrassiTagProvider.generate(event.includeServer(), generator, fileHelper);
