@@ -227,8 +227,7 @@ public class SolarPanelEntity extends PanelEntity {
   public @NotNull CompoundTag getUpdateTag() {
     CompoundTag nbt = super.getUpdateTag();
     nbt.put("panel.inventory", itemHandler.serializeNBT());
-    nbt.putInt("panel.energy", ENERGY_STORAGE.getEnergyStored());
-    nbt.putInt("panel.capacity", ENERGY_STORAGE.getMaxEnergyStored());
+    nbt.put("panel.energy", ENERGY_STORAGE.serializeNBT());
     return nbt;
   }
 

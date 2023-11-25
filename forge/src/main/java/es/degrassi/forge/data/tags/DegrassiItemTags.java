@@ -64,6 +64,7 @@ public final class DegrassiItemTags extends DegrassiTagProvider<Item> {
         ItemRegister.PHOTOVOLTAIC_CELL_VII.get(),
         ItemRegister.PHOTOVOLTAIC_CELL_VIII.get(),
         ItemRegister.CIRCUIT.get(),
+        ItemRegister.MOLTEN_RED_MATTER_BUCKET.get(),
 
         BlockRegister.MACHINE_CASING.get().asItem(),
         BlockRegister.SP1_BLOCK.get().asItem(),

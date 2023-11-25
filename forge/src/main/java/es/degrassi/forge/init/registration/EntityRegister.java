@@ -251,6 +251,6 @@ public class EntityRegister {
   );
 
   public static void register() {
-    BLOCK_ENTITIES.register();
+//    BLOCK_ENTITIES.register();
   }
 }

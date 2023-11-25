@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "d": {
+      "tag": "forge:gems/diamond"
+    },
+    "g": {
+      "tag": "forge:glass"
+    },
+    "l": {
+      "tag": "forge:dusts/glowstone"
+    },
+    "m": {
+      "tag": "forge:obsidian"
+    },
+    "p": {
+      "item": "degrassi:photovoltaic_cell_7"
+    }
+  },
+  "pattern": [
+    "ggg",
+    "ldl",
+    "mpm"
+  ],
+  "result": {
+    "item": "degrassi:photovoltaic_cell_8"
+  }
+}

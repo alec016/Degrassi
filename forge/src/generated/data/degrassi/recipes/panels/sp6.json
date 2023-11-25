@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "i": {
+      "tag": "forge:storage_blocks/diamond"
+    },
+    "p": {
+      "item": "degrassi:photovoltaic_cell_6"
+    },
+    "r": {
+      "item": "minecraft:redstone_lamp"
+    },
+    "s": {
+      "item": "degrassi:solar_panel_tier_5"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "srs",
+    "sis"
+  ],
+  "result": {
+    "item": "degrassi:solar_panel_tier_6"
+  }
+}

@@ -1,11 +1,15 @@
 package es.degrassi.forge.init.registration;
 
+import dev.architectury.core.item.ArchitecturyBucketItem;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.init.item.upgrade.*;
 import net.minecraft.core.Registry;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+
 import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
@@ -112,11 +116,16 @@ public class ItemRegister {
     () -> new Item(new Item.Properties().tab(CreativeTabs.COMMON))
   );
 
+  public static final RegistrySupplier<Item> MOLTEN_RED_MATTER_BUCKET = ITEMS.register(
+    "molten_red_matter_bucket",
+    () -> new BucketItem(FluidRegister.MOLTEN_RED_MATTER, new Item.Properties().tab(CreativeTabs.COMMON).craftRemainder(Items.BUCKET).stacksTo(1))
+  );
+
   private static RegistrySupplier<BaseUpgrade> registerUpgrade(String id, Supplier<? extends BaseUpgrade> supplier) {
     return ITEMS.register(id, supplier);
   }
 
   public static void register () {
-    ITEMS.register();
+//    ITEMS.register();
   }
 }

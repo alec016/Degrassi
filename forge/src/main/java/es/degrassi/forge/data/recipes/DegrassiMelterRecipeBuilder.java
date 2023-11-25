@@ -40,7 +40,7 @@ public class DegrassiMelterRecipeBuilder implements RecipeBuilder {
 
   @Override
   public @NotNull DegrassiMelterRecipeBuilder unlockedBy(@NotNull String criterionName, @NotNull CriterionTriggerInstance criterionTrigger) {
-//    this.advancement.addCriterion(criterionName, criterionTrigger);
+    this.advancement.addCriterion(criterionName, criterionTrigger);
     return this;
   }
 

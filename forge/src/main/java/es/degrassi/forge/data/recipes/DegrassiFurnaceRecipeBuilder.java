@@ -40,7 +40,7 @@ public class DegrassiFurnaceRecipeBuilder implements RecipeBuilder {
 
   @Override
   public @NotNull DegrassiFurnaceRecipeBuilder unlockedBy(@NotNull String criterionName, @NotNull CriterionTriggerInstance criterionTrigger) {
-//    this.advancement.addCriterion(criterionName, criterionTrigger);
+    this.advancement.addCriterion(criterionName, criterionTrigger);
     return this;
   }
 

@@ -10,6 +10,13 @@ public class DegrassiESLang extends DegrassiLangProvider {
     super(gen, "es_es");
   }
 
+  protected void addFluids() {
+    add(BlockRegister.MOLTEN_RED_MATTER_BLOCK.get(), "Materia Roja Fundida");
+    add(ItemRegister.MOLTEN_RED_MATTER_BUCKET.get(), "Cubo Materia Roja Fundida");
+    addFluid("molten_red_matter", "Materia Roja Fundida");
+    addFluidType("molten_red_matter", "Materia Roja Fundida");
+  }
+
   protected void addItems() {
     add(ItemRegister.GOLD_COIN.get(), "Moneda de Oro");
     add(ItemRegister.EFFICIENCY_UPGRADE.get(), "Mejora de Eficiencia");
@@ -116,5 +123,10 @@ public class DegrassiESLang extends DegrassiLangProvider {
   @Override
   protected void addMachineTooltips() {
     addMachineTooltip("sp", "Genera %s%s/t");
+    addMachineStatus("running", "En Ejecución");
+    addMachineStatus("idle", "En Espera");
+    addJadeConfig("melter_component_provider", "Melter Component Provider");
+    addJadeConfig("furnace_component_provider", "Furnace Component Provider");
+    addJadeConfig("upgrade_maker_component_provider", "Upgrade Maker Component Provider");
   }
 }

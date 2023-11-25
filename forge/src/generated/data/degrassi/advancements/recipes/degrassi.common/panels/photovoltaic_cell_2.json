@@ -1,0 +1,56 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "glass": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:glass"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_photovoltaic_cell_1": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "degrassi:photovoltaic_cell_1"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "degrassi:panels/photovoltaic_cell_2"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "lapis": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:gems/lapis"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_photovoltaic_cell_1",
+      "glass",
+      "lapis",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "degrassi:panels/photovoltaic_cell_2"
+    ]
+  }
+}

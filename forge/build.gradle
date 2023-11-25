@@ -13,7 +13,6 @@ loom {
     forge {
         convertAccessWideners = true
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
-//        mixinConfig "degrassi.mixins.json"
     }
 
     def generatedResources = file("src/generated")
@@ -62,8 +61,6 @@ dependencies {
     modApi "me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}"
     modApi "curse.maven:probejs-585406:4842668"
 
-    modApi "dev.architectury:architectury:${project.architectury_version}"
-
     // common module
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
@@ -77,7 +74,7 @@ dependencies {
     modLocalRuntime "curse.maven:mekanism-268560:3922056"
 
     // Jade
-    modLocalRuntime "curse.maven:jade-324717:4719987"
+    modImplementation "curse.maven:jade-324717:4719987"
 
     // KubeJS
     modImplementation "dev.latvian.mods:kubejs-forge:${kubejs_version}"

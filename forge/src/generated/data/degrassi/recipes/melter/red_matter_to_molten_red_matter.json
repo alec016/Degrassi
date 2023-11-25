@@ -1,0 +1,11 @@
+{
+  "type": "degrassi:melter",
+  "energy": 1000,
+  "input": {
+    "item": "degrassi:red_matter"
+  },
+  "output": {
+    "fluid": "degrassi:molten_red_matter"
+  },
+  "time": 500
+}

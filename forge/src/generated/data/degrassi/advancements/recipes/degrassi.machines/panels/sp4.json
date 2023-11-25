@@ -1,0 +1,71 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_clock": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:clock"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_photovoltaic_cell_4": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "degrassi:photovoltaic_cell_4"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_solar_panel_tier_3": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "degrassi:solar_panel_tier_3"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "degrassi:panels/sp4"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "iron_block": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:storage_blocks/iron"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_photovoltaic_cell_4",
+      "has_solar_panel_tier_3",
+      "has_clock",
+      "iron_block",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "degrassi:panels/sp4"
+    ]
+  }
+}

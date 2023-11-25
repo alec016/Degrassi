@@ -130,16 +130,14 @@ public abstract class PanelEntity extends BaseEntity implements IEnergyEntity, I
   protected void saveAdditional(@NotNull CompoundTag nbt) {
     super.saveAdditional(nbt);
     nbt.put("panel.inventory", itemHandler.serializeNBT());
-    nbt.putInt("panel.energy", ENERGY_STORAGE.getEnergyStored());
-    nbt.putInt("panel.capacity", ENERGY_STORAGE.getMaxEnergyStored());
+    nbt.put("panel.energy", ENERGY_STORAGE.serializeNBT());
   }
 
   @Override
   public void load(@NotNull CompoundTag nbt) {
     super.load(nbt);
     itemHandler.deserializeNBT(nbt.getCompound("panel.inventory"));
-    ENERGY_STORAGE.setEnergy(nbt.getInt("panel.energy"));
-    ENERGY_STORAGE.setCapacity(nbt.getInt("panel.capacity"));
+    ENERGY_STORAGE.deserializeNBT(nbt.getCompound("panel.energy"));
   }
 
   @Override
@@ -158,7 +156,7 @@ public abstract class PanelEntity extends BaseEntity implements IEnergyEntity, I
   }
 
   public void setCapacityLevel(int capacity) {
-    ENERGY_STORAGE.setCapacity(capacity);
+    this.ENERGY_STORAGE.setCapacity(capacity);
     setEnergyToCapacity();
     setChanged();
   }

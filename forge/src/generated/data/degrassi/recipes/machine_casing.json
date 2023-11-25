@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "b": {
+      "tag": "forge:storage_blocks/iron"
+    },
+    "d": {
+      "tag": "forge:storage_blocks/diamond"
+    },
+    "i": {
+      "tag": "forge:glass"
+    }
+  },
+  "pattern": [
+    "bib",
+    "idi",
+    "bib"
+  ],
+  "result": {
+    "item": "degrassi:machine_casing"
+  }
+}

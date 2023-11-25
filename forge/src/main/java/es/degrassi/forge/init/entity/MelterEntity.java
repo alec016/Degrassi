@@ -23,10 +23,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Containers;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -328,21 +326,17 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
   public @NotNull CompoundTag getUpdateTag() {
     CompoundTag nbt = super.getUpdateTag();
     nbt.put("melter.inventory", itemHandler.serializeNBT());
-    nbt.putInt("melter.energy", ENERGY_STORAGE.getEnergyStored());
-    nbt.putInt("melter.energy.capacity", ENERGY_STORAGE.getMaxEnergyStored());
-    nbt.putInt("melter.progress", progressStorage.getProgress());
-    nbt.putInt("melter.maxProgress", progressStorage.getMaxProgress());
+    nbt.put("melter.energy", ENERGY_STORAGE.serializeNBT());
+    nbt.put("melter.progress", progressStorage.serializeNBT());
     nbt = fluidStorage.writeToNBT(nbt);
     return nbt;
   }
 
   @Override
-  protected void saveAdditional(@NotNull CompoundTag nbt) {
+  public void saveAdditional(@NotNull CompoundTag nbt) {
     nbt.put("melter.inventory", itemHandler.serializeNBT());
-    nbt.putInt("melter.energy", ENERGY_STORAGE.getEnergyStored());
-    nbt.putInt("melter.energy.capacity", ENERGY_STORAGE.getMaxEnergyStored());
-    nbt.putInt("melter.progress", progressStorage.getProgress());
-    nbt.putInt("melter.maxProgress", progressStorage.getMaxProgress());
+    nbt.put("melter.energy", ENERGY_STORAGE.serializeNBT());
+    nbt.put("melter.progress", progressStorage.serializeNBT());
     nbt = fluidStorage.writeToNBT(nbt);
     nbt.putBoolean("ForceFluidLevel", true);
     nbt.putBoolean("LazySync", true);
@@ -353,10 +347,8 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
   public void load(@NotNull CompoundTag nbt) {
     super.load(nbt);
     itemHandler.deserializeNBT(nbt.getCompound("melter.inventory"));
-    ENERGY_STORAGE.setEnergy(nbt.getInt("melter.energy"));
-    ENERGY_STORAGE.setCapacity(nbt.getInt("melter.energy.capacity"));
-    progressStorage.setProgress(nbt.getInt("melter.progress"));
-    progressStorage.setMaxProgress(nbt.getInt("melter.maxProgress"));
+    ENERGY_STORAGE.deserializeNBT(nbt.getCompound("melter.energy"));
+    progressStorage.deserializeNBT(nbt.getCompound("melter.progress"));
     fluidStorage.readFromNBT(nbt);
     if (nbt.contains("ForceFluidLevel") || fluidLevel == null)
       fluidLevel = LerpedFloat.linear()
@@ -383,10 +375,6 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
   }
 
   public ItemStack getRenderStack() {
-//    ItemStack stack = ItemStack.EMPTY;
-//    if (!itemHandler.getStackInSlot(2).isEmpty())  stack = itemHandler.getStackInSlot(2);
-//    return stack;
-
     return itemHandler.getStackInSlot(2).isEmpty() ? ItemStack.EMPTY : itemHandler.getStackInSlot(2);
   }
 

@@ -42,7 +42,7 @@ public class DegrassiUpgradeMakerRecipeBuilder implements RecipeBuilder {
 
   @Override
   public @NotNull DegrassiUpgradeMakerRecipeBuilder unlockedBy(@NotNull String criterionName, @NotNull CriterionTriggerInstance criterionTrigger) {
-//    this.advancement.addCriterion(criterionName, criterionTrigger);
+    this.advancement.addCriterion(criterionName, criterionTrigger);
     return this;
   }
 

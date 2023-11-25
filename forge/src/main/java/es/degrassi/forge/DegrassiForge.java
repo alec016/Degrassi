@@ -3,6 +3,7 @@ package es.degrassi.forge;
 import dev.architectury.platform.forge.EventBuses;
 import es.degrassi.forge.init.entity.renderer.MelterRenderer;
 import es.degrassi.forge.init.registration.EntityRegister;
+import es.degrassi.forge.init.registration.FluidTypeRegister;
 import es.degrassi.forge.init.registration.Register;
 import es.degrassi.forge.integration.config.DegrassiConfig;
 import es.degrassi.forge.util.DegrassiLogger;
@@ -12,6 +13,7 @@ import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -27,7 +29,8 @@ public class DegrassiForge {
     AutoConfig.register(DegrassiConfig.class, PartitioningSerializer.wrap(JanksonConfigSerializer::new));
 
     Degrassi.init();
-    Register.register();
+    IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+    Register.register(bus);
 
     MinecraftForge.EVENT_BUS.register(DegrassiForge.class);
   }

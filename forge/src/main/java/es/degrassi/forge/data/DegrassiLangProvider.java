@@ -18,13 +18,13 @@ public abstract class DegrassiLangProvider extends LanguageProvider {
     generator.addProvider(event.includeClient(), new DegrassiUSLang(generator));
   }
 
-
   @Override
   protected void addTranslations() {
     addItemGroups();
     addItems();
     addBlocks();
     addEntities();
+    addFluids();
     addGuiElements();
     addUpgradeTooltips();
     addJei();
@@ -42,10 +42,15 @@ public abstract class DegrassiLangProvider extends LanguageProvider {
   protected abstract void addJeiGuiElements();
   protected abstract void addJeiRecipes();
   protected abstract void addMachineTooltips();
+  protected abstract void addFluids();
 
   protected void addJei() {
     addJeiGuiElements();
     addJeiRecipes();
+  }
+
+  protected void addFluid(String name, String value) {
+    add("fluid." + Degrassi.MODID + "." + name, value);
   }
 
   protected void addItemGroup(String name, String value) {
@@ -73,5 +78,17 @@ public abstract class DegrassiLangProvider extends LanguageProvider {
 
   protected void addMachineTooltip(String machine, String value) {
     add(Degrassi.MODID + ".machine." + machine + ".tooltip", value);
+  }
+
+  protected void addMachineStatus(String status, String value) {
+    add(Degrassi.MODID + ".machine." + status, value);
+  }
+
+  protected void addJadeConfig(String provider, String value) {
+    add("config.jade.plugin_" + Degrassi.MODID + "." + provider, value);
+  }
+
+  protected void addFluidType(String fluid, String value) {
+    add("fluid_type." + Degrassi.MODID + "." + fluid, value);
   }
 }

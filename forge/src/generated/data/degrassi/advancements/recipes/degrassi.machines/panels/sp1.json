@@ -1,0 +1,58 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_machine_casing": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "degrassi:machine_casing"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_photovoltaic_cell_1": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "degrassi:photovoltaic_cell_1"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "degrassi:panels/sp1"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "iron_block": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:storage_blocks/iron"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_photovoltaic_cell_1",
+      "has_machine_casing",
+      "iron_block",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "degrassi:panels/sp1"
+    ]
+  }
+}

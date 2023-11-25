@@ -16,6 +16,9 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -129,6 +132,11 @@ public class BlockRegister {
     CreativeTabs.MACHINES
   );
 
+  public static final RegistrySupplier<LiquidBlock> MOLTEN_RED_MATTER_BLOCK = BLOCKS.register(
+    "molten_red_matter",
+    () -> new LiquidBlock(FluidRegister.MOLTEN_RED_MATTER, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).lightLevel(arg -> 13).noLootTable())
+  );
+
   private static <T extends Block> RegistrySupplier<T> registerBlock(String name, Supplier<T> block, CreativeModeTab tab) {
     RegistrySupplier<T> toReturn = BLOCKS.register(name, block);
     registerBlockItem(name, toReturn, tab);
@@ -141,7 +149,7 @@ public class BlockRegister {
   }
 
   public static void register() {
-    BLOCKS.register();
+//    BLOCKS.register();
   }
 
   public static @NotNull List<ItemStack> getSolarPanelItemStacks() {

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "i": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "pattern": [
+    " i ",
+    "iii",
+    " i "
+  ],
+  "result": {
+    "item": "degrassi:modifier_base"
+  }
+}

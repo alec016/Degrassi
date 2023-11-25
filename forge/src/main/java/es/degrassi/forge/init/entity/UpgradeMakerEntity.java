@@ -1,6 +1,5 @@
 package es.degrassi.forge.init.entity;
 
-import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.init.block.FurnaceBlock;
 import es.degrassi.forge.init.block.UpgradeMaker;
 import es.degrassi.forge.init.entity.type.*;
@@ -15,7 +14,6 @@ import es.degrassi.forge.network.EnergyPacket;
 import es.degrassi.forge.network.FluidPacket;
 import es.degrassi.forge.network.ItemPacket;
 import es.degrassi.forge.network.ProgressPacket;
-import es.degrassi.forge.util.DegrassiLogger;
 import es.degrassi.forge.util.storage.AbstractEnergyStorage;
 import es.degrassi.forge.util.storage.ProgressStorage;
 import net.minecraft.core.BlockPos;
@@ -24,10 +22,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Containers;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -115,12 +111,6 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
             .sendToAll(level.getServer());
         }
       }
-//      else if(level != null && level.isClientSide()) {
-//        if (fluidLevel == null)
-//          fluidLevel = LerpedFloat.linear()
-//            .startWithValue(getFillState());
-//        fluidLevel.chase(getFillState(), .5f, LerpedFloat.Chaser.EXP);
-//      }
     }
     @Override
     public boolean isFluidValid(FluidStack stack) {
@@ -326,24 +316,18 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
   public @NotNull CompoundTag getUpdateTag() {
     CompoundTag nbt = super.getUpdateTag();
     nbt.put("upgrade_maker.inventory", itemHandler.serializeNBT());
-    nbt.putInt("upgrade_maker.energy", ENERGY_STORAGE.getEnergyStored());
-    nbt.putInt("upgrade_maker.energy.capacity", ENERGY_STORAGE.getMaxEnergyStored());
-    nbt.putInt("upgrade_maker.progress", progressStorage.getProgress());
-    nbt.putInt("upgrade_maker.maxProgress", progressStorage.getMaxProgress());
+    nbt.put("upgrade_maker.energy", ENERGY_STORAGE.serializeNBT());
+    nbt.put("upgrade_maker.progress", progressStorage.serializeNBT());
     nbt = fluidStorage.writeToNBT(nbt);
     return nbt;
   }
 
   @Override
-  protected void saveAdditional(@NotNull CompoundTag nbt) {
+  public void saveAdditional(@NotNull CompoundTag nbt) {
     nbt.put("upgrade_maker.inventory", itemHandler.serializeNBT());
-    nbt.putInt("upgrade_maker.energy", ENERGY_STORAGE.getEnergyStored());
-    nbt.putInt("upgrade_maker.energy.capacity", ENERGY_STORAGE.getMaxEnergyStored());
-    nbt.putInt("upgrade_maker.progress", progressStorage.getProgress());
-    nbt.putInt("upgrade_maker.maxProgress", progressStorage.getMaxProgress());
+    nbt.put("upgrade_maker.energy", ENERGY_STORAGE.serializeNBT());
+    nbt.put("upgrade_maker.progress", progressStorage.serializeNBT());
     nbt = fluidStorage.writeToNBT(nbt);
-//    nbt.putBoolean("ForceFluidLevel", true);
-//    nbt.putBoolean("LazySync", true);
     super.saveAdditional(nbt);
   }
 
@@ -351,25 +335,14 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
   public void load(@NotNull CompoundTag nbt) {
     super.load(nbt);
     itemHandler.deserializeNBT(nbt.getCompound("upgrade_maker.inventory"));
-    ENERGY_STORAGE.setEnergy(nbt.getInt("upgrade_maker.energy"));
-    ENERGY_STORAGE.setCapacity(nbt.getInt("upgrade_maker.energy.capacity"));
-    progressStorage.setProgress(nbt.getInt("upgrade_maker.progress"));
-    progressStorage.setMaxProgress(nbt.getInt("upgrade_maker.maxProgress"));
+    ENERGY_STORAGE.deserializeNBT(nbt.getCompound("upgrade_maker.energy"));
+    progressStorage.deserializeNBT(nbt.getCompound("upgrade_maker.progress"));
     fluidStorage.readFromNBT(nbt);
-//    if (nbt.contains("ForceFluidLevel") || fluidLevel == null)
-//      fluidLevel = LerpedFloat.linear()
-//        .startWithValue(getFillState());
-//    if (nbt.contains("LazySync"))
-//      fluidLevel.chase(fluidLevel.getChaseTarget(), 0.125f, LerpedFloat.Chaser.EXP);
   }
 
   @Override
   public void handleUpdateTag(CompoundTag tag) {
     load(tag);
-  }
-
-  public float getFillState() {
-    return (float) fluidStorage.getFluidAmount() / fluidStorage.getCapacity();
   }
 
 }

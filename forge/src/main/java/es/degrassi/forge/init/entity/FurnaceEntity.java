@@ -8,6 +8,7 @@ import es.degrassi.forge.init.recipe.recipes.FurnaceRecipe;
 import es.degrassi.forge.init.recipe.helpers.RecipeHelpers;
 import es.degrassi.forge.init.registration.ItemRegister;
 import es.degrassi.forge.init.tiers.FurnaceTier;
+import es.degrassi.forge.integration.config.DegrassiConfig;
 import es.degrassi.forge.network.EnergyPacket;
 import es.degrassi.forge.network.ItemPacket;
 import es.degrassi.forge.network.ProgressPacket;
@@ -205,7 +206,7 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
   }
 
   public void setCapacityLevel(int capacity) {
-    ENERGY_STORAGE.setCapacity(capacity);
+    this.ENERGY_STORAGE.setCapacity(capacity);
     setChanged();
   }
 
@@ -259,13 +260,11 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
   }
 
   @Override
-  protected void saveAdditional(@NotNull CompoundTag nbt) {
+  public void saveAdditional(@NotNull CompoundTag nbt) {
     super.saveAdditional(nbt);
     nbt.put("furnace.inventory", itemHandler.serializeNBT());
-    nbt.putInt("furnace.energy", ENERGY_STORAGE.getEnergyStored());
-    nbt.putInt("furnace.capacity", ENERGY_STORAGE.getMaxEnergyStored());
-    nbt.putInt("furnace.progress", progressStorage.getProgress());
-    nbt.putInt("furnace.maxProgress", progressStorage.getMaxProgress());
+    nbt.put("furnace.energy", ENERGY_STORAGE.serializeNBT());
+    nbt.put("furnace.progress", progressStorage.serializeNBT());
     nbt.putFloat("furnace.xp", xp.getXp());
   }
 
@@ -273,10 +272,8 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
   public void load(@NotNull CompoundTag nbt) {
     super.load(nbt);
     itemHandler.deserializeNBT(nbt.getCompound("furnace.inventory"));
-    ENERGY_STORAGE.setEnergy(nbt.getInt("furnace.energy"));
-    ENERGY_STORAGE.setCapacity(nbt.getInt("furnace.capacity"));
-    progressStorage.setProgress(nbt.getInt("furnace.progress"));
-    progressStorage.setMaxProgress(nbt.getInt("furnace.maxProgress"));
+    ENERGY_STORAGE.deserializeNBT(nbt.getCompound("furnace.energy"));
+    progressStorage.deserializeNBT(nbt.getCompound("furnace.progress"));
     xp.setXp(nbt.getFloat("furnace.xp"));
   }
 
@@ -328,10 +325,8 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
   public @NotNull CompoundTag getUpdateTag() {
     CompoundTag nbt = super.getUpdateTag();
     nbt.put("furnace.inventory", itemHandler.serializeNBT());
-    nbt.putInt("furnace.energy", ENERGY_STORAGE.getEnergyStored());
-    nbt.putInt("furnace.capacity", ENERGY_STORAGE.getMaxEnergyStored());
-    nbt.putInt("furnace.progress", progressStorage.getProgress());
-    nbt.putInt("furnace.maxProgress", progressStorage.getMaxProgress());
+    nbt.put("furnace.energy", ENERGY_STORAGE.serializeNBT());
+    nbt.put("furnace.progress", progressStorage.serializeNBT());
     return nbt;
   }
 
