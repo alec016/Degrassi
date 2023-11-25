@@ -1,4 +1,5 @@
 {
+  "replace": false,
   "values": [
     "degrassi:emerald_furnace",
     "degrassi:netherite_furnace"

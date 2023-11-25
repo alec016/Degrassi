@@ -1,4 +1,5 @@
 {
+  "replace": false,
   "values": [
     "degrassi:solar_panel_tier_1",
     "degrassi:solar_panel_tier_2",
