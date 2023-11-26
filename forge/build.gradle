@@ -78,6 +78,9 @@ dependencies {
 
     // KubeJS
     modImplementation "dev.latvian.mods:kubejs-forge:${kubejs_version}"
+
+    // GeckoLib
+    modImplementation "software.bernie.geckolib:geckolib-forge-1.19:${geckolib_version}"
 }
 
 processResources {
@@ -96,7 +99,9 @@ processResources {
                 "kubejs_version": project.kubejs_version,
                 "cloth_config_version": project.cloth_config_version,
                 "fabric_api_version": project.fabric_api_version,
-                "fabric_loader_version": project.fabric_loader_version
+                "fabric_loader_version": project.fabric_loader_version,
+                "geckolib_version": project.geckolib_version,
+                "jei_version": project.jei_version
     }
 }
 
@@ -144,6 +149,7 @@ unifiedPublishing {
                 relations {
                     depends "architectury-api"
                     depends "cloth-config"
+                    depends "geckolib"
                     optional "jei"
                     optional "kubejs"
                 }

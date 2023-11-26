@@ -62,6 +62,7 @@ public class DegrassiUSLang extends DegrassiLangProvider {
     add(BlockRegister.NETHERITE_FURNACE_BLOCK.get(), "Netherite Furnace");
     add(BlockRegister.UPGRADE_MAKER.get(), "Upgrade Maker");
     add(BlockRegister.JEWELRY_GENERATOR.get(), "Jewelry Generator");
+    add(BlockRegister.CIRCUIT_FABRICATOR.get(), "Circuit Fabricator");
   }
 
   protected void addEntities() {}

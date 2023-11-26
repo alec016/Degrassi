@@ -8,6 +8,7 @@ import es.degrassi.forge.init.block.Melter;
 import es.degrassi.forge.init.block.panel.SolarPanelBlock;
 import es.degrassi.forge.init.block.*;
 import es.degrassi.forge.init.block.UpgradeMaker;
+import es.degrassi.forge.init.geckolib.block.CircuitFabricatorBlock;
 import es.degrassi.forge.init.tiers.FurnaceTier;
 import es.degrassi.forge.init.tiers.SolarPanelTier;
 import net.minecraft.core.Registry;
@@ -130,6 +131,11 @@ public class BlockRegister {
     "jewelry_generator",
     JewelryGenerator::new,
     CreativeTabs.MACHINES
+  );
+
+  public static final RegistrySupplier<Block> CIRCUIT_FABRICATOR = BLOCKS.register(
+    "circuit_fabricator",
+    CircuitFabricatorBlock::new
   );
 
   public static final RegistrySupplier<LiquidBlock> MOLTEN_RED_MATTER_BLOCK = BLOCKS.register(

@@ -82,6 +82,7 @@ public class DegrassiItemModelProvider extends ItemModelProvider {
     simpleBlockItem(BlockRegister.SP8_BLOCK);
 
     simpleBlockItem(BlockRegister.JEWELRY_GENERATOR);
+    simpleBlockItem(BlockRegister.CIRCUIT_FABRICATOR);
   }
 
   private ItemModelBuilder simpleItem(@NotNull RegistrySupplier<? extends Item> item) {

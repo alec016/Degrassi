@@ -9,6 +9,7 @@ import es.degrassi.forge.init.entity.MelterEntity;
 import es.degrassi.forge.init.entity.generators.JewelryGeneratorEntity;
 import es.degrassi.forge.init.entity.panel.SolarPanelEntity;
 import es.degrassi.forge.init.entity.UpgradeMakerEntity;
+import es.degrassi.forge.init.geckolib.entity.CircuitFabricatorEntity;
 import es.degrassi.forge.init.tiers.FurnaceTier;
 import es.degrassi.forge.init.tiers.SolarPanelTier;
 import es.degrassi.forge.integration.config.DegrassiConfig;
@@ -246,6 +247,14 @@ public class EntityRegister {
     new BlockEntityType<>(
       JewelryGeneratorEntity::new,
       Set.of(BlockRegister.JEWELRY_GENERATOR.get()),
+      null
+    )
+  );
+
+  public static final RegistrySupplier<BlockEntityType<CircuitFabricatorEntity>> CIRCUIT_FABRICATOR = BLOCK_ENTITIES.register("circuit_fabricator", () ->
+    new BlockEntityType<>(
+      CircuitFabricatorEntity::new,
+      Set.of(BlockRegister.CIRCUIT_FABRICATOR.get()),
       null
     )
   );

@@ -2,8 +2,8 @@ package es.degrassi.forge;
 
 import dev.architectury.platform.forge.EventBuses;
 import es.degrassi.forge.init.entity.renderer.MelterRenderer;
+import es.degrassi.forge.init.geckolib.renderer.CircuitFabricatorRenderer;
 import es.degrassi.forge.init.registration.EntityRegister;
-import es.degrassi.forge.init.registration.FluidTypeRegister;
 import es.degrassi.forge.init.registration.Register;
 import es.degrassi.forge.integration.config.DegrassiConfig;
 import es.degrassi.forge.util.DegrassiLogger;
@@ -39,5 +39,7 @@ public class DegrassiForge {
   public static void registerRenderers(final EntityRenderersEvent.@NotNull RegisterRenderers event){
     DegrassiLogger.INSTANCE.info("Registering melter renderer");
     event.registerBlockEntityRenderer(EntityRegister.MELTER.get(), MelterRenderer::new);
+    DegrassiLogger.INSTANCE.info("Registering circuit fabricator renderer");
+    event.registerBlockEntityRenderer(EntityRegister.CIRCUIT_FABRICATOR.get(), CircuitFabricatorRenderer::new);
   }
 }

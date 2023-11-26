@@ -17,6 +17,7 @@
     "degrassi:melter",
     "degrassi:upgrade_maker",
     "degrassi:machine_casing",
-    "degrassi:jewelry_generator"
+    "degrassi:jewelry_generator",
+    "degrassi:circuit_fabricator"
   ]
 }

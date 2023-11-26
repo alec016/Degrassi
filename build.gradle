@@ -61,6 +61,7 @@ allprojects {
             url = "https://jitpack.io"
         }
         maven {
+            name = "Architectury"
             // Shedaniel's maven (Architectury API)
             url = "https://maven.architectury.dev"
             content {
@@ -74,6 +75,14 @@ allprojects {
             content {
                 includeGroup "dev.latvian.mods"
                 includeGroup "dev.ftb.mods"
+            }
+        }
+        // geckolib
+        maven {
+            name = "GeckoLib"
+            url = "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/"
+            content {
+                includeGroup "software.bernie.geckolib"
             }
         }
     }

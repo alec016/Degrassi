@@ -4,6 +4,7 @@ import dev.architectury.core.item.ArchitecturyBucketItem;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.forge.Degrassi;
+import es.degrassi.forge.init.geckolib.item.CircuitFabricatorItem;
 import es.degrassi.forge.init.item.upgrade.*;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.BucketItem;
@@ -119,6 +120,11 @@ public class ItemRegister {
   public static final RegistrySupplier<Item> MOLTEN_RED_MATTER_BUCKET = ITEMS.register(
     "molten_red_matter_bucket",
     () -> new BucketItem(FluidRegister.MOLTEN_RED_MATTER, new Item.Properties().tab(CreativeTabs.COMMON).craftRemainder(Items.BUCKET).stacksTo(1))
+  );
+
+  public static final RegistrySupplier<Item> CIRCUIT_FABRICATOR = ITEMS.register(
+    "circuit_fabricator",
+    CircuitFabricatorItem::new
   );
 
   private static RegistrySupplier<BaseUpgrade> registerUpgrade(String id, Supplier<? extends BaseUpgrade> supplier) {

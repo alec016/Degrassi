@@ -79,7 +79,8 @@ public final class DegrassiBlockTags extends DegrassiTagProvider<Block> {
         BlockRegister.NETHERITE_FURNACE_BLOCK.get(),
         BlockRegister.MELTER_BLOCK.get(),
         BlockRegister.UPGRADE_MAKER.get(),
-        BlockRegister.JEWELRY_GENERATOR.get()
+        BlockRegister.JEWELRY_GENERATOR.get(),
+        BlockRegister.CIRCUIT_FABRICATOR.get()
       );
   }
 
@@ -115,7 +116,8 @@ public final class DegrassiBlockTags extends DegrassiTagProvider<Block> {
         BlockRegister.NETHERITE_FURNACE_BLOCK.get(),
         BlockRegister.MELTER_BLOCK.get(),
         BlockRegister.UPGRADE_MAKER.get(),
-        BlockRegister.JEWELRY_GENERATOR.get()
+        BlockRegister.JEWELRY_GENERATOR.get(),
+        BlockRegister.CIRCUIT_FABRICATOR.get()
       );
   }
 
@@ -157,7 +159,8 @@ public final class DegrassiBlockTags extends DegrassiTagProvider<Block> {
       .replace(false)
       .add(
         BlockRegister.EMERALD_FURNACE_BLOCK.get(),
-        BlockRegister.NETHERITE_FURNACE_BLOCK.get()
+        BlockRegister.NETHERITE_FURNACE_BLOCK.get(),
+        BlockRegister.CIRCUIT_FABRICATOR.get()
       );
   }
 
@@ -206,7 +209,8 @@ public final class DegrassiBlockTags extends DegrassiTagProvider<Block> {
         BlockRegister.MELTER_BLOCK.get(),
         BlockRegister.UPGRADE_MAKER.get(),
         BlockRegister.MACHINE_CASING.get(),
-        BlockRegister.JEWELRY_GENERATOR.get()
+        BlockRegister.JEWELRY_GENERATOR.get(),
+        BlockRegister.CIRCUIT_FABRICATOR.get()
       );
   }
 }

@@ -34,6 +34,7 @@ public class DegrassiBlockLootTables extends BlockLoot {
     dropSelf(BlockRegister.MACHINE_CASING.get());
 
     dropSelf(BlockRegister.JEWELRY_GENERATOR.get());
+    dropSelf(BlockRegister.CIRCUIT_FABRICATOR.get());
 
 //    this.dropSelf(ModBlocks.CITRINE_BLOCK.get());
 //    this.dropSelf(ModBlocks.RAW_CITRINE_BLOCK.get());
