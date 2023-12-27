@@ -98,8 +98,7 @@ public class MelterRenderer extends SafeBlockEntityRenderer<MelterEntity> {
       .getFluidType()
       .isLighterThanAir();
 
-    float xMin = tankHullWidth;
-    float xMax = xMin + 1 - 2 * tankHullWidth;
+    float xMax = tankHullWidth + 1 - 2 * tankHullWidth;
     float yMin = totalHeight + capHeight + minPuddleHeight - clampedLevel;
     float yMax = yMin + clampedLevel;
 
@@ -108,12 +107,11 @@ public class MelterRenderer extends SafeBlockEntityRenderer<MelterEntity> {
       yMax += totalHeight - clampedLevel;
     }
 
-    float zMin = tankHullWidth;
-    float zMax = zMin + 1 - 2 * tankHullWidth;
+    float zMax = tankHullWidth + 1 - 2 * tankHullWidth;
 
     ms.pushPose();
     ms.translate(0, clampedLevel - totalHeight, 0);
-    FluidRenderer.renderFluidBox(fluidStack, xMin, yMin, zMin, xMax, yMax, zMax, buffer, ms, light, false);
+    FluidRenderer.renderFluidBox(fluidStack, tankHullWidth, yMin, tankHullWidth, xMax, yMax, zMax, buffer, ms, light, false);
     ms.popPose();
   }
 

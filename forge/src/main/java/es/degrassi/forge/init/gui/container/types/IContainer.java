@@ -1,6 +1,5 @@
 package es.degrassi.forge.init.gui.container.types;
 
-import es.degrassi.forge.init.entity.BaseEntity;
 import es.degrassi.forge.init.entity.type.IDegrassiEntity;
 import net.minecraft.world.entity.player.Inventory;
 

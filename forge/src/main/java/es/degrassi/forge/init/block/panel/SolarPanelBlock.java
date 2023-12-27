@@ -119,8 +119,8 @@ public class SolarPanelBlock extends PanelBlock {
   public void onRemove(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull BlockState pNewState, boolean pIsMoving) {
     if (pState.getBlock() != pNewState.getBlock()) {
       BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-      if (blockEntity instanceof SolarPanelEntity) {
-        ((SolarPanelEntity) blockEntity).drops();
+      if (blockEntity instanceof SolarPanelEntity entity) {
+        entity.drops();
       }
     }
     super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);

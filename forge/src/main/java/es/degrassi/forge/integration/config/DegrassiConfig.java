@@ -2,6 +2,7 @@ package es.degrassi.forge.integration.config;
 
 import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.integration.config.generators.GeneratorsConfig;
+import es.degrassi.forge.integration.config.panels.SolarPanelConfig;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Category;

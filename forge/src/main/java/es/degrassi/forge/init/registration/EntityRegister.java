@@ -3,7 +3,6 @@ package es.degrassi.forge.init.registration;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.forge.Degrassi;
-import es.degrassi.forge.init.block.generators.JewelryGenerator;
 import es.degrassi.forge.init.entity.FurnaceEntity;
 import es.degrassi.forge.init.entity.MelterEntity;
 import es.degrassi.forge.init.entity.generators.JewelryGeneratorEntity;

@@ -6,47 +6,19 @@ import es.degrassi.forge.init.registration.ItemRegister;
 import es.degrassi.forge.init.tiers.SolarPanelTier;
 import es.degrassi.forge.integration.config.DegrassiConfig;
 import es.degrassi.forge.network.ItemPacket;
-import es.degrassi.forge.util.storage.AbstractEnergyStorage;
-import es.degrassi.forge.util.storage.EfficiencyStorage;
-import es.degrassi.forge.network.EfficiencyPacket;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class SolarPanelEntity extends PanelEntity {
   public SolarPanelBlock delegate;
-  protected EfficiencyStorage efficiency = createEfficiencyStorage(this);
-  private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
-  private LazyOptional<AbstractEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
   private final SolarPanelTier tier;
-
-  @Contract("_ -> new")
-  protected static @NotNull EfficiencyStorage createEfficiencyStorage(SolarPanelEntity entity) {
-    return new EfficiencyStorage() {
-      @Override
-      public void onEfficiencyChanged() {
-        entity.setChanged();
-        if (entity.level != null && !entity.level.isClientSide()) {
-          new EfficiencyPacket(this.getEfficiency(), entity.worldPosition)
-            .sendToChunkListeners(entity.level.getChunkAt(entity.getBlockPos()));
-        }
-      }
-    };
-  }
 
   public SolarPanelEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, SolarPanelTier tier) {
     super(type, pos, state, getName(tier), defaultCapacity(tier), defaultTransfer(tier));
@@ -183,32 +155,6 @@ public class SolarPanelEntity extends PanelEntity {
     return Mth.clamp(multiplicator * Mth.cos(celestialAngleRadians / displacement), 0, 1);
   }
 
-  public EfficiencyStorage getCurrentEfficiency() {
-    return this.efficiency;
-  }
-
-  @Override
-  public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-    if (cap == ForgeCapabilities.ENERGY) return lazyEnergyHandler.cast();
-    if (cap == ForgeCapabilities.ITEM_HANDLER) return lazyItemHandler.cast();
-
-    return super.getCapability(cap, side);
-  }
-
-  @Override
-  public void onLoad() {
-    super.onLoad();
-    lazyItemHandler = LazyOptional.of(() -> itemHandler);
-    lazyEnergyHandler = LazyOptional.of(() -> ENERGY_STORAGE);
-  }
-
-  @Override
-  public void invalidateCaps() {
-    super.invalidateCaps();
-    lazyItemHandler.invalidate();
-    lazyEnergyHandler.invalidate();
-  }
-
   @Override
   public int getGeneration() {
     return switch(tier) {
@@ -221,19 +167,6 @@ public class SolarPanelEntity extends PanelEntity {
       case VII -> DegrassiConfig.get().solarPanelConfig.sp7_generation;
       case VIII -> DegrassiConfig.get().solarPanelConfig.sp8_generation;
     };
-  }
-
-  @Override
-  public @NotNull CompoundTag getUpdateTag() {
-    CompoundTag nbt = super.getUpdateTag();
-    nbt.put("panel.inventory", itemHandler.serializeNBT());
-    nbt.put("panel.energy", ENERGY_STORAGE.serializeNBT());
-    return nbt;
-  }
-
-  @Override
-  public void handleUpdateTag(CompoundTag tag) {
-    load(tag);
   }
 
   public SolarPanelTier tier() {

@@ -5,7 +5,6 @@ import es.degrassi.forge.init.block.Melter;
 import es.degrassi.forge.init.entity.renderer.LerpedFloat;
 import es.degrassi.forge.init.entity.type.*;
 import es.degrassi.forge.init.handlers.ItemWrapperHandler;
-import es.degrassi.forge.init.recipe.IDegrassiRecipe;
 import es.degrassi.forge.init.recipe.helpers.RecipeHelpers;
 import es.degrassi.forge.init.recipe.recipes.MelterRecipe;
 import es.degrassi.forge.init.registration.EntityRegister;
@@ -40,7 +39,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEntity, IProgressEntity, IItemEntity, IFluidEntity {
+public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEntity<MelterRecipe>, IProgressEntity, IItemEntity, IFluidEntity {
   public Melter delegate;
   private LerpedFloat fluidLevel;
   protected boolean forceFluidLevelUpdate;
@@ -226,13 +225,13 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
   }
 
   @Override
-  public IDegrassiRecipe getRecipe() {
+  public MelterRecipe getRecipe() {
     return recipe;
   }
 
   @Override
-  public void setRecipe(IDegrassiRecipe recipe) {
-    this.recipe = (MelterRecipe) recipe;
+  public void setRecipe(MelterRecipe recipe) {
+    this.recipe = recipe;
   }
 
   @Override

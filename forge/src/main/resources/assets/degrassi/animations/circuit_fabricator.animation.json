@@ -1,39 +1,36 @@
 {
   "format_version": "1.8.0",
   "animations": {
-    "chunk_loader": {
+    "circuit_animation": {
       "loop": true,
-      "animation_length": 5,
+      "animation_length": 6,
       "bones": {
         "particle": {
           "rotation": {
             "0.0": {
               "vector": [0, 0, 0]
             },
-            "5.0": {
-              "vector": [0, 360, 360]
+            "3.0": {
+              "vector": [360, 360, 360],
+              "easing": "linear"
+            },
+            "6.0": {
+              "vector": [0, 0, 0]
             }
           },
           "position": {
             "0.0": {
-              "vector": [0, 2, 0]
-            },
-            "1.25": {
               "vector": [0, 0, 0]
             },
-            "2.5": {
-              "vector": [0, -2, 0]
+            "3.0": {
+              "vector": [-46, 0, 0]
             },
-            "3.75": {
+            "6.0": {
               "vector": [0, 0, 0]
-            },
-            "5.0": {
-              "vector": [0, 2, 0]
             }
           }
         }
       }
     }
-  },
-  "geckolib_format_version": 2
+  }
 }

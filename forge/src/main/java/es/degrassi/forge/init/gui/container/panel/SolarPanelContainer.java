@@ -2,7 +2,6 @@ package es.degrassi.forge.init.gui.container.panel;
 
 import es.degrassi.forge.client.ClientHandler;
 import es.degrassi.forge.init.entity.panel.SolarPanelEntity;
-import es.degrassi.forge.init.gui.container.panel.PanelContainer;
 import es.degrassi.forge.init.registration.BlockRegister;
 import es.degrassi.forge.init.registration.ContainerRegistry;
 import net.minecraft.network.FriendlyByteBuf;
@@ -21,14 +20,14 @@ public class SolarPanelContainer extends PanelContainer<SolarPanelEntity> {
     this.data = data;
 
     this.entity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
-    this.addSlot(new SlotItemHandler(handler, 0, 8, 21));
-    this.addSlot(new SlotItemHandler(handler, 1, 8, 39));
-    this.addSlot(new SlotItemHandler(handler, 2, 8, 57));
-    this.addSlot(new SlotItemHandler(handler, 3, 8, 75));
-  });
+      this.addSlot(new SlotItemHandler(handler, 0, 8, 21));
+      this.addSlot(new SlotItemHandler(handler, 1, 8, 39));
+      this.addSlot(new SlotItemHandler(handler, 2, 8, 57));
+      this.addSlot(new SlotItemHandler(handler, 3, 8, 75));
+    });
 
-  addDataSlots(data);
-}
+    addDataSlots(data);
+  }
 
   public SolarPanelContainer(int id, Inventory inv, SolarPanelEntity entity) {
     this(id, inv, entity, new SimpleContainerData(4));

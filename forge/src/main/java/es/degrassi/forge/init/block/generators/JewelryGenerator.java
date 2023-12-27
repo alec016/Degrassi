@@ -1,6 +1,5 @@
 package es.degrassi.forge.init.block.generators;
 
-import es.degrassi.forge.init.block.BaseBlock;
 import es.degrassi.forge.init.entity.generators.JewelryGeneratorEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
@@ -10,14 +9,13 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
-import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class JewelryGenerator extends BaseBlock {
+public class JewelryGenerator extends GeneratorBlock {
   public JewelryGenerator() {
     super(
       BlockBehaviour.Properties
@@ -46,6 +44,6 @@ public class JewelryGenerator extends BaseBlock {
   @Nullable
   @Override
   public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-    return new JewelryGeneratorEntity(pos, state);
+    return new JewelryGeneratorEntity(pos, state, this);
   }
 }

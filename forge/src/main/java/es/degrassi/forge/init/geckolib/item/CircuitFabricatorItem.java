@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -19,14 +20,14 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import java.util.function.Consumer;
 
 public class CircuitFabricatorItem extends BlockItem implements IAnimatable {
-  private static final AnimationBuilder ACTIVATE_ANIM = new AnimationBuilder().loop("chunk_loader");
+  private static final AnimationBuilder ACTIVATE_ANIM = new AnimationBuilder().loop("circuit_animation");
   public final AnimationFactory factory = GeckoLibUtil.createFactory(this);
   public CircuitFabricatorItem() {
     super(BlockRegister.CIRCUIT_FABRICATOR.get(), new Properties().tab(CreativeTabs.MACHINES));
   }
 
   @Override
-  public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+  public void initializeClient(@NotNull Consumer<IClientItemExtensions> consumer) {
     consumer.accept(new IClientItemExtensions() {
       private BlockEntityWithoutLevelRenderer renderer = null;
       @Override
@@ -38,8 +39,8 @@ public class CircuitFabricatorItem extends BlockItem implements IAnimatable {
   }
 
   @Override
-  public void registerControllers(AnimationData data) {
-    data.addAnimationController(new AnimationController<>(this, "chunk_loader", 0, event -> {
+  public void registerControllers(@NotNull AnimationData data) {
+    data.addAnimationController(new AnimationController<>(this, "circuit_animation", 0, event -> {
       AnimationController<CircuitFabricatorItem> controller = event.getController();
       controller.transitionLengthTicks = 0;
       controller.setAnimation(ACTIVATE_ANIM);

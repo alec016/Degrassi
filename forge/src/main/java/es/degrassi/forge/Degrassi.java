@@ -17,7 +17,6 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Contract;
@@ -28,7 +27,6 @@ public class Degrassi {
   public static Logger LOGGER = LogManager.getLogger("Degrassi");
 
   public static void init() {
-
     DegrassiLogger.init();
     CommandRegistrationEvent.EVENT.register(Degrassi::registerCommands);
   }
@@ -38,7 +36,7 @@ public class Degrassi {
     final CommandBuildContext registry,
     final Commands.CommandSelection selection
   ) {
-    dispatcher.register(DegrassiCommand.register("degrassi"));
+    dispatcher.register(DegrassiCommand.register(MODID));
   }
 
   public static void setup() {
@@ -59,8 +57,8 @@ public class Degrassi {
   }
 
   @Contract("_ -> new")
-  public static @NotNull ResourceLocation rl(String s) {
-    return new DegrassiLocation(s);
+  public static @NotNull DegrassiLocation rl(String path) {
+    return new DegrassiLocation(path);
   }
 
 }

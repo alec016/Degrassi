@@ -102,8 +102,8 @@ public class UpgradeMaker extends BaseBlock {
   public void onRemove(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull BlockState pNewState, boolean pIsMoving) {
     if (pState.getBlock() != pNewState.getBlock()) {
       BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-      if (blockEntity instanceof UpgradeMakerEntity) {
-        ((UpgradeMakerEntity) blockEntity).drops();
+      if (blockEntity instanceof UpgradeMakerEntity entity) {
+        entity.drops();
       }
     }
     super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);

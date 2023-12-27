@@ -20,7 +20,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -31,49 +33,49 @@ public class BlockRegister {
   public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(Degrassi.MODID, Registry.BLOCK_REGISTRY);
   public static final Map<String, RegistrySupplier<BlockItem>> BLOCK_ITEMS = new HashMap<>();
 
-  public static final RegistrySupplier<Block> SP1_BLOCK = registerBlock(
+  public static final RegistrySupplier<SolarPanelBlock> SP1_BLOCK = registerBlock(
     "solar_panel_tier_1",
     () -> new SolarPanelBlock(SolarPanelTier.I),
     CreativeTabs.MACHINES
   );
 
-  public static final RegistrySupplier<Block> SP2_BLOCK = registerBlock(
+  public static final RegistrySupplier<SolarPanelBlock> SP2_BLOCK = registerBlock(
     "solar_panel_tier_2",
     () -> new SolarPanelBlock(SolarPanelTier.II),
     CreativeTabs.MACHINES
   );
 
-  public static final RegistrySupplier<Block> SP3_BLOCK = registerBlock(
+  public static final RegistrySupplier<SolarPanelBlock> SP3_BLOCK = registerBlock(
     "solar_panel_tier_3",
     () -> new SolarPanelBlock(SolarPanelTier.III),
     CreativeTabs.MACHINES
   );
 
-  public static final RegistrySupplier<Block> SP4_BLOCK = registerBlock(
+  public static final RegistrySupplier<SolarPanelBlock> SP4_BLOCK = registerBlock(
     "solar_panel_tier_4",
     () -> new SolarPanelBlock(SolarPanelTier.IV),
     CreativeTabs.MACHINES
   );
 
-  public static final RegistrySupplier<Block> SP5_BLOCK = registerBlock(
+  public static final RegistrySupplier<SolarPanelBlock> SP5_BLOCK = registerBlock(
     "solar_panel_tier_5",
     () -> new SolarPanelBlock(SolarPanelTier.V),
     CreativeTabs.MACHINES
   );
 
-  public static final RegistrySupplier<Block> SP6_BLOCK = registerBlock(
+  public static final RegistrySupplier<SolarPanelBlock> SP6_BLOCK = registerBlock(
     "solar_panel_tier_6",
     () -> new SolarPanelBlock(SolarPanelTier.VI),
     CreativeTabs.MACHINES
   );
 
-  public static final RegistrySupplier<Block> SP7_BLOCK = registerBlock(
+  public static final RegistrySupplier<SolarPanelBlock> SP7_BLOCK = registerBlock(
     "solar_panel_tier_7",
     () -> new SolarPanelBlock(SolarPanelTier.VII),
     CreativeTabs.MACHINES
   );
 
-  public static final RegistrySupplier<Block> SP8_BLOCK = registerBlock(
+  public static final RegistrySupplier<SolarPanelBlock> SP8_BLOCK = registerBlock(
     "solar_panel_tier_8",
     () -> new SolarPanelBlock(SolarPanelTier.VIII),
     CreativeTabs.MACHINES
@@ -127,7 +129,7 @@ public class BlockRegister {
     CreativeTabs.MACHINES
   );
 
-  public static final RegistrySupplier<Block> JEWELRY_GENERATOR = registerBlock(
+  public static final RegistrySupplier<JewelryGenerator> JEWELRY_GENERATOR = registerBlock(
     "jewelry_generator",
     JewelryGenerator::new,
     CreativeTabs.MACHINES
@@ -172,4 +174,17 @@ public class BlockRegister {
     return BLOCK_ITEMS.get(name).get().getDefaultInstance();
   }
 
+  @Contract(value = " -> new", pure = true)
+  public static @Unmodifiable List<RegistrySupplier<SolarPanelBlock>> listPanelBlocks() {
+    return List.of(
+      SP1_BLOCK,
+      SP2_BLOCK,
+      SP3_BLOCK,
+      SP4_BLOCK,
+      SP5_BLOCK,
+      SP6_BLOCK,
+      SP7_BLOCK,
+      SP8_BLOCK
+    );
+  }
 }

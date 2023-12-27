@@ -1,4 +1,4 @@
-package es.degrassi.forge.integration.config;
+package es.degrassi.forge.integration.config.panels;
 
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;

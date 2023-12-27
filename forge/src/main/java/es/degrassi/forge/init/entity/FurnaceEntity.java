@@ -3,12 +3,10 @@ package es.degrassi.forge.init.entity;
 import es.degrassi.forge.init.block.FurnaceBlock;
 import es.degrassi.forge.init.entity.type.*;
 import es.degrassi.forge.init.handlers.ItemWrapperHandler;
-import es.degrassi.forge.init.recipe.IDegrassiRecipe;
 import es.degrassi.forge.init.recipe.recipes.FurnaceRecipe;
 import es.degrassi.forge.init.recipe.helpers.RecipeHelpers;
 import es.degrassi.forge.init.registration.ItemRegister;
 import es.degrassi.forge.init.tiers.FurnaceTier;
-import es.degrassi.forge.integration.config.DegrassiConfig;
 import es.degrassi.forge.network.EnergyPacket;
 import es.degrassi.forge.network.ItemPacket;
 import es.degrassi.forge.network.ProgressPacket;
@@ -41,7 +39,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.Objects;
 
-public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeEntity, IItemEntity, IProgressEntity, IExperienceEntity {
+public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeEntity<FurnaceRecipe>, IItemEntity, IProgressEntity, IExperienceEntity {
   private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
   private LazyOptional<AbstractEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
 
@@ -343,7 +341,7 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
   }
 
   @Override
-  public IDegrassiRecipe getRecipe() {
+  public FurnaceRecipe getRecipe() {
     return this.recipe;
   }
 
@@ -353,7 +351,7 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
   }
 
   @Override
-  public void setRecipe(IDegrassiRecipe recipe) {
-    this.recipe = (FurnaceRecipe) recipe;
+  public void setRecipe(FurnaceRecipe recipe) {
+    this.recipe = recipe;
   }
 }

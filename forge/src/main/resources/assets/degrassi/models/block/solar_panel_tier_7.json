@@ -2,6 +2,6 @@
   "parent": "degrassi:block/solar_panel_tier_1",
 	"textures": {
 		"0": "degrassi:block/panel/sp/sp7",
-		"particle": "degrassi:block/panel/sp/sp7"
+		"particle": "degrassi:item/panel/pc7"
 	}
 }

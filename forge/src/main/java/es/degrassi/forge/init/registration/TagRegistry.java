@@ -117,6 +117,7 @@ public class TagRegistry {
     UPGRADES,
     MACHINES,
     SOLAR_PANELS(MOD, "panels/solar_panels"),
+    LUNAR_PANELS(MOD, "panels/lunar_panels"),
     FURNACES;
 
     public final TagKey<Item> tag;

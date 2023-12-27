@@ -33,7 +33,7 @@ public class FluidTypeRegister {
         .canSwim(true)
         .canPushEntity(true)
         .canHydrate(false)
-        .canConvertToSource(true)
+        .canConvertToSource(false)
     )
   );
 

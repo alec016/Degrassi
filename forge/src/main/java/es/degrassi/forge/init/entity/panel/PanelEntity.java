@@ -5,11 +5,14 @@ import es.degrassi.forge.init.entity.type.IEfficiencyEntity;
 import es.degrassi.forge.init.entity.type.IEnergyEntity;
 import es.degrassi.forge.init.entity.type.IEnergyEntity.IGenerationEntity;
 import es.degrassi.forge.init.entity.type.IItemEntity;
+import es.degrassi.forge.network.EfficiencyPacket;
 import es.degrassi.forge.network.EnergyPacket;
 import es.degrassi.forge.util.storage.AbstractEnergyStorage;
+import es.degrassi.forge.util.storage.EfficiencyStorage;
 import es.degrassi.forge.util.storage.GenerationStorage;
 import es.degrassi.forge.network.GenerationPacket;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -18,9 +21,14 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
 public abstract class PanelEntity extends BaseEntity implements IEnergyEntity, IItemEntity, IGenerationEntity, IEfficiencyEntity {
@@ -29,6 +37,20 @@ public abstract class PanelEntity extends BaseEntity implements IEnergyEntity, I
   protected GenerationStorage currentGen;
   public ItemStackHandler itemHandler;
   private final Component name;
+
+  protected EfficiencyStorage efficiency = new EfficiencyStorage() {
+    @Override
+    public void onEfficiencyChanged() {
+      setChanged();
+      if (level != null && !level.isClientSide()) {
+        new EfficiencyPacket(this.getEfficiency(), worldPosition)
+          .sendToChunkListeners(level.getChunkAt(getBlockPos()));
+      }
+    }
+  };;
+  protected LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
+  protected LazyOptional<AbstractEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
+
   protected final int defaultCapacity;
   protected final int defaultTransfer;
   protected int effCacheTime;
@@ -185,5 +207,45 @@ public abstract class PanelEntity extends BaseEntity implements IEnergyEntity, I
       itemHandler.setStackInSlot(i, handler.getStackInSlot(i));
     }
     setChanged();
+  }
+
+
+  public EfficiencyStorage getCurrentEfficiency() {
+    return this.efficiency;
+  }
+
+  @Override
+  public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+    if (cap == ForgeCapabilities.ENERGY) return lazyEnergyHandler.cast();
+    if (cap == ForgeCapabilities.ITEM_HANDLER) return lazyItemHandler.cast();
+
+    return super.getCapability(cap, side);
+  }
+
+  @Override
+  public void onLoad() {
+    super.onLoad();
+    lazyItemHandler = LazyOptional.of(() -> itemHandler);
+    lazyEnergyHandler = LazyOptional.of(() -> ENERGY_STORAGE);
+  }
+
+  @Override
+  public void invalidateCaps() {
+    super.invalidateCaps();
+    lazyItemHandler.invalidate();
+    lazyEnergyHandler.invalidate();
+  }
+
+  @Override
+  public @NotNull CompoundTag getUpdateTag() {
+    CompoundTag nbt = super.getUpdateTag();
+    nbt.put("panel.inventory", itemHandler.serializeNBT());
+    nbt.put("panel.energy", ENERGY_STORAGE.serializeNBT());
+    return nbt;
+  }
+
+  @Override
+  public void handleUpdateTag(CompoundTag tag) {
+    load(tag);
   }
 }

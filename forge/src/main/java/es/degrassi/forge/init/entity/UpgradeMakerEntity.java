@@ -4,7 +4,6 @@ import es.degrassi.forge.init.block.FurnaceBlock;
 import es.degrassi.forge.init.block.UpgradeMaker;
 import es.degrassi.forge.init.entity.type.*;
 import es.degrassi.forge.init.handlers.ItemWrapperHandler;
-import es.degrassi.forge.init.recipe.IDegrassiRecipe;
 import es.degrassi.forge.init.recipe.helpers.RecipeHelpers;
 import es.degrassi.forge.init.recipe.recipes.UpgradeMakerRecipe;
 import es.degrassi.forge.init.registration.EntityRegister;
@@ -39,7 +38,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRecipeEntity, IFluidEntity, IProgressEntity, IItemEntity {
+public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRecipeEntity<UpgradeMakerRecipe>, IFluidEntity, IProgressEntity, IItemEntity {
   public UpgradeMaker delegate;
   private UpgradeMakerRecipe recipe;
   private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
@@ -216,13 +215,13 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
 
 
   @Override
-  public IDegrassiRecipe getRecipe() {
+  public UpgradeMakerRecipe getRecipe() {
     return recipe;
   }
 
   @Override
-  public void setRecipe(IDegrassiRecipe recipe) {
-    this.recipe = (UpgradeMakerRecipe) recipe;
+  public void setRecipe(UpgradeMakerRecipe recipe) {
+    this.recipe = recipe;
   }
 
   @Override

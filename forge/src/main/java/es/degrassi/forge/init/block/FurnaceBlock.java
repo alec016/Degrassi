@@ -127,8 +127,8 @@ public class FurnaceBlock extends BaseBlock {
   public void onRemove(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull BlockState pNewState, boolean pIsMoving) {
     if (pState.getBlock() != pNewState.getBlock()) {
       BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-      if (blockEntity instanceof FurnaceEntity) {
-        ((FurnaceEntity) blockEntity).drops();
+      if (blockEntity instanceof FurnaceEntity entity) {
+        entity.drops();
       }
     }
     super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
@@ -195,7 +195,7 @@ public class FurnaceBlock extends BaseBlock {
         tier
       );
     }
-    entity.delegate = this;
+    if (entity != null) entity.delegate = this;
     return entity;
   }
 }

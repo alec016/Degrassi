@@ -3,7 +3,7 @@
 	"texture_size": [64, 64],
 	"textures": {
 		"0": "degrassi:block/panel/sp/sp1",
-		"particle": "degrassi:block/panel/sp/sp1"
+		"particle": "degrassi:item/panel/pc1"
 	},
 	"elements": [
 		{

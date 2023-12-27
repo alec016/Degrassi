@@ -14,7 +14,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class CircuitFabricatorEntity extends BaseEntity implements IAnimatable {
-  private static final AnimationBuilder ACTIVATE_ANIM = new AnimationBuilder().loop("chunk_loader");
+  private static final AnimationBuilder ACTIVATE_ANIM = new AnimationBuilder().loop("circuit_animation");
 
   public final AnimationFactory factory = GeckoLibUtil.createFactory(this);
   public CircuitFabricatorEntity(BlockPos blockPos, BlockState blockState) {
@@ -23,7 +23,7 @@ public class CircuitFabricatorEntity extends BaseEntity implements IAnimatable {
 
   @Override
   public void registerControllers(@NotNull AnimationData data) {
-    data.addAnimationController(new AnimationController<>(this, "chunk_loader", 0, event -> {
+    data.addAnimationController(new AnimationController<>(this, "circuit_animation", 0, event -> {
       AnimationController<CircuitFabricatorEntity> controller = event.getController();
       controller.transitionLengthTicks = 0;
       controller.setAnimation(ACTIVATE_ANIM);
