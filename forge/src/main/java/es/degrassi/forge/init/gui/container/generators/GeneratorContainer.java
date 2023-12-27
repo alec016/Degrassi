@@ -1,9 +1,9 @@
 package es.degrassi.forge.init.gui.container.generators;
 
 import es.degrassi.forge.client.IClientHandler;
-import es.degrassi.forge.init.entity.BaseEntity;
 import es.degrassi.forge.init.entity.generators.GeneratorEntity;
 import es.degrassi.forge.init.gui.container.BaseContainer;
+import es.degrassi.forge.init.gui.container.types.IProgressContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class GeneratorContainer<T extends GeneratorEntity<?, ?, ?>> extends BaseContainer<T> {
+public abstract class GeneratorContainer<T extends GeneratorEntity<?, ?, ?>> extends BaseContainer<T> implements IProgressContainer<T> {
   // THIS YOU HAVE TO DEFINE!
   protected final int TE_INVENTORY_SLOT_COUNT;  // must be the number of slots you have!
   protected GeneratorContainer(@Nullable MenuType<?> menu, int i, int inventorySlotCount, T entity, Inventory inv) {
@@ -30,6 +30,19 @@ public abstract class GeneratorContainer<T extends GeneratorEntity<?, ?, ?>> ext
   public void clicked(int slotId, int dragType, @NotNull ClickType clickTypeIn, @NotNull Player player) {
     this.entity.setChanged();
     super.clicked(slotId, dragType, clickTypeIn, player);
+  }
+
+  @Override
+  public boolean isCrafting() {
+    return entity.getProgressStorage().getProgress() > 0;
+  }
+
+  @Override
+  public int getScaledProgress(int renderSize) {
+    int progress = this.entity.getProgressStorage().getProgress();
+    int maxProgress = this.entity.getProgressStorage().getMaxProgress();  // Max Progress
+
+    return maxProgress != 0 && progress != 0 ? (int) (progress / (float) maxProgress) * renderSize : 0;
   }
 
   @Override

@@ -24,4 +24,6 @@ public abstract class GeneratorBlock extends BaseBlock {
     }
     super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
   }
+
+
 }

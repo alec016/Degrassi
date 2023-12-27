@@ -244,7 +244,7 @@ public class EntityRegister {
 
   public static final RegistrySupplier<BlockEntityType<JewelryGeneratorEntity>> JEWELRY_GENERATOR = BLOCK_ENTITIES.register("jewelry_generator", () ->
     new BlockEntityType<>(
-      JewelryGeneratorEntity::new,
+      (pos, state) -> new JewelryGeneratorEntity(pos, state, BlockRegister.JEWELRY_GENERATOR.get()),
       Set.of(BlockRegister.JEWELRY_GENERATOR.get()),
       null
     )

@@ -65,7 +65,7 @@ public class UpgradeMakerRecipe implements IDegrassiRecipe {
   }
 
   @Override
-  public IDegrassiRecipe copy() {
+  public UpgradeMakerRecipe copy() {
     return new UpgradeMakerRecipe(id, time, energy, recipeItems, fluidInput, output);
   }
 

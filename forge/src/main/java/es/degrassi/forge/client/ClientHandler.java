@@ -14,6 +14,7 @@ import es.degrassi.forge.init.entity.panel.SolarPanelEntity;
 import es.degrassi.forge.init.gui.screen.FurnaceScreen;
 import es.degrassi.forge.init.gui.screen.MelterScreen;
 import es.degrassi.forge.init.gui.screen.UpgradeMakerScreen;
+import es.degrassi.forge.init.gui.screen.generators.JewelryGeneratorScreen;
 import es.degrassi.forge.init.gui.screen.panel.SolarPanelScreen;
 import es.degrassi.forge.init.registration.ElementRegistry;
 import es.degrassi.forge.init.registration.ContainerRegistry;
@@ -50,6 +51,7 @@ public class ClientHandler {
     MenuRegistry.registerScreenFactory(ContainerRegistry.FURNACE_CONTAINER.get(), FurnaceScreen::new);
     MenuRegistry.registerScreenFactory(ContainerRegistry.MELTER_CONTAINER.get(), MelterScreen::new);
     MenuRegistry.registerScreenFactory(ContainerRegistry.UPGRADE_MAKER_CONTAINER.get(), UpgradeMakerScreen::new);
+    MenuRegistry.registerScreenFactory(ContainerRegistry.JEWELRY_GENERATOR.get(), JewelryGeneratorScreen::new);
   }
 
   private static void registerGuiElementJEIRenderers(final RegisterGuiElementJEIRendererEvent event) {

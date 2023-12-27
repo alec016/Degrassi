@@ -4,6 +4,7 @@ import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.init.gui.screen.FurnaceScreen;
 import es.degrassi.forge.init.gui.screen.MelterScreen;
 import es.degrassi.forge.init.gui.screen.UpgradeMakerScreen;
+import es.degrassi.forge.init.gui.screen.generators.JewelryGeneratorScreen;
 import es.degrassi.forge.init.recipe.helpers.RecipeHelpers;
 import es.degrassi.forge.init.registration.BlockRegister;
 import es.degrassi.forge.init.registration.ItemRegister;
@@ -11,6 +12,7 @@ import es.degrassi.forge.integration.config.DegrassiConfig;
 import es.degrassi.forge.integration.jei.categories.FurnaceRecipeCategory;
 import es.degrassi.forge.integration.jei.categories.MelterRecipeCategory;
 import es.degrassi.forge.integration.jei.categories.UpgradeMakerRecipeCategory;
+import es.degrassi.forge.integration.jei.categories.generators.JewelryGeneratorRecipeCategory;
 import es.degrassi.forge.integration.jei.ingredients.DegrassiTypes;
 import es.degrassi.forge.integration.jei.renderer.EnergyJeiRenderer;
 import es.degrassi.forge.integration.jei.renderer.ProgressJeiRenderer;
@@ -57,7 +59,8 @@ public class JEIDegrassiPlugin implements IModPlugin {
     registration.addRecipeCategories(
       new FurnaceRecipeCategory(registration.getJeiHelpers()),
       new MelterRecipeCategory(registration.getJeiHelpers()),
-      new UpgradeMakerRecipeCategory(registration.getJeiHelpers())
+      new UpgradeMakerRecipeCategory(registration.getJeiHelpers()),
+      new JewelryGeneratorRecipeCategory(registration.getJeiHelpers())
     );
   }
 
@@ -69,6 +72,7 @@ public class JEIDegrassiPlugin implements IModPlugin {
     registration.addRecipes(FURNACE_TYPE, RecipeHelpers.FURNACE.recipes);
     registration.addRecipes(MELTER_TYPE, RecipeHelpers.MELTER.recipes);
     registration.addRecipes(UPGRADE_MAKER_TYPE, RecipeHelpers.UPGRADE_MAKER.recipes);
+    registration.addRecipes(JEWELRY_GENERATOR_TYPE, RecipeHelpers.JEWELRY_GENERATOR.recipes);
 
     registerPanelInfo(registration);
     registerUpgradesInfo(registration);
@@ -79,6 +83,18 @@ public class JEIDegrassiPlugin implements IModPlugin {
     registerFurnaceHandler(registration);
     registerMelterHandler(registration);
     registerUpgradeMakerHandler(registration);
+    registerJewelryHandler(registration);
+  }
+
+  private void registerJewelryHandler(@NotNull IGuiHandlerRegistration registration) {
+    registration.addRecipeClickArea(
+      JewelryGeneratorScreen.class,
+      77,
+      49,
+      TextureSizeHelper.getTextureWidth(UpgradeMakerScreen.FILLED_ARROW),
+      TextureSizeHelper.getTextureHeight(UpgradeMakerScreen.FILLED_ARROW),
+      JEWELRY_GENERATOR_TYPE
+    );
   }
 
   private void registerUpgradeMakerHandler(@NotNull IGuiHandlerRegistration registration) {

@@ -1,6 +1,7 @@
 package es.degrassi.forge.init.entity.generators;
 
 import es.degrassi.forge.init.block.generators.JewelryGenerator;
+import es.degrassi.forge.init.entity.FurnaceEntity;
 import es.degrassi.forge.init.recipe.helpers.RecipeHelpers;
 import es.degrassi.forge.init.recipe.recipes.generators.JewelryGeneratorRecipe;
 import es.degrassi.forge.init.registration.EntityRegister;
@@ -11,6 +12,7 @@ import es.degrassi.forge.network.ItemPacket;
 import es.degrassi.forge.util.storage.AbstractEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -71,8 +73,33 @@ public class JewelryGeneratorEntity extends GeneratorEntity<JewelryGeneratorEnti
     };
   }
 
+  public final ContainerData data;
+
   public JewelryGeneratorEntity(BlockPos blockPos, BlockState blockState, JewelryGenerator block) {
     super(EntityRegister.JEWELRY_GENERATOR.get(), blockPos, blockState, block);
+    this.data = new ContainerData() {
+      @Override
+      public int get(int index) {
+        return switch (index) {
+          case 0 -> JewelryGeneratorEntity.this.progressStorage.getProgress();
+          case 1 -> JewelryGeneratorEntity.this.progressStorage.getMaxProgress();
+          default -> 0;
+        };
+      }
+
+      @Override
+      public void set(int index, int value) {
+        switch (index) {
+          case 0 -> JewelryGeneratorEntity.this.progressStorage.setProgress(value);
+          case 1 -> JewelryGeneratorEntity.this.progressStorage.setMaxProgress(value);
+        }
+      }
+
+      @Override
+      public int getCount() {
+        return 2;
+      }
+    };
   }
   public Component getName() {
     return Component.translatable(
