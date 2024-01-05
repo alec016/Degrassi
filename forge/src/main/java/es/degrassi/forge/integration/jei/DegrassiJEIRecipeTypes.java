@@ -1,18 +1,17 @@
 package es.degrassi.forge.integration.jei;
 
-import es.degrassi.forge.init.recipe.recipes.FurnaceRecipe;
-import es.degrassi.forge.init.recipe.recipes.MelterRecipe;
-import es.degrassi.forge.init.recipe.recipes.UpgradeMakerRecipe;
-import es.degrassi.forge.init.recipe.recipes.generators.JewelryGeneratorRecipe;
-import es.degrassi.forge.integration.jei.categories.FurnaceRecipeCategory;
-import es.degrassi.forge.integration.jei.categories.MelterRecipeCategory;
-import es.degrassi.forge.integration.jei.categories.UpgradeMakerRecipeCategory;
-import es.degrassi.forge.integration.jei.categories.generators.JewelryGeneratorRecipeCategory;
+import es.degrassi.forge.init.recipe.recipes.*;
+import es.degrassi.forge.integration.jei.categories.*;
 import mezz.jei.api.recipe.RecipeType;
 
 public class DegrassiJEIRecipeTypes {
-  public static RecipeType<FurnaceRecipe> FURNACE_TYPE = new RecipeType<>(FurnaceRecipeCategory.UID, FurnaceRecipe.class);
+  public static RecipeType<FurnaceRecipe> IRON_FURNACE_TYPE = new RecipeType<>(FurnaceRecipeCategory.createUID("iron"), FurnaceRecipe.class);
+  public static RecipeType<FurnaceRecipe> GOLD_FURNACE_TYPE = new RecipeType<>(FurnaceRecipeCategory.createUID("gold"), FurnaceRecipe.class);
+  public static RecipeType<FurnaceRecipe> DIAMOND_FURNACE_TYPE = new RecipeType<>(FurnaceRecipeCategory.createUID("diamond"), FurnaceRecipe.class);
+  public static RecipeType<FurnaceRecipe> EMERALD_FURNACE_TYPE = new RecipeType<>(FurnaceRecipeCategory.createUID("emerald"), FurnaceRecipe.class);
+  public static RecipeType<FurnaceRecipe> NETHERITE_FURNACE_TYPE = new RecipeType<>(FurnaceRecipeCategory.createUID("netherite"), FurnaceRecipe.class);
   public static RecipeType<MelterRecipe> MELTER_TYPE = new RecipeType<>(MelterRecipeCategory.UID, MelterRecipe.class);
   public static RecipeType<UpgradeMakerRecipe> UPGRADE_MAKER_TYPE = new RecipeType<>(UpgradeMakerRecipeCategory.UID, UpgradeMakerRecipe.class);
-  public static RecipeType<JewelryGeneratorRecipe> JEWELRY_GENERATOR_TYPE = new RecipeType<>(JewelryGeneratorRecipeCategory.UID, JewelryGeneratorRecipe.class);
+  public static RecipeType<GeneratorRecipe> GENERATOR_TYPE = new RecipeType<>(GeneratorRecipeCategory.createUID(""), GeneratorRecipe.class);
+  public static RecipeType<GeneratorRecipe> JEWELRY_GENERATOR_TYPE = new RecipeType<>(GeneratorRecipeCategory.createUID("jewelry"), GeneratorRecipe.class);
 }

@@ -1,11 +1,13 @@
-package es.degrassi.forge.integration.jei.categories.generators;
+package es.degrassi.forge.integration.jei.categories;
 
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import es.degrassi.common.DegrassiLocation;
+import es.degrassi.forge.init.block.generators.*;
 import es.degrassi.forge.init.gui.renderer.EnergyInfoArea;
 import es.degrassi.forge.init.gui.renderer.ProgressComponent;
-import es.degrassi.forge.init.recipe.recipes.generators.GeneratorRecipe;
+import es.degrassi.forge.init.recipe.recipes.GeneratorRecipe;
+import es.degrassi.forge.integration.jei.*;
 import es.degrassi.forge.integration.jei.ingredients.DegrassiTypes;
 import es.degrassi.forge.integration.jei.renderer.EnergyJeiRenderer;
 import es.degrassi.forge.integration.jei.renderer.ProgressJeiRenderer;
@@ -13,33 +15,66 @@ import es.degrassi.forge.requirements.IRequirement;
 import es.degrassi.forge.util.TextureSizeHelper;
 import es.degrassi.forge.util.storage.AbstractEnergyStorage;
 import es.degrassi.forge.util.storage.ProgressStorage;
+import mezz.jei.api.constants.*;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
-import mezz.jei.api.recipe.IFocusGroup;
-import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.helpers.*;
+import mezz.jei.api.recipe.*;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
 
-public abstract class GeneratorRecipeCategory<R extends GeneratorRecipe> implements IRecipeCategory<R> {
+public class GeneratorRecipeCategory implements IRecipeCategory<GeneratorRecipe> {
+  private static final Map<String, ResourceLocation> UIDS = Maps.newHashMap();
+
+  static {
+    UIDS.put("default", createUID(""));
+  }
+
+  public static ResourceLocation createUID(String generator) {
+    if (generator.isEmpty()) {
+      ResourceLocation UID = new DegrassiLocation("generator");
+      UIDS.put("default", UID);
+      return UID;
+    }
+    if (UIDS.get(generator) != null) return UIDS.get(generator);
+    ResourceLocation UID = new DegrassiLocation(generator + "_generator");
+    UIDS.put(generator, UID);
+    return UID;
+  }
+
   public static final ResourceLocation FILLED_PROGRESS = new DegrassiLocation("textures/gui/jei/generator_progress_filled.png");
+  public static final ResourceLocation TEXTURE = new DegrassiLocation("textures/gui/jei/generator_gui.png");
 
   private final IDrawable background;
   private final IDrawable icon;
-  private final Map<R, EnergyInfoArea> energyComponents = Maps.newHashMap();
-  private final Map<R, ProgressComponent> progressComponents = Maps.newHashMap();
+  private final Map<GeneratorRecipe<?>, EnergyInfoArea> energyComponents = Maps.newHashMap();
+  private final Map<GeneratorRecipe<?>, ProgressComponent> progressComponents = Maps.newHashMap();
   private ProgressJeiRenderer progress;
   private EnergyJeiRenderer energy;
+  private final GeneratorBlock block;
 
-  public GeneratorRecipeCategory(IDrawable background, IDrawable icon) {
-    this.background = background;
-    this.icon = icon;
+  private static @NotNull IDrawable createBackground(@NotNull IJeiHelpers helper) {
+    return helper.getGuiHelper().drawableBuilder(TEXTURE, 0, 0, 126, 73).setTextureSize(126, 73).build();
+  }
+
+  private static @NotNull IDrawable createIcon(@NotNull IJeiHelpers helper, GeneratorBlock block) {
+    return helper.getGuiHelper().createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(block));
+  }
+
+  public GeneratorRecipeCategory(IJeiHelpers helper, GeneratorBlock block) {
+    this.background = createBackground(helper);
+    this.icon = createIcon(helper, block);
+    this.block = block;
   }
 
   @Override
@@ -52,9 +87,10 @@ public abstract class GeneratorRecipeCategory<R extends GeneratorRecipe> impleme
     return icon;
   }
   @Override
-  public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull R recipe, @NotNull IFocusGroup focuses) {
+  public void setRecipe(@NotNull IRecipeLayoutBuilder builder, GeneratorRecipe recipe, @NotNull IFocusGroup focuses) {
+    if (!recipe.canUseRecipe(block.kjs$getId())) return;
     initRenderers(recipe);
-    builder.addSlot(RecipeIngredientRole.INPUT, 31, 19).addIngredients(recipe.getIngredients().get(0));
+    builder.addSlot(RecipeIngredientRole.INPUT, 31, 19).addIngredients((Ingredient) recipe.getIngredients().get(0));
     builder.addSlot(RecipeIngredientRole.OUTPUT, 101, 19).addItemStack(recipe.getResultItem());
     builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 7, 50)
       .addIngredient(DegrassiTypes.ENERGY, energyComponents.get(recipe))
@@ -78,7 +114,8 @@ public abstract class GeneratorRecipeCategory<R extends GeneratorRecipe> impleme
   }
 
   @Override
-  public void draw(@NotNull R recipe, @NotNull IRecipeSlotsView recipeSlotsView, @NotNull PoseStack stack, double mouseX, double mouseY) {
+  public void draw(GeneratorRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, @NotNull PoseStack stack, double mouseX, double mouseY) {
+    if (!recipe.canUseRecipe(block.kjs$getId())) return;
     IRecipeCategory.super.draw(recipe, recipeSlotsView, stack, mouseX, mouseY);
     stack.pushPose();
     // animated progress bar
@@ -88,7 +125,7 @@ public abstract class GeneratorRecipeCategory<R extends GeneratorRecipe> impleme
     stack.popPose();
   }
 
-  private void initRenderers(R recipe) {
+  private void initRenderers(GeneratorRecipe<?> recipe) {
     if (progress == null) progress = new ProgressJeiRenderer(42, 18);
     if (energy == null) energy = new EnergyJeiRenderer(111, 16);
     ProgressStorage progressStorage = new ProgressStorage(20) {
@@ -142,5 +179,23 @@ public abstract class GeneratorRecipeCategory<R extends GeneratorRecipe> impleme
         );
       }
     });
+  }
+
+  @Override
+  public @NotNull RecipeType<GeneratorRecipe> getRecipeType() {
+    if (block instanceof JewelryGenerator) {
+      return DegrassiJEIRecipeTypes.JEWELRY_GENERATOR_TYPE;
+    }
+
+    return DegrassiJEIRecipeTypes.GENERATOR_TYPE;
+//    return switch(block.kjs$getId()) {
+//      case "degrassi:jewelry_generator" -> DegrassiJEIRecipeTypes.JEWELRY_GENERATOR_TYPE;
+//      default -> DegrassiJEIRecipeTypes.GENERATOR_TYPE;
+//    };
+  }
+
+  @Override
+  public @NotNull Component getTitle() {
+    return Component.translatable(block.getDescriptionId());
   }
 }

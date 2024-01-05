@@ -1,9 +1,8 @@
 package es.degrassi.forge.init.entity.generators;
 
 import es.degrassi.forge.init.block.generators.JewelryGenerator;
-import es.degrassi.forge.init.entity.FurnaceEntity;
 import es.degrassi.forge.init.recipe.helpers.RecipeHelpers;
-import es.degrassi.forge.init.recipe.recipes.generators.JewelryGeneratorRecipe;
+import es.degrassi.forge.init.recipe.recipes.*;
 import es.degrassi.forge.init.registration.EntityRegister;
 import es.degrassi.forge.init.registration.ItemRegister;
 import es.degrassi.forge.integration.config.DegrassiConfig;
@@ -21,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class JewelryGeneratorEntity extends GeneratorEntity<JewelryGeneratorEntity, JewelryGeneratorRecipe, JewelryGenerator> {
+public class JewelryGeneratorEntity extends GeneratorEntity<JewelryGeneratorEntity, GeneratorRecipe<JewelryGeneratorEntity>, JewelryGenerator> {
   {
     ENERGY_STORAGE = new AbstractEnergyStorage(DegrassiConfig.get().generatorsConfig.jewelry_capacity, DegrassiConfig.get().generatorsConfig.jewelry_transfer) {
       @Override

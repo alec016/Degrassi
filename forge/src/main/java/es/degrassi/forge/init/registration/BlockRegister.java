@@ -81,31 +81,31 @@ public class BlockRegister {
     CreativeTabs.MACHINES
   );
 
-  public static final RegistrySupplier<Block> IRON_FURNACE_BLOCK = registerBlock(
+  public static final RegistrySupplier<FurnaceBlock> IRON_FURNACE_BLOCK = registerBlock(
     "iron_furnace",
     () -> new FurnaceBlock(FurnaceTier.IRON),
     CreativeTabs.MACHINES
   );
 
-  public static final RegistrySupplier<Block> GOLD_FURNACE_BLOCK = registerBlock(
+  public static final RegistrySupplier<FurnaceBlock> GOLD_FURNACE_BLOCK = registerBlock(
     "gold_furnace",
     () -> new FurnaceBlock(FurnaceTier.GOLD),
     CreativeTabs.MACHINES
   );
 
-  public static final RegistrySupplier<Block> DIAMOND_FURNACE_BLOCK = registerBlock(
+  public static final RegistrySupplier<FurnaceBlock> DIAMOND_FURNACE_BLOCK = registerBlock(
     "diamond_furnace",
     () -> new FurnaceBlock(FurnaceTier.DIAMOND),
     CreativeTabs.MACHINES
   );
 
-  public static final RegistrySupplier<Block> EMERALD_FURNACE_BLOCK = registerBlock(
+  public static final RegistrySupplier<FurnaceBlock> EMERALD_FURNACE_BLOCK = registerBlock(
     "emerald_furnace",
     () -> new FurnaceBlock(FurnaceTier.EMERALD),
     CreativeTabs.MACHINES
   );
 
-  public static final RegistrySupplier<Block> NETHERITE_FURNACE_BLOCK = registerBlock(
+  public static final RegistrySupplier<FurnaceBlock> NETHERITE_FURNACE_BLOCK = registerBlock(
     "netherite_furnace",
     () -> new FurnaceBlock(FurnaceTier.NETHERITE),
     CreativeTabs.MACHINES

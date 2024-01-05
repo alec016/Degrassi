@@ -20,7 +20,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Containers;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -35,7 +34,7 @@ import java.util.Map;
 
 public abstract class GeneratorEntity<T extends GeneratorEntity<T, E, B>, E extends IDegrassiRecipe, B extends GeneratorBlock> extends BaseEntity implements IEnergyEntity, IRecipeEntity<E>, IProgressEntity, IItemEntity, IEnergyEntity.IGenerationEntity {
 
-  // recipè
+  // recipe
   private E recipe;
 
   // handlers

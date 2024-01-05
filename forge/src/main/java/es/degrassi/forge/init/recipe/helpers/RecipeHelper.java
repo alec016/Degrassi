@@ -3,12 +3,12 @@ package es.degrassi.forge.init.recipe.helpers;
 import es.degrassi.forge.init.entity.BaseEntity;
 import es.degrassi.forge.init.entity.type.IEnergyEntity;
 import es.degrassi.forge.init.entity.type.IRecipeEntity;
+import es.degrassi.forge.init.recipe.*;
 import es.degrassi.forge.util.storage.AbstractEnergyStorage;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class RecipeHelper<T extends Recipe<?>, E extends BaseEntity & IEnergyEntity & IRecipeEntity> {
+public abstract class RecipeHelper<T extends IDegrassiRecipe, E extends BaseEntity & IEnergyEntity & IRecipeEntity<T>> {
 
   public final NonNullList<T> recipes = NonNullList.create();
   public final Map<ResourceLocation, T> recipesMap = new HashMap<>();

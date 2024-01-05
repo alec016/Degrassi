@@ -1,7 +1,7 @@
 package es.degrassi.forge.init.item.upgrade;
 
 import es.degrassi.forge.client.ClientHandler;
-import es.degrassi.forge.init.item.upgrade.types.IJewelryUpgrade;
+import es.degrassi.forge.init.item.upgrade.types.IGeneratorUpgrade;
 import es.degrassi.forge.init.item.upgrade.types.IPanelUpgrade;
 import es.degrassi.forge.integration.config.DegrassiConfig;
 import net.minecraft.ChatFormatting;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class CapacityUpgrade extends BaseUpgrade implements IPanelUpgrade, IJewelryUpgrade {
+public class CapacityUpgrade extends BaseUpgrade implements IPanelUpgrade, IGeneratorUpgrade {
   private Integer value;
   private UpgradeType type;
   public CapacityUpgrade(Properties properties) {

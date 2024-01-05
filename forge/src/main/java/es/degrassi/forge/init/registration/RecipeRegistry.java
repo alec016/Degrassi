@@ -3,14 +3,8 @@ package es.degrassi.forge.init.registration;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.forge.Degrassi;
-import es.degrassi.forge.init.recipe.recipes.FurnaceRecipe;
-import es.degrassi.forge.init.recipe.recipes.MelterRecipe;
-import es.degrassi.forge.init.recipe.recipes.UpgradeMakerRecipe;
-import es.degrassi.forge.init.recipe.recipes.generators.JewelryGeneratorRecipe;
-import es.degrassi.forge.init.recipe.serializers.FurnaceRecipeSerializer;
-import es.degrassi.forge.init.recipe.serializers.MelterRecipeSerializer;
-import es.degrassi.forge.init.recipe.serializers.UpgradeMakerRecipeSerializer;
-import es.degrassi.forge.init.recipe.serializers.generators.JewelryGeneratorRecipeSerializer;
+import es.degrassi.forge.init.recipe.recipes.*;
+import es.degrassi.forge.init.recipe.serializers.*;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -36,9 +30,9 @@ public class RecipeRegistry {
       return "upgrade_maker";
     }
   });
-  public static final RegistrySupplier<RecipeType<JewelryGeneratorRecipe>> JEWELRY_GENERATOR_RECIPE_TYPE = RECIPE_TYPES.register("jewelry_generator", () -> new RecipeType<>() {
+  public static final RegistrySupplier<RecipeType<GeneratorRecipe<?>>> GENERATOR_RECIPE_TYPE = RECIPE_TYPES.register("generator", () -> new RecipeType<>() {
     public String toString() {
-      return "jewelry_generator";
+      return "generator";
     }
   });
 
@@ -46,7 +40,7 @@ public class RecipeRegistry {
   public static final RegistrySupplier<RecipeSerializer<MelterRecipe>> MELTER_SERIALIZER = SERIALIZERS.register("melter", MelterRecipeSerializer::new);
   public static final RegistrySupplier<RecipeSerializer<FurnaceRecipe>> FURNACE_SERIALIZER = SERIALIZERS.register("furnace", FurnaceRecipeSerializer::new);
   public static final RegistrySupplier<RecipeSerializer<UpgradeMakerRecipe>> UPGRADE_MAKER_SERIALIZER = SERIALIZERS.register("upgrade_maker", UpgradeMakerRecipeSerializer::new);
-  public static final RegistrySupplier<RecipeSerializer<JewelryGeneratorRecipe>> JEWELRY_GENERATOR_SERIALIZER = SERIALIZERS.register("jewelry_generator", JewelryGeneratorRecipeSerializer::new);
+  public static final RegistrySupplier<RecipeSerializer<GeneratorRecipe<?>>> GENERATOR_SERIALIZER = SERIALIZERS.register("generator", GeneratorRecipeSerializer::new);
 
   public static void register() {
     SERIALIZERS.register();

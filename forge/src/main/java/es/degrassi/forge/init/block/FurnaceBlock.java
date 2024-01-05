@@ -198,4 +198,8 @@ public class FurnaceBlock extends BaseBlock {
     if (entity != null) entity.delegate = this;
     return entity;
   }
+
+  public FurnaceTier getTier() {
+    return tier;
+  }
 }

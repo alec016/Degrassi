@@ -9,16 +9,14 @@ import es.degrassi.forge.init.recipe.helpers.RecipeHelpers;
 import es.degrassi.forge.init.registration.BlockRegister;
 import es.degrassi.forge.init.registration.ItemRegister;
 import es.degrassi.forge.integration.config.DegrassiConfig;
-import es.degrassi.forge.integration.jei.categories.FurnaceRecipeCategory;
-import es.degrassi.forge.integration.jei.categories.MelterRecipeCategory;
-import es.degrassi.forge.integration.jei.categories.UpgradeMakerRecipeCategory;
-import es.degrassi.forge.integration.jei.categories.generators.JewelryGeneratorRecipeCategory;
+import es.degrassi.forge.integration.jei.categories.*;
 import es.degrassi.forge.integration.jei.ingredients.DegrassiTypes;
 import es.degrassi.forge.integration.jei.renderer.EnergyJeiRenderer;
 import es.degrassi.forge.integration.jei.renderer.ProgressJeiRenderer;
 import es.degrassi.forge.integration.jei.renderer.helpers.EnergyIngredientHelper;
 import es.degrassi.forge.integration.jei.renderer.helpers.ProgressIngredientHelper;
 import es.degrassi.forge.util.TextureSizeHelper;
+import java.util.*;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
@@ -27,9 +25,8 @@ import mezz.jei.api.registration.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.*;
 
-import java.util.ArrayList;
 import static es.degrassi.forge.integration.jei.DegrassiJEIRecipeTypes.*;
 
 @JeiPlugin
@@ -52,15 +49,20 @@ public class JEIDegrassiPlugin implements IModPlugin {
     registerFurnaceCatalysts(registration);
     registerMelterCatalysts(registration);
     registerUpgradeMakerCatalysts(registration);
+    registerGeneratorsCatalysts(registration);
   }
 
   @Override
   public void registerCategories(@NotNull IRecipeCategoryRegistration registration) {
     registration.addRecipeCategories(
-      new FurnaceRecipeCategory(registration.getJeiHelpers()),
+      new FurnaceRecipeCategory(registration.getJeiHelpers(), BlockRegister.IRON_FURNACE_BLOCK.get()),
+      new FurnaceRecipeCategory(registration.getJeiHelpers(), BlockRegister.GOLD_FURNACE_BLOCK.get()),
+      new FurnaceRecipeCategory(registration.getJeiHelpers(), BlockRegister.DIAMOND_FURNACE_BLOCK.get()),
+      new FurnaceRecipeCategory(registration.getJeiHelpers(), BlockRegister.EMERALD_FURNACE_BLOCK.get()),
+      new FurnaceRecipeCategory(registration.getJeiHelpers(), BlockRegister.NETHERITE_FURNACE_BLOCK.get()),
       new MelterRecipeCategory(registration.getJeiHelpers()),
       new UpgradeMakerRecipeCategory(registration.getJeiHelpers()),
-      new JewelryGeneratorRecipeCategory(registration.getJeiHelpers())
+      new GeneratorRecipeCategory(registration.getJeiHelpers(), BlockRegister.JEWELRY_GENERATOR.get())
     );
   }
 
@@ -69,10 +71,14 @@ public class JEIDegrassiPlugin implements IModPlugin {
 
     RecipeHelpers.init();
 
-    registration.addRecipes(FURNACE_TYPE, RecipeHelpers.FURNACE.recipes);
+    registration.addRecipes(IRON_FURNACE_TYPE, RecipeHelpers.FURNACE.recipes);
+    registration.addRecipes(GOLD_FURNACE_TYPE, RecipeHelpers.FURNACE.recipes);
+    registration.addRecipes(DIAMOND_FURNACE_TYPE, RecipeHelpers.FURNACE.recipes);
+    registration.addRecipes(EMERALD_FURNACE_TYPE, RecipeHelpers.FURNACE.recipes);
+    registration.addRecipes(NETHERITE_FURNACE_TYPE, RecipeHelpers.FURNACE.recipes);
     registration.addRecipes(MELTER_TYPE, RecipeHelpers.MELTER.recipes);
     registration.addRecipes(UPGRADE_MAKER_TYPE, RecipeHelpers.UPGRADE_MAKER.recipes);
-    registration.addRecipes(JEWELRY_GENERATOR_TYPE, RecipeHelpers.JEWELRY_GENERATOR.recipes);
+    registration.addRecipes(JEWELRY_GENERATOR_TYPE, RecipeHelpers.GENERATORS.recipes);
 
     registerPanelInfo(registration);
     registerUpgradesInfo(registration);
@@ -126,42 +132,53 @@ public class JEIDegrassiPlugin implements IModPlugin {
       33,
       TextureSizeHelper.getTextureWidth(FurnaceScreen.FILLED_ARROW),
       TextureSizeHelper.getTextureHeight(FurnaceScreen.FILLED_ARROW),
-      FURNACE_TYPE
+      IRON_FURNACE_TYPE,
+      GOLD_FURNACE_TYPE,
+      DIAMOND_FURNACE_TYPE,
+      EMERALD_FURNACE_TYPE,
+      NETHERITE_FURNACE_TYPE
+    );
+  }
+
+  private void registerGeneratorsCatalysts(@NotNull IRecipeCatalystRegistration registration) {
+    registration.addRecipeCatalyst(
+      new ItemStack(BlockRegister.JEWELRY_GENERATOR.get()),
+      JEWELRY_GENERATOR_TYPE
     );
   }
 
   private void registerFurnaceCatalysts(@NotNull IRecipeCatalystRegistration registration) {
     registration.addRecipeCatalyst(
       new ItemStack(BlockRegister.IRON_FURNACE_BLOCK.get()),
-      FURNACE_TYPE,
+      IRON_FURNACE_TYPE,
       RecipeTypes.SMELTING,
       RecipeTypes.BLASTING,
       RecipeTypes.SMOKING
     );
     registration.addRecipeCatalyst(
       new ItemStack(BlockRegister.GOLD_FURNACE_BLOCK.get()),
-      FURNACE_TYPE,
+      GOLD_FURNACE_TYPE,
       RecipeTypes.SMELTING,
       RecipeTypes.BLASTING,
       RecipeTypes.SMOKING
     );
     registration.addRecipeCatalyst(
       new ItemStack(BlockRegister.DIAMOND_FURNACE_BLOCK.get()),
-      FURNACE_TYPE,
+      DIAMOND_FURNACE_TYPE,
       RecipeTypes.SMELTING,
       RecipeTypes.BLASTING,
       RecipeTypes.SMOKING
     );
     registration.addRecipeCatalyst(
       new ItemStack(BlockRegister.EMERALD_FURNACE_BLOCK.get()),
-      FURNACE_TYPE,
+      EMERALD_FURNACE_TYPE,
       RecipeTypes.SMELTING,
       RecipeTypes.BLASTING,
       RecipeTypes.SMOKING
     );
     registration.addRecipeCatalyst(
       new ItemStack(BlockRegister.NETHERITE_FURNACE_BLOCK.get()),
-      FURNACE_TYPE,
+      NETHERITE_FURNACE_TYPE,
       RecipeTypes.SMELTING,
       RecipeTypes.BLASTING,
       RecipeTypes.SMOKING

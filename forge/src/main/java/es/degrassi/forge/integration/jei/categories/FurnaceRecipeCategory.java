@@ -3,6 +3,7 @@ package es.degrassi.forge.integration.jei.categories;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import es.degrassi.common.DegrassiLocation;
+import es.degrassi.forge.init.block.FurnaceBlock;
 import es.degrassi.forge.init.gui.renderer.EnergyInfoArea;
 import es.degrassi.forge.init.gui.renderer.ProgressComponent;
 import es.degrassi.forge.init.recipe.recipes.FurnaceRecipe;
@@ -10,10 +11,9 @@ import es.degrassi.forge.integration.jei.DegrassiJEIRecipeTypes;
 import es.degrassi.forge.integration.jei.ingredients.DegrassiTypes;
 import es.degrassi.forge.integration.jei.renderer.EnergyJeiRenderer;
 import es.degrassi.forge.requirements.IRequirement;
-import es.degrassi.forge.util.TextureSizeHelper;
+import es.degrassi.forge.util.*;
 import es.degrassi.forge.util.storage.AbstractEnergyStorage;
 import es.degrassi.forge.util.storage.ProgressStorage;
-import es.degrassi.forge.init.registration.BlockRegister;
 import es.degrassi.forge.integration.jei.renderer.ProgressJeiRenderer;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -35,7 +35,23 @@ import java.util.List;
 import java.util.Map;
 
 public class FurnaceRecipeCategory implements IRecipeCategory<FurnaceRecipe> {
-  public static final ResourceLocation UID = new DegrassiLocation("furnace");
+  private static final Map<String, ResourceLocation> UIDS = Maps.newHashMap();
+  static {
+    UIDS.put("default", createUID(""));
+  }
+
+  public static ResourceLocation createUID(String furnace) {
+    if (furnace.isEmpty()) {
+      ResourceLocation UID = new DegrassiLocation("generator");
+      UIDS.put("default", UID);
+      return UID;
+    }
+    if (UIDS.get(furnace) != null) return UIDS.get(furnace);
+    ResourceLocation UID = new DegrassiLocation(furnace + "furnace");
+    UIDS.put(furnace, UID);
+    return UID;
+  }
+
   public static final ResourceLocation TEXTURE = new DegrassiLocation("textures/gui/jei/furnace_gui.png");
   public static final ResourceLocation FILLED_PROGRESS = new DegrassiLocation("textures/gui/jei/furnace_progress_filled.png");
 
@@ -45,23 +61,29 @@ public class FurnaceRecipeCategory implements IRecipeCategory<FurnaceRecipe> {
   private final Map<FurnaceRecipe, ProgressComponent> progressComponents = Maps.newHashMap();
   private ProgressJeiRenderer progress;
   private EnergyJeiRenderer energy;
-  private final IJeiHelpers helper;
+  private final FurnaceBlock block;
 
-  public FurnaceRecipeCategory(@NotNull IJeiHelpers helper) {
-    this. helper = helper;
+  public FurnaceRecipeCategory(@NotNull IJeiHelpers helper, FurnaceBlock block) {
     IGuiHelper helper1 = helper.getGuiHelper();
     this.background = helper1.drawableBuilder(TEXTURE, 0, 0, 126, 73).setTextureSize(126, 73).build();
-    this.icon = helper1.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(BlockRegister.IRON_FURNACE_BLOCK.get()));
+    this.icon = helper1.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(block));
+    this.block = block;
   }
 
   @Override
   public @NotNull Component getTitle() {
-    return Component.literal("Degrassi Furnace");
+    return Component.translatable(block.getDescriptionId());
   }
 
   @Override
   public @NotNull RecipeType<FurnaceRecipe> getRecipeType() {
-    return DegrassiJEIRecipeTypes.FURNACE_TYPE;
+    return switch (block.getTier()) {
+      case IRON -> DegrassiJEIRecipeTypes.IRON_FURNACE_TYPE;
+      case GOLD -> DegrassiJEIRecipeTypes.GOLD_FURNACE_TYPE;
+      case DIAMOND -> DegrassiJEIRecipeTypes.DIAMOND_FURNACE_TYPE;
+      case EMERALD -> DegrassiJEIRecipeTypes.EMERALD_FURNACE_TYPE;
+      case NETHERITE -> DegrassiJEIRecipeTypes.NETHERITE_FURNACE_TYPE;
+    };
   }
 
   @Override
@@ -89,7 +111,6 @@ public class FurnaceRecipeCategory implements IRecipeCategory<FurnaceRecipe> {
           tooltip.addAll(energyComponents.get(recipe).getTooltips());
         }
       );
-    IDrawable overlay = helper.getGuiHelper().createBlankDrawable(42, 18);
     builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 53, 18)
       .setCustomRenderer(DegrassiTypes.PROGRESS, progress)
       .addIngredient(DegrassiTypes.PROGRESS, progressComponents.get(recipe))
