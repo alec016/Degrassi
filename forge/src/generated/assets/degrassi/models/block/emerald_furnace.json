@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/orientable",
-  "textures": {
-    "front": "degrassi:block/furnace/emerald_furnace",
-    "side": "degrassi:block/furnace/emerald_furnace_side",
-    "top": "degrassi:block/furnace/emerald_furnace_side"
-  }
-}
