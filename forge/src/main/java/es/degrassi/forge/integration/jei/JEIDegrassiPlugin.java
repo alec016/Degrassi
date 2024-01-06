@@ -151,33 +151,53 @@ public class JEIDegrassiPlugin implements IModPlugin {
     registration.addRecipeCatalyst(
       new ItemStack(BlockRegister.IRON_FURNACE_BLOCK.get()),
       IRON_FURNACE_TYPE,
+      GOLD_FURNACE_TYPE,
+      DIAMOND_FURNACE_TYPE,
+      EMERALD_FURNACE_TYPE,
+      NETHERITE_FURNACE_TYPE,
       RecipeTypes.SMELTING,
       RecipeTypes.BLASTING,
       RecipeTypes.SMOKING
     );
     registration.addRecipeCatalyst(
       new ItemStack(BlockRegister.GOLD_FURNACE_BLOCK.get()),
+      IRON_FURNACE_TYPE,
       GOLD_FURNACE_TYPE,
+      DIAMOND_FURNACE_TYPE,
+      EMERALD_FURNACE_TYPE,
+      NETHERITE_FURNACE_TYPE,
       RecipeTypes.SMELTING,
       RecipeTypes.BLASTING,
       RecipeTypes.SMOKING
     );
     registration.addRecipeCatalyst(
       new ItemStack(BlockRegister.DIAMOND_FURNACE_BLOCK.get()),
+      IRON_FURNACE_TYPE,
+      GOLD_FURNACE_TYPE,
       DIAMOND_FURNACE_TYPE,
+      EMERALD_FURNACE_TYPE,
+      NETHERITE_FURNACE_TYPE,
       RecipeTypes.SMELTING,
       RecipeTypes.BLASTING,
       RecipeTypes.SMOKING
     );
     registration.addRecipeCatalyst(
       new ItemStack(BlockRegister.EMERALD_FURNACE_BLOCK.get()),
+      IRON_FURNACE_TYPE,
+      GOLD_FURNACE_TYPE,
+      DIAMOND_FURNACE_TYPE,
       EMERALD_FURNACE_TYPE,
+      NETHERITE_FURNACE_TYPE,
       RecipeTypes.SMELTING,
       RecipeTypes.BLASTING,
       RecipeTypes.SMOKING
     );
     registration.addRecipeCatalyst(
       new ItemStack(BlockRegister.NETHERITE_FURNACE_BLOCK.get()),
+      IRON_FURNACE_TYPE,
+      GOLD_FURNACE_TYPE,
+      DIAMOND_FURNACE_TYPE,
+      EMERALD_FURNACE_TYPE,
       NETHERITE_FURNACE_TYPE,
       RecipeTypes.SMELTING,
       RecipeTypes.BLASTING,
