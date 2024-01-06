@@ -73,7 +73,10 @@ public class FurnaceContainer extends BaseContainer<FurnaceEntity> implements IP
   @Override
   public void clicked(int slotId, int dragType, @NotNull ClickType clickTypeIn, @NotNull Player player) {
     this.entity.setChanged();
-    if (slotId == 3 + VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT && slots.get(slotId).mayPickup(player)) this.entity.dropExperience();
+    if (slotId == 3 + VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT && slots.get(slotId).mayPickup(player)) {
+      player.giveExperiencePoints(this.entity.xp.getXp());
+      this.entity.xp.extractXp(this.entity.xp.getXp());
+    }
     super.clicked(slotId, dragType, clickTypeIn, player);
   }
 
@@ -94,7 +97,10 @@ public class FurnaceContainer extends BaseContainer<FurnaceEntity> implements IP
     } else if (index < TE_INVENTORY_FIRST_SLOT_INDEX + TE_INVENTORY_SLOT_COUNT) {
       // This is a TE slot so merge the stack into the players inventory
       if (!moveItemStackTo(sourceStack, VANILLA_FIRST_SLOT_INDEX, VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT, false)) {
-        if (sourceSlot.index == 3 + VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) this.entity.dropExperience();
+        if (sourceSlot.index == 3 + VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
+          playerIn.giveExperiencePoints(this.entity.xp.getXp());
+          this.entity.xp.extractXp(this.entity.xp.getXp());
+        }
         return ItemStack.EMPTY;
       }
     } else {

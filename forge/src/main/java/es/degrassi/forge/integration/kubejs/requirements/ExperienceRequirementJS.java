@@ -6,7 +6,7 @@ import es.degrassi.forge.requirements.ExperienceRequirement;
 
 @SuppressWarnings("unused")
 public interface ExperienceRequirementJS<T extends AbstractRecipeBuilderJS<?, ?>> extends RecipeBuilderJS<T> {
-  default T produceXp(float amount) {
+  default T produceXp(int amount) {
     return this.addRequirement(new ExperienceRequirement(amount));
   }
 }

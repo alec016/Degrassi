@@ -17,7 +17,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 @SuppressWarnings("unused")
 public class FurnaceRecipeBuilder extends AbstractRecipeBuilder<FurnaceRecipe> {
   private int time;
-  private float xp;
+  private int xp;
   private int energy;
   private IIngredient<Item> outputIngredient;
   private IIngredient<Item> inputIngredient;
@@ -29,7 +29,7 @@ public class FurnaceRecipeBuilder extends AbstractRecipeBuilder<FurnaceRecipe> {
   public static final NamedCodec<FurnaceRecipeBuilder> CODEC = NamedCodec.record(recipeBuilderInstance ->
     recipeBuilderInstance.group(
       NamedCodec.INT.fieldOf("time").forGetter(builder -> builder.time),
-      NamedCodec.FLOAT.fieldOf("xp").forGetter(builder -> builder.xp),
+      NamedCodec.INT.fieldOf("xp").forGetter(builder -> builder.xp),
       NamedCodec.INT.fieldOf("energy").forGetter(builder -> builder.energy),
       IIngredient.ITEM.fieldOf("input").forGetter(builder -> builder.inputIngredient),
       NamedCodec.INT.optionalFieldOf("inputAmount", 1).forGetter(builder -> builder.inputAmount),
@@ -64,7 +64,7 @@ public class FurnaceRecipeBuilder extends AbstractRecipeBuilder<FurnaceRecipe> {
     return recipe;
   }
 
-  public FurnaceRecipeBuilder xp(float xp) {
+  public FurnaceRecipeBuilder xp(int xp) {
     this.xp = xp;
     return this;
   }

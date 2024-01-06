@@ -8,11 +8,11 @@ import es.degrassi.forge.util.storage.ExperienceStorage;
 public class ExperienceRequirement implements IRequirement<ExperienceStorage> {
   public static final NamedCodec<ExperienceRequirement> CODEC = NamedCodec.record(energyRequirementInstance ->
     energyRequirementInstance.group(
-      NamedCodec.FLOAT.fieldOf("amount").forGetter(requirement -> requirement.amount)
+      NamedCodec.INT.fieldOf("amount").forGetter(requirement -> requirement.amount)
     ).apply(energyRequirementInstance, (ExperienceRequirement::new)), "Energy requirement"
   );
-  private final float amount;
-  public ExperienceRequirement(float amount) {
+  private final int amount;
+  public ExperienceRequirement(int amount) {
     this.amount = amount;
   }
 
@@ -37,7 +37,7 @@ public class ExperienceRequirement implements IRequirement<ExperienceStorage> {
     return CraftingResult.pass();
   }
 
-  public float getXP() {
+  public int getXP() {
     return this.amount;
   }
 }

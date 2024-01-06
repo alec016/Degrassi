@@ -86,7 +86,7 @@ public class FurnaceRecipeHelper extends RecipeHelper<FurnaceRecipe, FurnaceEnti
         if (r.getId().toString().equals(recipe.getId().toString())) has.set(true);
       });
       if (!has.get()) {
-        FurnaceRecipe r = new FurnaceRecipe(recipe.getId(), recipe.getResultItem(), recipe.getIngredients(), recipe.getCookingTime(), recipe.getExperience());
+        FurnaceRecipe r = new FurnaceRecipe(recipe.getId(), recipe.getResultItem(), recipe.getIngredients(), recipe.getCookingTime(), Math.round(recipe.getExperience() * 10));
         recipes.add(r);
         recipesMap.put(recipe.getId(), r);
       }

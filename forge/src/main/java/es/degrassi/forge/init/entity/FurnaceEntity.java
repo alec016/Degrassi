@@ -14,6 +14,7 @@ import es.degrassi.forge.util.storage.AbstractEnergyStorage;
 import es.degrassi.forge.util.storage.ExperienceStorage;
 import es.degrassi.forge.util.storage.ProgressStorage;
 import es.degrassi.forge.network.ExperiencePacket;
+import java.util.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -21,13 +22,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Containers;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -35,9 +36,6 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Map;
-import java.util.Objects;
 
 public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeEntity<FurnaceRecipe>, IItemEntity, IProgressEntity, IExperienceEntity {
   private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
@@ -150,9 +148,6 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
       public void onExperienceChanged() {
         setChanged();
         if(level != null && !level.isClientSide() && level.getServer() != null) {
-          if (this.xp >= 9843) {
-            dropExperience();
-          }
           new ExperiencePacket(this.xp, pos)
             .sendToChunkListeners(level.getChunkAt(getBlockPos()));
         }
@@ -165,7 +160,6 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
         if (level != null && !level.isClientSide() && level.getServer() != null) {
           new ItemPacket(this, worldPosition)
             .sendToAll(level.getServer());
-          //.sendToChunkListeners(level.getChunkAt(pos));
         }
       }
 
@@ -232,6 +226,14 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
 
     assert this.level != null;
     Containers.dropContents(this.level, this.worldPosition, inventory);
+    dropExperience(level, this);
+  }
+
+  private static void dropExperience(@NotNull Level level, FurnaceEntity entity) {
+    if(level.getServer() != null) {
+      ExperienceOrb.award(Objects.requireNonNull(level.getServer().getLevel(level.dimension())), Vec3.atCenterOf(entity.getBlockPos()), entity.xp.getXp());
+      entity.xp.extractXp(entity.xp.getXp());
+    }
   }
 
   public static void tick(
@@ -263,7 +265,7 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
     nbt.put("furnace.inventory", itemHandler.serializeNBT());
     nbt.put("furnace.energy", ENERGY_STORAGE.serializeNBT());
     nbt.put("furnace.progress", progressStorage.serializeNBT());
-    nbt.putFloat("furnace.xp", xp.getXp());
+    nbt.put("furnace.xp", xp.serializeNBT());
   }
 
   @Override
@@ -272,7 +274,7 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
     itemHandler.deserializeNBT(nbt.getCompound("furnace.inventory"));
     ENERGY_STORAGE.deserializeNBT(nbt.getCompound("furnace.energy"));
     progressStorage.deserializeNBT(nbt.getCompound("furnace.progress"));
-    xp.setXp(nbt.getFloat("furnace.xp"));
+    xp.deserializeNBT(nbt.get("furnace.xp"));
   }
 
   @Override
@@ -280,7 +282,7 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
     return ClientboundBlockEntityDataPacket.create(this);
   }
 
-  public void setXp(float xp) {
+  public void setXp(int xp) {
     this.xp.setXp(xp);
   }
 
@@ -325,19 +327,13 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
     nbt.put("furnace.inventory", itemHandler.serializeNBT());
     nbt.put("furnace.energy", ENERGY_STORAGE.serializeNBT());
     nbt.put("furnace.progress", progressStorage.serializeNBT());
+    nbt.put("furnace.xp", xp.serializeNBT());
     return nbt;
   }
 
   @Override
   public void handleUpdateTag(CompoundTag tag) {
     load(tag);
-  }
-
-  public void dropExperience() {
-    if(level != null && level.getServer() != null) {
-      ExperienceOrb.award(Objects.requireNonNull(level.getServer().getLevel(level.dimension())), Vec3.atCenterOf(getBlockPos()), (int) Math.floor(this.xp.getXp()));
-      this.xp.extractXp((float) Math.floor(this.xp.getXp()));
-    }
   }
 
   @Override

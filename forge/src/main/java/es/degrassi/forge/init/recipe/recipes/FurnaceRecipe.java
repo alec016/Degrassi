@@ -20,7 +20,7 @@ public class FurnaceRecipe implements IDegrassiRecipe {
   private final NonNullList<Ingredient> recipeItems;
   private int time;
   private int energyRequired;
-  private float xp;
+  private int xp;
   private boolean modified = false;
   private boolean showInJei = true;
 
@@ -29,7 +29,7 @@ public class FurnaceRecipe implements IDegrassiRecipe {
     ItemStack output,
     NonNullList<Ingredient> ingredients,
     int time,
-    float xp
+    int xp
   ) {
     this(id, output, ingredients, time, 10, xp);
   }
@@ -40,7 +40,7 @@ public class FurnaceRecipe implements IDegrassiRecipe {
     NonNullList<Ingredient> ingredients,
     int time,
     int energyRequired,
-    float xp
+    int xp
   ) {
     this.id = id;
     this.output = output;
@@ -116,11 +116,11 @@ public class FurnaceRecipe implements IDegrassiRecipe {
     this.time = time;
   }
 
-  public float getExperience() {
+  public int getExperience() {
     return this.xp;
   }
 
-  public void setExperience(float xp) {
+  public void setExperience(int xp) {
     this.xp = xp;
   }
 

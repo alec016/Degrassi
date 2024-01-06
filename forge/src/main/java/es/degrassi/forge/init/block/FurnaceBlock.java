@@ -6,8 +6,7 @@ import es.degrassi.forge.init.gui.container.FurnaceContainer;
 import es.degrassi.forge.init.registration.EntityRegister;
 import es.degrassi.forge.init.tiers.FurnaceTier;
 import es.degrassi.forge.integration.config.DegrassiConfig;
-import es.degrassi.forge.network.EnergyPacket;
-import es.degrassi.forge.network.ProgressPacket;
+import es.degrassi.forge.network.*;
 import es.degrassi.forge.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -91,6 +90,7 @@ public class FurnaceBlock extends BaseBlock {
           public AbstractContainerMenu createMenu(int id, @NotNull Inventory inv, @NotNull Player player) {
             new EnergyPacket(entity.ENERGY_STORAGE.getEnergyStored(), entity.ENERGY_STORAGE.getMaxEnergyStored(), entity.ENERGY_STORAGE.getMaxEnergyStored(), pos);
             new ProgressPacket(entity.progressStorage.getProgress(), entity.progressStorage.getMaxProgress(), pos);
+            new ExperiencePacket(entity.xp.getXp(), pos);
             return new FurnaceContainer(id, inv, entity, entity.data);
           }
         }, buf -> buf.writeBlockPos(pos));

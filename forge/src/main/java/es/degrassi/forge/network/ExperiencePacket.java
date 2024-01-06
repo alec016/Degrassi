@@ -13,20 +13,20 @@ import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 public class ExperiencePacket extends BaseS2CMessage {
-  private final float xp;
+  private final int xp;
   private final BlockPos pos;
 
   public ExperiencePacket(BlockPos pos) {
     this(0, pos);
   }
 
-  public ExperiencePacket(float xp, BlockPos pos) {
+  public ExperiencePacket(int xp, BlockPos pos) {
     this.xp = xp;
     this.pos = pos;
   }
 
   public ExperiencePacket(@NotNull FriendlyByteBuf buf) {
-    this.xp = buf.readFloat();
+    this.xp = buf.readInt();
     this.pos = buf.readBlockPos();
   }
 
@@ -37,7 +37,7 @@ public class ExperiencePacket extends BaseS2CMessage {
 
   @Override
   public void write(@NotNull FriendlyByteBuf buf) {
-    buf.writeFloat(xp);
+    buf.writeInt(xp);
     buf.writeBlockPos(pos);
   }
 
