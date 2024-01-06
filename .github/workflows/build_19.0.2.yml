@@ -3,10 +3,10 @@ name: Degrassi CI (1.19.2)
 on:
   push:
     branches:
-      - 'master'
+      - '1902'
   workflow_dispatch:
     branches:
-      - 'master'
+      - '1902'
     inputs:
       release_type:
         description: 'Release Type'
