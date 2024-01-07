@@ -22,7 +22,7 @@ public class FurnaceContainer extends BaseContainer<FurnaceEntity> implements IP
   protected static final int TE_INVENTORY_SLOT_COUNT = 4;  // must be the number of slots you have!
 
   public FurnaceContainer(int i, Inventory inv, FurnaceEntity entity, ContainerData data) {
-    super(ContainerRegistry.FURNACE_CONTAINER.get(), i);
+    super(ContainerRegistry.FURNACE_CONTAINER.get(), i, TE_INVENTORY_SLOT_COUNT);
     checkContainerSize(inv, TE_INVENTORY_SLOT_COUNT);
     this.entity = entity;
     this.level = inv.player.level;
@@ -51,19 +51,6 @@ public class FurnaceContainer extends BaseContainer<FurnaceEntity> implements IP
       playerInv,
       ClientHandler.getClientSideFurnaceEntity(extraData.readBlockPos())
     );
-  }
-
-  @Override
-  public boolean isCrafting() {
-    return entity.progressStorage.getProgress() > 0;
-  }
-
-  @Override
-  public int getScaledProgress(int renderSize) {
-    int progress = this.entity.progressStorage.getProgress();
-    int maxProgress = this.entity.progressStorage.getMaxProgress();  // Max Progress
-
-    return maxProgress != 0 && progress != 0 ? (int) (progress / (float) maxProgress) * renderSize : 0;
   }
 
   public FurnaceEntity getEntity() {
@@ -116,7 +103,6 @@ public class FurnaceContainer extends BaseContainer<FurnaceEntity> implements IP
     sourceSlot.onTake(playerIn, sourceStack);
     return copyOfSourceStack;
   }
-
 
   @Override
   public boolean stillValid(@NotNull Player player) {

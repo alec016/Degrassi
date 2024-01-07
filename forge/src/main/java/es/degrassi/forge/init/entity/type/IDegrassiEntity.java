@@ -4,4 +4,6 @@ import net.minecraft.core.BlockPos;
 
 public interface IDegrassiEntity {
   BlockPos getBlockPos();
+
+  void setChanged();
 }
