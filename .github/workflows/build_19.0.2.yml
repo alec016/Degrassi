@@ -50,6 +50,10 @@ jobs:
      #      SAPS_TOKEN: ${{ secrets.SAPS_TOKEN }}
      #    with:
      #      arguments: build publish --stacktrace --no-daemon
+      - name: Build
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build --stacktrace --no-daemon
 
       - name: Release to CurseForge
         uses: gradle/gradle-build-action@v2
