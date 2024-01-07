@@ -140,7 +140,7 @@ unifiedPublishing {
         gameLoaders = ["forge"]
         mainPublication remapJar
 
-        var CURSE_API_KEY = System.getenv("CURSEFORGE")
+        var CURSE_API_KEY = System.getenv("CURSEFORGE_KEY")
         if (CURSE_API_KEY != null) {
             curseforge {
                 token = CURSE_API_KEY

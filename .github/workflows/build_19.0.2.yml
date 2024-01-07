@@ -60,4 +60,4 @@ jobs:
           CURSEFORGE_KEY: ${{ secrets.CURSEFORGE_KEY }}
           RELEASE_TYPE: ${{ inputs.release_type }}
         with:
-          arguments: curseforge --stacktrace --no-daemon
+          arguments: build curseforge --stacktrace --no-daemon
