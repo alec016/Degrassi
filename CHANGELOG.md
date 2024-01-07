@@ -2,6 +2,8 @@
 
 > ### <u>Added:</u>
 > - Upgrade Maker machine
+> - Melter machine
+> - Jewelry generator machine
 > - Speed Upgrade
 > - Energy Upgrade
 > - JEI recipe handler
