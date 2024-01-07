@@ -15,7 +15,7 @@ import org.jetbrains.annotations.*;
 
 public class GeneratorRecipeSerializer implements RecipeSerializer<GeneratorRecipe<?>> {
   @Override
-  public GeneratorRecipe<?> fromJson(ResourceLocation recipeId, JsonObject json) {
+  public @NotNull GeneratorRecipe<?> fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
     DegrassiLogger.INSTANCE.info("Parsing recipe json: {}", recipeId);
     DataResult<Pair<GeneratorRecipeBuilder, JsonElement>> result = GeneratorRecipeBuilder.CODEC.decode(JsonOps.INSTANCE, json);
     if(result.result().isPresent()) {
@@ -32,7 +32,7 @@ public class GeneratorRecipeSerializer implements RecipeSerializer<GeneratorReci
   }
 
   @Override
-  public @Nullable GeneratorRecipe<?> fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+  public @Nullable GeneratorRecipe<?> fromNetwork(@NotNull ResourceLocation recipeId, FriendlyByteBuf buffer) {
     DegrassiLogger.INSTANCE.info("Receiving recipe: {} from server.", recipeId);
     DataResult<GeneratorRecipeBuilder> result = GeneratorRecipeBuilder.CODEC.read(NbtOps.INSTANCE, buffer.readAnySizeNbt());
     if(result.result().isPresent()) {
@@ -49,7 +49,8 @@ public class GeneratorRecipeSerializer implements RecipeSerializer<GeneratorReci
   }
 
   @Override
-  public void toNetwork(FriendlyByteBuf buffer, GeneratorRecipe<?> recipe) {DegrassiLogger.INSTANCE.info("Sending recipe: {} to clients", recipe.getId());
+  public void toNetwork(@NotNull FriendlyByteBuf buffer, GeneratorRecipe<?> recipe) {
+    DegrassiLogger.INSTANCE.info("Sending recipe: {} to clients", recipe.getId());
     DataResult<Tag> result = GeneratorRecipeBuilder.CODEC.encodeStart(NbtOps.INSTANCE, new GeneratorRecipeBuilder(recipe));
     if(result.result().isPresent()) {
       DegrassiLogger.INSTANCE.info("Successfully send recipe: {} to clients.", recipe.getId());

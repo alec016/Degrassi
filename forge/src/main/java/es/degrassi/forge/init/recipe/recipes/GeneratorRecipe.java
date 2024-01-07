@@ -13,6 +13,7 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
 public class GeneratorRecipe<T extends GeneratorEntity<T, GeneratorRecipe<T>, ? extends GeneratorBlock>> implements IDegrassiRecipe {
   protected final ResourceLocation id;
   protected final NonNullList<Ingredient> recipeItems;
@@ -123,7 +124,7 @@ public class GeneratorRecipe<T extends GeneratorEntity<T, GeneratorRecipe<T>, ? 
   }
 
   @Override
-  public NonNullList<Ingredient> getIngredients() {
+  public @NotNull NonNullList<Ingredient> getIngredients() {
     return recipeItems;
   }
 }

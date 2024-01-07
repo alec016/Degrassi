@@ -19,6 +19,7 @@
   "block.degrassi.solar_panel_tier_8": "Panel Solar Tier VIII",
   "block.degrassi.upgrade_maker": "Fábrica de Mejoras",
   "config.jade.plugin_degrassi.furnace_component_provider": "Furnace Component Provider",
+  "config.jade.plugin_degrassi.generator_component_provider": "Generator Component Provider",
   "config.jade.plugin_degrassi.melter_component_provider": "Melter Component Provider",
   "config.jade.plugin_degrassi.upgrade_maker_component_provider": "Upgrade Maker Component Provider",
   "degrassi.gui.element.efficiency": "Eficiencia: %s",

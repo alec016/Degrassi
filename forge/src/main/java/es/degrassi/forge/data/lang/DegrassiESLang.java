@@ -129,5 +129,6 @@ public class DegrassiESLang extends DegrassiLangProvider {
     addJadeConfig("melter_component_provider", "Melter Component Provider");
     addJadeConfig("furnace_component_provider", "Furnace Component Provider");
     addJadeConfig("upgrade_maker_component_provider", "Upgrade Maker Component Provider");
+    addJadeConfig("generator_component_provider", "Generator Component Provider");
   }
 }

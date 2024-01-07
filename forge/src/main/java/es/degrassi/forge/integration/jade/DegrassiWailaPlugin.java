@@ -3,9 +3,11 @@ package es.degrassi.forge.integration.jade;
 import es.degrassi.forge.init.block.FurnaceBlock;
 import es.degrassi.forge.init.block.Melter;
 import es.degrassi.forge.init.block.UpgradeMaker;
+import es.degrassi.forge.init.block.generators.*;
 import es.degrassi.forge.init.entity.FurnaceEntity;
 import es.degrassi.forge.init.entity.MelterEntity;
 import es.degrassi.forge.init.entity.UpgradeMakerEntity;
+import es.degrassi.forge.init.entity.generators.*;
 import es.degrassi.forge.init.registration.BlockRegister;
 import org.jetbrains.annotations.NotNull;
 import snownee.jade.api.IWailaClientRegistration;
@@ -21,6 +23,7 @@ public class DegrassiWailaPlugin implements IWailaPlugin {
     registration.registerBlockDataProvider(DegrassiServerDataProvider.FURNACE, FurnaceEntity.class);
     registration.registerBlockDataProvider(DegrassiServerDataProvider.MELTER, MelterEntity.class);
     registration.registerBlockDataProvider(DegrassiServerDataProvider.UPGRADE_MAKER, UpgradeMakerEntity.class);
+    registration.registerBlockDataProvider(DegrassiServerDataProvider.GENERATOR, JewelryGeneratorEntity.class);
   }
 
   @Override
@@ -35,5 +38,7 @@ public class DegrassiWailaPlugin implements IWailaPlugin {
     registration.usePickedResult(BlockRegister.MELTER_BLOCK.get());
     registration.registerBlockComponent(DegrassiComponentProvider.UPGRADE_MAKER, UpgradeMaker.class);
     registration.usePickedResult(BlockRegister.UPGRADE_MAKER.get());
+    registration.registerBlockComponent(DegrassiComponentProvider.GENERATOR, JewelryGenerator.class);
+    registration.usePickedResult(BlockRegister.JEWELRY_GENERATOR.get());
   }
 }

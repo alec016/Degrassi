@@ -9,9 +9,7 @@ import dev.latvian.mods.kubejs.recipe.component.ArrayRecipeComponent;
 import dev.latvian.mods.kubejs.recipe.component.RecipeComponent;
 import dev.latvian.mods.kubejs.recipe.component.TimeComponent;
 import dev.latvian.mods.kubejs.recipe.schema.RecipeSchema;
-import es.degrassi.forge.integration.kubejs.recipes.builder.FurnaceRecipeBuilderJS;
-import es.degrassi.forge.integration.kubejs.recipes.builder.MelterRecipeBuilderJS;
-import es.degrassi.forge.integration.kubejs.recipes.builder.UpgradeMakerRecipeBuilderJS;
+import es.degrassi.forge.integration.kubejs.recipes.builder.*;
 import es.degrassi.forge.requirements.IRequirement;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -42,5 +40,6 @@ public interface DegrassiRecipeSchemas {
   RecipeSchema FURNACE_MACHINE = new RecipeSchema(FurnaceRecipeBuilderJS.class, FurnaceRecipeBuilderJS::new, TIME, REQUIREMENTS);
   RecipeSchema MELTER_MACHINE = new RecipeSchema(MelterRecipeBuilderJS.class, MelterRecipeBuilderJS::new, TIME, REQUIREMENTS);
   RecipeSchema UPGRADE_MACHINE = new RecipeSchema(UpgradeMakerRecipeBuilderJS.class, UpgradeMakerRecipeBuilderJS::new, TIME, REQUIREMENTS);
+  RecipeSchema GENERATOR_MACHINE = new RecipeSchema(GeneratorRecipeBuilderJS.class, GeneratorRecipeBuilderJS::new, TIME, REQUIREMENTS);
 
 }

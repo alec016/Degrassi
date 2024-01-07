@@ -4,7 +4,6 @@ import es.degrassi.forge.init.block.generators.GeneratorBlock;
 import es.degrassi.forge.init.entity.generators.*;
 import es.degrassi.forge.init.item.upgrade.UpgradeUpgradeType;
 import es.degrassi.forge.init.item.upgrade.types.IGeneratorUpgrade;
-import es.degrassi.forge.init.recipe.helpers.RecipeHelper;
 import es.degrassi.forge.init.recipe.recipes.*;
 import es.degrassi.forge.init.registration.*;
 import es.degrassi.forge.util.*;
@@ -16,6 +15,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.*;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("rawtypes")
 public class GeneratorRecipeHelper extends RecipeHelper<GeneratorRecipe, GeneratorEntity<?, GeneratorRecipe, GeneratorBlock>> {
   @Override
   public boolean hasRecipe(@NotNull GeneratorEntity<?, GeneratorRecipe, GeneratorBlock> entity) {

@@ -28,12 +28,10 @@ public class GeneratorRecipeBuilder extends AbstractRecipeBuilder<GeneratorRecip
       NamedCodec.STRING.listOf().fieldOf("machineIds").forGetter(builder -> builder.machineIds)
     ).apply(recipeBuilderInstance, (time, energy, input, inputAmount, machineIds) -> {
       DegrassiLogger.INSTANCE.info("GeneratorRecipeBuilderCODED[ time: " + time + ", energy: " + energy + ", input: " + input + ", amount: " + inputAmount + " ]");
-      GeneratorRecipeBuilder builder = new GeneratorRecipeBuilder(time);
-      builder
+      return new GeneratorRecipeBuilder(time)
         .energy(energy)
-        .input(new ItemStack(input.getAll().get(0), inputAmount));
-      machineIds.forEach(builder::addMachine);
-      return builder;
+        .input(new ItemStack(input.getAll().get(0), inputAmount), input, inputAmount)
+        .addMachines(machineIds);
     }), "Generator recipe builder"
   );
 
@@ -60,13 +58,19 @@ public class GeneratorRecipeBuilder extends AbstractRecipeBuilder<GeneratorRecip
     return this;
   }
 
-  public GeneratorRecipeBuilder input(ItemStack input) {
+  public GeneratorRecipeBuilder input(ItemStack input, IIngredient<Item> ingredient, int amount) {
     this.input = input;
+    this.inputIngredient = ingredient;
+    this.inputAmount = amount;
     return this;
   }
 
-  public GeneratorRecipeBuilder addMachine(String machineId) {
+  private void addMachine(String machineId) {
     this.machineIds.add(machineId);
+  }
+
+  public GeneratorRecipeBuilder addMachines(List<String> machineIds) {
+    machineIds.forEach(this::addMachine);
     return this;
   }
 
@@ -80,7 +84,7 @@ public class GeneratorRecipeBuilder extends AbstractRecipeBuilder<GeneratorRecip
   @Override
   public GeneratorRecipe<?> build(ResourceLocation id) {
     GeneratorRecipe<?> recipe = new GeneratorRecipe<>(id, NonNullList.withSize(1, Ingredient.of(input)), time, energy, machineIds);
-    DegrassiLogger.INSTANCE.info("JewelryGeneratorRecipeBuilder$build: " + recipe);
+    DegrassiLogger.INSTANCE.info("GeneratorRecipeBuilder$build: " + recipe);
     return recipe;
   }
 }

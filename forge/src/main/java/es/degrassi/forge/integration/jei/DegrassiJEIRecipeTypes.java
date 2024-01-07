@@ -4,6 +4,7 @@ import es.degrassi.forge.init.recipe.recipes.*;
 import es.degrassi.forge.integration.jei.categories.*;
 import mezz.jei.api.recipe.RecipeType;
 
+@SuppressWarnings("rawtypes")
 public class DegrassiJEIRecipeTypes {
   public static RecipeType<FurnaceRecipe> IRON_FURNACE_TYPE = new RecipeType<>(FurnaceRecipeCategory.createUID("iron"), FurnaceRecipe.class);
   public static RecipeType<FurnaceRecipe> GOLD_FURNACE_TYPE = new RecipeType<>(FurnaceRecipeCategory.createUID("gold"), FurnaceRecipe.class);

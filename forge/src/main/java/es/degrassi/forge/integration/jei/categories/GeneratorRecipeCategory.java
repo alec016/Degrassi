@@ -33,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("rawtypes")
 public class GeneratorRecipeCategory implements IRecipeCategory<GeneratorRecipe> {
   private static final Map<String, ResourceLocation> UIDS = Maps.newHashMap();
 
@@ -40,7 +41,7 @@ public class GeneratorRecipeCategory implements IRecipeCategory<GeneratorRecipe>
     UIDS.put("default", createUID(""));
   }
 
-  public static ResourceLocation createUID(String generator) {
+  public static ResourceLocation createUID(@NotNull String generator) {
     if (generator.isEmpty()) {
       ResourceLocation UID = new DegrassiLocation("generator");
       UIDS.put("default", UID);

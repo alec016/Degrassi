@@ -22,6 +22,7 @@ public class DegrassiKubeJSPlugin extends KubeJSPlugin {
     event.register(RecipeRegistry.FURNACE_RECIPE_TYPE.getId(), DegrassiRecipeSchemas.FURNACE_MACHINE);
     event.register(RecipeRegistry.MELTER_RECIPE_TYPE.getId(), DegrassiRecipeSchemas.MELTER_MACHINE);
     event.register(RecipeRegistry.UPGRADE_MAKER_RECIPE_TYPE.getId(), DegrassiRecipeSchemas.UPGRADE_MACHINE);
+    event.register(RecipeRegistry.GENERATOR_RECIPE_TYPE.getId(), DegrassiRecipeSchemas.GENERATOR_MACHINE);
   }
 
   @Override
