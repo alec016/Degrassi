@@ -1,6 +1,6 @@
 package es.degrassi.forge.init.entity.generators;
 
-import es.degrassi.forge.init.block.generators.JewelryGenerator;
+import es.degrassi.forge.init.block.generators.*;
 import es.degrassi.forge.init.recipe.helpers.RecipeHelpers;
 import es.degrassi.forge.init.recipe.recipes.*;
 import es.degrassi.forge.init.registration.EntityRegister;
@@ -9,7 +9,7 @@ import es.degrassi.forge.integration.config.DegrassiConfig;
 import es.degrassi.forge.network.EnergyPacket;
 import es.degrassi.forge.network.ItemPacket;
 import es.degrassi.forge.util.storage.AbstractEnergyStorage;
-import net.minecraft.core.BlockPos;
+import net.minecraft.core.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
@@ -20,24 +20,25 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class JewelryGeneratorEntity extends GeneratorEntity<JewelryGeneratorEntity, GeneratorRecipe<JewelryGeneratorEntity>, JewelryGenerator> {
+@SuppressWarnings("unchecked")
+public class JewelryGeneratorEntity extends GeneratorEntity<JewelryGeneratorEntity, JewelryGenerator> {
   {
     ENERGY_STORAGE = new AbstractEnergyStorage(DegrassiConfig.get().generatorsConfig.jewelry_capacity, DegrassiConfig.get().generatorsConfig.jewelry_transfer) {
       @Override
-      public boolean canExtract() {
+      public boolean canReceive() {
         return false;
       }
 
       @Override
       public void onEnergyChanged() {
         setChanged();
-        if (level != null && level.getServer() != null && !level.isClientSide())
+        if (level != null && !level.isClientSide())
           new EnergyPacket(this.energy, this.capacity, this.maxReceive, getBlockPos())
             .sendToChunkListeners(level.getChunkAt(getBlockPos()));
       }
     };
 
-    itemHandler = new ItemStackHandler(5) {
+    itemHandler = new ItemStackHandler(3) {
       @Override
       protected void onContentsChanged(int slot) {
         setChanged();
@@ -50,19 +51,13 @@ public class JewelryGeneratorEntity extends GeneratorEntity<JewelryGeneratorEnti
       @Override
       public boolean isItemValid(int slot, @NotNull ItemStack stack) {
         return switch(slot) {
-          case 0 -> stack.is(ItemRegister.SPEED_UPGRADE.get());
-          case 1 -> stack.is(ItemRegister.ENERGY_UPGRADE.get());
+          case 0 -> stack.is(ItemRegister.GENERATION_UPGRADE.get());
+          case 1 -> stack.is(ItemRegister.TRANSFER_UPGRADE.get());
           case 2 -> {
             AtomicBoolean has = new AtomicBoolean(false);
-            RecipeHelpers.UPGRADE_MAKER.recipes.forEach(recipe -> {
-              if (recipe.getIngredients().get(0).getItems()[0].is(stack.getItem())) has.set(true);
-            });
-            yield has.get();
-          }
-          case 3 -> {
-            AtomicBoolean has = new AtomicBoolean(false);
-            RecipeHelpers.UPGRADE_MAKER.recipes.forEach(recipe -> {
-              if (recipe.getIngredients().get(1).getItems()[0].is(stack.getItem())) has.set(true);
+            RecipeHelpers.GENERATORS.getRecipesForMachine(getDelegate()).forEach(recipe -> {
+              GeneratorRecipe r = (GeneratorRecipe) recipe;
+              if (r.getIngredients().get(0).getItems()[0].is(stack.getItem())) has.set(true);
             });
             yield has.get();
           }
@@ -74,7 +69,11 @@ public class JewelryGeneratorEntity extends GeneratorEntity<JewelryGeneratorEnti
 
   public final ContainerData data;
 
-  public JewelryGeneratorEntity(BlockPos blockPos, BlockState blockState, JewelryGenerator block) {
+  public JewelryGeneratorEntity(
+    BlockPos blockPos,
+    BlockState blockState,
+    JewelryGenerator block
+  ) {
     super(EntityRegister.JEWELRY_GENERATOR.get(), blockPos, blockState, block);
     this.data = new ContainerData() {
       @Override
@@ -112,16 +111,15 @@ public class JewelryGeneratorEntity extends GeneratorEntity<JewelryGeneratorEnti
     BlockState state,
     @NotNull JewelryGeneratorEntity entity
   ) {
-    if (level.isClientSide()) {
-      return;
+    if (level.isClientSide()) return;
+
+    if (RecipeHelpers.GENERATORS.hasRecipe(entity)) {
+      entity.progressStorage.increment(false);
+      RecipeHelpers.GENERATORS.insertEnergy(entity);
+      if (entity.progressStorage.getProgress() >= entity.progressStorage.getMaxProgress()) RecipeHelpers.GENERATORS.craftItem(entity);
+    } else {
+      entity.resetProgress();
     }
-//    if (RecipeHelpers.UPGRADE_MAKER.hasRecipe(entity)) {
-//      entity.progressStorage.increment(false);
-//      RecipeHelpers.UPGRADE_MAKER.extractEnergy(entity);
-//      if (entity.progressStorage.getProgress() >= entity.progressStorage.getMaxProgress()) RecipeHelpers.UPGRADE_MAKER.craftItem(entity);
-//    } else {
-//      entity.resetProgress();
-//    }
     setChanged(level, pos, state);
   }
 }

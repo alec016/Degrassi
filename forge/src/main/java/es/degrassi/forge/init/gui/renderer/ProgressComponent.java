@@ -59,7 +59,7 @@ public class ProgressComponent extends InfoArea implements IDrawableAnimated, IG
   @Override
   public void draw(PoseStack transform, int x, int y, ResourceLocation texture) {
     this.texture = texture;
-    draw(transform, x, y, texture, false);
+    draw(transform, x, y, texture, false, false);
   }
 
   public List<Component> getTooltips() {
@@ -77,14 +77,13 @@ public class ProgressComponent extends InfoArea implements IDrawableAnimated, IG
     return tooltips;
   }
 
-  @Override
-  public void draw(PoseStack pose, int x, int y, ResourceLocation texture, boolean vertical) {
+  public void draw(PoseStack pose, int x, int y, ResourceLocation texture, boolean vertical, boolean inverted) {
     this.texture = texture;
     final int width = TextureSizeHelper.getTextureWidth(texture);
     final int height = TextureSizeHelper.getTextureHeight(texture);
     IClientHandler.bindTexture(texture);
     int current;
-    if (getScaledProgress(height) == height || getScaledProgress(width) == width) {
+    if (getScaledProgress(height, inverted) == height || getScaledProgress(width, inverted) == width) {
       blit(
         pose,
         x,
@@ -99,7 +98,7 @@ public class ProgressComponent extends InfoArea implements IDrawableAnimated, IG
       return;
     }
     if (vertical) {
-      current = getScaledProgress(height);
+      current = getScaledProgress(height, inverted);
       blit(
         pose,
         x,
@@ -113,7 +112,7 @@ public class ProgressComponent extends InfoArea implements IDrawableAnimated, IG
       );
       return;
     }
-    current = getScaledProgress(width);
+    current = getScaledProgress(width, inverted);
     blit(
       pose,
       x,
@@ -127,11 +126,16 @@ public class ProgressComponent extends InfoArea implements IDrawableAnimated, IG
     );
   }
 
-  public int getScaledProgress(int renderSize) {
-    int progress = this.progress.getProgress();
-    int maxProgress = this.progress.getMaxProgress();  // Max Progress
+  @Override
+  public void draw(PoseStack pose, int x, int y, ResourceLocation texture, boolean vertical) {
+    draw(pose, x, y, texture, vertical, false);
+  }
 
-    return progress != 0 ? (int) Math.floor((progress / (float) maxProgress) * renderSize) : 0;
+  public int getScaledProgress(int renderSize, boolean inverted) {
+    int progress = this.progress.getProgress();
+    int maxProgress = this.progress.getMaxProgress();
+
+    return progress != 0 ? (int) Math.floor(Math.abs((inverted ? 1 : 0) - (progress / (float) maxProgress)) * renderSize) : 0;
   }
 
   @Override
@@ -172,8 +176,9 @@ public class ProgressComponent extends InfoArea implements IDrawableAnimated, IG
     return this.orientation;
   }
 
-  public void setDirection(Orientation direction) {
+  public ProgressComponent setDirection(Orientation direction) {
     this.orientation = direction;
+    return this;
   }
 
   public ResourceLocation getFilledTexture() {

@@ -6,6 +6,7 @@ import es.degrassi.forge.init.gui.screen.MelterScreen;
 import es.degrassi.forge.init.gui.screen.UpgradeMakerScreen;
 import es.degrassi.forge.init.gui.screen.generators.JewelryGeneratorScreen;
 import es.degrassi.forge.init.recipe.helpers.RecipeHelpers;
+import es.degrassi.forge.init.recipe.recipes.*;
 import es.degrassi.forge.init.registration.BlockRegister;
 import es.degrassi.forge.init.registration.ItemRegister;
 import es.degrassi.forge.integration.config.DegrassiConfig;
@@ -30,7 +31,7 @@ import org.jetbrains.annotations.*;
 import static es.degrassi.forge.integration.jei.DegrassiJEIRecipeTypes.*;
 
 @JeiPlugin
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused, unchecked"})
 public class JEIDegrassiPlugin implements IModPlugin {
 
   @Override
@@ -59,10 +60,21 @@ public class JEIDegrassiPlugin implements IModPlugin {
       new FurnaceRecipeCategory(registration.getJeiHelpers(), BlockRegister.GOLD_FURNACE_BLOCK.get()),
       new FurnaceRecipeCategory(registration.getJeiHelpers(), BlockRegister.DIAMOND_FURNACE_BLOCK.get()),
       new FurnaceRecipeCategory(registration.getJeiHelpers(), BlockRegister.EMERALD_FURNACE_BLOCK.get()),
-      new FurnaceRecipeCategory(registration.getJeiHelpers(), BlockRegister.NETHERITE_FURNACE_BLOCK.get()),
-      new MelterRecipeCategory(registration.getJeiHelpers()),
-      new UpgradeMakerRecipeCategory(registration.getJeiHelpers()),
-      new GeneratorRecipeCategory(registration.getJeiHelpers(), BlockRegister.JEWELRY_GENERATOR.get())
+      new FurnaceRecipeCategory(registration.getJeiHelpers(), BlockRegister.NETHERITE_FURNACE_BLOCK.get())
+    );
+    registration.addRecipeCategories(
+      new MelterRecipeCategory(registration.getJeiHelpers())
+    );
+    registration.addRecipeCategories(
+      new UpgradeMakerRecipeCategory(registration.getJeiHelpers())
+    );
+    registration.addRecipeCategories(
+      new GeneratorRecipeCategory(
+        registration.getJeiHelpers(),
+        BlockRegister.JEWELRY_GENERATOR.get(),
+        new DegrassiLocation("textures/gui/jei/jewelry_generator_gui.png"),
+        new DegrassiLocation("textures/gui/jei/jewelry_generator_progress_filled.png")
+      )
     );
   }
 
@@ -78,7 +90,9 @@ public class JEIDegrassiPlugin implements IModPlugin {
     registration.addRecipes(NETHERITE_FURNACE_TYPE, RecipeHelpers.FURNACE.recipes);
     registration.addRecipes(MELTER_TYPE, RecipeHelpers.MELTER.recipes);
     registration.addRecipes(UPGRADE_MAKER_TYPE, RecipeHelpers.UPGRADE_MAKER.recipes);
-    registration.addRecipes(JEWELRY_GENERATOR_TYPE, RecipeHelpers.GENERATORS.recipes);
+
+    List<GeneratorRecipe> jewelryRecipes = RecipeHelpers.GENERATORS.getRecipesForMachine(BlockRegister.JEWELRY_GENERATOR.get());
+    registration.addRecipes(JEWELRY_GENERATOR_TYPE, jewelryRecipes);
 
     registerPanelInfo(registration);
     registerUpgradesInfo(registration);
@@ -95,10 +109,10 @@ public class JEIDegrassiPlugin implements IModPlugin {
   private void registerJewelryHandler(@NotNull IGuiHandlerRegistration registration) {
     registration.addRecipeClickArea(
       JewelryGeneratorScreen.class,
-      77,
-      49,
-      TextureSizeHelper.getTextureWidth(UpgradeMakerScreen.FILLED_ARROW),
-      TextureSizeHelper.getTextureHeight(UpgradeMakerScreen.FILLED_ARROW),
+      86,
+      46,
+      TextureSizeHelper.getTextureWidth(JewelryGeneratorScreen.FILLED_ARROW),
+      TextureSizeHelper.getTextureHeight(JewelryGeneratorScreen.FILLED_ARROW),
       JEWELRY_GENERATOR_TYPE
     );
   }

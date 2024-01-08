@@ -8,7 +8,7 @@ import es.degrassi.forge.init.entity.type.IItemEntity;
 import es.degrassi.forge.init.entity.type.IProgressEntity;
 import es.degrassi.forge.init.entity.type.IRecipeEntity;
 import es.degrassi.forge.init.handlers.ItemWrapperHandler;
-import es.degrassi.forge.init.recipe.IDegrassiRecipe;
+import es.degrassi.forge.init.recipe.recipes.*;
 import es.degrassi.forge.network.GenerationPacket;
 import es.degrassi.forge.network.ProgressPacket;
 import es.degrassi.forge.util.storage.AbstractEnergyStorage;
@@ -32,14 +32,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public abstract class GeneratorEntity<T extends GeneratorEntity<T, E, B>, E extends IDegrassiRecipe, B extends GeneratorBlock> extends BaseEntity implements IEnergyEntity, IRecipeEntity<E>, IProgressEntity, IItemEntity, IEnergyEntity.IGenerationEntity {
+public abstract class GeneratorEntity<T extends GeneratorEntity<T, B>, B extends GeneratorBlock> extends BaseEntity implements IEnergyEntity, IRecipeEntity<GeneratorRecipe>, IProgressEntity, IItemEntity, IEnergyEntity.IGenerationEntity {
 
   // recipe
-  private E recipe;
+  private GeneratorRecipe recipe;
 
   // handlers
   protected LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
   protected LazyOptional<AbstractEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
+  protected LazyOptional<ProgressStorage> lazyProgressHandler = LazyOptional.empty();
 
   // storages
   protected AbstractEnergyStorage ENERGY_STORAGE;
@@ -51,7 +52,7 @@ public abstract class GeneratorEntity<T extends GeneratorEntity<T, E, B>, E exte
         new ProgressPacket(this.progress, this.maxProgress, getBlockPos())
           .sendToChunkListeners(level.getChunkAt(getBlockPos()));
     }
-  };;
+  };
   protected ItemStackHandler itemHandler;
   protected final GenerationStorage currentGen = new GenerationStorage() {
     @Override
@@ -136,12 +137,12 @@ public abstract class GeneratorEntity<T extends GeneratorEntity<T, E, B>, E exte
 
 
   @Override
-  public E getRecipe() {
+  public GeneratorRecipe getRecipe() {
     return recipe;
   }
 
   @Override
-  public void setRecipe(E recipe) {
+  public void setRecipe(GeneratorRecipe recipe) {
     this.recipe = recipe;
   }
 
@@ -210,6 +211,7 @@ public abstract class GeneratorEntity<T extends GeneratorEntity<T, E, B>, E exte
     super.onLoad();
     lazyItemHandler = LazyOptional.of(() -> itemHandler);
     lazyEnergyHandler = LazyOptional.of(() -> ENERGY_STORAGE);
+    lazyProgressHandler = LazyOptional.of(() -> progressStorage);
   }
 
   @Override
@@ -217,6 +219,7 @@ public abstract class GeneratorEntity<T extends GeneratorEntity<T, E, B>, E exte
     super.invalidateCaps();
     lazyItemHandler.invalidate();
     lazyEnergyHandler.invalidate();
+    lazyProgressHandler.invalidate();
   }
 
   @Override

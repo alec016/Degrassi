@@ -66,6 +66,10 @@ public interface IScreen {
     setProgressComponent(new ProgressComponent(getX() + xOffset, getY() + yOffset, ((IProgressEntity) getMenu().getEntity()).getProgressStorage(), TextureSizeHelper.getTextureWidth(FILLED_ARROW), TextureSizeHelper.getTextureHeight(FILLED_ARROW)));
   }
 
+  default void assignProgressComponent(int xOffset, int yOffset, ResourceLocation texture) {
+    setProgressComponent(new ProgressComponent(getX() + xOffset, getY() + yOffset, ((IProgressEntity) getMenu().getEntity()).getProgressStorage(), TextureSizeHelper.getTextureWidth(texture), TextureSizeHelper.getTextureHeight(texture)));
+  }
+
   default void assignFluidComponent(int xOffset, int yOffset, int width, int height) {
     setFluidComponent(new FluidTankRenderer(new Rect2i(getX() + xOffset, getY() + yOffset, width, height), ((IFluidEntity) getMenu().getEntity()).getFluidStorage().getFluid(), ((IFluidEntity) getMenu().getEntity()).getFluidStorage().getCapacity()));
   }

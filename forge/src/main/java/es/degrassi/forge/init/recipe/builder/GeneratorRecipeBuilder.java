@@ -1,5 +1,6 @@
 package es.degrassi.forge.init.recipe.builder;
 
+import com.google.common.collect.*;
 import es.degrassi.forge.api.codec.*;
 import es.degrassi.forge.api.ingredient.*;
 import es.degrassi.forge.init.recipe.recipes.*;
@@ -11,13 +12,13 @@ import net.minecraft.resources.*;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.*;
 
-public class GeneratorRecipeBuilder extends AbstractRecipeBuilder<GeneratorRecipe<?>> {
+public class GeneratorRecipeBuilder extends AbstractRecipeBuilder<GeneratorRecipe> {
   private int time;
   private int energy;
   private IIngredient<Item> inputIngredient;
   private ItemStack input;
   private int inputAmount;
-  private List<String> machineIds;
+  private final List<String> machineIds;
 
   public static final NamedCodec<GeneratorRecipeBuilder> CODEC = NamedCodec.record(recipeBuilderInstance ->
     recipeBuilderInstance.group(
@@ -25,9 +26,11 @@ public class GeneratorRecipeBuilder extends AbstractRecipeBuilder<GeneratorRecip
       NamedCodec.INT.fieldOf("energy").forGetter(builder -> builder.energy),
       IIngredient.ITEM.fieldOf("input").forGetter(builder -> builder.inputIngredient),
       NamedCodec.INT.optionalFieldOf("inputAmount", 1).forGetter(builder -> builder.inputAmount),
-      NamedCodec.STRING.listOf().fieldOf("machineIds").forGetter(builder -> builder.machineIds)
+      NamedCodec.STRING.listOf().fieldOf("machines").forGetter(builder -> builder.machineIds)
     ).apply(recipeBuilderInstance, (time, energy, input, inputAmount, machineIds) -> {
-      DegrassiLogger.INSTANCE.info("GeneratorRecipeBuilderCODED[ time: " + time + ", energy: " + energy + ", input: " + input + ", amount: " + inputAmount + " ]");
+      DegrassiLogger.INSTANCE.info("GeneratorRecipeBuilderCODED[time: {}, energy: {}, input: {}, inputAmount: {}, machineIds: {}]",
+        time, energy, input, inputAmount, machineIds
+      );
       return new GeneratorRecipeBuilder(time)
         .energy(energy)
         .input(new ItemStack(input.getAll().get(0), inputAmount), input, inputAmount)
@@ -36,11 +39,11 @@ public class GeneratorRecipeBuilder extends AbstractRecipeBuilder<GeneratorRecip
   );
 
   public GeneratorRecipeBuilder(int time) {
-    super();
     this.time = time;
+    this.machineIds = Lists.newLinkedList();
   }
 
-  public GeneratorRecipeBuilder(GeneratorRecipe<?> recipe) {
+  public GeneratorRecipeBuilder(GeneratorRecipe recipe) {
     super(recipe);
     this.time = recipe.getTime();
     this.machineIds = recipe.getMachineIds();
@@ -74,16 +77,22 @@ public class GeneratorRecipeBuilder extends AbstractRecipeBuilder<GeneratorRecip
     return this;
   }
 
-  public AbstractRecipeBuilder<GeneratorRecipe<?>> addRequirement(IRequirement<?> requirement) {
+  public AbstractRecipeBuilder<GeneratorRecipe> addRequirement(IRequirement<?> requirement) {
     this.requirements.add(requirement);
     if (requirement instanceof ItemRequirement r && r.getMode() == IRequirement.ModeIO.INPUT) input = r.getItem();
     else if (requirement instanceof EnergyRequirement r && r.getMode() == IRequirement.ModeIO.OUTPUT) energy = r.getAmount();
+    else if (requirement instanceof MachineRequirement r) {
+      r.getMachines().forEach(machine -> {
+        if (machineIds.stream().filter(m -> m.equals(machine)).toList().isEmpty())
+          machineIds.add(machine);
+      });
+    }
     return this;
   }
 
   @Override
-  public GeneratorRecipe<?> build(ResourceLocation id) {
-    GeneratorRecipe<?> recipe = new GeneratorRecipe<>(id, NonNullList.withSize(1, Ingredient.of(input)), time, energy, machineIds);
+  public GeneratorRecipe build(ResourceLocation id) {
+    GeneratorRecipe recipe = new GeneratorRecipe(id, NonNullList.withSize(1, Ingredient.of(input)), energy, time, machineIds);
     DegrassiLogger.INSTANCE.info("GeneratorRecipeBuilder$build: " + recipe);
     return recipe;
   }

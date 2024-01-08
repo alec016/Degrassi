@@ -1,5 +1,6 @@
 package es.degrassi.forge.init.recipe.helpers;
 
+import com.google.common.collect.*;
 import es.degrassi.forge.init.block.generators.GeneratorBlock;
 import es.degrassi.forge.init.entity.generators.*;
 import es.degrassi.forge.init.item.upgrade.UpgradeUpgradeType;
@@ -15,10 +16,9 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.*;
 import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings("rawtypes")
-public class GeneratorRecipeHelper extends RecipeHelper<GeneratorRecipe, GeneratorEntity<?, GeneratorRecipe, GeneratorBlock>> {
+public class GeneratorRecipeHelper<E extends GeneratorEntity<E, GeneratorBlock>> extends RecipeHelper<GeneratorRecipe, E> {
   @Override
-  public boolean hasRecipe(@NotNull GeneratorEntity<?, GeneratorRecipe, GeneratorBlock> entity) {
+  public boolean hasRecipe(@NotNull E entity) {
     Level level = entity.getLevel();
     if (level == null || level.isClientSide()) return false;
 
@@ -45,17 +45,23 @@ public class GeneratorRecipeHelper extends RecipeHelper<GeneratorRecipe, Generat
   }
 
   @Override
-  public void craftItem(@NotNull GeneratorEntity<?, GeneratorRecipe, GeneratorBlock> entity) {
-    entity.getItemHandler().extractItem(3, 1, false);
+  public void craftItem(@NotNull E entity) {
+    entity.getItemHandler().extractItem(2, 1, false);
 
     entity.resetProgress();
+  }
+
+  public List<GeneratorRecipe> getRecipesForMachine(GeneratorBlock block) {
+    List<GeneratorRecipe> r = Lists.newLinkedList();
+    r.addAll(recipes.stream().filter(recipe -> recipe.canUseRecipe(block.kjs$getIdLocation())).toList());
+    return r;
   }
 
   @Override
   public void init() {
     super.init();
     Level level = Objects.requireNonNull(Minecraft.getInstance().level);
-    List<GeneratorRecipe<?>> generatorRecipes = level.getRecipeManager().getAllRecipesFor(RecipeRegistry.GENERATOR_RECIPE_TYPE.get());
+    List<GeneratorRecipe> generatorRecipes = level.getRecipeManager().getAllRecipesFor(RecipeRegistry.GENERATOR_RECIPE_TYPE.get());
 
     DegrassiLogger.INSTANCE.info("GeneratorRecipeHelper");
     generatorRecipes.forEach(recipe -> {
@@ -72,22 +78,28 @@ public class GeneratorRecipeHelper extends RecipeHelper<GeneratorRecipe, Generat
     });
   }
 
-  private void modifyRecipe(@NotNull GeneratorEntity<?, GeneratorRecipe, GeneratorBlock> entity, @NotNull SimpleContainer inventory) {
+  private void modifyRecipe(@NotNull E entity, @NotNull SimpleContainer inventory) {
     ItemStack slot0 = inventory.getItem(0);
     ItemStack slot1 = inventory.getItem(1);
 
     int energyRequired = entity.getRecipe().getEnergyRequired();
+    int transfer = entity.getEnergyStorage().getMaxExtract();
     for(int i = 0; i < inventory.getContainerSize(); i++) {
       ItemStack slot = inventory.getItem(i);
       if (slot.getCount() > 0 && slot.getItem() instanceof IGeneratorUpgrade upgrade) {
         if (Objects.requireNonNull(upgrade.getUpgradeType()) == UpgradeUpgradeType.GENERATION) {
-          double energyModifier = Math.min(slot0.getCount(), slot1.getCount()) * upgrade.getModifier();
+          double energyModifier = slot0.getCount() * upgrade.getModifier();
           energyRequired += (int) Math.floor(entity.getRecipe().getEnergyRequired() * energyModifier);
+        } else if (Objects.requireNonNull(upgrade.getUpgradeType()) == UpgradeUpgradeType.TRANSFER) {
+          double transferModifier = slot1.getCount() * upgrade.getModifier();
+          transfer += (int) Math.floor(entity.getEnergyStorage().getMaxExtract() * transferModifier);
         }
       }
     }
 
     entity.getRecipe().setEnergyRequired(Math.max(1, energyRequired));
     entity.getRecipe().modify();
+    entity.setMaxProgress(entity.getRecipe().getTime());
+    entity.setTransferRate(transfer);
   }
 }

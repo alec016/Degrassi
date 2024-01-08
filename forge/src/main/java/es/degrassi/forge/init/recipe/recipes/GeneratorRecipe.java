@@ -1,7 +1,5 @@
 package es.degrassi.forge.init.recipe.recipes;
 
-import es.degrassi.forge.init.block.generators.*;
-import es.degrassi.forge.init.entity.generators.*;
 import es.degrassi.forge.init.recipe.IDegrassiRecipe;
 import es.degrassi.forge.init.registration.*;
 import java.util.*;
@@ -14,7 +12,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-public class GeneratorRecipe<T extends GeneratorEntity<T, GeneratorRecipe<T>, ? extends GeneratorBlock>> implements IDegrassiRecipe {
+public class GeneratorRecipe implements IDegrassiRecipe {
   protected final ResourceLocation id;
   protected final NonNullList<Ingredient> recipeItems;
   protected int time;
@@ -74,7 +72,7 @@ public class GeneratorRecipe<T extends GeneratorEntity<T, GeneratorRecipe<T>, ? 
   @Override
   public boolean matches(@NotNull SimpleContainer container, @NotNull Level level) {
     if (level.isClientSide()) return false;
-    return recipeItems.get(0).test(container.getItem(3));
+    return recipeItems.get(0).test(container.getItem(2));
   }
 
   public boolean canUseRecipe(String machineId) {
@@ -105,8 +103,8 @@ public class GeneratorRecipe<T extends GeneratorEntity<T, GeneratorRecipe<T>, ? 
     return id;
   }
 
-  public GeneratorRecipe<T> copy() {
-    return new GeneratorRecipe<>(id, recipeItems, time, energyProduced, machineIds);
+  public GeneratorRecipe copy() {
+    return new GeneratorRecipe(id, recipeItems, time, energyProduced, machineIds);
   }
 
   @Override

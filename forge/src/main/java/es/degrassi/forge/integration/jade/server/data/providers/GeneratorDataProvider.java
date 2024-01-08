@@ -18,7 +18,7 @@ public class GeneratorDataProvider implements IServerDataProvider<BlockEntity> {
   public static final ResourceLocation ID = new DegrassiLocation("generator_server_data_provider");
   @Override
   public void appendServerData(CompoundTag compoundTag, ServerPlayer serverPlayer, Level level, @NotNull BlockEntity entity, boolean b) {
-    if (entity instanceof GeneratorEntity<?, ?, ?> generatorEntity) {
+    if (entity instanceof GeneratorEntity<?, ?> generatorEntity) {
       CompoundTag tag = new CompoundTag();
       generatorEntity.saveAdditional(tag);
       compoundTag.put(Degrassi.MODID, tag);

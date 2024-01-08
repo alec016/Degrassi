@@ -33,7 +33,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("rawtypes")
 public class GeneratorRecipeCategory implements IRecipeCategory<GeneratorRecipe> {
   private static final Map<String, ResourceLocation> UIDS = Maps.newHashMap();
 
@@ -53,26 +52,30 @@ public class GeneratorRecipeCategory implements IRecipeCategory<GeneratorRecipe>
     return UID;
   }
 
-  public static final ResourceLocation FILLED_PROGRESS = new DegrassiLocation("textures/gui/jei/generator_progress_filled.png");
-  public static final ResourceLocation TEXTURE = new DegrassiLocation("textures/gui/jei/generator_gui.png");
+  public final ResourceLocation FILLED_PROGRESS;
+  public final ResourceLocation TEXTURE;
 
   private final IDrawable background;
   private final IDrawable icon;
-  private final Map<GeneratorRecipe<?>, EnergyInfoArea> energyComponents = Maps.newHashMap();
-  private final Map<GeneratorRecipe<?>, ProgressComponent> progressComponents = Maps.newHashMap();
+  private final Map<GeneratorRecipe, EnergyInfoArea> energyComponents = Maps.newHashMap();
+  private final Map<GeneratorRecipe, ProgressComponent> progressComponents = Maps.newHashMap();
   private ProgressJeiRenderer progress;
   private EnergyJeiRenderer energy;
   private final GeneratorBlock block;
 
-  private static @NotNull IDrawable createBackground(@NotNull IJeiHelpers helper) {
-    return helper.getGuiHelper().drawableBuilder(TEXTURE, 0, 0, 126, 73).setTextureSize(126, 73).build();
+  private @NotNull IDrawable createBackground(@NotNull IJeiHelpers helper) {
+    int width = TextureSizeHelper.getTextureWidth(TEXTURE);
+    int height = TextureSizeHelper.getTextureHeight(TEXTURE);
+    return helper.getGuiHelper().drawableBuilder(TEXTURE, 0, 0, width, height).setTextureSize(width, height).build();
   }
 
-  private static @NotNull IDrawable createIcon(@NotNull IJeiHelpers helper, GeneratorBlock block) {
+  private @NotNull IDrawable createIcon(@NotNull IJeiHelpers helper, GeneratorBlock block) {
     return helper.getGuiHelper().createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(block));
   }
 
-  public GeneratorRecipeCategory(IJeiHelpers helper, GeneratorBlock block) {
+  public GeneratorRecipeCategory(IJeiHelpers helper, GeneratorBlock block, ResourceLocation background, ResourceLocation filled_progress) {
+    this.TEXTURE = background;
+    this.FILLED_PROGRESS = filled_progress;
     this.background = createBackground(helper);
     this.icon = createIcon(helper, block);
     this.block = block;
@@ -91,9 +94,8 @@ public class GeneratorRecipeCategory implements IRecipeCategory<GeneratorRecipe>
   public void setRecipe(@NotNull IRecipeLayoutBuilder builder, GeneratorRecipe recipe, @NotNull IFocusGroup focuses) {
     if (!recipe.canUseRecipe(block.kjs$getId())) return;
     initRenderers(recipe);
-    builder.addSlot(RecipeIngredientRole.INPUT, 31, 19).addIngredients((Ingredient) recipe.getIngredients().get(0));
-    builder.addSlot(RecipeIngredientRole.OUTPUT, 101, 19).addItemStack(recipe.getResultItem());
-    builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 7, 50)
+    builder.addSlot(RecipeIngredientRole.INPUT, 53, 35).addIngredients((Ingredient) recipe.getIngredients().get(0));
+    builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 134, 9)
       .addIngredient(DegrassiTypes.ENERGY, energyComponents.get(recipe))
       .setCustomRenderer(DegrassiTypes.ENERGY, energy)
       .setSlotName("energy")
@@ -103,7 +105,7 @@ public class GeneratorRecipeCategory implements IRecipeCategory<GeneratorRecipe>
           tooltip.addAll(energyComponents.get(recipe).getTooltips());
         }
       );
-    builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 53, 18)
+    builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 82, 26)
       .setCustomRenderer(DegrassiTypes.PROGRESS, progress)
       .addIngredient(DegrassiTypes.PROGRESS, progressComponents.get(recipe))
       .addTooltipCallback(
@@ -121,15 +123,15 @@ public class GeneratorRecipeCategory implements IRecipeCategory<GeneratorRecipe>
     stack.pushPose();
     // animated progress bar
     initRenderers(recipe);
-    progress.renderElementInJEI(stack, progressComponents.get(recipe), recipe, mouseX, mouseY, 53, 18);
+    progress.renderElementInJEI(stack, progressComponents.get(recipe), recipe, mouseX, mouseY, progressComponents.get(recipe).getX(), progressComponents.get(recipe).getY());
     energy.renderElementInJEI(stack, energyComponents.get(recipe), recipe, mouseX, mouseY, energyComponents.get(recipe).getX(), energyComponents.get(recipe).getY());
     stack.popPose();
   }
 
-  private void initRenderers(GeneratorRecipe<?> recipe) {
-    if (progress == null) progress = new ProgressJeiRenderer(42, 18);
-    if (energy == null) energy = new EnergyJeiRenderer(111, 16);
-    ProgressStorage progressStorage = new ProgressStorage(20) {
+  private void initRenderers(GeneratorRecipe recipe) {
+    if (progress == null) progress = new ProgressJeiRenderer(43, 34);
+    if (energy == null) energy = new EnergyJeiRenderer(34, 70);
+    ProgressStorage progressStorage = new ProgressStorage(recipe.getTime()) {
       @Override
       public void onProgressChanged() {
         if(progress > maxProgress) resetProgress();
@@ -140,21 +142,19 @@ public class GeneratorRecipeCategory implements IRecipeCategory<GeneratorRecipe>
       public void onEnergyChanged() {}
     };
     progressComponents.put(recipe, new ProgressComponent(
-      56,
-      18,
+      82, 26,
       progressStorage,
       TextureSizeHelper.getTextureWidth(FILLED_PROGRESS),
       TextureSizeHelper.getTextureHeight(FILLED_PROGRESS),
       FILLED_PROGRESS
-    ));
+    ).setDirection(ProgressComponent.Orientation.TOP));
     energyComponents.put(recipe, new EnergyInfoArea(
-      7,
-      50,
+      134, 9,
       energyStorage,
       111,
       16,
       null,
-      IRequirement.ModeIO.INPUT
+      IRequirement.ModeIO.OUTPUT
     ) {
       @Override
       public List<Component> getTooltips() {
@@ -189,10 +189,6 @@ public class GeneratorRecipeCategory implements IRecipeCategory<GeneratorRecipe>
     }
 
     return DegrassiJEIRecipeTypes.GENERATOR_TYPE;
-//    return switch(block.kjs$getId()) {
-//      case "degrassi:jewelry_generator" -> DegrassiJEIRecipeTypes.JEWELRY_GENERATOR_TYPE;
-//      default -> DegrassiJEIRecipeTypes.GENERATOR_TYPE;
-//    };
   }
 
   @Override

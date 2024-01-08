@@ -18,7 +18,7 @@ public abstract class GeneratorBlock extends BaseBlock {
   public void onRemove(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull BlockState pNewState, boolean pIsMoving) {
     if (pState.getBlock() != pNewState.getBlock()) {
       BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-      if (blockEntity instanceof GeneratorEntity<?, ?, ?> entity) {
+      if (blockEntity instanceof GeneratorEntity<?, ?> entity) {
         entity.drops();
       }
     }

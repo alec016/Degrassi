@@ -35,6 +35,10 @@ public abstract class RecipeHelper<T extends IDegrassiRecipe, E extends BaseEnti
     entity.getEnergyStorage().setEnergy(entity.getEnergyStorage().getEnergyStored() - entity.getRecipe().getEnergyRequired());
   }
 
+  public void insertEnergy(@NotNull E entity) {
+    entity.getEnergyStorage().setEnergy(entity.getEnergyStorage().getEnergyStored() + entity.getRecipe().getEnergyRequired());
+  }
+
   public boolean hasEnoughEnergy(@NotNull E entity) {
     return entity.getEnergyStorage().getEnergyStored() >= entity.getRecipe().getEnergyRequired();
   }

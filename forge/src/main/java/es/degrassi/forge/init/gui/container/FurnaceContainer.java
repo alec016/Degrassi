@@ -22,7 +22,7 @@ public class FurnaceContainer extends BaseContainer<FurnaceEntity> implements IP
   protected static final int TE_INVENTORY_SLOT_COUNT = 4;  // must be the number of slots you have!
 
   public FurnaceContainer(int i, Inventory inv, FurnaceEntity entity, ContainerData data) {
-    super(ContainerRegistry.FURNACE_CONTAINER.get(), i, TE_INVENTORY_SLOT_COUNT);
+    super(ContainerRegistry.FURNACE_CONTAINER.get(), i);
     checkContainerSize(inv, TE_INVENTORY_SLOT_COUNT);
     this.entity = entity;
     this.level = inv.player.level;

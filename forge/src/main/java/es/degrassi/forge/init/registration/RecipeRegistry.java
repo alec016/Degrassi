@@ -30,7 +30,7 @@ public class RecipeRegistry {
       return "upgrade_maker";
     }
   });
-  public static final RegistrySupplier<RecipeType<GeneratorRecipe<?>>> GENERATOR_RECIPE_TYPE = RECIPE_TYPES.register("generator", () -> new RecipeType<>() {
+  public static final RegistrySupplier<RecipeType<GeneratorRecipe>> GENERATOR_RECIPE_TYPE = RECIPE_TYPES.register("generator", () -> new RecipeType<>() {
     public String toString() {
       return "generator";
     }
@@ -40,7 +40,7 @@ public class RecipeRegistry {
   public static final RegistrySupplier<RecipeSerializer<MelterRecipe>> MELTER_SERIALIZER = SERIALIZERS.register("melter", MelterRecipeSerializer::new);
   public static final RegistrySupplier<RecipeSerializer<FurnaceRecipe>> FURNACE_SERIALIZER = SERIALIZERS.register("furnace", FurnaceRecipeSerializer::new);
   public static final RegistrySupplier<RecipeSerializer<UpgradeMakerRecipe>> UPGRADE_MAKER_SERIALIZER = SERIALIZERS.register("upgrade_maker", UpgradeMakerRecipeSerializer::new);
-  public static final RegistrySupplier<RecipeSerializer<GeneratorRecipe<?>>> GENERATOR_SERIALIZER = SERIALIZERS.register("generator", GeneratorRecipeSerializer::new);
+  public static final RegistrySupplier<RecipeSerializer<GeneratorRecipe>> GENERATOR_SERIALIZER = SERIALIZERS.register("generator", GeneratorRecipeSerializer::new);
 
   public static void register() {
     SERIALIZERS.register();

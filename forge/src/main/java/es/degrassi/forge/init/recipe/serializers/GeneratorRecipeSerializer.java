@@ -13,14 +13,15 @@ import net.minecraft.resources.*;
 import net.minecraft.world.item.crafting.*;
 import org.jetbrains.annotations.*;
 
-public class GeneratorRecipeSerializer implements RecipeSerializer<GeneratorRecipe<?>> {
+@SuppressWarnings("unchecked")
+public class GeneratorRecipeSerializer implements RecipeSerializer<GeneratorRecipe> {
   @Override
-  public @NotNull GeneratorRecipe<?> fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
+  public @NotNull GeneratorRecipe fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
     DegrassiLogger.INSTANCE.info("Parsing recipe json: {}", recipeId);
     DataResult<Pair<GeneratorRecipeBuilder, JsonElement>> result = GeneratorRecipeBuilder.CODEC.decode(JsonOps.INSTANCE, json);
     if(result.result().isPresent()) {
       DegrassiLogger.INSTANCE.info("Successfully read recipe json: {}", recipeId);
-      GeneratorRecipe<?> recipe = result.result().get().getFirst().build(recipeId);
+      GeneratorRecipe recipe = result.result().get().getFirst().build(recipeId);
       RecipeHelpers.GENERATORS.recipesMap.put(recipeId, recipe);
       RecipeHelpers.GENERATORS.recipes.add(recipe);
       return recipe;
@@ -32,12 +33,12 @@ public class GeneratorRecipeSerializer implements RecipeSerializer<GeneratorReci
   }
 
   @Override
-  public @Nullable GeneratorRecipe<?> fromNetwork(@NotNull ResourceLocation recipeId, FriendlyByteBuf buffer) {
+  public @Nullable GeneratorRecipe fromNetwork(@NotNull ResourceLocation recipeId, FriendlyByteBuf buffer) {
     DegrassiLogger.INSTANCE.info("Receiving recipe: {} from server.", recipeId);
     DataResult<GeneratorRecipeBuilder> result = GeneratorRecipeBuilder.CODEC.read(NbtOps.INSTANCE, buffer.readAnySizeNbt());
     if(result.result().isPresent()) {
       DegrassiLogger.INSTANCE.info("Sucessfully received recipe: {} from server.", recipeId);
-      GeneratorRecipe<?> recipe = result.result().get().build(recipeId);
+      GeneratorRecipe recipe = result.result().get().build(recipeId);
       RecipeHelpers.GENERATORS.recipesMap.put(recipeId, recipe);
       RecipeHelpers.GENERATORS.recipes.add(recipe);
       return recipe;
@@ -49,7 +50,7 @@ public class GeneratorRecipeSerializer implements RecipeSerializer<GeneratorReci
   }
 
   @Override
-  public void toNetwork(@NotNull FriendlyByteBuf buffer, GeneratorRecipe<?> recipe) {
+  public void toNetwork(@NotNull FriendlyByteBuf buffer, GeneratorRecipe recipe) {
     DegrassiLogger.INSTANCE.info("Sending recipe: {} to clients", recipe.getId());
     DataResult<Tag> result = GeneratorRecipeBuilder.CODEC.encodeStart(NbtOps.INSTANCE, new GeneratorRecipeBuilder(recipe));
     if(result.result().isPresent()) {

@@ -3,12 +3,14 @@ package es.degrassi.forge.init.registration;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.forge.Degrassi;
+import es.degrassi.forge.init.block.generators.*;
 import es.degrassi.forge.init.entity.FurnaceEntity;
 import es.degrassi.forge.init.entity.MelterEntity;
-import es.degrassi.forge.init.entity.generators.JewelryGeneratorEntity;
+import es.degrassi.forge.init.entity.generators.*;
 import es.degrassi.forge.init.entity.panel.SolarPanelEntity;
 import es.degrassi.forge.init.entity.UpgradeMakerEntity;
 import es.degrassi.forge.init.geckolib.entity.CircuitFabricatorEntity;
+import es.degrassi.forge.init.recipe.recipes.*;
 import es.degrassi.forge.init.tiers.FurnaceTier;
 import es.degrassi.forge.init.tiers.SolarPanelTier;
 import es.degrassi.forge.integration.config.DegrassiConfig;
@@ -18,6 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import java.util.Set;
 
+@SuppressWarnings("rawtypes")
 public class EntityRegister {
   public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
     DeferredRegister.create(Degrassi.MODID, Registry.BLOCK_ENTITY_TYPE_REGISTRY);

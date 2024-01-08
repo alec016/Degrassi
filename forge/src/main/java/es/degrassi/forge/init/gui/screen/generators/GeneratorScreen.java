@@ -19,10 +19,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class GeneratorScreen<T extends GeneratorEntity<?, ?, ?>> extends AbstractContainerScreen<GeneratorContainer<T>> implements IScreen {
+public abstract class GeneratorScreen<T extends GeneratorEntity<?, ?>> extends AbstractContainerScreen<GeneratorContainer<T>> implements IScreen {
   protected static final ResourceLocation BACKGROUND = new DegrassiLocation("textures/gui/generator_gui.png");
   protected static final ResourceLocation ENERGY_FILLED = new DegrassiLocation("textures/gui/generator_energy_storage_filled.png");
-  public static final ResourceLocation FILLED_ARROW = new DegrassiLocation("textures/gui/generator_progress_filled.png");
+  protected static final ResourceLocation FILLED_ARROW = new DegrassiLocation("textures/gui/generator_progress_filled.png");
 
   protected EnergyInfoArea energyInfoArea;
   protected ProgressComponent progressComponent;
@@ -34,7 +34,6 @@ public abstract class GeneratorScreen<T extends GeneratorEntity<?, ?, ?>> extend
   @Override
   public void init() {
     super.init();
-    assignEnergyInfoArea(25, 20);
   }
 
   @Override
@@ -106,9 +105,7 @@ public abstract class GeneratorScreen<T extends GeneratorEntity<?, ?, ?>> extend
 
   @Override
   public void drawTooltips(PoseStack poseStack, @NotNull List<Component> tooltips, int mouseX, int mouseY) {
-    tooltips.forEach(tooltip -> {
-      renderTooltip(poseStack, mouseX, mouseY);
-    });
+    tooltips.forEach(tooltip -> renderTooltip(poseStack, mouseX, mouseY));
   }
 
   @Override

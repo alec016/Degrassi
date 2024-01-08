@@ -17,7 +17,7 @@ public class GeneratorComponentProvider implements IBlockComponentProvider {
   public static final ResourceLocation ID = new DegrassiLocation("generator_component_provider");
   @Override
   public void appendTooltip(ITooltip iTooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {
-    if (blockAccessor.getBlockEntity() instanceof GeneratorEntity<?,?,?>) {
+    if (blockAccessor.getBlockEntity() instanceof GeneratorEntity<?, ?>) {
       CompoundTag nbt = blockAccessor.getServerData().getCompound(Degrassi.MODID);
       if (nbt.isEmpty()) return;
       if (nbt.contains("generator.progress")) {
