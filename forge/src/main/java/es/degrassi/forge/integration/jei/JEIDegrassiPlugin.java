@@ -4,7 +4,7 @@ import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.init.gui.screen.FurnaceScreen;
 import es.degrassi.forge.init.gui.screen.MelterScreen;
 import es.degrassi.forge.init.gui.screen.UpgradeMakerScreen;
-import es.degrassi.forge.init.gui.screen.generators.JewelryGeneratorScreen;
+import es.degrassi.forge.init.gui.screen.generators.*;
 import es.degrassi.forge.init.recipe.helpers.RecipeHelpers;
 import es.degrassi.forge.init.recipe.recipes.*;
 import es.degrassi.forge.init.registration.BlockRegister;
@@ -76,6 +76,14 @@ public class JEIDegrassiPlugin implements IModPlugin {
         new DegrassiLocation("textures/gui/jei/jewelry_generator_progress_filled.png")
       )
     );
+    registration.addRecipeCategories(
+      new GeneratorRecipeCategory(
+        registration.getJeiHelpers(),
+        BlockRegister.COMBUSTION_GENERATOR.get(),
+        new DegrassiLocation("textures/gui/jei/combustion_generator_gui.png"),
+        new DegrassiLocation("textures/gui/jei/combustion_generator_progress_filled.png")
+      )
+    );
   }
 
   @Override
@@ -93,6 +101,8 @@ public class JEIDegrassiPlugin implements IModPlugin {
 
     List<GeneratorRecipe> jewelryRecipes = RecipeHelpers.GENERATORS.getRecipesForMachine(BlockRegister.JEWELRY_GENERATOR.get());
     registration.addRecipes(JEWELRY_GENERATOR_TYPE, jewelryRecipes);
+    List<GeneratorRecipe> combustionRecipes = RecipeHelpers.GENERATORS.getRecipesForMachine(BlockRegister.COMBUSTION_GENERATOR.get());
+    registration.addRecipes(COMBUSTION_GENERATOR_TYPE, combustionRecipes);
 
     registerPanelInfo(registration);
     registerUpgradesInfo(registration);
@@ -103,10 +113,10 @@ public class JEIDegrassiPlugin implements IModPlugin {
     registerFurnaceHandler(registration);
     registerMelterHandler(registration);
     registerUpgradeMakerHandler(registration);
-    registerJewelryHandler(registration);
+    registerGeneratorsHandler(registration);
   }
 
-  private void registerJewelryHandler(@NotNull IGuiHandlerRegistration registration) {
+  private void registerGeneratorsHandler(@NotNull IGuiHandlerRegistration registration) {
     registration.addRecipeClickArea(
       JewelryGeneratorScreen.class,
       86,
@@ -114,6 +124,14 @@ public class JEIDegrassiPlugin implements IModPlugin {
       TextureSizeHelper.getTextureWidth(JewelryGeneratorScreen.FILLED_ARROW),
       TextureSizeHelper.getTextureHeight(JewelryGeneratorScreen.FILLED_ARROW),
       JEWELRY_GENERATOR_TYPE
+    );
+    registration.addRecipeClickArea(
+      CombustionGeneratorScreen.class,
+      86,
+      46,
+      TextureSizeHelper.getTextureWidth(CombustionGeneratorScreen.FILLED_ARROW),
+      TextureSizeHelper.getTextureHeight(CombustionGeneratorScreen.FILLED_ARROW),
+      COMBUSTION_GENERATOR_TYPE
     );
   }
 
@@ -158,6 +176,10 @@ public class JEIDegrassiPlugin implements IModPlugin {
     registration.addRecipeCatalyst(
       new ItemStack(BlockRegister.JEWELRY_GENERATOR.get()),
       JEWELRY_GENERATOR_TYPE
+    );
+    registration.addRecipeCatalyst(
+      new ItemStack(BlockRegister.COMBUSTION_GENERATOR.get()),
+      COMBUSTION_GENERATOR_TYPE
     );
   }
 

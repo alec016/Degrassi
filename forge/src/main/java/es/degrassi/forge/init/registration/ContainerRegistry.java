@@ -6,7 +6,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.init.gui.container.FurnaceContainer;
 import es.degrassi.forge.init.gui.container.MelterContainer;
-import es.degrassi.forge.init.gui.container.generators.JewelryGeneratorContainer;
+import es.degrassi.forge.init.gui.container.generators.*;
 import es.degrassi.forge.init.gui.container.panel.SolarPanelContainer;
 import es.degrassi.forge.init.gui.container.UpgradeMakerContainer;
 import net.minecraft.core.Registry;
@@ -29,6 +29,7 @@ public class ContainerRegistry {
 
   // generators
   public static final RegistrySupplier<MenuType<JewelryGeneratorContainer>> JEWELRY_GENERATOR = CONTAINERS.register("jewelry_generator_container", () -> MenuRegistry.ofExtended(JewelryGeneratorContainer::new));
+  public static final RegistrySupplier<MenuType<CombustionGeneratorContainer>> COMBUSTION_GENERATOR = CONTAINERS.register("combustion_generator_container", () -> MenuRegistry.ofExtended(CombustionGeneratorContainer::new));
 
   public static void register() {
     CONTAINERS.register();

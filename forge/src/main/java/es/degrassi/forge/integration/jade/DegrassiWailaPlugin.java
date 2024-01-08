@@ -24,6 +24,7 @@ public class DegrassiWailaPlugin implements IWailaPlugin {
     registration.registerBlockDataProvider(DegrassiServerDataProvider.MELTER, MelterEntity.class);
     registration.registerBlockDataProvider(DegrassiServerDataProvider.UPGRADE_MAKER, UpgradeMakerEntity.class);
     registration.registerBlockDataProvider(DegrassiServerDataProvider.GENERATOR, JewelryGeneratorEntity.class);
+    registration.registerBlockDataProvider(DegrassiServerDataProvider.GENERATOR, CombustionGeneratorEntity.class);
   }
 
   @Override
@@ -40,5 +41,7 @@ public class DegrassiWailaPlugin implements IWailaPlugin {
     registration.usePickedResult(BlockRegister.UPGRADE_MAKER.get());
     registration.registerBlockComponent(DegrassiComponentProvider.GENERATOR, JewelryGenerator.class);
     registration.usePickedResult(BlockRegister.JEWELRY_GENERATOR.get());
+    registration.registerBlockComponent(DegrassiComponentProvider.GENERATOR, CombustionGenerator.class);
+    registration.usePickedResult(BlockRegister.COMBUSTION_GENERATOR.get());
   }
 }

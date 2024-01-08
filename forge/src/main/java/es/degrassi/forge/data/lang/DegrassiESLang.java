@@ -58,6 +58,7 @@ public class DegrassiESLang extends DegrassiLangProvider {
     add(BlockRegister.NETHERITE_FURNACE_BLOCK.get(), "Horno de Netherite");
     add(BlockRegister.UPGRADE_MAKER.get(), "Fábrica de Mejoras");
     add(BlockRegister.JEWELRY_GENERATOR.get(), "Generador por Joyas");
+    add(BlockRegister.COMBUSTION_GENERATOR.get(), "Generador de combustión");
     add(BlockRegister.CIRCUIT_FABRICATOR.get(), "Fábrica de Circuitos");
   }
 

@@ -18,6 +18,7 @@
     "degrassi:upgrade_maker",
     "degrassi:machine_casing",
     "degrassi:jewelry_generator",
+    "degrassi:combustion_generator",
     "degrassi:circuit_fabricator"
   ]
 }

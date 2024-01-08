@@ -17,6 +17,7 @@ import es.degrassi.forge.util.storage.ProgressStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.*;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Containers;
 import net.minecraft.world.SimpleContainer;
@@ -168,6 +169,10 @@ public abstract class GeneratorEntity<T extends GeneratorEntity<T, B>, B extends
     setChanged();
   }
 
+  public Component getName() {
+    return getDelegate().getName();
+  }
+
   @Override
   public void setHandler(@NotNull ItemStackHandler handler) {
     for (int i = 0; i < handler.getSlots(); i++) {
@@ -230,7 +235,6 @@ public abstract class GeneratorEntity<T extends GeneratorEntity<T, B>, B extends
     nbt.put("generator.progress", progressStorage.serializeNBT());
     return nbt;
   }
-
 
   @Override
   public void saveAdditional(@NotNull CompoundTag nbt) {

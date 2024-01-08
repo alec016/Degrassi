@@ -1,28 +1,25 @@
 package es.degrassi.forge.init.entity.generators;
 
 import es.degrassi.forge.init.block.generators.*;
-import es.degrassi.forge.init.recipe.helpers.RecipeHelpers;
+import es.degrassi.forge.init.recipe.helpers.*;
 import es.degrassi.forge.init.recipe.recipes.*;
-import es.degrassi.forge.init.registration.EntityRegister;
-import es.degrassi.forge.init.registration.ItemRegister;
-import es.degrassi.forge.integration.config.DegrassiConfig;
-import es.degrassi.forge.network.EnergyPacket;
-import es.degrassi.forge.network.ItemPacket;
-import es.degrassi.forge.util.storage.AbstractEnergyStorage;
+import es.degrassi.forge.init.registration.*;
+import es.degrassi.forge.integration.config.*;
+import es.degrassi.forge.network.*;
+import es.degrassi.forge.util.storage.*;
+import java.util.concurrent.atomic.*;
 import net.minecraft.core.*;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.concurrent.atomic.AtomicBoolean;
+import net.minecraft.world.inventory.*;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.state.*;
+import net.minecraftforge.items.*;
+import org.jetbrains.annotations.*;
 
 @SuppressWarnings("unchecked")
-public class JewelryGeneratorEntity extends GeneratorEntity<JewelryGeneratorEntity, JewelryGenerator> {
+public class CombustionGeneratorEntity extends GeneratorEntity<CombustionGeneratorEntity, CombustionGenerator> {
   {
-    ENERGY_STORAGE = new AbstractEnergyStorage(DegrassiConfig.get().generatorsConfig.jewelry_capacity, DegrassiConfig.get().generatorsConfig.jewelry_transfer) {
+    ENERGY_STORAGE = new AbstractEnergyStorage(DegrassiConfig.get().generatorsConfig.combustion_capacity, DegrassiConfig.get().generatorsConfig.combustion_transfer) {
       @Override
       public boolean canReceive() {
         return false;
@@ -68,18 +65,18 @@ public class JewelryGeneratorEntity extends GeneratorEntity<JewelryGeneratorEnti
 
   public final ContainerData data;
 
-  public JewelryGeneratorEntity(
+  public CombustionGeneratorEntity(
     BlockPos blockPos,
     BlockState blockState,
-    JewelryGenerator block
+    CombustionGenerator block
   ) {
-    super(EntityRegister.JEWELRY_GENERATOR.get(), blockPos, blockState, block);
+    super(EntityRegister.COMBUSTION_GENERATOR.get(), blockPos, blockState, block);
     this.data = new ContainerData() {
       @Override
       public int get(int index) {
         return switch (index) {
-          case 0 -> JewelryGeneratorEntity.this.progressStorage.getProgress();
-          case 1 -> JewelryGeneratorEntity.this.progressStorage.getMaxProgress();
+          case 0 -> CombustionGeneratorEntity.this.progressStorage.getProgress();
+          case 1 -> CombustionGeneratorEntity.this.progressStorage.getMaxProgress();
           default -> 0;
         };
       }
@@ -87,8 +84,8 @@ public class JewelryGeneratorEntity extends GeneratorEntity<JewelryGeneratorEnti
       @Override
       public void set(int index, int value) {
         switch (index) {
-          case 0 -> JewelryGeneratorEntity.this.progressStorage.setProgress(value);
-          case 1 -> JewelryGeneratorEntity.this.progressStorage.setMaxProgress(value);
+          case 0 -> CombustionGeneratorEntity.this.progressStorage.setProgress(value);
+          case 1 -> CombustionGeneratorEntity.this.progressStorage.setMaxProgress(value);
         }
       }
 
@@ -103,7 +100,7 @@ public class JewelryGeneratorEntity extends GeneratorEntity<JewelryGeneratorEnti
     @NotNull Level level,
     BlockPos pos,
     BlockState state,
-    @NotNull JewelryGeneratorEntity entity
+    @NotNull CombustionGeneratorEntity entity
   ) {
     if (level.isClientSide()) return;
 

@@ -67,6 +67,7 @@ public class TagRegistry {
     PISTONS(NameSpace.FORGE),
     BLOCKS,
     FURNACES,
+    GENERATORS,
     MACHINES,
     SOLAR_PANELS(MOD, "panels/solar_panels");
 
@@ -117,7 +118,7 @@ public class TagRegistry {
     UPGRADES,
     MACHINES,
     SOLAR_PANELS(MOD, "panels/solar_panels"),
-    LUNAR_PANELS(MOD, "panels/lunar_panels"),
+    GENERATORS,
     FURNACES;
 
     public final TagKey<Item> tag;

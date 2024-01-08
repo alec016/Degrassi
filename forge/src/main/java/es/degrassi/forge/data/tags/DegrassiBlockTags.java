@@ -37,6 +37,7 @@ public final class DegrassiBlockTags extends DegrassiTagProvider<Block> {
   private void addCustomTags() {
     addBlocks();
     addFurnaces();
+    addGenerators();
     addMachines();
     addPanels();
   }
@@ -80,6 +81,7 @@ public final class DegrassiBlockTags extends DegrassiTagProvider<Block> {
         BlockRegister.MELTER_BLOCK.get(),
         BlockRegister.UPGRADE_MAKER.get(),
         BlockRegister.JEWELRY_GENERATOR.get(),
+        BlockRegister.COMBUSTION_GENERATOR.get(),
         BlockRegister.CIRCUIT_FABRICATOR.get()
       );
   }
@@ -93,6 +95,15 @@ public final class DegrassiBlockTags extends DegrassiTagProvider<Block> {
         BlockRegister.DIAMOND_FURNACE_BLOCK.get(),
         BlockRegister.EMERALD_FURNACE_BLOCK.get(),
         BlockRegister.NETHERITE_FURNACE_BLOCK.get()
+      );
+  }
+
+  private void addGenerators() {
+    tag(TagRegistry.AllBlockTags.GENERATORS.tag)
+      .replace(false)
+      .add(
+        BlockRegister.JEWELRY_GENERATOR.get(),
+        BlockRegister.COMBUSTION_GENERATOR.get()
       );
   }
 
@@ -150,7 +161,8 @@ public final class DegrassiBlockTags extends DegrassiTagProvider<Block> {
         BlockRegister.DIAMOND_FURNACE_BLOCK.get(),
         BlockRegister.MELTER_BLOCK.get(),
         BlockRegister.UPGRADE_MAKER.get(),
-        BlockRegister.JEWELRY_GENERATOR.get()
+        BlockRegister.JEWELRY_GENERATOR.get(),
+        BlockRegister.COMBUSTION_GENERATOR.get()
       );
   }
 
@@ -210,6 +222,7 @@ public final class DegrassiBlockTags extends DegrassiTagProvider<Block> {
         BlockRegister.UPGRADE_MAKER.get(),
         BlockRegister.MACHINE_CASING.get(),
         BlockRegister.JEWELRY_GENERATOR.get(),
+        BlockRegister.COMBUSTION_GENERATOR.get(),
         BlockRegister.CIRCUIT_FABRICATOR.get()
       );
   }

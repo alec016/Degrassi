@@ -186,6 +186,8 @@ public class GeneratorRecipeCategory implements IRecipeCategory<GeneratorRecipe>
   public @NotNull RecipeType<GeneratorRecipe> getRecipeType() {
     if (block instanceof JewelryGenerator) {
       return DegrassiJEIRecipeTypes.JEWELRY_GENERATOR_TYPE;
+    } else if (block instanceof CombustionGenerator) {
+      return DegrassiJEIRecipeTypes.COMBUSTION_GENERATOR_TYPE;
     }
 
     return DegrassiJEIRecipeTypes.GENERATOR_TYPE;

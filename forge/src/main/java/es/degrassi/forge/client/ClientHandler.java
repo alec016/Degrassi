@@ -9,12 +9,12 @@ import dev.architectury.registry.menu.MenuRegistry;
 import es.degrassi.forge.init.entity.FurnaceEntity;
 import es.degrassi.forge.init.entity.MelterEntity;
 import es.degrassi.forge.init.entity.UpgradeMakerEntity;
-import es.degrassi.forge.init.entity.generators.JewelryGeneratorEntity;
+import es.degrassi.forge.init.entity.generators.*;
 import es.degrassi.forge.init.entity.panel.SolarPanelEntity;
 import es.degrassi.forge.init.gui.screen.FurnaceScreen;
 import es.degrassi.forge.init.gui.screen.MelterScreen;
 import es.degrassi.forge.init.gui.screen.UpgradeMakerScreen;
-import es.degrassi.forge.init.gui.screen.generators.JewelryGeneratorScreen;
+import es.degrassi.forge.init.gui.screen.generators.*;
 import es.degrassi.forge.init.gui.screen.panel.SolarPanelScreen;
 import es.degrassi.forge.init.registration.ElementRegistry;
 import es.degrassi.forge.init.registration.ContainerRegistry;
@@ -52,6 +52,7 @@ public class ClientHandler {
     MenuRegistry.registerScreenFactory(ContainerRegistry.MELTER_CONTAINER.get(), MelterScreen::new);
     MenuRegistry.registerScreenFactory(ContainerRegistry.UPGRADE_MAKER_CONTAINER.get(), UpgradeMakerScreen::new);
     MenuRegistry.registerScreenFactory(ContainerRegistry.JEWELRY_GENERATOR.get(), JewelryGeneratorScreen::new);
+    MenuRegistry.registerScreenFactory(ContainerRegistry.COMBUSTION_GENERATOR.get(), CombustionGeneratorScreen::new);
   }
 
   private static void registerGuiElementJEIRenderers(final RegisterGuiElementJEIRendererEvent event) {
@@ -198,5 +199,13 @@ public class ClientHandler {
       if (tile instanceof JewelryGeneratorEntity jewelryGenerator) return jewelryGenerator;
     }
     throw new IllegalStateException("Trying to open a Jewelry Generator container without clicking on a Jewelry Generator block");
+  }
+
+  public static CombustionGeneratorEntity getClientSideCombustionGeneratorEntity(BlockPos pos) {
+    if (Minecraft.getInstance().level != null) {
+      BlockEntity tile = Minecraft.getInstance().level.getBlockEntity(pos);
+      if (tile instanceof CombustionGeneratorEntity combustionGenerator) return combustionGenerator;
+    }
+    throw new IllegalStateException("Trying to open a Combustion Generator container without clicking on a Combustion Generator block");
   }
 }

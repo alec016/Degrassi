@@ -15,4 +15,5 @@ public class DegrassiJEIRecipeTypes {
   public static RecipeType<UpgradeMakerRecipe> UPGRADE_MAKER_TYPE = new RecipeType<>(UpgradeMakerRecipeCategory.UID, UpgradeMakerRecipe.class);
   public static RecipeType<GeneratorRecipe> GENERATOR_TYPE = new RecipeType<>(GeneratorRecipeCategory.createUID(""), GeneratorRecipe.class);
   public static RecipeType<GeneratorRecipe> JEWELRY_GENERATOR_TYPE = new RecipeType<>(GeneratorRecipeCategory.createUID("jewelry"), GeneratorRecipe.class);
+  public static RecipeType<GeneratorRecipe> COMBUSTION_GENERATOR_TYPE = new RecipeType<>(GeneratorRecipeCategory.createUID("combustion"), GeneratorRecipe.class);
 }
