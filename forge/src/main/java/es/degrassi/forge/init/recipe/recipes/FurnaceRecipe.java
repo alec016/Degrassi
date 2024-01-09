@@ -1,9 +1,7 @@
 package es.degrassi.forge.init.recipe.recipes;
 
-import com.google.gson.JsonObject;
 import es.degrassi.forge.init.entity.*;
 import es.degrassi.forge.init.entity.type.*;
-import es.degrassi.forge.init.item.upgrade.types.*;
 import es.degrassi.forge.init.recipe.IDegrassiRecipe;
 import es.degrassi.forge.init.recipe.helpers.*;
 import es.degrassi.forge.init.registration.RecipeRegistry;
@@ -15,7 +13,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
-import java.util.List;
 
 @SuppressWarnings("unused")
 public class FurnaceRecipe implements IDegrassiRecipe {

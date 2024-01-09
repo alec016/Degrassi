@@ -61,7 +61,7 @@ public class FurnaceRecipeBuilder extends AbstractRecipeBuilder<FurnaceRecipe> {
     return this;
   }
 
-  public FurnaceRecipeBuilder time (int time) {
+  public FurnaceRecipeBuilder time(int time) {
     this.time = time;
     return this;
   }

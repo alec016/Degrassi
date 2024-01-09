@@ -36,7 +36,8 @@ public class MelterRecipeBuilder extends AbstractRecipeBuilder<MelterRecipe> {
     ).apply(recipeBuilderInstance, (time, energy, input, inputAmount, output, outputAmount) -> new MelterRecipeBuilder(time)
       .energy(energy)
       .input(new ItemStack(input.getAll().get(0), inputAmount))
-      .output(new FluidStack(output.getAll().get(0), outputAmount))), "Melter recipe builder"
+      .output(new FluidStack(output.getAll().get(0), outputAmount))
+    ), "Melter recipe builder"
   );
 
   public MelterRecipeBuilder(int time) {

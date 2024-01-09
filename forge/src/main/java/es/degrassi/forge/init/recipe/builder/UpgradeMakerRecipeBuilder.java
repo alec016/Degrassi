@@ -47,7 +47,8 @@ public class UpgradeMakerRecipeBuilder extends AbstractRecipeBuilder<UpgradeMake
       .input1(new ItemStack(input1.getAll().get(0), inputAmount1))
       .input2(new ItemStack(input2.getAll().get(0), inputAmount2))
       .fluidInput(new FluidStack(fluidInput.getAll().get(0), fluidInputAmount))
-      .output(new ItemStack(output.getAll().get(0), outputAmount))), "Upgrade Maker recipe builder"
+      .output(new ItemStack(output.getAll().get(0), outputAmount))
+    ), "Upgrade Maker recipe builder"
   );
 
   public UpgradeMakerRecipeBuilder(int time) {

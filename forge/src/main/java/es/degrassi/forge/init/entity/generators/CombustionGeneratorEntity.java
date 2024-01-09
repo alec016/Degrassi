@@ -113,8 +113,6 @@ public class CombustionGeneratorEntity extends GeneratorEntity<CombustionGenerat
       if (entity.getProgressStorage().getProgress() >= entity.getProgressStorage().getMaxProgress()) {
         entity.getRecipe().endProcess(entity);
       }
-    } else {
-      entity.resetProgress();
     }
     setChanged(level, pos, state);
   }

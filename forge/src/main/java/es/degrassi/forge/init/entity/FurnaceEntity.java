@@ -252,8 +252,6 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
       if (entity.getProgressStorage().getProgress() >= entity.getProgressStorage().getMaxProgress()) {
         entity.getRecipe().endProcess(entity);
       }
-    } else {
-      entity.resetProgress();
     }
     setChanged(level, pos, state);
   }

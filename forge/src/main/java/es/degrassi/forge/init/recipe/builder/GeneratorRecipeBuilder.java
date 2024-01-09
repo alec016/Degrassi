@@ -29,7 +29,8 @@ public class GeneratorRecipeBuilder extends AbstractRecipeBuilder<GeneratorRecip
     ).apply(recipeBuilderInstance, (time, energy, input, inputAmount, machineIds) -> new GeneratorRecipeBuilder(time)
       .energy(energy)
       .input(new ItemStack(input.getAll().get(0), inputAmount), input, inputAmount)
-      .addMachines(machineIds)), "Generator recipe builder"
+      .addMachines(machineIds)
+    ), "Generator recipe builder"
   );
 
   public GeneratorRecipeBuilder(int time) {

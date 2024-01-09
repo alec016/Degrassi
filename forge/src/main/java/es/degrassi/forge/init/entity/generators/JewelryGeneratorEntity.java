@@ -115,8 +115,6 @@ public class JewelryGeneratorEntity extends GeneratorEntity<JewelryGeneratorEnti
       if (entity.getProgressStorage().getProgress() >= entity.getProgressStorage().getMaxProgress()) {
         entity.getRecipe().endProcess(entity);
       }
-    } else {
-      entity.resetProgress();
     }
     setChanged(level, pos, state);
   }

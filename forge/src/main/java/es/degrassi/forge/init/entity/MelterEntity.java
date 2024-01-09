@@ -204,8 +204,6 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
       if (entity.getProgressStorage().getProgress() >= entity.getProgressStorage().getMaxProgress()) {
         entity.getRecipe().endProcess(entity);
       }
-    } else {
-      entity.resetProgress();
     }
     setChanged(level, pos, state);
   }

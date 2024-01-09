@@ -192,8 +192,6 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
       if (entity.getProgressStorage().getProgress() >= entity.getProgressStorage().getMaxProgress()) {
         entity.getRecipe().endProcess(entity);
       }
-    } else {
-      entity.resetProgress();
     }
     setChanged(level, pos, state);
   }

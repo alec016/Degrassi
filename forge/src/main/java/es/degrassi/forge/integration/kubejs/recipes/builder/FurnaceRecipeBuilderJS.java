@@ -7,16 +7,10 @@ import es.degrassi.forge.integration.kubejs.recipes.DegrassiRecipeSchemas;
 import es.degrassi.forge.integration.kubejs.requirements.EnergyRequirementJS;
 import es.degrassi.forge.integration.kubejs.requirements.ExperienceRequirementJS;
 import es.degrassi.forge.integration.kubejs.requirements.ItemRequirementJS;
-import es.degrassi.forge.requirements.EnergyRequirement;
-import es.degrassi.forge.requirements.IRequirement;
-import es.degrassi.forge.requirements.ItemRequirement;
-import es.degrassi.forge.requirements.TimeRequirement;
 import net.minecraft.world.item.crafting.Recipe;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 public class FurnaceRecipeBuilderJS extends AbstractRecipeBuilderJS<FurnaceRecipeBuilder, FurnaceRecipeBuilderJS>
   implements ItemRequirementJS<FurnaceRecipeBuilderJS>, EnergyRequirementJS<FurnaceRecipeBuilderJS>, ExperienceRequirementJS<FurnaceRecipeBuilderJS>
