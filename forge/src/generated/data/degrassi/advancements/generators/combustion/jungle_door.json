@@ -1,0 +1,21 @@
+{
+  "criteria": {
+    "has_jungle_door": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:jungle_door"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_jungle_door"
+    ]
+  ]
+}

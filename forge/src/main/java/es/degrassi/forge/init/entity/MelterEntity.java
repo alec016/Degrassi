@@ -192,12 +192,18 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
     if (level.isClientSide()) {
       if (entity.fluidLevel != null)
         entity.fluidLevel.tickChaser();
+      setChanged(level, pos, state);
       return;
     }
     if (RecipeHelpers.MELTER.hasRecipe(entity)) {
-      entity.progressStorage.increment(false);
-      RecipeHelpers.MELTER.extractEnergy(entity);
-      if (entity.progressStorage.getProgress() >= entity.progressStorage.getMaxProgress()) RecipeHelpers.MELTER.craftItem(entity);
+      if(!entity.getRecipe().isInProgress() && entity.getProgressStorage().getProgress() == 0) {
+        entity.getRecipe().startProcess(entity);
+      } else {
+        entity.getRecipe().tick(entity);
+      }
+      if (entity.getProgressStorage().getProgress() >= entity.getProgressStorage().getMaxProgress()) {
+        entity.getRecipe().endProcess(entity);
+      }
     } else {
       entity.resetProgress();
     }

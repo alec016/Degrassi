@@ -1,0 +1,21 @@
+{
+  "criteria": {
+    "has_dead_bush": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:dead_bush"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_dead_bush"
+    ]
+  ]
+}

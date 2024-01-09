@@ -1,9 +1,13 @@
 package es.degrassi.forge.init.recipe.recipes;
 
+import es.degrassi.forge.init.entity.*;
+import es.degrassi.forge.init.entity.type.*;
 import es.degrassi.forge.init.recipe.IDegrassiRecipe;
+import es.degrassi.forge.init.recipe.helpers.*;
 import es.degrassi.forge.init.registration.RecipeRegistry;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -20,6 +24,7 @@ public class UpgradeMakerRecipe implements IDegrassiRecipe {
   private int time;
   private int energy;
   private boolean modified = false;
+  private boolean inProgress = false;
   private final FluidStack fluidInput;
   private final ItemStack output;
 
@@ -127,30 +132,42 @@ public class UpgradeMakerRecipe implements IDegrassiRecipe {
   }
 
   @Override
+  public boolean isInProgress() {
+    return inProgress;
+  }
+
+  @Override
+  public void startProgress() {
+    inProgress = true;
+  }
+
+  @Override
+  public <T extends BaseEntity & IProgressEntity & IRecipeEntity<?>> void startProcess(T entity) {
+    RecipeHelpers.UPGRADE_MAKER.startProcess((UpgradeMakerEntity) entity);
+  }
+
+  @Override
+  public <T extends BaseEntity & IProgressEntity & IRecipeEntity<?>> void tick(T entity) {
+    RecipeHelpers.UPGRADE_MAKER.tickProcess((UpgradeMakerEntity) entity);
+
+  }
+
+  @Override
+  public <T extends BaseEntity & IProgressEntity & IRecipeEntity<?>> void endProcess(T entity) {
+    RecipeHelpers.UPGRADE_MAKER.endProcess((UpgradeMakerEntity) entity);
+  }
+
+  @Override
   public String toString() {
-    return "UpgradeMakerRecipe [ " + "id: " +
-      id +
-      ", requirements: { input1: { item: " +
-      recipeItems.get(0).getItems()[0].getDisplayName().getString() +
-      ", amount: " +
-      recipeItems.get(0).getItems()[0].getCount() +
-      " }, input2: { item: " +
-      recipeItems.get(1).getItems()[0].getDisplayName().getString() +
-      ", amount: " +
-      recipeItems.get(1).getItems()[0].getCount() +
-      " }, input3: { fluid: " +
-      fluidInput.getDisplayName().getString() +
-      ", amount: " +
-      fluidInput.getAmount() +
-      "}, time: " +
-      time +
-      ", energy: " +
-      energy +
-      ", output: { item: " +
-      output.getDisplayName().getString() +
-      ", amount: " +
-      output.getCount() +
-      " }" +
-      " } ]";
+    return "UpgradeMakerRecipe: " + GsonHelper.parse(
+      "{" +
+        "\n\t\"id\": \"" + this.id + "\"" +
+        ",\n\t\"inputs\": \"" + this.recipeItems.stream().toList().stream().map(ingredient -> ingredient.getItems()[0].getDisplayName().getString()).toList() + "\"" +
+        ",\n\t\"fluid\": \"" + fluidInput.getDisplayName().getString() + "\"" +
+        ",\n\t\"output\": \"" + this.output.getDisplayName().getString() + "\"" +
+        ",\n\t\"time\": " + this.time +
+        ",\n\t\"energy\": " + this.energy +
+        "\n}"
+    );
   }
 }

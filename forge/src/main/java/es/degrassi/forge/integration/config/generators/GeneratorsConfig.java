@@ -8,18 +8,18 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 @Config(name = "generators")
 public class GeneratorsConfig implements ConfigData {
   @ConfigEntry.Category("Jewelry Generator")
-  @Comment("energy capacity - Default 10000")
-  public int jewelry_capacity = 10000;
+  @Comment("energy capacity - Default 1000000")
+  public int jewelry_capacity = 1000000;
 
   @ConfigEntry.Category("Jewelry Generator")
-  @Comment("energy transfer - Default 200")
-  public int jewelry_transfer = 200;
+  @Comment("energy transfer - Default 20000")
+  public int jewelry_transfer = 20000;
 
   @ConfigEntry.Category("Combustion Generator")
-  @Comment("energy capacity - Default 10000")
-  public int combustion_capacity = 10000;
+  @Comment("energy capacity - Default 1000000")
+  public int combustion_capacity = 1000000;
 
   @ConfigEntry.Category("Combustion Generator")
-  @Comment("energy transfer - Default 200")
-  public int combustion_transfer = 200;
+  @Comment("energy transfer - Default 20000")
+  public int combustion_transfer = 20000;
 }

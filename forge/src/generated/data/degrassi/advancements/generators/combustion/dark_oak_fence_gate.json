@@ -1,0 +1,21 @@
+{
+  "criteria": {
+    "has_dark_oak_fence_gate": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:dark_oak_fence_gate"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_dark_oak_fence_gate"
+    ]
+  ]
+}

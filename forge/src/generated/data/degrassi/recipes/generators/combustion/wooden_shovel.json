@@ -1,0 +1,11 @@
+{
+  "type": "degrassi:generator",
+  "energy": 12,
+  "input": {
+    "item": "minecraft:wooden_shovel"
+  },
+  "machines": [
+    "degrassi:combustion_generator"
+  ],
+  "time": 100
+}

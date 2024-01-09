@@ -106,11 +106,15 @@ public class JewelryGeneratorEntity extends GeneratorEntity<JewelryGeneratorEnti
     @NotNull JewelryGeneratorEntity entity
   ) {
     if (level.isClientSide()) return;
-
     if (RecipeHelpers.GENERATORS.hasRecipe(entity)) {
-      entity.progressStorage.increment(false);
-      RecipeHelpers.GENERATORS.insertEnergy(entity);
-      if (entity.progressStorage.getProgress() >= entity.progressStorage.getMaxProgress()) RecipeHelpers.GENERATORS.craftItem(entity);
+      if(!entity.getRecipe().isInProgress() && entity.getProgressStorage().getProgress() == 0) {
+        entity.getRecipe().startProcess(entity);
+      } else {
+        entity.getRecipe().tick(entity);
+      }
+      if (entity.getProgressStorage().getProgress() >= entity.getProgressStorage().getMaxProgress()) {
+        entity.getRecipe().endProcess(entity);
+      }
     } else {
       entity.resetProgress();
     }

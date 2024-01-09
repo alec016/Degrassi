@@ -2,6 +2,7 @@ package es.degrassi.forge.init.recipe.helpers;
 
 import com.google.common.collect.*;
 import es.degrassi.forge.init.block.generators.GeneratorBlock;
+import es.degrassi.forge.init.entity.*;
 import es.degrassi.forge.init.entity.generators.*;
 import es.degrassi.forge.init.item.upgrade.UpgradeUpgradeType;
 import es.degrassi.forge.init.item.upgrade.types.IGeneratorUpgrade;
@@ -27,14 +28,10 @@ public class GeneratorRecipeHelper<E extends GeneratorEntity<E, GeneratorBlock>>
       inventory.setItem(i, entity.getItemHandler().getStackInSlot(i));
     }
 
-    recipes.forEach(recipe -> {
+    getRecipesForMachine(entity.getDelegate()).forEach(recipe -> {
       if (recipe == null) return;
-      if (
-        !entity.getType().validBlocks.stream().filter(
-          validBlock -> recipe.canUseRecipe(validBlock.asItem().kjs$getId())
-        ).toList().isEmpty() &&
-          recipe.matches(inventory, level)
-      ) entity.setRecipe(recipe.copy());
+      if (recipe.matches(inventory, level))
+        entity.setRecipe(recipe.copy());
     });
 
     if (entity.getRecipe() == null) return false;
@@ -45,16 +42,26 @@ public class GeneratorRecipeHelper<E extends GeneratorEntity<E, GeneratorBlock>>
   }
 
   @Override
-  public void craftItem(@NotNull E entity) {
+  public void startProcess(@NotNull E entity) {
+    GeneratorRecipe recipe = entity.getRecipe();
+    recipe.startProgress();
     entity.getItemHandler().extractItem(2, 1, false);
+    entity.getProgressStorage().increment(false);
+  }
 
+  @Override
+  public void tickProcess(@NotNull E entity) {
+    insertEnergy(entity);
+    entity.getProgressStorage().increment(false);
+  }
+
+  @Override
+  public void endProcess(@NotNull E entity) {
     entity.resetProgress();
   }
 
   public List<GeneratorRecipe> getRecipesForMachine(GeneratorBlock block) {
-    List<GeneratorRecipe> r = Lists.newLinkedList();
-    r.addAll(recipes.stream().filter(recipe -> recipe.canUseRecipe(block.kjs$getIdLocation())).toList());
-    return r;
+    return recipes.stream().filter(recipe -> recipe.canUseRecipe(block.kjs$getId())).toList();
   }
 
   @Override
@@ -63,9 +70,8 @@ public class GeneratorRecipeHelper<E extends GeneratorEntity<E, GeneratorBlock>>
     Level level = Objects.requireNonNull(Minecraft.getInstance().level);
     List<GeneratorRecipe> generatorRecipes = level.getRecipeManager().getAllRecipesFor(RecipeRegistry.GENERATOR_RECIPE_TYPE.get());
 
-    DegrassiLogger.INSTANCE.info("GeneratorRecipeHelper");
+    DegrassiLogger.INSTANCE.info("GeneratorRecipeHelper$count: {}", generatorRecipes.size());
     generatorRecipes.forEach(recipe -> {
-      DegrassiLogger.INSTANCE.info(recipe);
       if (recipe == null) return;
       AtomicBoolean has = new AtomicBoolean(false);
       recipes.forEach(r -> {

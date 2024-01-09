@@ -1,0 +1,21 @@
+{
+  "criteria": {
+    "has_birch_leaves": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:birch_leaves"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_birch_leaves"
+    ]
+  ]
+}

@@ -1,7 +1,11 @@
 package es.degrassi.forge.init.recipe.recipes;
 
 import com.google.gson.JsonObject;
+import es.degrassi.forge.init.entity.*;
+import es.degrassi.forge.init.entity.type.*;
+import es.degrassi.forge.init.item.upgrade.types.*;
 import es.degrassi.forge.init.recipe.IDegrassiRecipe;
+import es.degrassi.forge.init.recipe.helpers.*;
 import es.degrassi.forge.init.registration.RecipeRegistry;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
@@ -23,6 +27,7 @@ public class FurnaceRecipe implements IDegrassiRecipe {
   private int xp;
   private boolean modified = false;
   private boolean showInJei = true;
+  private boolean inProgress = false;
 
   public FurnaceRecipe (
     ResourceLocation id,
@@ -137,20 +142,41 @@ public class FurnaceRecipe implements IDegrassiRecipe {
   }
 
   @Override
+  public boolean isInProgress() {
+    return inProgress;
+  }
+
+  @Override
+  public void startProgress() {
+    inProgress = true;
+  }
+
+  @Override
+  public <T extends BaseEntity & IProgressEntity & IRecipeEntity<?>> void startProcess(T entity) {
+    RecipeHelpers.FURNACE.startProcess((FurnaceEntity) entity);
+  }
+
+  @Override
+  public <T extends BaseEntity & IProgressEntity & IRecipeEntity<?>> void tick(T entity) {
+    RecipeHelpers.FURNACE.tickProcess((FurnaceEntity) entity);
+  }
+
+  @Override
+  public <T extends BaseEntity & IProgressEntity & IRecipeEntity<?>> void endProcess(T entity) {
+    RecipeHelpers.FURNACE.endProcess((FurnaceEntity) entity);
+  }
+
+  @Override
   public String toString() {
-    List<Ingredient> list = this.recipeItems.stream().toList();
-    List<String> ing = list.stream().map(ingredient -> ingredient.getItems()[0].getDisplayName().getString()).toList();
-    String array = ing.toString();
-    JsonObject json = GsonHelper.parse(
+    return "FurnaceRecipe: " + GsonHelper.parse(
       "{" +
-        "\n\t\"id\": \"" + id.getNamespace() + ":" + id.getPath() + "\"" +
-        ",\n\t\"ingredients\": \"" + array + "\"" +
-        ",\n\t\"output\": \"" + output.getDisplayName().getString() + "\"" +
-        ",\n\t\"time\": " + time +
-        ",\n\t\"energy\": " + energyRequired +
-        ",\n\t\"xp\": " + xp +
+        "\n\t\"id\": \"" + this.id + "\"" +
+        ",\n\t\"ingredients\": \"" + this.recipeItems.stream().toList().stream().map(ingredient -> ingredient.getItems()[0].getDisplayName().getString()).toList() + "\"" +
+        ",\n\t\"output\": \"" + this.output.getDisplayName().getString() + "\"" +
+        ",\n\t\"time\": " + this.time +
+        ",\n\t\"energy\": " + this.energyRequired +
+        ",\n\t\"xp\": " + this.xp +
         "\n}"
     );
-    return json.toString();
   }
 }

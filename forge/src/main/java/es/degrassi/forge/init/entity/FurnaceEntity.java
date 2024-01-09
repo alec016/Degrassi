@@ -240,15 +240,20 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
     @NotNull Level level,
     BlockPos pos,
     BlockState state,
-    @NotNull FurnaceEntity furnaceEntity
+    @NotNull FurnaceEntity entity
   ) {
     if (level.isClientSide()) return;
-    if (RecipeHelpers.FURNACE.hasRecipe(furnaceEntity)) {
-      furnaceEntity.progressStorage.increment(false);
-      RecipeHelpers.FURNACE.extractEnergy(furnaceEntity);
-      if (furnaceEntity.progressStorage.getProgress() >= furnaceEntity.progressStorage.getMaxProgress()) RecipeHelpers.FURNACE.craftItem(furnaceEntity);
+    if (RecipeHelpers.FURNACE.hasRecipe(entity)) {
+      if(!entity.getRecipe().isInProgress() && entity.getProgressStorage().getProgress() == 0) {
+        entity.getRecipe().startProcess(entity);
+      } else {
+        entity.getRecipe().tick(entity);
+      }
+      if (entity.getProgressStorage().getProgress() >= entity.getProgressStorage().getMaxProgress()) {
+        entity.getRecipe().endProcess(entity);
+      }
     } else {
-      furnaceEntity.resetProgress();
+      entity.resetProgress();
     }
     setChanged(level, pos, state);
   }

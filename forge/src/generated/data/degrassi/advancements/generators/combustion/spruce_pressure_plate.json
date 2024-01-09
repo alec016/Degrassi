@@ -1,0 +1,21 @@
+{
+  "criteria": {
+    "has_spruce_pressure_plate": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:spruce_pressure_plate"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_spruce_pressure_plate"
+    ]
+  ]
+}

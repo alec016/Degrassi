@@ -1,0 +1,11 @@
+{
+  "type": "degrassi:generator",
+  "energy": 4,
+  "input": {
+    "item": "minecraft:bowl"
+  },
+  "machines": [
+    "degrassi:combustion_generator"
+  ],
+  "time": 100
+}

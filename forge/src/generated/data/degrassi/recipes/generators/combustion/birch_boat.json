@@ -1,0 +1,11 @@
+{
+  "type": "degrassi:generator",
+  "energy": 8,
+  "input": {
+    "item": "minecraft:birch_boat"
+  },
+  "machines": [
+    "degrassi:combustion_generator"
+  ],
+  "time": 100
+}

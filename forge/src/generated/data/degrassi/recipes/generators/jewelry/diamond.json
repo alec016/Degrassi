@@ -1,0 +1,11 @@
+{
+  "type": "degrassi:generator",
+  "energy": 200,
+  "input": {
+    "item": "minecraft:diamond"
+  },
+  "machines": [
+    "degrassi:jewelry_generator"
+  ],
+  "time": 100
+}

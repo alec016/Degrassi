@@ -4,7 +4,6 @@ import es.degrassi.forge.api.codec.NamedCodec;
 import es.degrassi.forge.api.ingredient.IIngredient;
 import es.degrassi.forge.init.recipe.recipes.MelterRecipe;
 import es.degrassi.forge.requirements.*;
-import es.degrassi.forge.util.DegrassiLogger;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -15,6 +14,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Objects;
 
+@SuppressWarnings("unused")
 public class MelterRecipeBuilder extends AbstractRecipeBuilder<MelterRecipe> {
   private int time;
   private int energy;
@@ -33,13 +33,10 @@ public class MelterRecipeBuilder extends AbstractRecipeBuilder<MelterRecipe> {
       NamedCodec.INT.optionalFieldOf("inputAmount", 1).forGetter(builder -> builder.inputAmount),
       IIngredient.FLUID.fieldOf("output").forGetter(builder -> builder.outputIngredient),
       NamedCodec.INT.optionalFieldOf("outputAmount", 1000).forGetter(builder -> builder.outputAmount)
-    ).apply(recipeBuilderInstance, (time, energy, input, inputAmount, output, outputAmount) -> {
-      DegrassiLogger.INSTANCE.info("MelterRecipeBuilderCODED[ time: " + time + ", energy: " + energy + ", input: " + input + ", amount: " + inputAmount + ", output: " + output + ", amount: " + outputAmount + " ]");
-      return new MelterRecipeBuilder(time)
-        .energy(energy)
-        .input(new ItemStack(input.getAll().get(0), inputAmount))
-        .output(new FluidStack(output.getAll().get(0), outputAmount));
-    }), "Melter recipe builder"
+    ).apply(recipeBuilderInstance, (time, energy, input, inputAmount, output, outputAmount) -> new MelterRecipeBuilder(time)
+      .energy(energy)
+      .input(new ItemStack(input.getAll().get(0), inputAmount))
+      .output(new FluidStack(output.getAll().get(0), outputAmount))), "Melter recipe builder"
   );
 
   public MelterRecipeBuilder(int time) {
@@ -54,9 +51,7 @@ public class MelterRecipeBuilder extends AbstractRecipeBuilder<MelterRecipe> {
 
   @Override
   public MelterRecipe build(ResourceLocation id) {
-    MelterRecipe recipe = new MelterRecipe(id, time, energy, ingredients, output);
-    DegrassiLogger.INSTANCE.info("MelterRecipeBuilder$build: " + recipe);
-    return recipe;
+    return new MelterRecipe(id, time, energy, ingredients, output);
   }
 
   public MelterRecipeBuilder energy(int energy) {

@@ -1,0 +1,21 @@
+{
+  "criteria": {
+    "has_jungle_trapdoor": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:jungle_trapdoor"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_jungle_trapdoor"
+    ]
+  ]
+}

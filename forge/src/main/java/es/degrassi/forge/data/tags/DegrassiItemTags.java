@@ -37,6 +37,7 @@ public final class DegrassiItemTags extends DegrassiTagProvider<Item> {
     addMachines();
     addUpgrades();
     addFurnaces();
+    addGenerators();
     addPanels();
   }
 
@@ -82,6 +83,16 @@ public final class DegrassiItemTags extends DegrassiTagProvider<Item> {
         BlockRegister.NETHERITE_FURNACE_BLOCK.get().asItem(),
         BlockRegister.MELTER_BLOCK.get().asItem(),
         BlockRegister.UPGRADE_MAKER.get().asItem(),
+        BlockRegister.JEWELRY_GENERATOR.get().asItem(),
+        BlockRegister.COMBUSTION_GENERATOR.get().asItem(),
+        BlockRegister.CIRCUIT_FABRICATOR.get().asItem()
+      );
+  }
+
+  private void addGenerators() {
+    tag(TagRegistry.AllItemTags.GENERATORS.tag)
+      .replace(false)
+      .add(
         BlockRegister.JEWELRY_GENERATOR.get().asItem(),
         BlockRegister.CIRCUIT_FABRICATOR.get().asItem()
       );

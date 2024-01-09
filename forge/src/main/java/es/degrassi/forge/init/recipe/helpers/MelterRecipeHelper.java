@@ -41,25 +41,37 @@ public class MelterRecipeHelper extends RecipeHelper<MelterRecipe, MelterEntity>
   }
 
   @Override
-  public void craftItem(@NotNull MelterEntity entity) {
-    MelterRecipe recipe = (MelterRecipe) entity.getRecipe();
-    entity.getEnergyStorage().extractEnergy(recipe.getEnergyRequired(), false);
+  public void startProcess(@NotNull MelterEntity entity) {
+    MelterRecipe recipe = entity.getRecipe();
+    recipe.startProgress();
     entity.getItemHandler().extractItem(2, 1, false);
+    entity.getProgressStorage().increment(false);
+  }
+
+  @Override
+  public void tickProcess(@NotNull MelterEntity entity) {
+    extractEnergy(entity);
+    entity.getProgressStorage().increment(false);
+  }
+
+  @Override
+  public void endProcess(@NotNull MelterEntity entity) {
+    MelterRecipe recipe = entity.getRecipe();
     entity.getFluidStorage().fill(recipe.getFluid(), IFluidHandler.FluidAction.EXECUTE);
-    entity.resetProgress();
     if (entity.getFluidLevel() != null) entity.getFluidLevel().tickChaser();
     else entity.setFluidLevel(LerpedFloat.linear().startWithValue(entity.getFillState()));
+    entity.resetProgress();
   }
+
 
   @Override
   public void init() {
     super.init();
     Level level = Objects.requireNonNull(Minecraft.getInstance().level);
     List<MelterRecipe> melterRecipes = level.getRecipeManager().getAllRecipesFor(RecipeRegistry.MELTER_RECIPE_TYPE.get());
-    DegrassiLogger.INSTANCE.info("MelterRecipeHelper");
+    DegrassiLogger.INSTANCE.info("MelterRecipeHelper$count: {}", melterRecipes.size());
     melterRecipes.forEach(recipe -> {
       if (recipe == null) return;
-      DegrassiLogger.INSTANCE.info(recipe);
       AtomicBoolean has = new AtomicBoolean(false);
       recipes.forEach(r -> {
         if (r.getId().toString().equals(recipe.getId().toString())) has.set(true);

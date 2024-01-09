@@ -1,0 +1,21 @@
+{
+  "criteria": {
+    "has_jungle_button": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:jungle_button"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_jungle_button"
+    ]
+  ]
+}

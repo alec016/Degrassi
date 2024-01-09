@@ -1,0 +1,11 @@
+{
+  "type": "degrassi:generator",
+  "energy": 3,
+  "input": {
+    "item": "minecraft:dead_bush"
+  },
+  "machines": [
+    "degrassi:combustion_generator"
+  ],
+  "time": 100
+}

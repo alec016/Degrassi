@@ -1,0 +1,21 @@
+{
+  "criteria": {
+    "has_jungle_fence_gate": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:jungle_fence_gate"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_jungle_fence_gate"
+    ]
+  ]
+}

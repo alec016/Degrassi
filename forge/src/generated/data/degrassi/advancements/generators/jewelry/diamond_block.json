@@ -1,0 +1,21 @@
+{
+  "criteria": {
+    "has_diamond_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:diamond_block"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_diamond_block"
+    ]
+  ]
+}

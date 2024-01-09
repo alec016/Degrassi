@@ -23,7 +23,9 @@ public abstract class RecipeHelper<T extends IDegrassiRecipe, E extends BaseEnti
 
   public abstract boolean hasRecipe(@NotNull E entity);
 
-  public abstract void craftItem(@NotNull E entity);
+  public abstract void endProcess(@NotNull E entity);
+  public abstract void startProcess(@NotNull E entity);
+  public abstract void tickProcess(@NotNull E entity);
 
   public void init() {
     this.recipes.clear();

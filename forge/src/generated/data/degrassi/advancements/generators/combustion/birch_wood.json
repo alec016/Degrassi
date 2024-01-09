@@ -1,0 +1,21 @@
+{
+  "criteria": {
+    "has_birch_wood": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:birch_wood"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_birch_wood"
+    ]
+  ]
+}

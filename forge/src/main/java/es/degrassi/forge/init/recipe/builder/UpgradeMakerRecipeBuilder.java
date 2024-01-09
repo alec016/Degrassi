@@ -4,7 +4,6 @@ import es.degrassi.forge.api.codec.NamedCodec;
 import es.degrassi.forge.api.ingredient.IIngredient;
 import es.degrassi.forge.init.recipe.recipes.UpgradeMakerRecipe;
 import es.degrassi.forge.requirements.*;
-import es.degrassi.forge.util.DegrassiLogger;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -43,15 +42,12 @@ public class UpgradeMakerRecipeBuilder extends AbstractRecipeBuilder<UpgradeMake
       NamedCodec.INT.optionalFieldOf("inputFluidAmount", 1000).forGetter(builder -> builder.inputFluidAmount),
       IIngredient.ITEM.fieldOf("output").forGetter(builder -> builder.outputItemIngredient),
       NamedCodec.INT.optionalFieldOf("outputAmount", 1).forGetter(builder -> builder.outputAmount)
-    ).apply(recipeBuilderInstance, (time, energy, input1, inputAmount1, input2, inputAmount2, fluidInput, fluidInputAmount, output, outputAmount) -> {
-      DegrassiLogger.INSTANCE.info("UpgradeMakerRecipeBuilderCODED[ time: " + time + ", energy: " + energy + ", input1: " + input1 + ", amount1: " + inputAmount1 + ", input2: " + input2 + ", amount2: " + inputAmount2 + ", fluid_input: " + fluidInput + ", fluid_amount: " + fluidInputAmount + ", output: " + output + ", amount: " + outputAmount + " ]");
-      return new UpgradeMakerRecipeBuilder(time)
-        .energy(energy)
-        .input1(new ItemStack(input1.getAll().get(0), inputAmount1))
-        .input2(new ItemStack(input2.getAll().get(0), inputAmount2))
-        .fluidInput(new FluidStack(fluidInput.getAll().get(0), fluidInputAmount))
-        .output(new ItemStack(output.getAll().get(0), outputAmount));
-    }), "Upgrade Maker recipe builder"
+    ).apply(recipeBuilderInstance, (time, energy, input1, inputAmount1, input2, inputAmount2, fluidInput, fluidInputAmount, output, outputAmount) -> new UpgradeMakerRecipeBuilder(time)
+      .energy(energy)
+      .input1(new ItemStack(input1.getAll().get(0), inputAmount1))
+      .input2(new ItemStack(input2.getAll().get(0), inputAmount2))
+      .fluidInput(new FluidStack(fluidInput.getAll().get(0), fluidInputAmount))
+      .output(new ItemStack(output.getAll().get(0), outputAmount))), "Upgrade Maker recipe builder"
   );
 
   public UpgradeMakerRecipeBuilder(int time) {
@@ -66,9 +62,7 @@ public class UpgradeMakerRecipeBuilder extends AbstractRecipeBuilder<UpgradeMake
 
   @Override
   public UpgradeMakerRecipe build(ResourceLocation id) {
-    UpgradeMakerRecipe recipe = new UpgradeMakerRecipe(id, time, energy, ingredients, fluidInput, itemOutput);
-    DegrassiLogger.INSTANCE.info("UpgradeMakerRecipe$build: " + recipe);
-    return recipe;
+    return new UpgradeMakerRecipe(id, time, energy, ingredients, fluidInput, itemOutput);
   }
 
   @Override

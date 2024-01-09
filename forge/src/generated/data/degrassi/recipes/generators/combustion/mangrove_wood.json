@@ -1,0 +1,11 @@
+{
+  "type": "degrassi:generator",
+  "energy": 8,
+  "input": {
+    "item": "minecraft:mangrove_wood"
+  },
+  "machines": [
+    "degrassi:combustion_generator"
+  ],
+  "time": 100
+}

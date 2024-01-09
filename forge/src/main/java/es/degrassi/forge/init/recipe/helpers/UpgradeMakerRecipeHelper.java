@@ -47,12 +47,24 @@ public class UpgradeMakerRecipeHelper extends RecipeHelper<UpgradeMakerRecipe, U
   }
 
   @Override
-  public void craftItem(@NotNull UpgradeMakerEntity entity) {
-    UpgradeMakerRecipe recipe = (UpgradeMakerRecipe) entity.getRecipe();
-    entity.getEnergyStorage().extractEnergy(recipe.getEnergyRequired(), false);
+  public void tickProcess(@NotNull UpgradeMakerEntity entity) {
+    extractEnergy(entity);
+    entity.getProgressStorage().increment(false);
+  }
+
+  @Override
+  public void startProcess(@NotNull UpgradeMakerEntity entity) {
+    UpgradeMakerRecipe recipe = entity.getRecipe();
+    recipe.startProgress();
     entity.getItemHandler().extractItem(2, 1, false);
     entity.getItemHandler().extractItem(3, 1, false);
     extractFluid(entity.getFluidStorage(), entity);
+    entity.getProgressStorage().increment(false);
+  }
+
+  @Override
+  public void endProcess(@NotNull UpgradeMakerEntity entity) {
+    UpgradeMakerRecipe recipe = entity.getRecipe();
     entity.getItemHandler().setStackInSlot(4, new ItemStack(
       recipe.getResultItem().getItem(),
       entity.getItemHandler().getStackInSlot(4).getCount() + 1
@@ -65,10 +77,9 @@ public class UpgradeMakerRecipeHelper extends RecipeHelper<UpgradeMakerRecipe, U
     super.init();
     Level level = Objects.requireNonNull(Minecraft.getInstance().level);
     List<UpgradeMakerRecipe> upgradeMakerRecipes = level.getRecipeManager().getAllRecipesFor(RecipeRegistry.UPGRADE_MAKER_RECIPE_TYPE.get());
-    DegrassiLogger.INSTANCE.info("UpgradeMakerRecipeHelper");
+    DegrassiLogger.INSTANCE.info("UpgradeMakerRecipeHelper$count: {}", upgradeMakerRecipes.size());
     upgradeMakerRecipes.forEach(recipe -> {
       if (recipe == null) return;
-      DegrassiLogger.INSTANCE.info(recipe);
       AtomicBoolean has = new AtomicBoolean(false);
       recipes.forEach(r -> {
         if (r.getId().toString().equals(recipe.getId().toString())) has.set(true);

@@ -1,9 +1,9 @@
 package es.degrassi.forge.init.recipe.helpers;
 
-import es.degrassi.forge.init.entity.FurnaceEntity;
+import es.degrassi.forge.init.entity.*;
 import es.degrassi.forge.init.item.upgrade.SpeedUpgrade;
 import es.degrassi.forge.init.item.upgrade.types.IFurnaceUpgrade;
-import es.degrassi.forge.init.recipe.recipes.FurnaceRecipe;
+import es.degrassi.forge.init.recipe.recipes.*;
 import es.degrassi.forge.init.registration.RecipeRegistry;
 import es.degrassi.forge.integration.config.DegrassiConfig;
 import es.degrassi.forge.util.DegrassiLogger;
@@ -44,16 +44,29 @@ public class FurnaceRecipeHelper extends RecipeHelper<FurnaceRecipe, FurnaceEnti
   }
 
   @Override
-  public void craftItem(@NotNull FurnaceEntity entity) {
-    entity.itemHandler.extractItem(2, 1, false);
+  public void endProcess(@NotNull FurnaceEntity entity) {
+    FurnaceRecipe recipe = entity.getRecipe();
     entity.itemHandler.setStackInSlot(3, new ItemStack(
-      entity.recipe.getResultItem().getItem(),
+      recipe.getResultItem().getItem(),
       entity.itemHandler.getStackInSlot(3).getCount() + 1
     ));
 
-    entity.xp.addXp(entity.recipe.getExperience());
-
+    entity.xp.addXp(recipe.getExperience());
     entity.resetProgress();
+  }
+
+  @Override
+  public void tickProcess(@NotNull FurnaceEntity entity) {
+    extractEnergy(entity);
+    entity.getProgressStorage().increment(false);
+  }
+
+  @Override
+  public void startProcess(@NotNull FurnaceEntity entity) {
+    FurnaceRecipe recipe = entity.getRecipe();
+    recipe.startProgress();
+    entity.itemHandler.extractItem(2, 1, false);
+    entity.getProgressStorage().increment(false);
   }
 
   @Override
@@ -91,9 +104,8 @@ public class FurnaceRecipeHelper extends RecipeHelper<FurnaceRecipe, FurnaceEnti
         recipesMap.put(recipe.getId(), r);
       }
     });
-    DegrassiLogger.INSTANCE.info("FurnaceRecipeHelper");
+    DegrassiLogger.INSTANCE.info("FurnaceRecipeHelper$count: {}", furnaceRecipes.size());
     furnaceRecipes.forEach(recipe -> {
-      DegrassiLogger.INSTANCE.info(recipe);
       if (recipe == null) return;
       AtomicBoolean has = new AtomicBoolean(false);
       recipes.forEach(r -> {

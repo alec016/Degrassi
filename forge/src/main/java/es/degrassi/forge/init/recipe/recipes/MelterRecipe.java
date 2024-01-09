@@ -1,9 +1,13 @@
 package es.degrassi.forge.init.recipe.recipes;
 
+import es.degrassi.forge.init.entity.*;
+import es.degrassi.forge.init.entity.type.*;
 import es.degrassi.forge.init.recipe.IDegrassiRecipe;
+import es.degrassi.forge.init.recipe.helpers.*;
 import es.degrassi.forge.init.registration.RecipeRegistry;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -22,6 +26,7 @@ public class MelterRecipe implements IDegrassiRecipe {
   private final ResourceLocation id;
 
   boolean modified;
+  private boolean inProgress = false;
 
   public MelterRecipe(
     ResourceLocation id,
@@ -121,22 +126,40 @@ public class MelterRecipe implements IDegrassiRecipe {
   }
 
   @Override
+  public boolean isInProgress() {
+    return inProgress;
+  }
+
+  @Override
+  public void startProgress() {
+    inProgress = true;
+  }
+
+  @Override
+  public <T extends BaseEntity & IProgressEntity & IRecipeEntity<?>> void startProcess(T entity) {
+    RecipeHelpers.MELTER.startProcess((MelterEntity) entity);
+  }
+
+  @Override
+  public <T extends BaseEntity & IProgressEntity & IRecipeEntity<?>> void tick(T entity) {
+    RecipeHelpers.MELTER.tickProcess((MelterEntity) entity);
+  }
+
+  @Override
+  public <T extends BaseEntity & IProgressEntity & IRecipeEntity<?>> void endProcess(T entity) {
+    RecipeHelpers.MELTER.endProcess((MelterEntity) entity);
+  }
+
+  @Override
   public String toString() {
-    return "MelterRecipe [ " + "id: " +
-      id +
-      ", requirements: { input: { item: " +
-      recipeItems.get(0).getItems()[0].getDisplayName().getString() +
-      ", amount: " +
-      recipeItems.get(0).getItems()[0].getCount() +
-      " }, time: " +
-      time +
-      ", energy: " +
-      energyRequired +
-      ", output: { fluid: " +
-      output.getDisplayName().getString() +
-      ", amount: " +
-      output.getAmount() +
-      " }" +
-      " } ]";
+    return "MelterRecipe: " + GsonHelper.parse(
+      "{" +
+        "\n\t\"id\": \"" + this.id + "\"" +
+        ",\n\t\"input\": \"" + this.recipeItems.stream().toList().stream().map(ingredient -> ingredient.getItems()[0].getDisplayName().getString()).toList() + "\"" +
+        ",\n\t\"output\": \"" + this.output.getDisplayName().getString() + "\"" +
+        ",\n\t\"time\": " + this.time +
+        ",\n\t\"energy\": " + this.energyRequired +
+        "\n}"
+    );
   }
 }

@@ -1,0 +1,21 @@
+{
+  "criteria": {
+    "has_spruce_leaves": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:spruce_leaves"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_spruce_leaves"
+    ]
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "criteria": {
+    "has_oak_planks": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:oak_planks"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_oak_planks"
+    ]
+  ]
+}

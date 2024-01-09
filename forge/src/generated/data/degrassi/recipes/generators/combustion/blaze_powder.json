@@ -1,0 +1,11 @@
+{
+  "type": "degrassi:generator",
+  "energy": 20,
+  "input": {
+    "item": "minecraft:blaze_powder"
+  },
+  "machines": [
+    "degrassi:combustion_generator"
+  ],
+  "time": 100
+}

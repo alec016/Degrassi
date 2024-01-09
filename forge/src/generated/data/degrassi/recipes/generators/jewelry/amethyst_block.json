@@ -1,0 +1,11 @@
+{
+  "type": "degrassi:generator",
+  "energy": 100,
+  "input": {
+    "item": "minecraft:amethyst_block"
+  },
+  "machines": [
+    "degrassi:jewelry_generator"
+  ],
+  "time": 1000
+}

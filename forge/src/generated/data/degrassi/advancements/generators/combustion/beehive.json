@@ -1,0 +1,21 @@
+{
+  "criteria": {
+    "has_beehive": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:beehive"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_beehive"
+    ]
+  ]
+}

@@ -1,17 +1,22 @@
 package es.degrassi.forge.init.recipe.recipes;
 
+import es.degrassi.forge.init.entity.*;
+import es.degrassi.forge.init.entity.generators.*;
+import es.degrassi.forge.init.entity.type.*;
 import es.degrassi.forge.init.recipe.IDegrassiRecipe;
+import es.degrassi.forge.init.recipe.helpers.*;
 import es.degrassi.forge.init.registration.*;
 import java.util.*;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused, unchecked"})
 public class GeneratorRecipe implements IDegrassiRecipe {
   protected final ResourceLocation id;
   protected final NonNullList<Ingredient> recipeItems;
@@ -19,6 +24,7 @@ public class GeneratorRecipe implements IDegrassiRecipe {
   protected int energyProduced;
   protected boolean modified = false;
   private final List<String> machineIds;
+  protected boolean inProgress = false;
 
   public GeneratorRecipe (
     ResourceLocation id,
@@ -80,7 +86,7 @@ public class GeneratorRecipe implements IDegrassiRecipe {
   }
 
   public boolean canUseRecipe(ResourceLocation machineId) {
-    return !machineIds.stream().filter(id -> id.equals(machineId.toString())).toList().isEmpty();
+    return canUseRecipe(machineId.toString());
   }
 
   @Override
@@ -104,7 +110,7 @@ public class GeneratorRecipe implements IDegrassiRecipe {
   }
 
   public GeneratorRecipe copy() {
-    return new GeneratorRecipe(id, recipeItems, time, energyProduced, machineIds);
+    return new GeneratorRecipe(id, recipeItems, energyProduced, time, machineIds);
   }
 
   @Override
@@ -122,7 +128,45 @@ public class GeneratorRecipe implements IDegrassiRecipe {
   }
 
   @Override
+  public boolean isInProgress() {
+    return inProgress;
+  }
+
+  @Override
+  public void startProgress() {
+    inProgress = true;
+  }
+
+  @Override
   public @NotNull NonNullList<Ingredient> getIngredients() {
     return recipeItems;
+  }
+
+  @Override
+  public <T extends BaseEntity & IProgressEntity & IRecipeEntity<?>> void startProcess(T entity) {
+    RecipeHelpers.GENERATORS.startProcess((GeneratorEntity<?, ?>) entity);
+  }
+
+  @Override
+  public <T extends BaseEntity & IProgressEntity & IRecipeEntity<?>> void tick(T entity) {
+    RecipeHelpers.GENERATORS.tickProcess((GeneratorEntity<?, ?>) entity);
+  }
+
+  @Override
+  public <T extends BaseEntity & IProgressEntity & IRecipeEntity<?>> void endProcess(T entity) {
+    RecipeHelpers.GENERATORS.endProcess((GeneratorEntity<?, ?>) entity);
+  }
+
+  @Override
+  public String toString() {
+    return "GeneratorRecipe: " + GsonHelper.parse(
+      "{" +
+        "\n\t\"id\": \"" + this.id + "\"" +
+        ",\n\t\"ingredients\": \"" + this.recipeItems.stream().toList().stream().map(ingredient -> ingredient.getItems()[0].getDisplayName().getString()).toList() + "\"" +
+        ",\n\t\"time\": " + this.time +
+        ",\n\t\"energy\": " + this.energyProduced +
+        ", \n\t\"machines\": " + this.machineIds +
+        "\n}"
+    );
   }
 }

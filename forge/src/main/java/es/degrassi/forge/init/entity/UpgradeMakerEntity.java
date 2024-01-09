@@ -184,9 +184,14 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
       return;
     }
     if (RecipeHelpers.UPGRADE_MAKER.hasRecipe(entity)) {
-      entity.progressStorage.increment(false);
-      RecipeHelpers.UPGRADE_MAKER.extractEnergy(entity);
-      if (entity.progressStorage.getProgress() >= entity.progressStorage.getMaxProgress()) RecipeHelpers.UPGRADE_MAKER.craftItem(entity);
+      if(!entity.getRecipe().isInProgress() && entity.getProgressStorage().getProgress() == 0) {
+        entity.getRecipe().startProcess(entity);
+      } else {
+        entity.getRecipe().tick(entity);
+      }
+      if (entity.getProgressStorage().getProgress() >= entity.getProgressStorage().getMaxProgress()) {
+        entity.getRecipe().endProcess(entity);
+      }
     } else {
       entity.resetProgress();
     }

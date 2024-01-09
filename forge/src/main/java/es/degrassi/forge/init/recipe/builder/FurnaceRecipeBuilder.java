@@ -7,7 +7,6 @@ import es.degrassi.forge.requirements.EnergyRequirement;
 import es.degrassi.forge.requirements.ExperienceRequirement;
 import es.degrassi.forge.requirements.IRequirement;
 import es.degrassi.forge.requirements.ItemRequirement;
-import es.degrassi.forge.util.DegrassiLogger;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -35,16 +34,11 @@ public class FurnaceRecipeBuilder extends AbstractRecipeBuilder<FurnaceRecipe> {
       NamedCodec.INT.optionalFieldOf("inputAmount", 1).forGetter(builder -> builder.inputAmount),
       IIngredient.ITEM.fieldOf("output").forGetter(builder -> builder.outputIngredient),
       NamedCodec.INT.optionalFieldOf("outputAmount", 1).forGetter(builder -> builder.outputAmount)
-    ).apply(recipeBuilderInstance, (time, xp, energy, input, inputAmount, output, outputAmount) -> {
-      DegrassiLogger.INSTANCE.info("FurnaceRecipeBuilderCODED[ time: " + time + ", energy: " + energy + ", input: " + input + ", amount: " + inputAmount + ", output: " + output + ", amount: " + outputAmount + " ]");
-      FurnaceRecipeBuilder builder = new FurnaceRecipeBuilder(time);
-      builder
-        .xp(xp)
+    ).apply(recipeBuilderInstance, (time, xp, energy, input, inputAmount, output, outputAmount) -> new FurnaceRecipeBuilder(time).xp(xp)
         .energy(energy)
         .input(new ItemStack(input.getAll().get(0), inputAmount))
-        .output(new ItemStack(output.getAll().get(0), outputAmount));
-      return builder;
-    }), "Furnace recipe builder"
+        .output(new ItemStack(output.getAll().get(0), outputAmount))
+    ), "Furnace recipe builder"
   );
 
   public FurnaceRecipeBuilder(int time) {
@@ -59,9 +53,7 @@ public class FurnaceRecipeBuilder extends AbstractRecipeBuilder<FurnaceRecipe> {
 
   @Override
   public FurnaceRecipe build(ResourceLocation id) {
-    FurnaceRecipe recipe = new FurnaceRecipe(id, output, NonNullList.withSize(1, Ingredient.of(input)), time, energy, xp);
-    DegrassiLogger.INSTANCE.info("FurnaceRecipeBuilder$build: " + recipe);
-    return recipe;
+    return new FurnaceRecipe(id, output, NonNullList.withSize(1, Ingredient.of(input)), time, energy, xp);
   }
 
   public FurnaceRecipeBuilder xp(int xp) {

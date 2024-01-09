@@ -1,0 +1,11 @@
+{
+  "type": "degrassi:generator",
+  "energy": 50,
+  "input": {
+    "item": "minecraft:lapis_block"
+  },
+  "machines": [
+    "degrassi:jewelry_generator"
+  ],
+  "time": 1000
+}

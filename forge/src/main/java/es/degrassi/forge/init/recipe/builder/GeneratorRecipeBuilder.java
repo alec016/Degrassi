@@ -5,7 +5,6 @@ import es.degrassi.forge.api.codec.*;
 import es.degrassi.forge.api.ingredient.*;
 import es.degrassi.forge.init.recipe.recipes.*;
 import es.degrassi.forge.requirements.*;
-import es.degrassi.forge.util.*;
 import java.util.*;
 import net.minecraft.core.*;
 import net.minecraft.resources.*;
@@ -27,15 +26,10 @@ public class GeneratorRecipeBuilder extends AbstractRecipeBuilder<GeneratorRecip
       IIngredient.ITEM.fieldOf("input").forGetter(builder -> builder.inputIngredient),
       NamedCodec.INT.optionalFieldOf("inputAmount", 1).forGetter(builder -> builder.inputAmount),
       NamedCodec.STRING.listOf().fieldOf("machines").forGetter(builder -> builder.machineIds)
-    ).apply(recipeBuilderInstance, (time, energy, input, inputAmount, machineIds) -> {
-      DegrassiLogger.INSTANCE.info("GeneratorRecipeBuilderCODED[time: {}, energy: {}, input: {}, inputAmount: {}, machineIds: {}]",
-        time, energy, input, inputAmount, machineIds
-      );
-      return new GeneratorRecipeBuilder(time)
-        .energy(energy)
-        .input(new ItemStack(input.getAll().get(0), inputAmount), input, inputAmount)
-        .addMachines(machineIds);
-    }), "Generator recipe builder"
+    ).apply(recipeBuilderInstance, (time, energy, input, inputAmount, machineIds) -> new GeneratorRecipeBuilder(time)
+      .energy(energy)
+      .input(new ItemStack(input.getAll().get(0), inputAmount), input, inputAmount)
+      .addMachines(machineIds)), "Generator recipe builder"
   );
 
   public GeneratorRecipeBuilder(int time) {
@@ -92,8 +86,6 @@ public class GeneratorRecipeBuilder extends AbstractRecipeBuilder<GeneratorRecip
 
   @Override
   public GeneratorRecipe build(ResourceLocation id) {
-    GeneratorRecipe recipe = new GeneratorRecipe(id, NonNullList.withSize(1, Ingredient.of(input)), energy, time, machineIds);
-    DegrassiLogger.INSTANCE.info("GeneratorRecipeBuilder$build: " + recipe);
-    return recipe;
+    return new GeneratorRecipe(id, NonNullList.withSize(1, Ingredient.of(input)), energy, time, machineIds);
   }
 }

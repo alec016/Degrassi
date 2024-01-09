@@ -1,5 +1,4 @@
 {
-  "replace": false,
   "values": [
     "degrassi:gold_coin",
     "degrassi:efficiency_upgrade",
@@ -39,6 +38,7 @@
     "degrassi:melter",
     "degrassi:upgrade_maker",
     "degrassi:jewelry_generator",
+    "degrassi:combustion_generator",
     "degrassi:circuit_fabricator"
   ]
 }
