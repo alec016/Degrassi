@@ -9,7 +9,7 @@ Degrassi is a Minecraft Forge mod currently developed for Minecraft 1.19.2
 
 ## Download
 
-Download this mod on [CurseForge](https://www.curseforge.com/minecraft/mc-mods/degrassi-machinery)
+Download this mod on [CurseForge](https://www.curseforge.com/minecraft/mc-mods/degrassi)
 
 ## License
 
