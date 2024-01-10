@@ -2,8 +2,8 @@
 
 > ### <u>Added:</u>
 > - Upgrade Maker machine
-> - Melter machine
 > - Jewelry generator machine
+> - Combustion generator machine
 > - Speed Upgrade
 > - Energy Upgrade
 > - JEI recipe handler
@@ -24,5 +24,6 @@
 > - Solar Panel Management
 > - Furnaces Management
 > - Upgrade management
+> - Recipe management
 
 [degrassi]: https://www.curseforge.com/minecraft/mc-mods/degrassi
