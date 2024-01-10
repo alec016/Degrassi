@@ -129,9 +129,13 @@ jar {
     archiveClassifier.set("dev")
 }
 
+var CURSE_API_KEY = System.getenv("CURSEFORGE_KEY")
+var CURSE_PROJECT_ID = "932731"
+var MOD_NAME = "[Forge]Degrassi-${project.minecraft_version}-${project.mod_version}"
+
 unifiedPublishing {
     project {
-        displayName = "[Forge]Degrassi-${project.minecraft_version}-${project.mod_version}"
+        displayName = MOD_NAME
         releaseType = "beta"
         if (rootProject.file("CHANGELOG.md").exists()) {
             changelog = rootProject.file("CHANGELOG.md").text
@@ -140,11 +144,11 @@ unifiedPublishing {
         gameLoaders = ["forge"]
         mainPublication remapJar
 
-        var CURSE_API_KEY = System.getenv("CURSEFORGE_KEY")
+
         if (CURSE_API_KEY != null) {
             curseforge {
                 token = CURSE_API_KEY
-                id = "932731"
+                id = CURSE_PROJECT_ID
                 gameVersions.addAll "Java 17"
                 relations {
                     depends "architectury-api"

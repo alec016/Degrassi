@@ -113,61 +113,76 @@ public class MelterRecipeCategory implements IRecipeCategory<MelterRecipe> {
     stack.popPose();
   }
 
-  private void initRenderers(MelterRecipe recipe) {
-    if (progress == null) progress = new ProgressJeiRenderer(42, 18);
-    if (energy == null) energy = new EnergyJeiRenderer(16, 70);
-    ProgressStorage progressStorage = new ProgressStorage(20) {
+  private void initRenderers(@NotNull MelterRecipe recipe) {
+    if (progress == null) {
+      progress = new ProgressJeiRenderer(42, 18);
+      initRenderers(recipe);
+      return;
+    }
+    if (energy == null) {
+      energy = new EnergyJeiRenderer(16, 70);
+      initRenderers(recipe);
+      return;
+    }
+    ProgressStorage progressStorage = new ProgressStorage(recipe.getTime()) {
       @Override
       public void onProgressChanged() {
-        if(progress > maxProgress) resetProgress();
+        if(progress >= maxProgress) resetProgress();
       }
     };
     AbstractEnergyStorage energyStorage = new AbstractEnergyStorage(recipe.getEnergyRequired()) {
       @Override
-      public void onEnergyChanged() {
-
-      }
+      public void onEnergyChanged() {}
     };
-    progressComponents.put(recipe, new ProgressComponent(
-      70,
-      33,
-      progressStorage,
-      TextureSizeHelper.getTextureWidth(FILLED_PROGRESS),
-      TextureSizeHelper.getTextureHeight(FILLED_PROGRESS),
-      FILLED_PROGRESS
-    ));
-    energyComponents.put(recipe, new EnergyInfoArea(
-      8,
-      7,
-      energyStorage,
-      16,
-      70,
-      null,
-      IRequirement.ModeIO.INPUT
-    ) {
-      @Override
-      public List<Component> getTooltips() {
-        return List.of(
-          mode == IRequirement.ModeIO.INPUT
-            ? Component.translatable("degrassi.gui.element.energy.input").withStyle(ChatFormatting.ITALIC)
-            : Component.translatable("degrassi.gui.element.energy.output").withStyle(ChatFormatting.ITALIC),
-          Component.translatable(
-            "degrassi.gui.element.energy.jei",
+    if (progressComponents.get(recipe) == null) {
+      progressComponents.put(recipe, new ProgressComponent(
+        70,
+        33,
+        progressStorage,
+        TextureSizeHelper.getTextureWidth(FILLED_PROGRESS),
+        TextureSizeHelper.getTextureHeight(FILLED_PROGRESS),
+        FILLED_PROGRESS
+      ));
+      initRenderers(recipe);
+      return;
+    }
+    if (energyComponents.get(recipe) == null) {
+      energyComponents.put(recipe, new EnergyInfoArea(
+        8,
+        7,
+        energyStorage,
+        16,
+        70,
+        null,
+        IRequirement.ModeIO.INPUT
+      ) {
+        @Override
+        public List<Component> getTooltips() {
+          return List.of(
+            mode == IRequirement.ModeIO.INPUT
+              ? Component.translatable("degrassi.gui.element.energy.input").withStyle(ChatFormatting.ITALIC)
+              : Component.translatable("degrassi.gui.element.energy.output").withStyle(ChatFormatting.ITALIC),
             Component.translatable(
-              "degrassi.gui.element.energy.jei.total",
-              recipe.getEnergyRequired() * recipe.getTime(),
-              Component.translatable("unit.energy.forge")
-            ),
-            Component.literal(" @ ").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY),
-            Component.translatable(
-              "degrassi.gui.element.energy.jei.perTick",
-              recipe.getEnergyRequired(),
-              Component.translatable("unit.energy.forge"),
-              "/t"
+              "degrassi.gui.element.energy.jei",
+              Component.translatable(
+                "degrassi.gui.element.energy.jei.total",
+                recipe.getEnergyRequired() * recipe.getTime(),
+                Component.translatable("unit.energy.forge")
+              ),
+              Component.literal(" @ ").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY),
+              Component.translatable(
+                "degrassi.gui.element.energy.jei.perTick",
+                recipe.getEnergyRequired(),
+                Component.translatable("unit.energy.forge"),
+                "/t"
+              )
             )
-          )
-        );
-      }
-    });
+          );
+        }
+      });
+      initRenderers(recipe);
+      return;
+    }
+    progressComponents.get(recipe).getStorage().increment();
   }
 }

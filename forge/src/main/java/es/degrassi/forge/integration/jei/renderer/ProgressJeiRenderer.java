@@ -29,27 +29,54 @@ public class ProgressJeiRenderer implements IJeiElementRenderer<ProgressComponen
   }
 
   @Override
-  public void renderElementInJEI(PoseStack matrix, @NotNull ProgressComponent element, IDegrassiRecipe recipe, double mouseX, double mouseY, int x, int y) {
-    int width = element.getWidth();
-    int height = element.getHeight();
-
-    if(Minecraft.getInstance().level == null)
-      return;
-
-    int filledWidth = 0;
-    int filledHeight = 0;
+  public void renderElementInJEI(PoseStack stack, @NotNull ProgressComponent ingredient, IDegrassiRecipe recipe, double mouseX, double mouseY, int x, int y) {
+//    int width = ingredient.getWidth();
+//    int height = ingredient.getHeight();
+//
+//    if(Minecraft.getInstance().level == null)
+//      return;
+//
+//    int filledWidth = 0;
+//    int filledHeight = 0;
     if(recipe.getTime() > 0) {
-      filledWidth = (int)(Minecraft.getInstance().level.getGameTime() % width);
-      filledHeight = (int)(Minecraft.getInstance().level.getGameTime() % height);
+      ingredient.draw(stack, ingredient.getX(), ingredient.getY());
+//      ingredient.getStorage().increment();
+//      filledWidth = (int)(Minecraft.getInstance().level.getGameTime() % width);
+//      filledHeight = (int)(Minecraft.getInstance().level.getGameTime() % height);
     }
 
-    IClientHandler.bindTexture(element.getFilledTexture());
-    switch (element.getDirection()) {
-      case RIGHT -> GuiComponent.blit(matrix, x, y, 0, 0, filledWidth, height, width, height);
-      case LEFT -> GuiComponent.blit(matrix, x + width - filledWidth, y, width - filledWidth, 0, filledWidth, height, width, height);
-      case TOP -> GuiComponent.blit(matrix, x, y, 0, 0, width, filledHeight, width, height);
-      case BOTTOM -> GuiComponent.blit(matrix, x, y + height - filledHeight, 0, height - filledHeight, width, filledHeight, width, height);
-    }
+//    IClientHandler.bindTexture(ingredient.getFilledTexture());
+//    if (ingredient.isInverted()) {
+//      filledWidth = (int)(width % Minecraft.getInstance().level.getGameTime());
+//      filledHeight = (int)(height % Minecraft.getInstance().level.getGameTime());
+//    }
+//
+//    switch (ingredient.getDirection()) {
+//      case RIGHT -> GuiComponent.blit(
+//        stack, x, y,
+//        0, 0,
+//        filledWidth, height,
+//        width, height
+//      );
+//      case LEFT -> GuiComponent.blit(
+//        stack, x + width - filledWidth, y,
+//        width - filledWidth, 0,
+//        filledWidth, height,
+//        width, height
+//      );
+//      case TOP -> GuiComponent.blit(
+//        stack, x, y,
+//        0, 0,
+//        width, filledHeight,
+//        width, height
+//      );
+//      case BOTTOM -> GuiComponent.blit(
+//        stack, x, y + height - filledHeight,
+//        0, height - filledHeight,
+//        width, filledHeight,
+//        width, height
+//      );
+//    }
   }
 
   @Override
@@ -74,7 +101,8 @@ public class ProgressJeiRenderer implements IJeiElementRenderer<ProgressComponen
 
   @Override
   public void render(@NotNull PoseStack stack, @NotNull ProgressComponent ingredient) {
-    ingredient.draw(stack, ingredient.getX(), ingredient.getY());
+//    ingredient.draw(stack, ingredient.getX(), ingredient.getY());
+//    ingredient.getStorage().increment();
   }
 
   public int getWidth() {

@@ -55,6 +55,8 @@ public class GeneratorRecipeCategory implements IRecipeCategory<GeneratorRecipe>
   public final ResourceLocation FILLED_PROGRESS;
   public final ResourceLocation TEXTURE;
 
+  private final int progressX, progressY;
+
   private final IDrawable background;
   private final IDrawable icon;
   private final Map<GeneratorRecipe, EnergyInfoArea> energyComponents = Maps.newHashMap();
@@ -73,12 +75,21 @@ public class GeneratorRecipeCategory implements IRecipeCategory<GeneratorRecipe>
     return helper.getGuiHelper().createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(block));
   }
 
-  public GeneratorRecipeCategory(IJeiHelpers helper, GeneratorBlock block, ResourceLocation background, ResourceLocation filled_progress) {
+  public GeneratorRecipeCategory(
+    IJeiHelpers helper,
+    GeneratorBlock block,
+    ResourceLocation background,
+    ResourceLocation filled_progress,
+    int progressX,
+    int progressY
+  ) {
     this.TEXTURE = background;
     this.FILLED_PROGRESS = filled_progress;
     this.background = createBackground(helper);
     this.icon = createIcon(helper, block);
     this.block = block;
+    this.progressX = progressX;
+    this.progressY = progressY;
   }
 
   @Override
@@ -105,7 +116,7 @@ public class GeneratorRecipeCategory implements IRecipeCategory<GeneratorRecipe>
           tooltip.addAll(energyComponents.get(recipe).getTooltips());
         }
       );
-    builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 82, 26)
+    builder.addSlot(RecipeIngredientRole.RENDER_ONLY, progressX, progressY)
       .setCustomRenderer(DegrassiTypes.PROGRESS, progress)
       .addIngredient(DegrassiTypes.PROGRESS, progressComponents.get(recipe))
       .addTooltipCallback(
@@ -129,57 +140,78 @@ public class GeneratorRecipeCategory implements IRecipeCategory<GeneratorRecipe>
   }
 
   private void initRenderers(GeneratorRecipe recipe) {
-    if (progress == null) progress = new ProgressJeiRenderer(43, 34);
-    if (energy == null) energy = new EnergyJeiRenderer(34, 70);
+    if (progress == null) {
+      progress = new ProgressJeiRenderer(
+        TextureSizeHelper.getTextureWidth(FILLED_PROGRESS),
+        TextureSizeHelper.getTextureHeight(FILLED_PROGRESS)
+      );
+      initRenderers(recipe);
+      return;
+    }
+    if (energy == null) {
+      energy = new EnergyJeiRenderer(34, 70);
+      initRenderers(recipe);
+      return;
+    }
     ProgressStorage progressStorage = new ProgressStorage(recipe.getTime()) {
       @Override
       public void onProgressChanged() {
-        if(progress > maxProgress) resetProgress();
+        if(progress >= maxProgress) resetProgress();
       }
     };
     AbstractEnergyStorage energyStorage = new AbstractEnergyStorage(recipe.getEnergyRequired()) {
       @Override
       public void onEnergyChanged() {}
     };
-    progressComponents.put(recipe, new ProgressComponent(
-      82, 26,
-      progressStorage,
-      TextureSizeHelper.getTextureWidth(FILLED_PROGRESS),
-      TextureSizeHelper.getTextureHeight(FILLED_PROGRESS),
-      FILLED_PROGRESS
-    ).setDirection(ProgressComponent.Orientation.TOP));
-    energyComponents.put(recipe, new EnergyInfoArea(
-      134, 9,
-      energyStorage,
-      111,
-      16,
-      null,
-      IRequirement.ModeIO.OUTPUT
-    ) {
-      @Override
-      public List<Component> getTooltips() {
-        return List.of(
-          mode == IRequirement.ModeIO.INPUT
-            ? Component.translatable("degrassi.gui.element.energy.input").withStyle(ChatFormatting.ITALIC)
-            : Component.translatable("degrassi.gui.element.energy.output").withStyle(ChatFormatting.ITALIC),
-          Component.translatable(
-            "degrassi.gui.element.energy.jei",
+    if (progressComponents.get(recipe) == null) {
+      progressComponents.put(recipe, new ProgressComponent(
+        progressX,
+        progressY,
+        progressStorage,
+        TextureSizeHelper.getTextureWidth(FILLED_PROGRESS),
+        TextureSizeHelper.getTextureHeight(FILLED_PROGRESS),
+        FILLED_PROGRESS
+      ).vertical().inverted());
+      initRenderers(recipe);
+      return;
+    }
+    if (energyComponents.get(recipe) == null) {
+      energyComponents.put(recipe, new EnergyInfoArea(
+        134, 9,
+        energyStorage,
+        111,
+        16,
+        null,
+        IRequirement.ModeIO.OUTPUT
+      ) {
+        @Override
+        public List<Component> getTooltips() {
+          return List.of(
+            mode == IRequirement.ModeIO.INPUT
+              ? Component.translatable("degrassi.gui.element.energy.input").withStyle(ChatFormatting.ITALIC)
+              : Component.translatable("degrassi.gui.element.energy.output").withStyle(ChatFormatting.ITALIC),
             Component.translatable(
-              "degrassi.gui.element.energy.jei.total",
-              recipe.getEnergyRequired() * recipe.getTime(),
-              Component.translatable("unit.energy.forge")
-            ),
-            Component.literal(" @ ").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY),
-            Component.translatable(
-              "degrassi.gui.element.energy.jei.perTick",
-              recipe.getEnergyRequired(),
-              Component.translatable("unit.energy.forge"),
-              "/t"
+              "degrassi.gui.element.energy.jei",
+              Component.translatable(
+                "degrassi.gui.element.energy.jei.total",
+                recipe.getEnergyRequired() * recipe.getTime(),
+                Component.translatable("unit.energy.forge")
+              ),
+              Component.literal(" @ ").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY),
+              Component.translatable(
+                "degrassi.gui.element.energy.jei.perTick",
+                recipe.getEnergyRequired(),
+                Component.translatable("unit.energy.forge"),
+                "/t"
+              )
             )
-          )
-        );
-      }
-    });
+          );
+        }
+      });
+      initRenderers(recipe);
+      return;
+    }
+    progressComponents.get(recipe).getStorage().increment();
   }
 
   @Override

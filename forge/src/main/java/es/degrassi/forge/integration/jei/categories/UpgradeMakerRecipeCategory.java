@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.init.gui.renderer.EnergyInfoArea;
 import es.degrassi.forge.init.gui.renderer.ProgressComponent;
-import es.degrassi.forge.init.recipe.recipes.UpgradeMakerRecipe;
+import es.degrassi.forge.init.recipe.recipes.*;
 import es.degrassi.forge.init.registration.BlockRegister;
 import es.degrassi.forge.integration.jei.DegrassiJEIRecipeTypes;
 import es.degrassi.forge.integration.jei.ingredients.DegrassiTypes;
@@ -39,7 +39,6 @@ public class UpgradeMakerRecipeCategory implements IRecipeCategory<UpgradeMakerR
   public static final ResourceLocation UID = new DegrassiLocation("upgrade_maker");
   public static final ResourceLocation TEXTURE = new DegrassiLocation("textures/gui/jei/upgrade_maker_gui.png");
   public static final ResourceLocation FILLED_PROGRESS = new DegrassiLocation("textures/gui/jei/upgrade_maker_progress_filled.png");
-
 
   private final IDrawable background;
   private final IDrawable icon;
@@ -94,7 +93,6 @@ public class UpgradeMakerRecipeCategory implements IRecipeCategory<UpgradeMakerR
           tooltip.addAll(energyComponents.get(recipe).getTooltips());
         }
       );
-    IDrawable overlay = helper.getGuiHelper().createBlankDrawable(42, 18);
     builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 66, 36)
       .setCustomRenderer(DegrassiTypes.PROGRESS, progress)
       .addIngredient(DegrassiTypes.PROGRESS, progressComponents.get(recipe))
@@ -119,58 +117,78 @@ public class UpgradeMakerRecipeCategory implements IRecipeCategory<UpgradeMakerR
   }
 
   private void initRenderers(@NotNull UpgradeMakerRecipe recipe) {
-    ProgressStorage progressStorage = new ProgressStorage(20) {
+    if (progress == null) {
+      progress = new ProgressJeiRenderer(
+        TextureSizeHelper.getTextureWidth(FILLED_PROGRESS),
+        TextureSizeHelper.getTextureHeight(FILLED_PROGRESS)
+      );
+      initRenderers(recipe);
+      return;
+    }
+    if (energy == null) {
+      energy = new EnergyJeiRenderer(16, 70);
+      initRenderers(recipe);
+      return;
+    }
+    ProgressStorage progressStorage = new ProgressStorage(recipe.getTime()) {
       @Override
       public void onProgressChanged() {
-        if(progress > maxProgress) resetProgress();
+        if(progress >= maxProgress) resetProgress();
       }
     };
     AbstractEnergyStorage energyStorage = new AbstractEnergyStorage(recipe.getEnergyRequired()) {
       @Override
-      public void onEnergyChanged() {
-
-      }
+      public void onEnergyChanged() {}
     };
-    progressComponents.put(recipe, new ProgressComponent(
-      66,
-      36,
-      progressStorage,
-      TextureSizeHelper.getTextureWidth(FILLED_PROGRESS),
-      TextureSizeHelper.getTextureHeight(FILLED_PROGRESS),
-      FILLED_PROGRESS
-    ));
-    energyComponents.put(recipe, new EnergyInfoArea(
-      8,
-      8,
-      energyStorage,
-      16,
-      70,
-      null,
-      IRequirement.ModeIO.INPUT
-    ) {
-      @Override
-      public List<Component> getTooltips() {
-        return List.of(
-          mode == IRequirement.ModeIO.INPUT
-            ? Component.translatable("degrassi.gui.element.energy.input").withStyle(ChatFormatting.ITALIC)
-            : Component.translatable("degrassi.gui.element.energy.output").withStyle(ChatFormatting.ITALIC),
-          Component.translatable(
-            "degrassi.gui.element.energy.jei",
+    if (progressComponents.get(recipe) == null) {
+      progressComponents.put(recipe, new ProgressComponent(
+        66,
+        36,
+        progressStorage,
+        TextureSizeHelper.getTextureWidth(FILLED_PROGRESS),
+        TextureSizeHelper.getTextureHeight(FILLED_PROGRESS),
+        FILLED_PROGRESS
+      ));
+      initRenderers(recipe);
+      return;
+    }
+    if (energyComponents.get(recipe) == null) {
+      energyComponents.put(recipe, new EnergyInfoArea(
+        8,
+        8,
+        energyStorage,
+        16,
+        70,
+        null,
+        IRequirement.ModeIO.INPUT
+      ) {
+        @Override
+        public List<Component> getTooltips() {
+          return List.of(
+            mode == IRequirement.ModeIO.INPUT
+              ? Component.translatable("degrassi.gui.element.energy.input").withStyle(ChatFormatting.ITALIC)
+              : Component.translatable("degrassi.gui.element.energy.output").withStyle(ChatFormatting.ITALIC),
             Component.translatable(
-              "degrassi.gui.element.energy.jei.total",
-              recipe.getEnergyRequired() * recipe.getTime(),
-              Component.translatable("unit.energy.forge")
-            ),
-            Component.literal(" @ ").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY),
-            Component.translatable(
-              "degrassi.gui.element.energy.jei.perTick",
-              recipe.getEnergyRequired(),
-              Component.translatable("unit.energy.forge"),
-              "/t"
+              "degrassi.gui.element.energy.jei",
+              Component.translatable(
+                "degrassi.gui.element.energy.jei.total",
+                recipe.getEnergyRequired() * recipe.getTime(),
+                Component.translatable("unit.energy.forge")
+              ),
+              Component.literal(" @ ").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY),
+              Component.translatable(
+                "degrassi.gui.element.energy.jei.perTick",
+                recipe.getEnergyRequired(),
+                Component.translatable("unit.energy.forge"),
+                "/t"
+              )
             )
-          )
-        );
-      }
-    });
+          );
+        }
+      });
+      initRenderers(recipe);
+      return;
+    }
+    progressComponents.get(recipe).getStorage().increment();
   }
 }

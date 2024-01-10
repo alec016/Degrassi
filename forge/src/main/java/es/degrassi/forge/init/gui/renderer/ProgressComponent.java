@@ -28,6 +28,7 @@ public class ProgressComponent extends InfoArea implements IDrawableAnimated, IG
   public ResourceLocation texture;
   private int x, y, width, height;
   private Orientation orientation = Orientation.RIGHT;
+  private boolean inverted = false, vertical = false;
 
   public ProgressComponent(CompoundTag tag){
     processTag(tag);
@@ -56,10 +57,28 @@ public class ProgressComponent extends InfoArea implements IDrawableAnimated, IG
     this.height = height;
   }
 
+  public ProgressComponent inverted() {
+    inverted = true;
+    return this;
+  }
+
+  public ProgressComponent vertical() {
+    vertical = true;
+    return this;
+  }
+
+  public boolean isVertical() {
+    return vertical;
+  }
+
+  public boolean isInverted() {
+    return inverted;
+  }
+
   @Override
   public void draw(PoseStack transform, int x, int y, ResourceLocation texture) {
     this.texture = texture;
-    draw(transform, x, y, texture, false, false);
+    draw(transform, x, y, texture, vertical, inverted);
   }
 
   public List<Component> getTooltips() {
@@ -79,6 +98,8 @@ public class ProgressComponent extends InfoArea implements IDrawableAnimated, IG
 
   public void draw(PoseStack pose, int x, int y, ResourceLocation texture, boolean vertical, boolean inverted) {
     this.texture = texture;
+    this.inverted = inverted;
+    this.vertical = vertical;
     final int width = TextureSizeHelper.getTextureWidth(texture);
     final int height = TextureSizeHelper.getTextureHeight(texture);
     IClientHandler.bindTexture(texture);
@@ -128,10 +149,12 @@ public class ProgressComponent extends InfoArea implements IDrawableAnimated, IG
 
   @Override
   public void draw(PoseStack pose, int x, int y, ResourceLocation texture, boolean vertical) {
-    draw(pose, x, y, texture, vertical, false);
+    this.vertical = vertical;
+    draw(pose, x, y, texture, vertical, inverted);
   }
 
   public int getScaledProgress(int renderSize, boolean inverted) {
+    this.inverted = inverted;
     int progress = this.progress.getProgress();
     int maxProgress = this.progress.getMaxProgress();
 
@@ -167,7 +190,7 @@ public class ProgressComponent extends InfoArea implements IDrawableAnimated, IG
   public void draw(@NotNull PoseStack poseStack, int xOffset, int yOffset) {
     poseStack.pushPose();
     {
-      draw(poseStack, xOffset, yOffset, texture, false);
+      draw(poseStack, xOffset, yOffset, texture, vertical, inverted);
     }
     poseStack.popPose();
   }
@@ -211,7 +234,7 @@ public class ProgressComponent extends InfoArea implements IDrawableAnimated, IG
 
   @Override
   public void renderButton(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
-    draw(poseStack, mouseX, mouseY, texture, false);
+    draw(poseStack, mouseX, mouseY, texture, vertical, inverted);
   }
 
   @Override
@@ -229,6 +252,7 @@ public class ProgressComponent extends InfoArea implements IDrawableAnimated, IG
     nbt.putInt("width", width);
     nbt.putInt("height", height);
     nbt.putString("orientation", orientation.name());
+    nbt.putBoolean("inverted", inverted);
     return nbt;
   }
 
@@ -241,6 +265,7 @@ public class ProgressComponent extends InfoArea implements IDrawableAnimated, IG
     width = nbt.getInt("width");
     height = nbt.getInt("height");
     orientation = Orientation.valueOf(nbt.getString("orientation"));
+    inverted = nbt.getBoolean("inverted");
   }
 
   protected void processTag(CompoundTag nbt) {
@@ -252,6 +277,7 @@ public class ProgressComponent extends InfoArea implements IDrawableAnimated, IG
     width = nbt.getInt("width");
     height = nbt.getInt("height");
     orientation = Orientation.valueOf(nbt.getString("orientation"));
+    inverted = nbt.getBoolean("inverted");
   }
 
   public enum Orientation {

@@ -73,7 +73,9 @@ public class JEIDegrassiPlugin implements IModPlugin {
         registration.getJeiHelpers(),
         BlockRegister.JEWELRY_GENERATOR.get(),
         new DegrassiLocation("textures/gui/jei/jewelry_generator_gui.png"),
-        new DegrassiLocation("textures/gui/jei/jewelry_generator_progress_filled.png")
+        new DegrassiLocation("textures/gui/jei/jewelry_generator_progress_filled.png"),
+        82,
+        26
       )
     );
     registration.addRecipeCategories(
@@ -81,7 +83,9 @@ public class JEIDegrassiPlugin implements IModPlugin {
         registration.getJeiHelpers(),
         BlockRegister.COMBUSTION_GENERATOR.get(),
         new DegrassiLocation("textures/gui/jei/combustion_generator_gui.png"),
-        new DegrassiLocation("textures/gui/jei/combustion_generator_progress_filled.png")
+        new DegrassiLocation("textures/gui/jei/combustion_generator_progress_filled.png"),
+        88,
+        32
       )
     );
   }
@@ -127,8 +131,8 @@ public class JEIDegrassiPlugin implements IModPlugin {
     );
     registration.addRecipeClickArea(
       CombustionGeneratorScreen.class,
-      86,
-      46,
+      88,
+      52,
       TextureSizeHelper.getTextureWidth(CombustionGeneratorScreen.FILLED_ARROW),
       TextureSizeHelper.getTextureHeight(CombustionGeneratorScreen.FILLED_ARROW),
       COMBUSTION_GENERATOR_TYPE

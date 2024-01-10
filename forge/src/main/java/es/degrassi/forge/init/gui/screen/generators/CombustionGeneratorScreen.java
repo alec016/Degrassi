@@ -26,7 +26,7 @@ public class CombustionGeneratorScreen extends GeneratorScreen<CombustionGenerat
   public void init() {
     super.init();
     assignEnergyInfoArea(134, 19);
-    assignProgressComponent(82, 46, FILLED_ARROW);
+    assignProgressComponent(88, 52, FILLED_ARROW);
   }
 
   @Override
@@ -44,7 +44,7 @@ public class CombustionGeneratorScreen extends GeneratorScreen<CombustionGenerat
     renderHover(pPoseStack, this.leftPos, this.topPos, 134, 19, pMouseX, pMouseY, TextureSizeHelper.getTextureWidth(ENERGY_FILLED), TextureSizeHelper.getTextureHeight(ENERGY_FILLED));
 
     if(menu.isCrafting()) {
-      progressComponent.draw(pPoseStack, this.leftPos + 82, this.topPos + 46, FILLED_ARROW, true, true);
+      progressComponent.draw(pPoseStack, this.leftPos + 88, this.topPos + 52, FILLED_ARROW, true, true);
     }
   }
 
@@ -56,8 +56,8 @@ public class CombustionGeneratorScreen extends GeneratorScreen<CombustionGenerat
         mouseY,
         x,
         y,
-        82,
-        46,
+        88,
+        52,
         TextureSizeHelper.getTextureWidth(FILLED_ARROW),
         TextureSizeHelper.getTextureHeight(FILLED_ARROW)
       )
