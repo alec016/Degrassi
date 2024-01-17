@@ -6,8 +6,8 @@ import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.init.entity.panel.PanelEntity;
 import es.degrassi.forge.init.gui.container.panel.PanelContainer;
 import es.degrassi.forge.init.gui.screen.IScreen;
-import es.degrassi.forge.init.gui.renderer.EnergyInfoArea;
-import es.degrassi.forge.util.storage.AbstractEnergyStorage;
+import es.degrassi.forge.init.gui.element.EnergyGuiElement;
+import es.degrassi.forge.init.gui.component.EnergyComponent;
 import es.degrassi.forge.util.TextureSizeHelper;
 import es.degrassi.forge.util.Utils;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -25,7 +25,7 @@ public abstract class PanelScreen extends AbstractContainerScreen<PanelContainer
   protected static final ResourceLocation BACKGROUND = new DegrassiLocation("textures/gui/panel_gui.png");
   protected static final ResourceLocation ENERGY_FILLED = new DegrassiLocation("textures/gui/panel_energy_storage_filled.png");
 
-  protected EnergyInfoArea energyInfoArea;
+  protected EnergyGuiElement energyComponent;
 
   public PanelScreen(PanelContainer<? extends PanelEntity> container, Inventory inventory, Component name) {
     super(container, inventory, name);
@@ -49,7 +49,7 @@ public abstract class PanelScreen extends AbstractContainerScreen<PanelContainer
 
     blit(pPoseStack, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight, imageWidth, imageHeight);
 
-    energyInfoArea.draw(pPoseStack, this.leftPos + 25, this.topPos + 20, ENERGY_FILLED, true);
+    energyComponent.draw(pPoseStack, this.leftPos + 25, this.topPos + 20, ENERGY_FILLED, true);
     renderHover(pPoseStack, this.leftPos, this.topPos, 25, 20, pMouseX, pMouseY, TextureSizeHelper.getTextureWidth(ENERGY_FILLED), TextureSizeHelper.getTextureHeight(ENERGY_FILLED));
   }
 
@@ -64,7 +64,7 @@ public abstract class PanelScreen extends AbstractContainerScreen<PanelContainer
   protected void renderLabels(@NotNull PoseStack poseStack, int mouseX, int mouseY) {
     int x = this.leftPos;
     int y = this.topPos;
-    AbstractEnergyStorage energy = menu.getEntity().getEnergyStorage();
+    EnergyComponent energy = menu.getEntity().getEnergyStorage();
 
     this.font.draw(poseStack, this.title, (float) this.titleLabelX, (float) this.titleLabelY, 4210752);
 
@@ -125,7 +125,7 @@ public abstract class PanelScreen extends AbstractContainerScreen<PanelContainer
     ) {
       renderTooltip(
         poseStack,
-        energyInfoArea.getTooltips(),
+        energyComponent.getTooltips(),
         Optional.empty(),
         mouseX - x,
         mouseY - y

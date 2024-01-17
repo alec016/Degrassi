@@ -4,10 +4,10 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.init.gui.container.FurnaceContainer;
-import es.degrassi.forge.init.gui.renderer.EfficiencyInfoArea;
-import es.degrassi.forge.init.gui.renderer.EnergyInfoArea;
-import es.degrassi.forge.init.gui.renderer.FluidTankRenderer;
-import es.degrassi.forge.init.gui.renderer.ProgressComponent;
+import es.degrassi.forge.init.gui.element.EfficiencyGuiElement;
+import es.degrassi.forge.init.gui.element.EnergyGuiElement;
+import es.degrassi.forge.init.gui.element.FluidGuiElement;
+import es.degrassi.forge.init.gui.element.ProgressGuiElement;
 import es.degrassi.forge.util.TextureSizeHelper;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -23,8 +23,8 @@ public class FurnaceScreen extends AbstractContainerScreen<FurnaceContainer> imp
   public static final ResourceLocation BACKGROUND = new DegrassiLocation("textures/gui/furnace_gui.png");
   public static final ResourceLocation ENERGY_FILLED = new DegrassiLocation("textures/gui/furnace_energy_storage_filled.png");
   public static final ResourceLocation FILLED_ARROW = new DegrassiLocation("textures/gui/furnace_progress_filled.png");
-  protected EnergyInfoArea energyInfoArea;
-  protected ProgressComponent progressComponent;
+  protected EnergyGuiElement energyComponent;
+  protected ProgressGuiElement progressComponent;
 
   public FurnaceScreen(FurnaceContainer abstractContainerMenu, Inventory inventory, Component component) {
     super(abstractContainerMenu, inventory, component);
@@ -49,7 +49,7 @@ public class FurnaceScreen extends AbstractContainerScreen<FurnaceContainer> imp
 
     blit(pPoseStack, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight, imageWidth, imageHeight);
 
-    energyInfoArea.draw(pPoseStack, this.leftPos + 7, this.topPos + 72, ENERGY_FILLED, false);
+    energyComponent.draw(pPoseStack, this.leftPos + 7, this.topPos + 72, ENERGY_FILLED, false);
     renderHover(pPoseStack, this.leftPos, this.topPos, 7, 72, pMouseX, pMouseY, TextureSizeHelper.getTextureWidth(ENERGY_FILLED), TextureSizeHelper.getTextureHeight(ENERGY_FILLED));
 
     if(menu.isCrafting()) {
@@ -112,7 +112,7 @@ public class FurnaceScreen extends AbstractContainerScreen<FurnaceContainer> imp
     ) {
       renderTooltip(
         poseStack,
-        energyInfoArea.getTooltips(),
+        energyComponent.getTooltips(),
         Optional.empty(),
         mouseX - x,
         mouseY - y
@@ -125,7 +125,7 @@ public class FurnaceScreen extends AbstractContainerScreen<FurnaceContainer> imp
     return this;
   }
 
-  public ProgressComponent getComponent() {
+  public ProgressGuiElement getComponent() {
     return progressComponent;
   }
 
@@ -147,18 +147,18 @@ public class FurnaceScreen extends AbstractContainerScreen<FurnaceContainer> imp
   }
 
   @Override
-  public void setProgressComponent(ProgressComponent progress) {
+  public void setProgressComponent(ProgressGuiElement progress) {
     this.progressComponent = progress;
   }
 
   @Override
-  public void setEnergyComponent(EnergyInfoArea energy) {
-    this.energyInfoArea = energy;
+  public void setEnergyComponent(EnergyGuiElement energy) {
+    this.energyComponent = energy;
   }
 
   @Override
-  public void setFluidComponent(FluidTankRenderer fluid) {}
+  public void setFluidComponent(FluidGuiElement fluid) {}
 
   @Override
-  public void setEfficiencyComponent(EfficiencyInfoArea efficiency) {}
+  public void setEfficiencyComponent(EfficiencyGuiElement efficiency) {}
 }

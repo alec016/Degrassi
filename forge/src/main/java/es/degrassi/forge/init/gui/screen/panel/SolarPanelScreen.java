@@ -4,11 +4,11 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.init.gui.container.panel.PanelContainer;
-import es.degrassi.forge.init.gui.renderer.EnergyInfoArea;
-import es.degrassi.forge.init.gui.renderer.FluidTankRenderer;
-import es.degrassi.forge.init.gui.renderer.ProgressComponent;
-import es.degrassi.forge.init.gui.renderer.EfficiencyInfoArea;
-import es.degrassi.forge.util.storage.AbstractEnergyStorage;
+import es.degrassi.forge.init.gui.element.EnergyGuiElement;
+import es.degrassi.forge.init.gui.element.FluidGuiElement;
+import es.degrassi.forge.init.gui.element.ProgressGuiElement;
+import es.degrassi.forge.init.gui.element.EfficiencyGuiElement;
+import es.degrassi.forge.init.gui.component.EnergyComponent;
 import es.degrassi.forge.util.TextureSizeHelper;
 import es.degrassi.forge.util.Utils;
 import net.minecraft.client.renderer.GameRenderer;
@@ -21,7 +21,7 @@ import java.util.Optional;
 
 public class SolarPanelScreen extends PanelScreen {
   private static final ResourceLocation EFFICIENCY_FILLED = new DegrassiLocation("textures/gui/panel_efficiency_filled.png");
-  protected EfficiencyInfoArea efficiencyInfoArea;
+  protected EfficiencyGuiElement efficiencyComponent;
   public SolarPanelScreen(PanelContainer<?> container, Inventory inventory, Component name) {
     super(container, inventory, name);
   }
@@ -44,9 +44,9 @@ public class SolarPanelScreen extends PanelScreen {
 
     blit(pPoseStack, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight, imageWidth, imageHeight);
 
-    energyInfoArea.draw(pPoseStack, this.leftPos + 25, this.topPos + 20, ENERGY_FILLED);
+    energyComponent.draw(pPoseStack, this.leftPos + 25, this.topPos + 20, ENERGY_FILLED);
     renderHover(pPoseStack, this.leftPos, this.topPos, 25, 20, pMouseX, pMouseY, TextureSizeHelper.getTextureWidth(ENERGY_FILLED), TextureSizeHelper.getTextureHeight(ENERGY_FILLED));
-    efficiencyInfoArea.draw(pPoseStack, this.leftPos + 43, this.topPos + 20, EFFICIENCY_FILLED);
+    efficiencyComponent.draw(pPoseStack, this.leftPos + 43, this.topPos + 20, EFFICIENCY_FILLED);
     renderHover(pPoseStack, this.leftPos, this.topPos, 43, 20, pMouseX, pMouseY, TextureSizeHelper.getTextureWidth(EFFICIENCY_FILLED), TextureSizeHelper.getTextureHeight(EFFICIENCY_FILLED));
   }
 
@@ -54,7 +54,7 @@ public class SolarPanelScreen extends PanelScreen {
   protected void renderLabels(@NotNull PoseStack poseStack, int mouseX, int mouseY) {
     int x = this.leftPos;
     int y = this.topPos;
-    AbstractEnergyStorage energy = menu.getEntity().getEnergyStorage();
+    EnergyComponent energy = menu.getEntity().getEnergyStorage();
 
     this.font.draw(poseStack, this.title, (float) this.titleLabelX, (float) this.titleLabelY, 4210752);
 
@@ -99,7 +99,7 @@ public class SolarPanelScreen extends PanelScreen {
     );
     this.font.draw(
       poseStack,
-      efficiencyInfoArea.getTooltips().get(0),
+      efficiencyComponent.getTooltips().get(0),
       95,
       95,
       4210752
@@ -124,7 +124,7 @@ public class SolarPanelScreen extends PanelScreen {
     ) {
       renderTooltip(
         poseStack,
-        efficiencyInfoArea.getTooltips(),
+        efficiencyComponent.getTooltips(),
         Optional.empty(),
         mouseX - x,
         mouseY - y
@@ -133,19 +133,19 @@ public class SolarPanelScreen extends PanelScreen {
   }
 
   @Override
-  public void setProgressComponent(ProgressComponent progress) {
+  public void setProgressComponent(ProgressGuiElement progress) {
   }
 
   @Override
-  public void setEnergyComponent(EnergyInfoArea energy) {
-    this.energyInfoArea = energy;
+  public void setEnergyComponent(EnergyGuiElement energy) {
+    this.energyComponent = energy;
   }
 
   @Override
-  public void setFluidComponent(FluidTankRenderer fluid) {}
+  public void setFluidComponent(FluidGuiElement fluid) {}
 
   @Override
-  public void setEfficiencyComponent(EfficiencyInfoArea efficiency) {
-    this.efficiencyInfoArea = efficiency;
+  public void setEfficiencyComponent(EfficiencyGuiElement efficiency) {
+    this.efficiencyComponent = efficiency;
   }
 }

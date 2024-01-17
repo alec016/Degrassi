@@ -5,10 +5,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import es.degrassi.common.*;
 import es.degrassi.forge.init.entity.generators.JewelryGeneratorEntity;
 import es.degrassi.forge.init.gui.container.generators.GeneratorContainer;
-import es.degrassi.forge.init.gui.renderer.EfficiencyInfoArea;
-import es.degrassi.forge.init.gui.renderer.EnergyInfoArea;
-import es.degrassi.forge.init.gui.renderer.FluidTankRenderer;
-import es.degrassi.forge.init.gui.renderer.ProgressComponent;
+import es.degrassi.forge.init.gui.element.EfficiencyGuiElement;
+import es.degrassi.forge.init.gui.element.EnergyGuiElement;
+import es.degrassi.forge.init.gui.element.FluidGuiElement;
+import es.degrassi.forge.init.gui.element.ProgressGuiElement;
 import es.degrassi.forge.util.TextureSizeHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.*;
@@ -43,7 +43,7 @@ public class JewelryGeneratorScreen extends GeneratorScreen<JewelryGeneratorEnti
 
     blit(pPoseStack, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight, imageWidth, imageHeight);
 
-    energyInfoArea.draw(pPoseStack, this.leftPos + 134, this.topPos + 19, ENERGY_FILLED, true);
+    energyComponent.draw(pPoseStack, this.leftPos + 134, this.topPos + 19, ENERGY_FILLED, true);
     renderHover(pPoseStack, this.leftPos, this.topPos, 134, 19, pMouseX, pMouseY, TextureSizeHelper.getTextureWidth(ENERGY_FILLED), TextureSizeHelper.getTextureHeight(ENERGY_FILLED));
 
     if(menu.isCrafting()) {
@@ -75,7 +75,7 @@ public class JewelryGeneratorScreen extends GeneratorScreen<JewelryGeneratorEnti
     }
   }
 
-  public ProgressComponent getComponent() {
+  public ProgressGuiElement getComponent() {
     return progressComponent;
   }
 
@@ -94,7 +94,7 @@ public class JewelryGeneratorScreen extends GeneratorScreen<JewelryGeneratorEnti
     ) {
       renderTooltip(
         poseStack,
-        energyInfoArea.getTooltips(),
+        energyComponent.getTooltips(),
         Optional.empty(),
         mouseX - x,
         mouseY - y
@@ -114,20 +114,20 @@ public class JewelryGeneratorScreen extends GeneratorScreen<JewelryGeneratorEnti
   }
 
   @Override
-  public void setProgressComponent(ProgressComponent progress) {
+  public void setProgressComponent(ProgressGuiElement progress) {
     this.progressComponent = progress;
   }
 
   @Override
-  public void setEnergyComponent(EnergyInfoArea energy) {
-    this.energyInfoArea = energy;
+  public void setEnergyComponent(EnergyGuiElement energy) {
+    this.energyComponent = energy;
   }
 
   @Override
-  public void setFluidComponent(FluidTankRenderer fluid) {
+  public void setFluidComponent(FluidGuiElement fluid) {
   }
 
   @Override
-  public void setEfficiencyComponent(EfficiencyInfoArea efficiency) {
+  public void setEfficiencyComponent(EfficiencyGuiElement efficiency) {
   }
 }

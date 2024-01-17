@@ -8,7 +8,7 @@ import es.degrassi.forge.init.registration.ItemRegister;
 import es.degrassi.forge.integration.config.DegrassiConfig;
 import es.degrassi.forge.network.EnergyPacket;
 import es.degrassi.forge.network.ItemPacket;
-import es.degrassi.forge.util.storage.AbstractEnergyStorage;
+import es.degrassi.forge.init.gui.component.EnergyComponent;
 import net.minecraft.core.*;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
@@ -22,15 +22,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @SuppressWarnings("unchecked")
 public class JewelryGeneratorEntity extends GeneratorEntity<JewelryGeneratorEntity, JewelryGenerator> {
   {
-    ENERGY_STORAGE = new AbstractEnergyStorage(DegrassiConfig.get().generatorsConfig.jewelry_capacity, DegrassiConfig.get().generatorsConfig.jewelry_transfer) {
+    ENERGY_STORAGE = new EnergyComponent(getManager(), DegrassiConfig.get().generatorsConfig.jewelry_capacity, DegrassiConfig.get().generatorsConfig.jewelry_transfer) {
       @Override
       public boolean canReceive() {
         return false;
       }
 
       @Override
-      public void onEnergyChanged() {
-        setChanged();
+      public void onChanged() {
+        super.onChanged();
         if (level != null && !level.isClientSide())
           new EnergyPacket(this.energy, this.capacity, this.maxReceive, getBlockPos())
             .sendToChunkListeners(level.getChunkAt(getBlockPos()));
@@ -40,7 +40,7 @@ public class JewelryGeneratorEntity extends GeneratorEntity<JewelryGeneratorEnti
     itemHandler = new ItemStackHandler(3) {
       @Override
       protected void onContentsChanged(int slot) {
-        setChanged();
+        getManager().markDirty();
         if (level != null && !level.isClientSide() && level.getServer() != null) {
           new ItemPacket(this, worldPosition)
             .sendToAll(level.getServer());
@@ -78,8 +78,8 @@ public class JewelryGeneratorEntity extends GeneratorEntity<JewelryGeneratorEnti
       @Override
       public int get(int index) {
         return switch (index) {
-          case 0 -> JewelryGeneratorEntity.this.progressStorage.getProgress();
-          case 1 -> JewelryGeneratorEntity.this.progressStorage.getMaxProgress();
+          case 0 -> JewelryGeneratorEntity.this.progressComponent.getProgress();
+          case 1 -> JewelryGeneratorEntity.this.progressComponent.getMaxProgress();
           default -> 0;
         };
       }
@@ -87,8 +87,8 @@ public class JewelryGeneratorEntity extends GeneratorEntity<JewelryGeneratorEnti
       @Override
       public void set(int index, int value) {
         switch (index) {
-          case 0 -> JewelryGeneratorEntity.this.progressStorage.setProgress(value);
-          case 1 -> JewelryGeneratorEntity.this.progressStorage.setMaxProgress(value);
+          case 0 -> JewelryGeneratorEntity.this.progressComponent.setProgress(value);
+          case 1 -> JewelryGeneratorEntity.this.progressComponent.setMaxProgress(value);
         }
       }
 
@@ -116,6 +116,6 @@ public class JewelryGeneratorEntity extends GeneratorEntity<JewelryGeneratorEnti
         entity.getRecipe().endProcess(entity);
       }
     }
-    setChanged(level, pos, state);
+    entity.getManager().markDirty();
   }
 }

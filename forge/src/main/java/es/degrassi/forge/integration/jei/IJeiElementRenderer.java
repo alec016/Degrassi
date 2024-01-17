@@ -1,7 +1,7 @@
 package es.degrassi.forge.integration.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import es.degrassi.forge.init.gui.renderer.IGuiElement;
+import es.degrassi.forge.init.gui.element.IGuiElement;
 import es.degrassi.forge.init.recipe.IDegrassiRecipe;
 import net.minecraft.network.chat.Component;
 

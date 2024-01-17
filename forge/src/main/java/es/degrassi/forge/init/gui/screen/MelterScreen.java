@@ -4,14 +4,13 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.init.gui.container.MelterContainer;
-import es.degrassi.forge.init.gui.renderer.EfficiencyInfoArea;
-import es.degrassi.forge.init.gui.renderer.EnergyInfoArea;
-import es.degrassi.forge.init.gui.renderer.FluidTankRenderer;
-import es.degrassi.forge.init.gui.renderer.ProgressComponent;
+import es.degrassi.forge.init.gui.element.EfficiencyGuiElement;
+import es.degrassi.forge.init.gui.element.EnergyGuiElement;
+import es.degrassi.forge.init.gui.element.FluidGuiElement;
+import es.degrassi.forge.init.gui.element.ProgressGuiElement;
 import es.degrassi.forge.util.TextureSizeHelper;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -23,9 +22,9 @@ import java.util.Optional;
 public class MelterScreen extends AbstractContainerScreen<MelterContainer> implements IScreen {
   public static final ResourceLocation ENERGY_FILLED = new DegrassiLocation("textures/gui/melter_energy_filled.png");
   public static final ResourceLocation TEXTURE = new DegrassiLocation("textures/gui/melter_gui.png");
-  private EnergyInfoArea energyInfoArea;
-  private ProgressComponent progressComponent;
-  private FluidTankRenderer fluidComponent;
+  private EnergyGuiElement energyComponent;
+  private ProgressGuiElement progressComponent;
+  private FluidGuiElement fluidComponent;
   public MelterScreen(MelterContainer container, Inventory inv, Component name) {
     super(container, inv, name);
   }
@@ -55,7 +54,7 @@ public class MelterScreen extends AbstractContainerScreen<MelterContainer> imple
 
     blit(poseStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, this.imageWidth, this.imageHeight);
 
-    this.energyInfoArea.draw(poseStack, this.leftPos + 8, this.topPos + 22, ENERGY_FILLED, true);
+    this.energyComponent.draw(poseStack, this.leftPos + 8, this.topPos + 22, ENERGY_FILLED, true);
     renderHover(poseStack, this.leftPos, this.topPos, 8, 22, mouseX, mouseY, TextureSizeHelper.getTextureWidth(ENERGY_FILLED), TextureSizeHelper.getTextureHeight(ENERGY_FILLED));
     if(this.menu.isCrafting()) {
       this.progressComponent.draw(poseStack, this.leftPos + 84, this.topPos + 48, this.FILLED_ARROW, false);
@@ -95,7 +94,7 @@ public class MelterScreen extends AbstractContainerScreen<MelterContainer> imple
     ) {
       renderTooltip(
         poseStack,
-        this.energyInfoArea.getTooltips(),
+        this.energyComponent.getTooltips(),
         Optional.empty(),
         mouseX - x,
         mouseY - y
@@ -138,7 +137,7 @@ public class MelterScreen extends AbstractContainerScreen<MelterContainer> imple
     }
   }
 
-  public ProgressComponent getComponent() {
+  public ProgressGuiElement getComponent() {
     return progressComponent;
   }
 
@@ -161,20 +160,20 @@ public class MelterScreen extends AbstractContainerScreen<MelterContainer> imple
 
 
   @Override
-  public void setProgressComponent(ProgressComponent progress) {
+  public void setProgressComponent(ProgressGuiElement progress) {
     this.progressComponent = progress;
   }
 
   @Override
-  public void setEnergyComponent(EnergyInfoArea energy) {
-    this.energyInfoArea = energy;
+  public void setEnergyComponent(EnergyGuiElement energy) {
+    this.energyComponent = energy;
   }
 
   @Override
-  public void setFluidComponent(FluidTankRenderer fluid) {
+  public void setFluidComponent(FluidGuiElement fluid) {
     this.fluidComponent = fluid;
   }
 
   @Override
-  public void setEfficiencyComponent(EfficiencyInfoArea efficiency) {}
+  public void setEfficiencyComponent(EfficiencyGuiElement efficiency) {}
 }

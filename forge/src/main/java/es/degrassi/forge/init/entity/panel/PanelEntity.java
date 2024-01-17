@@ -5,11 +5,9 @@ import es.degrassi.forge.init.entity.type.IEfficiencyEntity;
 import es.degrassi.forge.init.entity.type.IEnergyEntity;
 import es.degrassi.forge.init.entity.type.IEnergyEntity.IGenerationEntity;
 import es.degrassi.forge.init.entity.type.IItemEntity;
+import es.degrassi.forge.init.gui.component.*;
 import es.degrassi.forge.network.EfficiencyPacket;
 import es.degrassi.forge.network.EnergyPacket;
-import es.degrassi.forge.util.storage.AbstractEnergyStorage;
-import es.degrassi.forge.util.storage.EfficiencyStorage;
-import es.degrassi.forge.util.storage.GenerationStorage;
 import es.degrassi.forge.network.GenerationPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -33,23 +31,14 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public abstract class PanelEntity extends BaseEntity implements IEnergyEntity, IItemEntity, IGenerationEntity, IEfficiencyEntity {
   public static final float RAIN_MULTIPLIER = 0.6F, THUNDER_MULTIPLIER = 0.4F;
-  public AbstractEnergyStorage ENERGY_STORAGE;
-  protected GenerationStorage currentGen;
+  public EnergyComponent ENERGY_STORAGE;
+  protected GenerationComponent currentGen;
   public ItemStackHandler itemHandler;
   private final Component name;
 
-  protected EfficiencyStorage efficiency = new EfficiencyStorage() {
-    @Override
-    public void onEfficiencyChanged() {
-      setChanged();
-      if (level != null && !level.isClientSide()) {
-        new EfficiencyPacket(this.getEfficiency(), worldPosition)
-          .sendToChunkListeners(level.getChunkAt(getBlockPos()));
-      }
-    }
-  };;
+  protected EfficiencyComponent efficiency;
   protected LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
-  protected LazyOptional<AbstractEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
+  protected LazyOptional<EnergyComponent> lazyEnergyHandler = LazyOptional.empty();
 
   protected final int defaultCapacity;
   protected final int defaultTransfer;
@@ -76,16 +65,26 @@ public abstract class PanelEntity extends BaseEntity implements IEnergyEntity, I
     this.name = name;
     this.defaultTransfer = defaultTransfer;
     this.defaultCapacity = defaultCapacity;
+    this.efficiency= new EfficiencyComponent(getManager()) {
+      @Override
+      public void onChanged() {
+        super.onChanged();
+        if (level != null && !level.isClientSide()) {
+          new EfficiencyPacket(this.getEfficiency(), worldPosition)
+            .sendToChunkListeners(level.getChunkAt(getBlockPos()));
+        }
+      }
+    };
     this.ENERGY_STORAGE = createEnergyStorage(this);
     this.currentGen = createGenerationStorage(this);
   }
 
   @Contract(value = "_ -> new", pure = true)
-  protected static @NotNull GenerationStorage createGenerationStorage(PanelEntity entity) {
-    return new GenerationStorage() {
+  protected static @NotNull GenerationComponent createGenerationStorage(PanelEntity entity) {
+    return new GenerationComponent(entity.getManager()) {
       @Override
-      public void onGenerationChanged() {
-        entity.setChanged();
+      public void onChanged() {
+        super.onChanged();
         if (entity.level != null && !entity.level.isClientSide()) {
           new GenerationPacket(this.getGeneration(), entity.worldPosition)
             .sendToChunkListeners(entity.level.getChunkAt(entity.getBlockPos()));
@@ -95,23 +94,23 @@ public abstract class PanelEntity extends BaseEntity implements IEnergyEntity, I
   }
 
   @Contract(value = "_ -> new", pure = true)
-  protected static @NotNull AbstractEnergyStorage createEnergyStorage(@NotNull PanelEntity panelEntity) {
-    return new AbstractEnergyStorage(panelEntity.defaultCapacity, panelEntity.defaultTransfer) {
+  protected static @NotNull EnergyComponent createEnergyStorage(@NotNull PanelEntity entity) {
+    return new EnergyComponent(entity.getManager(), entity.defaultCapacity, entity.defaultTransfer) {
       @Override
       public boolean canReceive() {
         return false;
       }
 
       @Override
-      public void onEnergyChanged() {
-        panelEntity.setChanged();
-        if (panelEntity.level != null && !panelEntity.level.isClientSide())
+      public void onChanged() {
+        super.onChanged();
+        if (entity.level != null && !entity.level.isClientSide())
           new EnergyPacket(
             this.energy,
             this.capacity,
             this.maxExtract,
-            panelEntity.getBlockPos()
-          ).sendToChunkListeners(panelEntity.level.getChunkAt(panelEntity.getBlockPos()));
+            entity.getBlockPos()
+          ).sendToChunkListeners(entity.level.getChunkAt(entity.getBlockPos()));
       }
     };
   }
@@ -126,7 +125,7 @@ public abstract class PanelEntity extends BaseEntity implements IEnergyEntity, I
 
   public abstract int getGeneration();
 
-  public GenerationStorage getGenerationStorage() {
+  public GenerationComponent getGenerationStorage() {
     return this.currentGen;
   }
 
@@ -134,7 +133,7 @@ public abstract class PanelEntity extends BaseEntity implements IEnergyEntity, I
     int energy = ENERGY_STORAGE.getEnergyStored() + currentGen.getGeneration();
     if (energy <= ENERGY_STORAGE.getMaxEnergyStored())
       ENERGY_STORAGE.setEnergy(energy);
-    setChanged();
+    getManager().markDirty();
   }
 
   public boolean doesSeeSky() {
@@ -180,25 +179,25 @@ public abstract class PanelEntity extends BaseEntity implements IEnergyEntity, I
   public void setCapacityLevel(int capacity) {
     this.ENERGY_STORAGE.setCapacity(capacity);
     setEnergyToCapacity();
-    setChanged();
+    getManager().markDirty();
   }
 
   public void setTransferRate(int transfer) {
     ENERGY_STORAGE.setTransfer(transfer);
-    setChanged();
+    getManager().markDirty();
   }
 
   public void setEnergyToCapacity() {
     ENERGY_STORAGE.setEnergyToCapacity();
-    setChanged();
+    getManager().markDirty();
   }
 
   public void setEnergyLevel(int energy) {
     this.ENERGY_STORAGE.setEnergy(energy);
-    setChanged();
+    getManager().markDirty();
   }
 
-  public AbstractEnergyStorage getEnergyStorage() {
+  public EnergyComponent getEnergyStorage() {
     return ENERGY_STORAGE;
   }
 
@@ -206,11 +205,11 @@ public abstract class PanelEntity extends BaseEntity implements IEnergyEntity, I
     for (int i = 0; i < handler.getSlots(); i++) {
       itemHandler.setStackInSlot(i, handler.getStackInSlot(i));
     }
-    setChanged();
+    getManager().markDirty();
   }
 
 
-  public EfficiencyStorage getCurrentEfficiency() {
+  public EfficiencyComponent getCurrentEfficiency() {
     return this.efficiency;
   }
 

@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.*;
 import es.degrassi.common.*;
 import es.degrassi.forge.init.entity.generators.*;
 import es.degrassi.forge.init.gui.container.generators.*;
-import es.degrassi.forge.init.gui.renderer.*;
+import es.degrassi.forge.init.gui.element.*;
 import es.degrassi.forge.util.*;
 import java.util.*;
 import net.minecraft.network.chat.*;
@@ -40,7 +40,7 @@ public class CombustionGeneratorScreen extends GeneratorScreen<CombustionGenerat
 
     blit(pPoseStack, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight, imageWidth, imageHeight);
 
-    energyInfoArea.draw(pPoseStack, this.leftPos + 134, this.topPos + 19, ENERGY_FILLED, true);
+    energyComponent.draw(pPoseStack, this.leftPos + 134, this.topPos + 19, ENERGY_FILLED, true);
     renderHover(pPoseStack, this.leftPos, this.topPos, 134, 19, pMouseX, pMouseY, TextureSizeHelper.getTextureWidth(ENERGY_FILLED), TextureSizeHelper.getTextureHeight(ENERGY_FILLED));
 
     if(menu.isCrafting()) {
@@ -72,7 +72,7 @@ public class CombustionGeneratorScreen extends GeneratorScreen<CombustionGenerat
     }
   }
 
-  public ProgressComponent getComponent() {
+  public ProgressGuiElement getComponent() {
     return progressComponent;
   }
 
@@ -91,7 +91,7 @@ public class CombustionGeneratorScreen extends GeneratorScreen<CombustionGenerat
     ) {
       renderTooltip(
         poseStack,
-        energyInfoArea.getTooltips(),
+        energyComponent.getTooltips(),
         Optional.empty(),
         mouseX - x,
         mouseY - y
@@ -111,20 +111,20 @@ public class CombustionGeneratorScreen extends GeneratorScreen<CombustionGenerat
   }
 
   @Override
-  public void setProgressComponent(ProgressComponent progress) {
+  public void setProgressComponent(ProgressGuiElement progress) {
     this.progressComponent = progress;
   }
 
   @Override
-  public void setEnergyComponent(EnergyInfoArea energy) {
-    this.energyInfoArea = energy;
+  public void setEnergyComponent(EnergyGuiElement energy) {
+    this.energyComponent = energy;
   }
 
   @Override
-  public void setFluidComponent(FluidTankRenderer fluid) {
+  public void setFluidComponent(FluidGuiElement fluid) {
   }
 
   @Override
-  public void setEfficiencyComponent(EfficiencyInfoArea efficiency) {
+  public void setEfficiencyComponent(EfficiencyGuiElement efficiency) {
   }
 }

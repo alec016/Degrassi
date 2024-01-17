@@ -1,6 +1,6 @@
-package es.degrassi.forge.util.storage;
+package es.degrassi.forge.init.gui.component;
 
-import es.degrassi.forge.init.gui.IComponent;
+import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -11,36 +11,40 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Predicate;
 
 @SuppressWarnings("unused")
-public abstract class FluidStorage implements IComponent, IFluidTank, IFluidHandler {
+public class FluidComponent implements IComponent, IFluidTank, IFluidHandler {
   private FluidStack fluid = FluidStack.EMPTY;
   protected Predicate<FluidStack> validator;
   private int capacity;
 
-  public FluidStorage(int capacity) {
-    this(capacity, e -> true);
+  private final ComponentManager manager;
+
+  public FluidComponent(ComponentManager manager, int capacity) {
+    this(manager, capacity, e -> true);
   }
 
-  public FluidStorage(int capacity, Predicate<FluidStack> validator) {
+  public FluidComponent(ComponentManager manager, int capacity, Predicate<FluidStack> validator) {
     this.capacity = capacity;
     this.validator = validator;
+    this.manager = manager;
   }
 
-  public FluidStorage(Fluid fluid, int amount, int capacity) {
-    this(fluid, amount, capacity, e -> true);
+  public FluidComponent(ComponentManager manager, Fluid fluid, int amount, int capacity) {
+    this(manager, fluid, amount, capacity, e -> true);
   }
 
-  public FluidStorage(Fluid fluid, int amount, int capacity, Predicate<FluidStack> validator) {
-    this(new FluidStack(fluid, amount), capacity, validator);
+  public FluidComponent(ComponentManager manager, Fluid fluid, int amount, int capacity, Predicate<FluidStack> validator) {
+    this(manager, new FluidStack(fluid, amount), capacity, validator);
   }
 
-  public FluidStorage(FluidStack fluid, int capacity) {
-    this(fluid, capacity, e -> true);
+  public FluidComponent(ComponentManager manager, FluidStack fluid, int capacity) {
+    this(manager, fluid, capacity, e -> true);
   }
 
-  public FluidStorage(FluidStack fluid, int capacity, Predicate<FluidStack> validator) {
+  public FluidComponent(ComponentManager manager, FluidStack fluid, int capacity, Predicate<FluidStack> validator) {
     this.fluid = fluid;
     this.capacity = capacity;
     this.validator = validator;
+    this.manager = manager;
   }
 
   @Override
@@ -58,14 +62,14 @@ public abstract class FluidStorage implements IComponent, IFluidTank, IFluidHand
     return capacity;
   }
 
-  public FluidStorage setValidator(Predicate<FluidStack> validator) {
+  public FluidComponent setValidator(Predicate<FluidStack> validator) {
     if (validator != null) {
       this.validator = validator;
     }
     return this;
   }
 
-  public FluidStorage setCapacity(int capacity) {
+  public FluidComponent setCapacity(int capacity) {
     if (this.capacity == capacity) return this;
     this.capacity = capacity;
     if (fluid.getAmount() > capacity) fluid.setAmount(capacity);
@@ -87,7 +91,7 @@ public abstract class FluidStorage implements IComponent, IFluidTank, IFluidHand
     }
     if (fluid.isEmpty()) {
       fluid = new FluidStack(fluidStack, Math.min(capacity, fluidStack.getAmount()));
-      onFluidChanged();
+      onChanged();
       return fluid.getAmount();
     }
     if (!fluid.isFluidEqual(fluidStack)) return 0;
@@ -97,7 +101,7 @@ public abstract class FluidStorage implements IComponent, IFluidTank, IFluidHand
       filled = fluidStack.getAmount();
     } else fluid.setAmount(capacity);
     if (filled > 0)
-      onFluidChanged();
+      onChanged();
 
     return filled;
   }
@@ -109,7 +113,7 @@ public abstract class FluidStorage implements IComponent, IFluidTank, IFluidHand
     FluidStack stack = new FluidStack(fluid, drained);
     if (action.execute() && drained > 0) {
       fluid.shrink(drained);
-      onFluidChanged();
+      onChanged();
     }
     return stack;
   }
@@ -144,18 +148,25 @@ public abstract class FluidStorage implements IComponent, IFluidTank, IFluidHand
     return isFluidValid(fluidStack);
   }
 
-  public FluidStorage readFromNBT(CompoundTag nbt) {
-    FluidStack fluid = FluidStack.loadFluidStackFromNBT(nbt);
-    setFluid(fluid);
-    return this;
+  public void deserializeNBT(Tag tag) {
+    if (tag instanceof CompoundTag nbt) {
+      FluidStack fluid = FluidStack.loadFluidStackFromNBT(nbt);
+      setFluid(fluid);
+    }
   }
 
-  public CompoundTag writeToNBT(CompoundTag nbt) {
+  public Tag serializeNBT() {
+    CompoundTag nbt = new CompoundTag();
     fluid.writeToNBT(nbt);
     return nbt;
   }
 
-  protected void onFluidChanged() {
+  @Override
+  public ComponentManager getManager() {
+    return manager;
+  }
 
+  public void onChanged() {
+    manager.markDirty();
   }
 }

@@ -89,7 +89,7 @@ public class FurnaceBlock extends BaseBlock {
           @Override
           public AbstractContainerMenu createMenu(int id, @NotNull Inventory inv, @NotNull Player player) {
             new EnergyPacket(entity.ENERGY_STORAGE.getEnergyStored(), entity.ENERGY_STORAGE.getMaxEnergyStored(), entity.ENERGY_STORAGE.getMaxEnergyStored(), pos);
-            new ProgressPacket(entity.progressStorage.getProgress(), entity.progressStorage.getMaxProgress(), pos);
+            new ProgressPacket(entity.progressComponent.getProgress(), entity.progressComponent.getMaxProgress(), pos);
             new ExperiencePacket(entity.xp.getXp(), pos);
             return new FurnaceContainer(id, inv, entity, entity.data);
           }

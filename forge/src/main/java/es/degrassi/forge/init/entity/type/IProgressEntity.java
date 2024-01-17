@@ -1,10 +1,10 @@
 package es.degrassi.forge.init.entity.type;
 
-import es.degrassi.forge.util.storage.ProgressStorage;
+import es.degrassi.forge.init.gui.component.ProgressComponent;
 
 public interface IProgressEntity extends IDegrassiEntity {
 
-  ProgressStorage getProgressStorage();
+  ProgressComponent getProgressStorage();
   void setProgress(int progress);
 
   void setMaxProgress(int maxProgress);

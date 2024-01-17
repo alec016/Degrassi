@@ -1,7 +1,7 @@
 package es.degrassi.forge.integration.jei.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import es.degrassi.forge.init.gui.renderer.EnergyInfoArea;
+import es.degrassi.forge.init.gui.element.EnergyGuiElement;
 import es.degrassi.forge.init.recipe.IDegrassiRecipe;
 import es.degrassi.forge.integration.jei.IJeiElementRenderer;
 import es.degrassi.forge.requirements.IRequirement;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnergyJeiRenderer implements IJeiElementRenderer<EnergyInfoArea>, IIngredientRenderer<EnergyInfoArea> {
+public class EnergyJeiRenderer implements IJeiElementRenderer<EnergyGuiElement>, IIngredientRenderer<EnergyGuiElement> {
   private final int width, height;
   public EnergyJeiRenderer() {
     this(16, 70);
@@ -25,17 +25,17 @@ public class EnergyJeiRenderer implements IJeiElementRenderer<EnergyInfoArea>, I
     this.height = height;
   }
   @Override
-  public void renderElementInJEI(PoseStack matrix, EnergyInfoArea ingredient, IDegrassiRecipe recipe, double mouseX, double mouseY, int x, int y) {}
+  public void renderElementInJEI(PoseStack matrix, EnergyGuiElement ingredient, IDegrassiRecipe recipe, double mouseX, double mouseY, int x, int y) {}
 
   @Override
-  public boolean isHoveredInJei(@NotNull EnergyInfoArea element, int posX, int posY, int mouseX, int mouseY) {
+  public boolean isHoveredInJei(@NotNull EnergyGuiElement element, int posX, int posY, int mouseX, int mouseY) {
     int width = element.vertical ? this.height : this.width;
     int height = element.vertical ? this.width : this.height;
     return mouseX >= posX && mouseX <= posX + width && mouseY >= posY && mouseY <= posY + height;
   }
 
   @Override
-  public List<Component> getJEITooltips(EnergyInfoArea element, @NotNull IDegrassiRecipe recipe) {
+  public List<Component> getJEITooltips(EnergyGuiElement element, @NotNull IDegrassiRecipe recipe) {
     List<Component> tooltips = new ArrayList<>();
     tooltips.add(
       element.mode == IRequirement.ModeIO.INPUT
@@ -55,7 +55,7 @@ public class EnergyJeiRenderer implements IJeiElementRenderer<EnergyInfoArea>, I
   }
 
   @Override
-  public void render(@NotNull PoseStack stack, @NotNull EnergyInfoArea ingredient) {
+  public void render(@NotNull PoseStack stack, @NotNull EnergyGuiElement ingredient) {
     ingredient.draw(stack, ingredient.getX(), ingredient.getY());
     if (ingredient.isHoveredOrFocused()) {
       ingredient.drawHighlight(stack, ingredient.getX(), ingredient.getY());
@@ -71,7 +71,7 @@ public class EnergyJeiRenderer implements IJeiElementRenderer<EnergyInfoArea>, I
   }
 
   @Override
-  public @NotNull List<Component> getTooltip(@NotNull EnergyInfoArea ingredient, @NotNull TooltipFlag tooltipFlag) {
+  public @NotNull List<Component> getTooltip(@NotNull EnergyGuiElement ingredient, @NotNull TooltipFlag tooltipFlag) {
     return ingredient.getTooltips();
   }
 }

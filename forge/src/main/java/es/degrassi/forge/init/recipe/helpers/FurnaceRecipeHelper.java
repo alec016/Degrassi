@@ -173,6 +173,6 @@ public class FurnaceRecipeHelper extends RecipeHelper<FurnaceRecipe, FurnaceEnti
     entity.recipe.setEnergyRequired(Math.max(1, energyRequired));
     entity.recipe.setTime(Math.max(1, timeRequired));
     entity.recipe.modify();
-    entity.progressStorage.setMaxProgress(entity.recipe.getTime());
+    entity.progressComponent.setMaxProgress(entity.recipe.getTime());
   }
 }

@@ -11,9 +11,9 @@ import es.degrassi.forge.init.handlers.ItemWrapperHandler;
 import es.degrassi.forge.init.recipe.recipes.*;
 import es.degrassi.forge.network.GenerationPacket;
 import es.degrassi.forge.network.ProgressPacket;
-import es.degrassi.forge.util.storage.AbstractEnergyStorage;
-import es.degrassi.forge.util.storage.GenerationStorage;
-import es.degrassi.forge.util.storage.ProgressStorage;
+import es.degrassi.forge.init.gui.component.EnergyComponent;
+import es.degrassi.forge.init.gui.component.GenerationComponent;
+import es.degrassi.forge.init.gui.component.ProgressComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -40,25 +40,25 @@ public abstract class GeneratorEntity<T extends GeneratorEntity<T, B>, B extends
 
   // handlers
   protected LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
-  protected LazyOptional<AbstractEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
-  protected LazyOptional<ProgressStorage> lazyProgressHandler = LazyOptional.empty();
+  protected LazyOptional<EnergyComponent> lazyEnergyHandler = LazyOptional.empty();
+  protected LazyOptional<ProgressComponent> lazyProgressHandler = LazyOptional.empty();
 
   // storages
-  protected AbstractEnergyStorage ENERGY_STORAGE;
-  protected final ProgressStorage progressStorage = new ProgressStorage(0) {
+  protected EnergyComponent ENERGY_STORAGE;
+  protected final ProgressComponent progressComponent = new ProgressComponent(getManager(), 0) {
     @Override
-    public void onProgressChanged() {
-      setChanged();
+    public void onChanged() {
+      super.onChanged();
       if (level != null && !level.isClientSide())
         new ProgressPacket(this.progress, this.maxProgress, getBlockPos())
           .sendToChunkListeners(level.getChunkAt(getBlockPos()));
     }
   };
   protected ItemStackHandler itemHandler;
-  protected final GenerationStorage currentGen = new GenerationStorage() {
+  protected final GenerationComponent currentGen = new GenerationComponent(getManager()) {
     @Override
-    public void onGenerationChanged() {
-      setChanged();
+    public void onChanged() {
+      super.onChanged();
       if (level != null && !level.isClientSide()) {
         new GenerationPacket(this.getGeneration(), worldPosition)
           .sendToChunkListeners(level.getChunkAt(getBlockPos()));
@@ -70,31 +70,37 @@ public abstract class GeneratorEntity<T extends GeneratorEntity<T, B>, B extends
 
   protected final Map<Direction, LazyOptional<ItemWrapperHandler>> itemWrapperHandlerMap = Map.of(
     Direction.UP, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 4,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
     )),
     Direction.DOWN, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 4,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
     )),
     Direction.NORTH, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 4,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
     )),
     Direction.SOUTH, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 4,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
     )),
     Direction.EAST, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 4,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
     )),
     Direction.WEST, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 4,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
@@ -117,23 +123,26 @@ public abstract class GeneratorEntity<T extends GeneratorEntity<T, B>, B extends
   }
 
   @Override
-  public AbstractEnergyStorage getEnergyStorage() {
+  public EnergyComponent getEnergyStorage() {
     return ENERGY_STORAGE;
   }
 
   @Override
   public void setEnergyLevel(int energy) {
     this.ENERGY_STORAGE.setEnergy(energy);
+    getManager().markDirty();
   }
 
   @Override
   public void setCapacityLevel(int capacity) {
     this.ENERGY_STORAGE.setCapacity(capacity);
+    getManager().markDirty();
   }
 
   @Override
   public void setTransferRate(int transfer) {
     this.ENERGY_STORAGE.setTransfer(transfer);
+    getManager().markDirty();
   }
 
 
@@ -148,25 +157,27 @@ public abstract class GeneratorEntity<T extends GeneratorEntity<T, B>, B extends
   }
 
   @Override
-  public ProgressStorage getProgressStorage() {
-    return progressStorage;
+  public ProgressComponent getProgressStorage() {
+    return progressComponent;
   }
 
   @Override
   public void setProgress(int progress) {
-    this.progressStorage.setProgress(progress);
+    this.progressComponent.setProgress(progress);
+    getManager().markDirty();
   }
 
   @Override
   public void setMaxProgress(int maxProgress) {
-    this.progressStorage.setMaxProgress(maxProgress);
+    this.progressComponent.setMaxProgress(maxProgress);
+    getManager().markDirty();
   }
 
   @Override
   public void resetProgress() {
-    this.progressStorage.resetProgress();
+    this.progressComponent.resetProgress();
     this.recipe = null;
-    setChanged();
+    getManager().markDirty();
   }
 
   public Component getName() {
@@ -178,14 +189,14 @@ public abstract class GeneratorEntity<T extends GeneratorEntity<T, B>, B extends
     for (int i = 0; i < handler.getSlots(); i++) {
       itemHandler.setStackInSlot(i, handler.getStackInSlot(i));
     }
-    setChanged();
+    getManager().markDirty();
   }
   public ItemStackHandler getItemHandler() {
     return itemHandler;
   }
 
   @Override
-  public GenerationStorage getGenerationStorage() {
+  public GenerationComponent getGenerationStorage() {
     return currentGen;
   }
 
@@ -216,7 +227,7 @@ public abstract class GeneratorEntity<T extends GeneratorEntity<T, B>, B extends
     super.onLoad();
     lazyItemHandler = LazyOptional.of(() -> itemHandler);
     lazyEnergyHandler = LazyOptional.of(() -> ENERGY_STORAGE);
-    lazyProgressHandler = LazyOptional.of(() -> progressStorage);
+    lazyProgressHandler = LazyOptional.of(() -> progressComponent);
   }
 
   @Override
@@ -232,7 +243,7 @@ public abstract class GeneratorEntity<T extends GeneratorEntity<T, B>, B extends
     CompoundTag nbt = super.getUpdateTag();
     nbt.put("generator.inventory", itemHandler.serializeNBT());
     nbt.put("generator.energy", ENERGY_STORAGE.serializeNBT());
-    nbt.put("generator.progress", progressStorage.serializeNBT());
+    nbt.put("generator.progress", progressComponent.serializeNBT());
     return nbt;
   }
 
@@ -241,7 +252,7 @@ public abstract class GeneratorEntity<T extends GeneratorEntity<T, B>, B extends
     super.saveAdditional(nbt);
     nbt.put("generator.inventory", itemHandler.serializeNBT());
     nbt.put("generator.energy", ENERGY_STORAGE.serializeNBT());
-    nbt.put("generator.progress", progressStorage.serializeNBT());
+    nbt.put("generator.progress", progressComponent.serializeNBT());
   }
 
   @Override
@@ -249,7 +260,7 @@ public abstract class GeneratorEntity<T extends GeneratorEntity<T, B>, B extends
     super.load(nbt);
     itemHandler.deserializeNBT(nbt.getCompound("generator.inventory"));
     ENERGY_STORAGE.deserializeNBT(nbt.getCompound("generator.energy"));
-    progressStorage.deserializeNBT(nbt.getCompound("generator.progress"));
+    progressComponent.deserializeNBT(nbt.getCompound("generator.progress"));
   }
 
   @Override

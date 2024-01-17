@@ -4,8 +4,9 @@ import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.init.block.generators.*;
-import es.degrassi.forge.init.gui.renderer.EnergyInfoArea;
-import es.degrassi.forge.init.gui.renderer.ProgressComponent;
+import es.degrassi.forge.init.gui.component.*;
+import es.degrassi.forge.init.gui.element.EnergyGuiElement;
+import es.degrassi.forge.init.gui.element.ProgressGuiElement;
 import es.degrassi.forge.init.recipe.recipes.GeneratorRecipe;
 import es.degrassi.forge.integration.jei.*;
 import es.degrassi.forge.integration.jei.ingredients.DegrassiTypes;
@@ -13,8 +14,6 @@ import es.degrassi.forge.integration.jei.renderer.EnergyJeiRenderer;
 import es.degrassi.forge.integration.jei.renderer.ProgressJeiRenderer;
 import es.degrassi.forge.requirements.IRequirement;
 import es.degrassi.forge.util.TextureSizeHelper;
-import es.degrassi.forge.util.storage.AbstractEnergyStorage;
-import es.degrassi.forge.util.storage.ProgressStorage;
 import mezz.jei.api.constants.*;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -59,8 +58,8 @@ public class GeneratorRecipeCategory implements IRecipeCategory<GeneratorRecipe>
 
   private final IDrawable background;
   private final IDrawable icon;
-  private final Map<GeneratorRecipe, EnergyInfoArea> energyComponents = Maps.newHashMap();
-  private final Map<GeneratorRecipe, ProgressComponent> progressComponents = Maps.newHashMap();
+  private final Map<GeneratorRecipe, EnergyGuiElement> energyComponents = Maps.newHashMap();
+  private final Map<GeneratorRecipe, ProgressGuiElement> progressComponents = Maps.newHashMap();
   private ProgressJeiRenderer progress;
   private EnergyJeiRenderer energy;
   private final GeneratorBlock block;
@@ -153,21 +152,21 @@ public class GeneratorRecipeCategory implements IRecipeCategory<GeneratorRecipe>
       initRenderers(recipe);
       return;
     }
-    ProgressStorage progressStorage = new ProgressStorage(recipe.getTime()) {
+    ProgressComponent progressComponent = new ProgressComponent(new ComponentManager(null), recipe.getTime()) {
       @Override
-      public void onProgressChanged() {
+      public void onChanged() {
         if(progress >= maxProgress) resetProgress();
       }
     };
-    AbstractEnergyStorage energyStorage = new AbstractEnergyStorage(recipe.getEnergyRequired()) {
+    EnergyComponent energyStorage = new EnergyComponent(new ComponentManager(null), recipe.getEnergyRequired()) {
       @Override
-      public void onEnergyChanged() {}
+      public void onChanged() {}
     };
     if (progressComponents.get(recipe) == null) {
-      progressComponents.put(recipe, new ProgressComponent(
+      progressComponents.put(recipe, new ProgressGuiElement(
         progressX,
         progressY,
-        progressStorage,
+        progressComponent,
         TextureSizeHelper.getTextureWidth(FILLED_PROGRESS),
         TextureSizeHelper.getTextureHeight(FILLED_PROGRESS),
         FILLED_PROGRESS
@@ -176,7 +175,7 @@ public class GeneratorRecipeCategory implements IRecipeCategory<GeneratorRecipe>
       return;
     }
     if (energyComponents.get(recipe) == null) {
-      energyComponents.put(recipe, new EnergyInfoArea(
+      energyComponents.put(recipe, new EnergyGuiElement(
         134, 9,
         energyStorage,
         111,

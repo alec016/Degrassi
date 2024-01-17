@@ -4,11 +4,11 @@ import es.degrassi.forge.api.codec.NamedCodec;
 import es.degrassi.forge.api.ingredient.IIngredient;
 import es.degrassi.forge.init.recipe.CraftingResult;
 import es.degrassi.forge.init.registration.RequirementRegistry;
-import es.degrassi.forge.util.storage.FluidStorage;
+import es.degrassi.forge.init.gui.component.FluidComponent;
 import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.NotNull;
 
-public class FluidRequirement implements IRequirement<FluidStorage> {
+public class FluidRequirement implements IRequirement<FluidComponent> {
 
   public static final NamedCodec<FluidRequirement> CODEC = NamedCodec.record(itemRequirementInstance ->
     itemRequirementInstance.group(
@@ -33,17 +33,17 @@ public class FluidRequirement implements IRequirement<FluidStorage> {
   }
 
   @Override
-  public boolean test(FluidStorage handler, ICraftingContext context) {
+  public boolean test(FluidComponent handler, ICraftingContext context) {
     return false;
   }
 
   @Override
-  public CraftingResult processStart(FluidStorage handler, ICraftingContext context) {
+  public CraftingResult processStart(FluidComponent handler, ICraftingContext context) {
     return CraftingResult.success();
   }
 
   @Override
-  public CraftingResult processEnd(FluidStorage component, ICraftingContext context) {
+  public CraftingResult processEnd(FluidComponent component, ICraftingContext context) {
     return CraftingResult.success();
   }
 

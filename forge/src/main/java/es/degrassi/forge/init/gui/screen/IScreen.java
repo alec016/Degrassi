@@ -7,10 +7,10 @@ import es.degrassi.forge.init.entity.type.IEnergyEntity;
 import es.degrassi.forge.init.entity.type.IFluidEntity;
 import es.degrassi.forge.init.entity.type.IProgressEntity;
 import es.degrassi.forge.init.gui.container.types.IContainer;
-import es.degrassi.forge.init.gui.renderer.EfficiencyInfoArea;
-import es.degrassi.forge.init.gui.renderer.EnergyInfoArea;
-import es.degrassi.forge.init.gui.renderer.FluidTankRenderer;
-import es.degrassi.forge.init.gui.renderer.ProgressComponent;
+import es.degrassi.forge.init.gui.element.EfficiencyGuiElement;
+import es.degrassi.forge.init.gui.element.EnergyGuiElement;
+import es.degrassi.forge.init.gui.element.FluidGuiElement;
+import es.degrassi.forge.init.gui.element.ProgressGuiElement;
 import es.degrassi.forge.util.MouseUtil;
 import es.degrassi.forge.util.TextureSizeHelper;
 import net.minecraft.client.gui.GuiComponent;
@@ -53,31 +53,31 @@ public interface IScreen {
 
   int getY();
 
-  void setProgressComponent(ProgressComponent progress);
-  void setEnergyComponent(EnergyInfoArea energy);
-  void setFluidComponent(FluidTankRenderer fluid);
-  void setEfficiencyComponent(EfficiencyInfoArea efficiency);
+  void setProgressComponent(ProgressGuiElement progress);
+  void setEnergyComponent(EnergyGuiElement energy);
+  void setFluidComponent(FluidGuiElement fluid);
+  void setEfficiencyComponent(EfficiencyGuiElement efficiency);
 
   default void assignEnergyInfoArea(int xOffset, int yOffset) {
-    setEnergyComponent(new EnergyInfoArea(getX() + xOffset, getY() + yOffset, ((IEnergyEntity) getMenu().getEntity()).getEnergyStorage()));
+    setEnergyComponent(new EnergyGuiElement(getX() + xOffset, getY() + yOffset, ((IEnergyEntity) getMenu().getEntity()).getEnergyStorage()));
   }
 
   default void assignProgressComponent(int xOffset, int yOffset) {
-    setProgressComponent(new ProgressComponent(getX() + xOffset, getY() + yOffset, ((IProgressEntity) getMenu().getEntity()).getProgressStorage(), TextureSizeHelper.getTextureWidth(FILLED_ARROW), TextureSizeHelper.getTextureHeight(FILLED_ARROW)));
+    setProgressComponent(new ProgressGuiElement(getX() + xOffset, getY() + yOffset, ((IProgressEntity) getMenu().getEntity()).getProgressStorage(), TextureSizeHelper.getTextureWidth(FILLED_ARROW), TextureSizeHelper.getTextureHeight(FILLED_ARROW)));
   }
 
   default void assignProgressComponent(int xOffset, int yOffset, ResourceLocation texture) {
-    setProgressComponent(new ProgressComponent(getX() + xOffset, getY() + yOffset, ((IProgressEntity) getMenu().getEntity()).getProgressStorage(), TextureSizeHelper.getTextureWidth(texture), TextureSizeHelper.getTextureHeight(texture)));
+    setProgressComponent(new ProgressGuiElement(getX() + xOffset, getY() + yOffset, ((IProgressEntity) getMenu().getEntity()).getProgressStorage(), TextureSizeHelper.getTextureWidth(texture), TextureSizeHelper.getTextureHeight(texture)));
   }
 
   default void assignFluidComponent(int xOffset, int yOffset, int width, int height) {
-    setFluidComponent(new FluidTankRenderer(new Rect2i(getX() + xOffset, getY() + yOffset, width, height), ((IFluidEntity) getMenu().getEntity()).getFluidStorage().getFluid(), ((IFluidEntity) getMenu().getEntity()).getFluidStorage().getCapacity()));
+    setFluidComponent(new FluidGuiElement(new Rect2i(getX() + xOffset, getY() + yOffset, width, height), ((IFluidEntity) getMenu().getEntity()).getFluidStorage().getFluid(), ((IFluidEntity) getMenu().getEntity()).getFluidStorage().getCapacity()));
   }
 
   default void assignEfficiencyInfoArea(int xOffset, int yOffset) {
     int x = getX();
     int y = getY();
     IEfficiencyEntity entity = (IEfficiencyEntity) getMenu().getEntity();
-    setEfficiencyComponent(new EfficiencyInfoArea(x + xOffset, y + yOffset, entity.getCurrentEfficiency(), 18, 72));
+    setEfficiencyComponent(new EfficiencyGuiElement(x + xOffset, y + yOffset, entity.getCurrentEfficiency(), 18, 72));
   }
 }

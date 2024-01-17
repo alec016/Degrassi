@@ -1,51 +1,50 @@
-package es.degrassi.forge.init.gui.renderer;
+package es.degrassi.forge.init.gui.element;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.client.IClientHandler;
 import es.degrassi.forge.init.registration.ElementRegistry;
 import es.degrassi.forge.requirements.IRequirement.ModeIO;
-import es.degrassi.forge.util.storage.AbstractEnergyStorage;
+import es.degrassi.forge.init.gui.component.EnergyComponent;
 import es.degrassi.forge.util.TextureSizeHelper;
 import es.degrassi.forge.util.Utils;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.Rect2i;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class EnergyInfoArea extends InfoArea implements IDrawableAnimated, IGuiElement {
-  private final AbstractEnergyStorage energy;
+public class EnergyGuiElement extends GuiElement implements IDrawableAnimated, IGuiElement {
+  private final EnergyComponent energy;
   private final int x, y, width, height;
   public ResourceLocation texture;
   public boolean vertical = true;
   public ModeIO mode;
 
-  public EnergyInfoArea (int xMin, int yMin, ModeIO mode) {
+  public EnergyGuiElement(int xMin, int yMin, ModeIO mode) {
     this(xMin, yMin, null, 8, 64, null, mode);
   }
-  public EnergyInfoArea (int xMin, int yMin) {
+  public EnergyGuiElement(int xMin, int yMin) {
     this(xMin, yMin, null, 8, 64, null, ModeIO.INPUT);
   }
-  public EnergyInfoArea(int xMin, int yMin, AbstractEnergyStorage energy, ModeIO mode) {
+  public EnergyGuiElement(int xMin, int yMin, EnergyComponent energy, ModeIO mode) {
     this(xMin, yMin, energy, 8, 64, null, mode);
   }
-  public EnergyInfoArea(int xMin, int yMin, AbstractEnergyStorage energy) {
+  public EnergyGuiElement(int xMin, int yMin, EnergyComponent energy) {
     this(xMin, yMin, energy, 8, 64, null, ModeIO.INPUT);
   }
 
-  public EnergyInfoArea(int xMin, int yMin, AbstractEnergyStorage energy, int width, int height, ModeIO mode) {
+  public EnergyGuiElement(int xMin, int yMin, EnergyComponent energy, int width, int height, ModeIO mode) {
     this(xMin, yMin, energy, width, height, new DegrassiLocation(""), mode);
   }
-  public EnergyInfoArea(int xMin, int yMin, AbstractEnergyStorage energy, int width, int height) {
+  public EnergyGuiElement(int xMin, int yMin, EnergyComponent energy, int width, int height) {
     this(xMin, yMin, energy, width, height, new DegrassiLocation(""));
   }
-  public EnergyInfoArea(int xMin, int yMin, AbstractEnergyStorage energy, int width, int height, ResourceLocation texture, ModeIO mode) {
-    super(new Rect2i(xMin, yMin, width, height), Component.literal("Energy"));
+  public EnergyGuiElement(int xMin, int yMin, EnergyComponent energy, int width, int height, ResourceLocation texture, ModeIO mode) {
+    super(new Rect2i(xMin, yMin, width, height), net.minecraft.network.chat.Component.literal("Energy"));
     this.energy = energy;
     this.x = xMin;
     this.y = yMin;
@@ -54,7 +53,7 @@ public class EnergyInfoArea extends InfoArea implements IDrawableAnimated, IGuiE
     this.texture = texture;
     this.mode = mode;
   }
-  public EnergyInfoArea(int xMin, int yMin, AbstractEnergyStorage energy, int width, int height, ResourceLocation texture) {
+  public EnergyGuiElement(int xMin, int yMin, EnergyComponent energy, int width, int height, ResourceLocation texture) {
     this(xMin, yMin, energy, width, height, texture, ModeIO.INPUT);
   }
 
@@ -73,9 +72,9 @@ public class EnergyInfoArea extends InfoArea implements IDrawableAnimated, IGuiE
     return y;
   }
 
-  public List<Component> getTooltips() {
+  public List<net.minecraft.network.chat.Component> getTooltips() {
     return List.of(
-      Component.translatable("degrassi.gui.element.energy.tooltip", Utils.format(energy.getEnergyStored()), Component.translatable("unit.energy.forge"), Utils.format(energy.getMaxEnergyStored()), Component.translatable("unit.energy.forge"))
+      net.minecraft.network.chat.Component.translatable("degrassi.gui.element.energy.tooltip", Utils.format(energy.getEnergyStored()), net.minecraft.network.chat.Component.translatable("unit.energy.forge"), Utils.format(energy.getMaxEnergyStored()), net.minecraft.network.chat.Component.translatable("unit.energy.forge"))
     );
   }
 
@@ -156,7 +155,7 @@ public class EnergyInfoArea extends InfoArea implements IDrawableAnimated, IGuiE
     poseStack.popPose();
   }
 
-  public AbstractEnergyStorage getStorage() {
+  public EnergyComponent getStorage() {
     return energy;
   }
 

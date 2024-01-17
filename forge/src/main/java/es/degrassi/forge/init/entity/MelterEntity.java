@@ -14,8 +14,8 @@ import es.degrassi.forge.network.EnergyPacket;
 import es.degrassi.forge.network.FluidPacket;
 import es.degrassi.forge.network.ItemPacket;
 import es.degrassi.forge.network.ProgressPacket;
-import es.degrassi.forge.util.storage.AbstractEnergyStorage;
-import es.degrassi.forge.util.storage.ProgressStorage;
+import es.degrassi.forge.init.gui.component.EnergyComponent;
+import es.degrassi.forge.init.gui.component.ProgressComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -46,26 +46,26 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
   protected boolean queuedSync;
   private MelterRecipe recipe;
   private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
-  private LazyOptional<AbstractEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
+  private LazyOptional<EnergyComponent> lazyEnergyHandler = LazyOptional.empty();
   private LazyOptional<IFluidHandler> lazyFluidHandler = LazyOptional.empty();
-  private final AbstractEnergyStorage ENERGY_STORAGE = new AbstractEnergyStorage(DegrassiConfig.get().melterConfig.melter_capacity, DegrassiConfig.get().melterConfig.melter_transfer) {
+  private final EnergyComponent ENERGY_STORAGE = new EnergyComponent(getManager(), DegrassiConfig.get().melterConfig.melter_capacity, DegrassiConfig.get().melterConfig.melter_transfer) {
     @Override
     public boolean canExtract() {
       return false;
     }
 
     @Override
-    public void onEnergyChanged() {
-      setChanged();
+    public void onChanged() {
+      super.onChanged();
       if (level != null && level.getServer() != null && !level.isClientSide())
         new EnergyPacket(this.energy, this.capacity, this.maxReceive, getBlockPos())
           .sendToChunkListeners(level.getChunkAt(getBlockPos()));
     }
   };
-  private final ProgressStorage progressStorage = new ProgressStorage(0) {
+  private final ProgressComponent progressComponent = new ProgressComponent(getManager(), 0) {
     @Override
-    public void onProgressChanged() {
-      setChanged();
+    public void onChanged() {
+      super.onChanged();
       if (level != null && !level.isClientSide())
         new ProgressPacket(this.progress, this.maxProgress, getBlockPos())
           .sendToChunkListeners(level.getChunkAt(getBlockPos()));
@@ -74,7 +74,7 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
   private final ItemStackHandler itemHandler = new ItemStackHandler(4) {
     @Override
     protected void onContentsChanged(int slot) {
-      setChanged();
+      getManager().markDirty();
       if (level != null && !level.isClientSide() && level.getServer() != null) {
         new ItemPacket(this, worldPosition)
           .sendToAll(level.getServer());
@@ -100,7 +100,7 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
   private final FluidTank fluidStorage = new FluidTank(10000) {
     @Override
     public void onContentsChanged() {
-      setChanged();
+      getManager().markDirty();
       if (level != null && !level.isClientSide()) {
         if(level.getServer() != null) {
           new FluidPacket(this.fluid, worldPosition)
@@ -125,31 +125,37 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
 
   private final Map<Direction, LazyOptional<ItemWrapperHandler>> itemWrapperHandlerMap = Map.of(
     Direction.UP, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 3,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
     )),
     Direction.DOWN, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 3,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
     )),
     Direction.NORTH, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 3,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
     )),
     Direction.SOUTH, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 3,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
     )),
     Direction.EAST, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 3,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
     )),
     Direction.WEST, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 3,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
@@ -192,7 +198,7 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
     if (level.isClientSide()) {
       if (entity.fluidLevel != null)
         entity.fluidLevel.tickChaser();
-      setChanged(level, pos, state);
+      entity.getManager().markDirty();
       return;
     }
     if (RecipeHelpers.MELTER.hasRecipe(entity)) {
@@ -205,27 +211,30 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
         entity.getRecipe().endProcess(entity);
       }
     }
-    setChanged(level, pos, state);
+    entity.getManager().markDirty();
   }
 
   @Override
-  public AbstractEnergyStorage getEnergyStorage() {
+  public EnergyComponent getEnergyStorage() {
     return ENERGY_STORAGE;
   }
 
   @Override
   public void setEnergyLevel(int energy) {
     this.ENERGY_STORAGE.setEnergy(energy);
+    getManager().markDirty();
   }
 
   @Override
   public void setCapacityLevel(int capacity) {
     this.ENERGY_STORAGE.setCapacity(capacity);
+    getManager().markDirty();
   }
 
   @Override
   public void setTransferRate(int transfer) {
     this.ENERGY_STORAGE.setTransfer(transfer);
+    getManager().markDirty();
   }
 
   @Override
@@ -239,24 +248,27 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
   }
 
   @Override
-  public ProgressStorage getProgressStorage() {
-    return progressStorage;
+  public ProgressComponent getProgressStorage() {
+    return progressComponent;
   }
 
   @Override
   public void setProgress(int progress) {
-    this.progressStorage.setProgress(progress);
+    this.progressComponent.setProgress(progress);
+    getManager().markDirty();
   }
 
   @Override
   public void setMaxProgress(int maxProgress) {
-    this.progressStorage.setMaxProgress(maxProgress);
+    this.progressComponent.setMaxProgress(maxProgress);
+    getManager().markDirty();
   }
 
   @Override
   public void resetProgress() {
-    this.progressStorage.resetProgress();
+    this.progressComponent.resetProgress();
     this.recipe = null;
+    getManager().markDirty();
   }
 
   @Override
@@ -264,7 +276,7 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
     for (int i = 0; i < handler.getSlots(); i++) {
       itemHandler.setStackInSlot(i, handler.getStackInSlot(i));
     }
-    setChanged();
+    getManager().markDirty();
   }
   public ItemStackHandler getItemHandler() {
     return itemHandler;
@@ -279,12 +291,13 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
   public void setFluidHandler(@NotNull FluidTank storage) {
     this.fluidStorage.setFluid(storage.getFluid());
     this.fluidStorage.setCapacity(storage.getCapacity());
-    setChanged();
+    getManager().markDirty();
   }
 
   @Override
   public void setFluid(FluidStack fluid) {
     this.fluidStorage.setFluid(fluid);
+    getManager().markDirty();
   }
 
   @Override
@@ -330,7 +343,7 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
     CompoundTag nbt = super.getUpdateTag();
     nbt.put("melter.inventory", itemHandler.serializeNBT());
     nbt.put("melter.energy", ENERGY_STORAGE.serializeNBT());
-    nbt.put("melter.progress", progressStorage.serializeNBT());
+    nbt.put("melter.progress", progressComponent.serializeNBT());
     nbt = fluidStorage.writeToNBT(nbt);
     return nbt;
   }
@@ -339,7 +352,7 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
   public void saveAdditional(@NotNull CompoundTag nbt) {
     nbt.put("melter.inventory", itemHandler.serializeNBT());
     nbt.put("melter.energy", ENERGY_STORAGE.serializeNBT());
-    nbt.put("melter.progress", progressStorage.serializeNBT());
+    nbt.put("melter.progress", progressComponent.serializeNBT());
     nbt = fluidStorage.writeToNBT(nbt);
     nbt.putBoolean("ForceFluidLevel", true);
     nbt.putBoolean("LazySync", true);
@@ -351,7 +364,7 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
     super.load(nbt);
     itemHandler.deserializeNBT(nbt.getCompound("melter.inventory"));
     ENERGY_STORAGE.deserializeNBT(nbt.getCompound("melter.energy"));
-    progressStorage.deserializeNBT(nbt.getCompound("melter.progress"));
+    progressComponent.deserializeNBT(nbt.getCompound("melter.progress"));
     fluidStorage.readFromNBT(nbt);
     if (nbt.contains("ForceFluidLevel") || fluidLevel == null)
       fluidLevel = LerpedFloat.linear()
@@ -375,6 +388,7 @@ public class MelterEntity extends BaseEntity implements IEnergyEntity, IRecipeEn
 
   public void setFluidLevel(LerpedFloat fluidLevel) {
     this.fluidLevel = fluidLevel;
+    getManager().markDirty();
   }
 
   public ItemStack getRenderStack() {

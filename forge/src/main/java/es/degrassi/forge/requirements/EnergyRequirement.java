@@ -3,10 +3,10 @@ package es.degrassi.forge.requirements;
 import es.degrassi.forge.api.codec.NamedCodec;
 import es.degrassi.forge.init.recipe.CraftingResult;
 import es.degrassi.forge.init.registration.RequirementRegistry;
-import es.degrassi.forge.util.storage.AbstractEnergyStorage;
+import es.degrassi.forge.init.gui.component.EnergyComponent;
 import net.minecraft.network.chat.Component;
 
-public class EnergyRequirement implements IRequirement<AbstractEnergyStorage> {
+public class EnergyRequirement implements IRequirement<EnergyComponent> {
   public static final NamedCodec<EnergyRequirement> CODEC = NamedCodec.record(energyRequirementInstance ->
     energyRequirementInstance.group(
       ModeIO.CODEC.fieldOf("mode").forGetter(requirement -> requirement.mode),
@@ -41,7 +41,7 @@ public class EnergyRequirement implements IRequirement<AbstractEnergyStorage> {
   }
 
   @Override
-  public boolean test(AbstractEnergyStorage energy, ICraftingContext context) {
+  public boolean test(EnergyComponent energy, ICraftingContext context) {
     int amount = (int) context.getIntegerModifiedValue(this.amount, this, null);
     if (mode == ModeIO.INPUT)
       return energy.extractEnergy(amount, false) == amount;
@@ -50,7 +50,7 @@ public class EnergyRequirement implements IRequirement<AbstractEnergyStorage> {
   }
 
   @Override
-  public CraftingResult processStart(AbstractEnergyStorage energy, ICraftingContext context) {
+  public CraftingResult processStart(EnergyComponent energy, ICraftingContext context) {
     int amount = (int) context.getIntegerModifiedValue(this.amount, this, null);
     if (mode == ModeIO.INPUT) {
       int canExtract = energy.extractEnergy(amount, true);
@@ -64,7 +64,7 @@ public class EnergyRequirement implements IRequirement<AbstractEnergyStorage> {
   }
 
   @Override
-  public CraftingResult processEnd(AbstractEnergyStorage energy, ICraftingContext context) {
+  public CraftingResult processEnd(EnergyComponent energy, ICraftingContext context) {
     int amount = (int) context.getIntegerModifiedValue(this.amount, this, null);
     if (mode == ModeIO.OUTPUT) {
       int canReceive = energy.receiveEnergy(amount, true);

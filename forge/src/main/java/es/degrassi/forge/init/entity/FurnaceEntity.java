@@ -10,9 +10,9 @@ import es.degrassi.forge.init.tiers.FurnaceTier;
 import es.degrassi.forge.network.EnergyPacket;
 import es.degrassi.forge.network.ItemPacket;
 import es.degrassi.forge.network.ProgressPacket;
-import es.degrassi.forge.util.storage.AbstractEnergyStorage;
-import es.degrassi.forge.util.storage.ExperienceStorage;
-import es.degrassi.forge.util.storage.ProgressStorage;
+import es.degrassi.forge.init.gui.component.EnergyComponent;
+import es.degrassi.forge.init.gui.component.ExperienceComponent;
+import es.degrassi.forge.init.gui.component.ProgressComponent;
 import es.degrassi.forge.network.ExperiencePacket;
 import java.util.*;
 import net.minecraft.core.BlockPos;
@@ -39,46 +39,52 @@ import org.jetbrains.annotations.Nullable;
 
 public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeEntity<FurnaceRecipe>, IItemEntity, IProgressEntity, IExperienceEntity {
   private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
-  private LazyOptional<AbstractEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
+  private LazyOptional<EnergyComponent> lazyEnergyHandler = LazyOptional.empty();
 
   public ItemStackHandler itemHandler;
-  public AbstractEnergyStorage ENERGY_STORAGE;
+  public EnergyComponent ENERGY_STORAGE;
   private final Component name;
   public final ContainerData data;
   private final FurnaceTier tier;
 
   public FurnaceBlock delegate;
-  public ProgressStorage progressStorage;
+  public ProgressComponent progressComponent;
   public FurnaceRecipe recipe;
-  public ExperienceStorage xp;
+  public ExperienceComponent xp;
 
   private final Map<Direction, LazyOptional<ItemWrapperHandler>> itemWrapperHandlerMap = Map.of(
     Direction.UP, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 3,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
     )),
     Direction.DOWN, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 3,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
     )),
     Direction.NORTH, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 3,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
     )),
     Direction.SOUTH, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 3,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
     )),
     Direction.EAST, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 3,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
     )),
     Direction.WEST, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 3,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
@@ -101,8 +107,8 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
       @Override
       public int get(int index) {
         return switch (index) {
-          case 0 -> FurnaceEntity.this.progressStorage.getProgress();
-          case 1 -> FurnaceEntity.this.progressStorage.getMaxProgress();
+          case 0 -> FurnaceEntity.this.progressComponent.getProgress();
+          case 1 -> FurnaceEntity.this.progressComponent.getMaxProgress();
           default -> 0;
         };
       }
@@ -110,8 +116,8 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
       @Override
       public void set(int index, int value) {
         switch (index) {
-          case 0 -> FurnaceEntity.this.progressStorage.setProgress(value);
-          case 1 -> FurnaceEntity.this.progressStorage.setMaxProgress(value);
+          case 0 -> FurnaceEntity.this.progressComponent.setProgress(value);
+          case 1 -> FurnaceEntity.this.progressComponent.setMaxProgress(value);
         }
       }
 
@@ -120,33 +126,33 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
         return 2;
       }
     };
-    this.ENERGY_STORAGE = new AbstractEnergyStorage(defaultCapacity, defaultTransfer) {
+    this.ENERGY_STORAGE = new EnergyComponent(getManager(), defaultCapacity, defaultTransfer) {
         @Override
         public boolean canExtract() {
           return false;
         }
 
         @Override
-        public void onEnergyChanged() {
-          setChanged();
+        public void onChanged() {
+          super.onChanged();
           if (level != null && level.getServer() != null && !level.isClientSide())
             new EnergyPacket(this.energy, this.capacity, this.maxReceive, getBlockPos())
               .sendToChunkListeners(level.getChunkAt(getBlockPos()));
         }
       };
-    this.progressStorage = new ProgressStorage(0) {
+    this.progressComponent = new ProgressComponent(getManager(), 0) {
       @Override
-      public void onProgressChanged() {
-        setChanged();
+      public void onChanged() {
+        super.onChanged();
         if (level != null && !level.isClientSide())
           new ProgressPacket(this.progress, this.maxProgress, getBlockPos())
             .sendToChunkListeners(level.getChunkAt(getBlockPos()));
       }
     };
-    this.xp = new ExperienceStorage(0) {
+    this.xp = new ExperienceComponent(getManager(), 0) {
       @Override
-      public void onExperienceChanged() {
-        setChanged();
+      public void onChanged() {
+        super.onChanged();
         if(level != null && !level.isClientSide() && level.getServer() != null) {
           new ExperiencePacket(this.xp, pos)
             .sendToChunkListeners(level.getChunkAt(getBlockPos()));
@@ -156,7 +162,7 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
     this.itemHandler = new ItemStackHandler(4) {
       @Override
       protected void onContentsChanged(int slot) {
-        setChanged();
+        getManager().markDirty();
         if (level != null && !level.isClientSide() && level.getServer() != null) {
           new ItemPacket(this, worldPosition)
             .sendToAll(level.getServer());
@@ -180,17 +186,17 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
   }
 
   public void setProgress(int progress) {
-    this.progressStorage.setProgress(progress);
-    setChanged();
+    this.progressComponent.setProgress(progress);
+    getManager().markDirty();
   }
 
   public void setMaxProgress(int maxProgress) {
-    this.progressStorage.setMaxProgress(maxProgress);
+    this.progressComponent.setMaxProgress(maxProgress);
   }
 
   public void setEnergyLevel(int energy) {
     this.ENERGY_STORAGE.setEnergy(energy);
-    setChanged();
+    getManager().markDirty();
   }
 
   public FurnaceTier tier() {
@@ -199,15 +205,15 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
 
   public void setCapacityLevel(int capacity) {
     this.ENERGY_STORAGE.setCapacity(capacity);
-    setChanged();
+    getManager().markDirty();
   }
 
   public void setTransferRate(int transfer) {
     ENERGY_STORAGE.setTransfer(transfer);
-    setChanged();
+    getManager().markDirty();
   }
 
-  public AbstractEnergyStorage getEnergyStorage() {
+  public EnergyComponent getEnergyStorage() {
     return ENERGY_STORAGE;
   }
 
@@ -215,7 +221,7 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
     for (int i = 0; i < handler.getSlots(); i++) {
       itemHandler.setStackInSlot(i, handler.getStackInSlot(i));
     }
-    setChanged();
+    getManager().markDirty();
   }
   
   public void drops() {
@@ -234,6 +240,7 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
       ExperienceOrb.award(Objects.requireNonNull(level.getServer().getLevel(level.dimension())), Vec3.atCenterOf(entity.getBlockPos()), entity.xp.getXp());
       entity.xp.extractXp(entity.xp.getXp());
     }
+    entity.getManager().markDirty();
   }
 
   public static void tick(
@@ -253,13 +260,13 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
         entity.getRecipe().endProcess(entity);
       }
     }
-    setChanged(level, pos, state);
+    entity.getManager().markDirty();
   }
 
   public void resetProgress() {
-    this.progressStorage.resetProgressAndMaxProgress();
+    this.progressComponent.resetProgressAndMaxProgress();
     this.recipe = null;
-    setChanged();
+    getManager().markDirty();
   }
 
   @Override
@@ -267,7 +274,7 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
     super.saveAdditional(nbt);
     nbt.put("furnace.inventory", itemHandler.serializeNBT());
     nbt.put("furnace.energy", ENERGY_STORAGE.serializeNBT());
-    nbt.put("furnace.progress", progressStorage.serializeNBT());
+    nbt.put("furnace.progress", progressComponent.serializeNBT());
     nbt.put("furnace.xp", xp.serializeNBT());
   }
 
@@ -276,7 +283,7 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
     super.load(nbt);
     itemHandler.deserializeNBT(nbt.getCompound("furnace.inventory"));
     ENERGY_STORAGE.deserializeNBT(nbt.getCompound("furnace.energy"));
-    progressStorage.deserializeNBT(nbt.getCompound("furnace.progress"));
+    progressComponent.deserializeNBT(nbt.getCompound("furnace.progress"));
     xp.deserializeNBT(nbt.get("furnace.xp"));
   }
 
@@ -287,6 +294,7 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
 
   public void setXp(int xp) {
     this.xp.setXp(xp);
+    getManager().markDirty();
   }
 
   @Override
@@ -329,7 +337,7 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
     CompoundTag nbt = super.getUpdateTag();
     nbt.put("furnace.inventory", itemHandler.serializeNBT());
     nbt.put("furnace.energy", ENERGY_STORAGE.serializeNBT());
-    nbt.put("furnace.progress", progressStorage.serializeNBT());
+    nbt.put("furnace.progress", progressComponent.serializeNBT());
     nbt.put("furnace.xp", xp.serializeNBT());
     return nbt;
   }
@@ -345,8 +353,8 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
   }
 
   @Override
-  public ProgressStorage getProgressStorage(){
-    return this.progressStorage;
+  public ProgressComponent getProgressStorage(){
+    return this.progressComponent;
   }
 
   @Override

@@ -1,4 +1,4 @@
-package es.degrassi.forge.init.gui.renderer;
+package es.degrassi.forge.init.gui.element;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
@@ -14,7 +14,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -28,14 +27,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FluidTankRenderer extends InfoArea {
+public class FluidGuiElement extends GuiElement {
   private static final int MIN_FLUID_HEIGHT = 1;
   private static final int TEXTURE_SIZE = 16;
   private final FluidStack fluid;
   private final int capacity;
 
-  public FluidTankRenderer(Rect2i area, FluidStack fluid, int capacity) {
-    super(area, Component.literal("Fluid Tank"));
+  public FluidGuiElement(Rect2i area, FluidStack fluid, int capacity) {
+    super(area, net.minecraft.network.chat.Component.literal("Fluid Tank"));
     this.fluid = fluid;
     this.capacity = capacity;
   }
@@ -47,7 +46,7 @@ public class FluidTankRenderer extends InfoArea {
   public void draw(PoseStack transform, int x, int y, ResourceLocation texture, boolean vertical) {}
 
   @Override
-  public List<Component> getTooltips() {
+  public List<net.minecraft.network.chat.Component> getTooltips() {
     return getTooltip(TooltipMode.SHOW_AMOUNT_AND_CAPACITY);
   }
 
@@ -142,27 +141,27 @@ public class FluidTankRenderer extends InfoArea {
     tesselator.end();
   }
 
-  public List<Component> getTooltip(TooltipMode mode) {
-    List<Component> tooltip = new ArrayList<>();
+  public List<net.minecraft.network.chat.Component> getTooltip(TooltipMode mode) {
+    List<net.minecraft.network.chat.Component> tooltip = new ArrayList<>();
 
     Fluid fluidType = fluid.getFluid();
     try {
       if (fluidType.isSame(Fluids.EMPTY)) {
-        tooltip.add(Component.translatable("degrassi.gui.element.fluid.empty", 0, capacity));
+        tooltip.add(net.minecraft.network.chat.Component.translatable("degrassi.gui.element.fluid.empty", 0, capacity));
         return tooltip;
       }
 
-      Component displayName = fluid.getDisplayName();
+      net.minecraft.network.chat.Component displayName = fluid.getDisplayName();
       tooltip.add(displayName);
 
       long amount = fluid.getAmount();
       long milliBuckets = (amount * 1000) / FluidType.BUCKET_VOLUME;
 
       if (mode == TooltipMode.SHOW_AMOUNT_AND_CAPACITY) {
-        MutableComponent amountString = Component.translatable("degrassi.gui.element.fluid.tooltip", Utils.format(milliBuckets), Utils.format(capacity));
+        MutableComponent amountString = net.minecraft.network.chat.Component.translatable("degrassi.gui.element.fluid.tooltip", Utils.format(milliBuckets), Utils.format(capacity));
         tooltip.add(amountString.withStyle(ChatFormatting.GRAY));
       } else if (mode == TooltipMode.SHOW_AMOUNT) {
-        MutableComponent amountString = Component.translatable("degrassi.gui.element.fluid.tooltip.amount", Utils.format(milliBuckets));
+        MutableComponent amountString = net.minecraft.network.chat.Component.translatable("degrassi.gui.element.fluid.tooltip.amount", Utils.format(milliBuckets));
         tooltip.add(amountString.withStyle(ChatFormatting.GRAY));
       }
     } catch (RuntimeException e) {

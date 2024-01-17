@@ -1,19 +1,20 @@
-package es.degrassi.forge.util.storage;
+package es.degrassi.forge.init.gui.component;
 
-import es.degrassi.forge.init.gui.IComponent;
-import net.minecraft.nbt.*;
-import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.IntTag;
 
 @SuppressWarnings("unused")
-public abstract class ExperienceStorage implements INBTSerializable<Tag>, IComponent {
+public class ExperienceComponent implements IComponent {
   protected int xp;
+  private final ComponentManager manager;
 
-  public ExperienceStorage() {
-    this(0);
+  public ExperienceComponent(ComponentManager manager) {
+    this(manager, 0);
   }
 
-  public ExperienceStorage(int xp) {
+  public ExperienceComponent(ComponentManager manager, int xp) {
     this.xp = xp;
+    this.manager = manager;
   }
 
   public int getXp() {
@@ -22,12 +23,12 @@ public abstract class ExperienceStorage implements INBTSerializable<Tag>, ICompo
 
   public void setXp(int xp) {
     this.xp = xp;
-    onExperienceChanged();
+    onChanged();
   }
 
   public void addXp(int xp) {
     this.xp += xp;
-    onExperienceChanged();
+    onChanged();
   }
 
   public void extractXp(int xp) {
@@ -52,5 +53,12 @@ public abstract class ExperienceStorage implements INBTSerializable<Tag>, ICompo
     this.xp = intNbt.getAsInt();
   }
 
-  public abstract void onExperienceChanged();
+  @Override
+  public ComponentManager getManager() {
+    return manager;
+  }
+
+  public void onChanged() {
+    manager.markDirty();
+  }
 }

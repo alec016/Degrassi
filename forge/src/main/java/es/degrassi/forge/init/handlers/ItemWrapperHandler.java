@@ -1,6 +1,7 @@
 package es.degrassi.forge.init.handlers;
 
-import es.degrassi.forge.init.gui.IComponent;
+import es.degrassi.forge.init.gui.component.*;
+import net.minecraft.nbt.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
@@ -17,8 +18,10 @@ public class ItemWrapperHandler implements IItemHandlerModifiable, IComponent {
   private final IItemHandlerModifiable handler;
   private final Predicate<Integer> extract;
   private final BiPredicate<Integer, ItemStack> insert;
+  private final ComponentManager manager;
 
   public ItemWrapperHandler (
+    ComponentManager manager,
     IItemHandlerModifiable handler,
     Predicate<Integer> extract,
     BiPredicate<Integer, ItemStack> insert
@@ -26,6 +29,7 @@ public class ItemWrapperHandler implements IItemHandlerModifiable, IComponent {
     this.handler = handler;
     this.extract = extract;
     this.insert = insert;
+    this.manager = manager;
   }
 
   @Override
@@ -64,5 +68,41 @@ public class ItemWrapperHandler implements IItemHandlerModifiable, IComponent {
   @Override
   public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
     return this.insert.test(slot, stack) && this.handler.isItemValid(slot, stack);
+  }
+
+  @Override
+  public void deserializeNBT(Tag tag) {
+    if (tag == null) throw new IllegalArgumentException("tag cant be null");
+    if (tag instanceof CompoundTag nbt) {
+      ListTag listTag = nbt.getList("items", 0);
+      int slots = this.handler.getSlots();
+      for (int i = 0; i < slots; i++) {
+        ItemStack item = ItemStack.EMPTY;
+        item.deserializeNBT((CompoundTag) listTag.get(i));
+        this.handler.setStackInSlot(i, item);
+      }
+    }
+  }
+
+  @Override
+  public Tag serializeNBT() {
+    CompoundTag nbt = new CompoundTag();
+    ListTag listTag = new ListTag();
+    int slots = this.handler.getSlots();
+    for (int i = 0; i < slots; i++) {
+      listTag.add(this.handler.getStackInSlot(i).serializeNBT());
+    }
+    nbt.put("items", listTag);
+    return nbt;
+  }
+
+  @Override
+  public void onChanged() {
+    getManager().markDirty();
+  }
+
+  @Override
+  public ComponentManager getManager() {
+    return manager;
   }
 }

@@ -1,31 +1,30 @@
-package es.degrassi.forge.util.storage;
+package es.degrassi.forge.init.gui.component;
 
-import es.degrassi.forge.init.gui.IComponent;
+import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.common.util.INBTSerializable;
-
-import java.io.DataOutput;
 
 @SuppressWarnings("unused")
-public abstract class ProgressStorage implements INBTSerializable<CompoundTag>, IComponent {
+public class ProgressComponent implements IComponent {
   protected int progress;
   protected int maxProgress;
+  private final ComponentManager manager;
 
-  public ProgressStorage() {
-    this(78);
+  public ProgressComponent(ComponentManager manager) {
+    this(manager, 78);
   }
 
-  public ProgressStorage(int maxProgress) {
-    this(0, maxProgress);
+  public ProgressComponent(ComponentManager manager, int maxProgress) {
+    this(manager, 0, maxProgress);
   }
 
-  public ProgressStorage(int progress, int maxProgress) {
+  public ProgressComponent(ComponentManager manager, int progress, int maxProgress) {
     this.progress = Math.max(0, Math.min(progress, maxProgress));
     this.maxProgress = maxProgress;
+    this.manager = manager;
   }
 
   @Override
-  public CompoundTag serializeNBT() {
+  public Tag serializeNBT() {
     CompoundTag nbt = new CompoundTag();
     nbt.putInt("progress", progress);
     nbt.putInt("maxProgress", maxProgress);
@@ -33,28 +32,18 @@ public abstract class ProgressStorage implements INBTSerializable<CompoundTag>, 
   }
 
   @Override
-  public void deserializeNBT(CompoundTag nbt) {
-    if (nbt == null)
+  public void deserializeNBT(Tag tag) {
+    if (tag == null)
       throw new IllegalArgumentException("Can not deserialize to an instance that isn't the default implementation");
-    this.progress = nbt.getInt("progress");
-    this.maxProgress = nbt.getInt("maxProgress");
-  }
-
-  public static ProgressStorage fromNBT(CompoundTag nbt) {
-    if (nbt == null)
-      throw new IllegalArgumentException("Can not deserialize to an instance that isn't the default implementation");
-    int progress = nbt.getInt("progress");
-    int maxProgress = nbt.getInt("maxProgress");
-    return new ProgressStorage(progress, maxProgress) {
-      @Override
-      public void onProgressChanged() {
-      }
-    };
+    if (tag instanceof CompoundTag nbt) {
+      this.progress = nbt.getInt("progress");
+      this.maxProgress = nbt.getInt("maxProgress");
+    }
   }
 
   public void resetProgress() {
     this.progress = 0;
-    onProgressChanged();
+    onChanged();
   }
 
   public void increment() {
@@ -71,7 +60,7 @@ public abstract class ProgressStorage implements INBTSerializable<CompoundTag>, 
 
   public void increment(int increment) {
     if (canIncrement()) this.progress += increment;
-    onProgressChanged();
+    onChanged();
   }
 
   public boolean canIncrement() {
@@ -80,13 +69,13 @@ public abstract class ProgressStorage implements INBTSerializable<CompoundTag>, 
 
   public void setMaxProgress(int maxProgress) {
     this.maxProgress = maxProgress;
-    onProgressChanged();
+    onChanged();
   }
 
   public void setProgress(int progress) {
     if (progress <= maxProgress)
       this.progress = progress;
-    onProgressChanged();
+    onChanged();
   }
 
   public int getProgress() {
@@ -97,10 +86,18 @@ public abstract class ProgressStorage implements INBTSerializable<CompoundTag>, 
     return maxProgress;
   }
 
-  public abstract void onProgressChanged();
-
   public void resetProgressAndMaxProgress() {
     this.maxProgress = 0;
     resetProgress();
+  }
+
+  @Override
+  public ComponentManager getManager() {
+    return manager;
+  }
+
+  @Override
+  public void onChanged() {
+    manager.markDirty();
   }
 }

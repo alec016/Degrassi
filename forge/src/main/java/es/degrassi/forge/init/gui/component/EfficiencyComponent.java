@@ -1,24 +1,24 @@
-package es.degrassi.forge.util.storage;
+package es.degrassi.forge.init.gui.component;
 
-import es.degrassi.forge.init.gui.IComponent;
 import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.Tag;
-import net.minecraftforge.common.util.INBTSerializable;
 
 @SuppressWarnings("unused")
-public abstract class EfficiencyStorage implements INBTSerializable<Tag>, IComponent {
+public class EfficiencyComponent implements IComponent {
   protected double efficiency;
   protected int capacity;
+  private final ComponentManager manager;
 
-  public EfficiencyStorage() {
-    this(100, 0);
+  public EfficiencyComponent(ComponentManager manager) {
+    this(manager, 100, 0);
   }
-  public EfficiencyStorage(int capacity)
+  public EfficiencyComponent(ComponentManager manager, int capacity)
   {
-    this(capacity, 0);
+    this(manager, capacity, 0);
   }
 
-  public EfficiencyStorage(int capacity, double efficiency) {
+  public EfficiencyComponent(ComponentManager manager, int capacity, double efficiency) {
+    this.manager = manager;
     this.capacity = capacity;
     this.efficiency = Math.max(0 , Math.min(capacity, efficiency));
   }
@@ -41,7 +41,7 @@ public abstract class EfficiencyStorage implements INBTSerializable<Tag>, ICompo
     double efficiencyExtracted = Math.min(efficiency, maxExtract);
     if (!simulate)
       efficiency -= efficiencyExtracted;
-    onEfficiencyChanged();
+    onChanged();
     return efficiencyExtracted;
   }
 
@@ -60,7 +60,14 @@ public abstract class EfficiencyStorage implements INBTSerializable<Tag>, ICompo
   public void setEfficiency(double efficiency) {
     if (efficiency > this.capacity) return;
     this.efficiency = efficiency;
-    onEfficiencyChanged();
+    onChanged();
   }
-  public abstract void onEfficiencyChanged();
+
+  public ComponentManager getManager () {
+    return manager;
+  }
+
+  public void onChanged() {
+    manager.markDirty();
+  }
 }

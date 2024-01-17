@@ -1,4 +1,4 @@
-package es.degrassi.forge.init.gui.renderer;
+package es.degrassi.forge.init.gui.element;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import es.degrassi.forge.client.IClientHandler;
@@ -6,7 +6,7 @@ import es.degrassi.forge.init.recipe.IDegrassiRecipe;
 import es.degrassi.forge.init.registration.ElementRegistry;
 import es.degrassi.forge.integration.jei.ingredients.DegrassiTypes;
 import es.degrassi.forge.util.TextureSizeHelper;
-import es.degrassi.forge.util.storage.ProgressStorage;
+import es.degrassi.forge.init.gui.component.ProgressComponent;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.ITypedIngredient;
@@ -15,7 +15,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,32 +22,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class ProgressComponent extends InfoArea implements IDrawableAnimated, IGuiElement, IClickableIngredient<ProgressComponent> {
-  private ProgressStorage progress;
+public class ProgressGuiElement extends GuiElement implements IDrawableAnimated, IGuiElement, IClickableIngredient<ProgressGuiElement> {
+  private ProgressComponent progress;
   public ResourceLocation texture;
   private int x, y, width, height;
   private Orientation orientation = Orientation.RIGHT;
   private boolean inverted = false, vertical = false;
 
-  public ProgressComponent(CompoundTag tag){
+  public ProgressGuiElement(CompoundTag tag){
     processTag(tag);
   }
-  public ProgressComponent (int xMin, int yMin) {
+  public ProgressGuiElement(int xMin, int yMin) {
     this(xMin, yMin, null, 8, 64);
   }
-  public ProgressComponent(int xMin, int yMin, ProgressStorage progress) {
+  public ProgressGuiElement(int xMin, int yMin, ProgressComponent progress) {
     this(xMin, yMin, progress, 8, 64);
   }
-  public ProgressComponent(int xMin, int yMin, ProgressStorage progress, int width, int height) {
-    super(new Rect2i(xMin, yMin, width, height), Component.literal("Progress"));
+  public ProgressGuiElement(int xMin, int yMin, ProgressComponent progress, int width, int height) {
+    super(new Rect2i(xMin, yMin, width, height), net.minecraft.network.chat.Component.literal("Progress"));
     this.x = xMin;
     this.y = yMin;
     this.width = width;
     this.height = height;
     this.progress = progress;
   }
-  public ProgressComponent(int xMin, int yMin, ProgressStorage progress, int width, int height, ResourceLocation texture) {
-    super(new Rect2i(xMin, yMin, width, height), Component.literal("Progress"));
+  public ProgressGuiElement(int xMin, int yMin, ProgressComponent progress, int width, int height, ResourceLocation texture) {
+    super(new Rect2i(xMin, yMin, width, height), net.minecraft.network.chat.Component.literal("Progress"));
     this.progress = progress;
     this.texture = texture;
     this.x = xMin;
@@ -57,12 +56,12 @@ public class ProgressComponent extends InfoArea implements IDrawableAnimated, IG
     this.height = height;
   }
 
-  public ProgressComponent inverted() {
+  public ProgressGuiElement inverted() {
     inverted = true;
     return this;
   }
 
-  public ProgressComponent vertical() {
+  public ProgressGuiElement vertical() {
     vertical = true;
     return this;
   }
@@ -81,18 +80,18 @@ public class ProgressComponent extends InfoArea implements IDrawableAnimated, IG
     draw(transform, x, y, texture, vertical, inverted);
   }
 
-  public List<Component> getTooltips() {
+  public List<net.minecraft.network.chat.Component> getTooltips() {
     return List.of();
   }
 
-  public List<Component> getTooltips(@NotNull IDegrassiRecipe recipe) {
-    List<Component> tooltips = new ArrayList<>();
+  public List<net.minecraft.network.chat.Component> getTooltips(@NotNull IDegrassiRecipe recipe) {
+    List<net.minecraft.network.chat.Component> tooltips = new ArrayList<>();
     if(recipe.getTime() > 0)
-      tooltips.add(Component.translatable("degrassi.jei.recipe.time", recipe.getTime()));
+      tooltips.add(net.minecraft.network.chat.Component.translatable("degrassi.jei.recipe.time", recipe.getTime()));
     else
-      tooltips.add(Component.translatable("degrassi.jei.recipe.instant"));
+      tooltips.add(net.minecraft.network.chat.Component.translatable("degrassi.jei.recipe.instant"));
     if(Minecraft.getInstance().options.advancedItemTooltips)
-      tooltips.add(Component.translatable("degrassi.jei.recipe.id", recipe.getId().toString()).withStyle(ChatFormatting.DARK_GRAY));
+      tooltips.add(net.minecraft.network.chat.Component.translatable("degrassi.jei.recipe.id", recipe.getId().toString()).withStyle(ChatFormatting.DARK_GRAY));
     return tooltips;
   }
 
@@ -199,7 +198,7 @@ public class ProgressComponent extends InfoArea implements IDrawableAnimated, IG
     return this.orientation;
   }
 
-  public ProgressComponent setDirection(Orientation direction) {
+  public ProgressGuiElement setDirection(Orientation direction) {
     this.orientation = direction;
     return this;
   }
@@ -208,21 +207,21 @@ public class ProgressComponent extends InfoArea implements IDrawableAnimated, IG
     return texture;
   }
 
-  public ProgressStorage getStorage() {
+  public ProgressComponent getStorage() {
     return progress;
   }
 
   @Override
-  public @NotNull ITypedIngredient<ProgressComponent> getTypedIngredient() {
+  public @NotNull ITypedIngredient<ProgressGuiElement> getTypedIngredient() {
     return new ITypedIngredient<>() {
       @Override
-      public @NotNull IIngredientType<ProgressComponent> getType() {
+      public @NotNull IIngredientType<ProgressGuiElement> getType() {
         return DegrassiTypes.PROGRESS;
       }
 
       @Override
-      public @NotNull ProgressComponent getIngredient() {
-        return ProgressComponent.this;
+      public @NotNull ProgressGuiElement getIngredient() {
+        return ProgressGuiElement.this;
       }
     };
   }
@@ -257,7 +256,7 @@ public class ProgressComponent extends InfoArea implements IDrawableAnimated, IG
   }
 
   public void fromNBT(CompoundTag nbt) {
-    progress.deserializeNBT(nbt);
+    progress.deserializeNBT(nbt.getCompound("progress"));
     if (nbt.contains("texture"))
       texture = new ResourceLocation(nbt.getString("texture"));
     x = nbt.getInt("x");
@@ -269,7 +268,7 @@ public class ProgressComponent extends InfoArea implements IDrawableAnimated, IG
   }
 
   protected void processTag(CompoundTag nbt) {
-    progress = ProgressStorage.fromNBT(nbt);
+    progress.deserializeNBT(nbt.getCompound("progress"));
     if (nbt.contains("texture"))
       texture = new ResourceLocation(nbt.getString("texture"));
     x = nbt.getInt("x");

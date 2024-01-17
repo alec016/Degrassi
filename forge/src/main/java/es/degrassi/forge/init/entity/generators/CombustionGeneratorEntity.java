@@ -1,12 +1,12 @@
 package es.degrassi.forge.init.entity.generators;
 
 import es.degrassi.forge.init.block.generators.*;
+import es.degrassi.forge.init.gui.component.*;
 import es.degrassi.forge.init.recipe.helpers.*;
 import es.degrassi.forge.init.recipe.recipes.*;
 import es.degrassi.forge.init.registration.*;
 import es.degrassi.forge.integration.config.*;
 import es.degrassi.forge.network.*;
-import es.degrassi.forge.util.storage.*;
 import java.util.concurrent.atomic.*;
 import net.minecraft.core.*;
 import net.minecraft.world.inventory.*;
@@ -19,15 +19,15 @@ import org.jetbrains.annotations.*;
 @SuppressWarnings("unchecked")
 public class CombustionGeneratorEntity extends GeneratorEntity<CombustionGeneratorEntity, CombustionGenerator> {
   {
-    ENERGY_STORAGE = new AbstractEnergyStorage(DegrassiConfig.get().generatorsConfig.combustion_capacity, DegrassiConfig.get().generatorsConfig.combustion_transfer) {
+    ENERGY_STORAGE = new EnergyComponent(getManager(), DegrassiConfig.get().generatorsConfig.combustion_capacity, DegrassiConfig.get().generatorsConfig.combustion_transfer) {
       @Override
       public boolean canReceive() {
         return false;
       }
 
       @Override
-      public void onEnergyChanged() {
-        setChanged();
+      public void onChanged() {
+        super.onChanged();
         if (level != null && !level.isClientSide())
           new EnergyPacket(this.energy, this.capacity, this.maxReceive, getBlockPos())
             .sendToChunkListeners(level.getChunkAt(getBlockPos()));
@@ -37,7 +37,7 @@ public class CombustionGeneratorEntity extends GeneratorEntity<CombustionGenerat
     itemHandler = new ItemStackHandler(3) {
       @Override
       protected void onContentsChanged(int slot) {
-        setChanged();
+        getManager().markDirty();
         if (level != null && !level.isClientSide() && level.getServer() != null) {
           new ItemPacket(this, worldPosition)
             .sendToAll(level.getServer());
@@ -75,8 +75,8 @@ public class CombustionGeneratorEntity extends GeneratorEntity<CombustionGenerat
       @Override
       public int get(int index) {
         return switch (index) {
-          case 0 -> CombustionGeneratorEntity.this.progressStorage.getProgress();
-          case 1 -> CombustionGeneratorEntity.this.progressStorage.getMaxProgress();
+          case 0 -> CombustionGeneratorEntity.this.progressComponent.getProgress();
+          case 1 -> CombustionGeneratorEntity.this.progressComponent.getMaxProgress();
           default -> 0;
         };
       }
@@ -84,8 +84,8 @@ public class CombustionGeneratorEntity extends GeneratorEntity<CombustionGenerat
       @Override
       public void set(int index, int value) {
         switch (index) {
-          case 0 -> CombustionGeneratorEntity.this.progressStorage.setProgress(value);
-          case 1 -> CombustionGeneratorEntity.this.progressStorage.setMaxProgress(value);
+          case 0 -> CombustionGeneratorEntity.this.progressComponent.setProgress(value);
+          case 1 -> CombustionGeneratorEntity.this.progressComponent.setMaxProgress(value);
         }
       }
 
@@ -114,6 +114,6 @@ public class CombustionGeneratorEntity extends GeneratorEntity<CombustionGenerat
         entity.getRecipe().endProcess(entity);
       }
     }
-    setChanged(level, pos, state);
+    entity.getManager().markDirty();
   }
 }

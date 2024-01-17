@@ -5,7 +5,7 @@ import dev.architectury.networking.simple.BaseC2SMessage;
 import dev.architectury.networking.simple.MessageType;
 import dev.architectury.utils.Env;
 import es.degrassi.forge.init.gui.container.types.IProgressContainer;
-import es.degrassi.forge.init.gui.renderer.ProgressComponent;
+import es.degrassi.forge.init.gui.element.ProgressGuiElement;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Contract;
@@ -13,10 +13,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class GuiElementClickPacket extends BaseC2SMessage {
 
-  private final ProgressComponent element;
+  private final ProgressGuiElement element;
   private final byte type;
 
-  public GuiElementClickPacket(ProgressComponent element, byte type) {
+  public GuiElementClickPacket(ProgressGuiElement element, byte type) {
     this.element = element;
     this.type = type;
   }
@@ -33,7 +33,7 @@ public class GuiElementClickPacket extends BaseC2SMessage {
   }
   @Contract("_ -> new")
   public static @NotNull GuiElementClickPacket read(@NotNull FriendlyByteBuf buf) {
-    return new GuiElementClickPacket(new ProgressComponent(buf.readNbt()), buf.readByte());
+    return new GuiElementClickPacket(new ProgressGuiElement(buf.readNbt()), buf.readByte());
   }
 
   @Override

@@ -2,7 +2,7 @@ package es.degrassi.forge.requirements;
 
 import es.degrassi.forge.api.codec.NamedCodec;
 import es.degrassi.forge.api.codec.impl.RegistrarCodec;
-import es.degrassi.forge.init.gui.IComponent;
+import es.degrassi.forge.init.gui.component.IComponent;
 import es.degrassi.forge.init.recipe.CraftingResult;
 
 

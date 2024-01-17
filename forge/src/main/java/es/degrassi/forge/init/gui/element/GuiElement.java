@@ -1,25 +1,24 @@
-package es.degrassi.forge.init.gui.renderer;
+package es.degrassi.forge.init.gui.element;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.Rect2i;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public abstract class InfoArea extends AbstractWidget {
+public abstract class GuiElement extends AbstractWidget {
   protected Rect2i area;
-  protected InfoArea(@NotNull Rect2i area, Component component) {
+  protected GuiElement(@NotNull Rect2i area, net.minecraft.network.chat.Component component) {
     super(area.getX(), area.getY(), area.getWidth(), area.getHeight(), component);
     this.area = area;
   }
 
-  protected InfoArea() {
-    super(0, 0, 1, 1, Component.empty());
+  protected GuiElement() {
+    super(0, 0, 1, 1, net.minecraft.network.chat.Component.empty());
   }
 
   public abstract void draw(PoseStack transform, int x, int y, ResourceLocation texture);
@@ -27,8 +26,8 @@ public abstract class InfoArea extends AbstractWidget {
 
   @Override
   public void updateNarration(@NotNull NarrationElementOutput output) {
-    output.add(NarratedElementType.HINT, getTooltips().toArray(new Component[0]));
+    output.add(NarratedElementType.HINT, getTooltips().toArray(new net.minecraft.network.chat.Component[0]));
   }
 
-  protected abstract List<Component> getTooltips();
+  protected abstract List<net.minecraft.network.chat.Component> getTooltips();
 }

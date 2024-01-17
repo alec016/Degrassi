@@ -4,7 +4,7 @@ import es.degrassi.forge.init.entity.BaseEntity;
 import es.degrassi.forge.init.entity.type.IEnergyEntity;
 import es.degrassi.forge.init.entity.type.IRecipeEntity;
 import es.degrassi.forge.init.recipe.*;
-import es.degrassi.forge.util.storage.AbstractEnergyStorage;
+import es.degrassi.forge.init.gui.component.EnergyComponent;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.*;
@@ -53,7 +53,7 @@ public abstract class RecipeHelper<T extends IDegrassiRecipe, E extends BaseEnti
     return inventory.getItem(slot).getMaxStackSize() > inventory.getItem(slot).getCount();
   }
 
-  public boolean canInsertAmountIntoOutputSlot(@NotNull AbstractEnergyStorage inventory, int energyProduced) {
+  public boolean canInsertAmountIntoOutputSlot(@NotNull EnergyComponent inventory, int energyProduced) {
     return inventory.getEnergyStored() + energyProduced <= inventory.getMaxEnergyStored();
   }
 

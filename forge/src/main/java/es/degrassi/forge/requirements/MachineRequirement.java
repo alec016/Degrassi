@@ -1,7 +1,7 @@
 package es.degrassi.forge.requirements;
 
 import es.degrassi.forge.api.codec.*;
-import es.degrassi.forge.init.gui.*;
+import es.degrassi.forge.init.gui.component.*;
 import es.degrassi.forge.init.recipe.*;
 import es.degrassi.forge.init.registration.*;
 import java.util.*;

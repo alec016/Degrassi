@@ -1,34 +1,34 @@
-package es.degrassi.forge.util.storage;
+package es.degrassi.forge.init.gui.component;
 
-import es.degrassi.forge.init.gui.IComponent;
+import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.common.util.INBTSerializable;
+
 import net.minecraftforge.energy.IEnergyStorage;
 
-import java.util.List;
-
 @SuppressWarnings("unused")
-public abstract class AbstractEnergyStorage implements IEnergyStorage, INBTSerializable<CompoundTag>, IComponent {
+public class EnergyComponent implements IEnergyStorage, IComponent {
   protected int energy;
   protected int capacity;
   protected int maxReceive;
   protected int maxExtract;
+  private final ComponentManager manager;
 
-  public AbstractEnergyStorage (int capacity) {
-    this(capacity, capacity, capacity, 0);
+  public EnergyComponent(ComponentManager manager, int capacity) {
+    this(manager, capacity, capacity, capacity, 0);
   }
-  public AbstractEnergyStorage(int capacity, int maxTransfer) {
-    this(capacity, maxTransfer, maxTransfer, 0);
+  public EnergyComponent(ComponentManager manager, int capacity, int maxTransfer) {
+    this(manager, capacity, maxTransfer, maxTransfer, 0);
   }
-  public AbstractEnergyStorage(int capacity, int maxReceive, int maxExtract) {
-    this(capacity, maxReceive, maxExtract, 0);
+  public EnergyComponent(ComponentManager manager, int capacity, int maxReceive, int maxExtract) {
+    this(manager, capacity, maxReceive, maxExtract, 0);
   }
 
-  public AbstractEnergyStorage(int capacity, int maxReceive, int maxExtract, int energy) {
+  public EnergyComponent(ComponentManager manager, int capacity, int maxReceive, int maxExtract, int energy) {
     this.capacity = capacity;
     this.maxReceive = maxReceive;
     this.maxExtract = maxExtract;
     this.energy = Math.max(0 , Math.min(capacity, energy));
+    this.manager = manager;
   }
 
   @Override
@@ -39,7 +39,7 @@ public abstract class AbstractEnergyStorage implements IEnergyStorage, INBTSeria
     int energyExtracted = Math.min(energy, Math.min(this.maxExtract, maxExtract));
     if (!simulate)
       energy -= energyExtracted;
-    onEnergyChanged();
+    onChanged();
     return energyExtracted;
   }
 
@@ -51,7 +51,7 @@ public abstract class AbstractEnergyStorage implements IEnergyStorage, INBTSeria
     int energyReceived = Math.min(capacity - energy, Math.min(this.maxReceive, maxReceive));
     if (!simulate)
       energy += energyReceived;
-    onEnergyChanged();
+    onChanged();
     return energyReceived;
   }
 
@@ -72,7 +72,7 @@ public abstract class AbstractEnergyStorage implements IEnergyStorage, INBTSeria
 
   public void setEnergy(int energy) {
     if (this.energy != energy) this.energy = energy;
-    onEnergyChanged();
+    onChanged();
   }
 
   @Override
@@ -80,16 +80,14 @@ public abstract class AbstractEnergyStorage implements IEnergyStorage, INBTSeria
     return this.maxReceive > 0;
   }
 
-  public abstract void onEnergyChanged();
-
   public void setMaxExtract(int maxExtract) {
     this.maxExtract = maxExtract;
-    onEnergyChanged();
+    onChanged();
   }
 
   public void setMaxReceive(int maxReceive) {
     this.maxReceive = maxReceive;
-    onEnergyChanged();
+    onChanged();
   }
 
   public int getMaxExtract() {
@@ -103,16 +101,16 @@ public abstract class AbstractEnergyStorage implements IEnergyStorage, INBTSeria
   public void setTransfer(int transfer) {
     this.maxExtract = transfer;
     this.maxReceive = transfer;
-    onEnergyChanged();
+    onChanged();
   }
 
   public void setCapacity(int capacity) {
     this.capacity = capacity;
-    onEnergyChanged();
+    onChanged();
   }
 
   @Override
-  public CompoundTag serializeNBT() {
+  public Tag serializeNBT() {
     CompoundTag nbt = new CompoundTag();
     nbt.putInt("energy", this.getEnergyStored());
     nbt.putInt("capacity", this.getMaxEnergyStored());
@@ -120,16 +118,27 @@ public abstract class AbstractEnergyStorage implements IEnergyStorage, INBTSeria
   }
 
   @Override
-  public void deserializeNBT(CompoundTag nbt) {
-    if (nbt == null)
+  public void deserializeNBT(Tag tag) {
+    if (tag == null)
       throw new IllegalArgumentException("Can not deserialize to an instance that isn't the default implementation");
-    this.energy = nbt.getInt("energy");
-    this.capacity = nbt.getInt("capacity");
+    if (tag instanceof CompoundTag nbt) {
+      this.energy = nbt.getInt("energy");
+      this.capacity = nbt.getInt("capacity");
+    }
   }
 
   public void setEnergyToCapacity() {
     if (this.energy > this.capacity)
       this.energy = this.capacity;
-    onEnergyChanged();
+    onChanged();
+  }
+
+
+  public ComponentManager getManager () {
+    return manager;
+  }
+
+  public void onChanged() {
+    manager.markDirty();
   }
 }

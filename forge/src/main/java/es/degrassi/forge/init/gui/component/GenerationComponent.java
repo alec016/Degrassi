@@ -1,20 +1,21 @@
-package es.degrassi.forge.util.storage;
+package es.degrassi.forge.init.gui.component;
 
-import es.degrassi.forge.init.gui.IComponent;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.util.INBTSerializable;
 
 @SuppressWarnings("unused")
-public abstract class GenerationStorage implements INBTSerializable<Tag>, IComponent {
+public class GenerationComponent implements INBTSerializable<Tag>, IComponent {
   protected int generation;
+  private final ComponentManager manager;
 
-  public GenerationStorage() {
-    this(0);
+  public GenerationComponent(ComponentManager manager) {
+    this(manager, 0);
   }
 
-  public GenerationStorage(int generation) {
+  public GenerationComponent(ComponentManager manager, int generation) {
     this.generation = Math.max(0 , generation);
+    this.manager = manager;
   }
 
   @Override
@@ -35,7 +36,7 @@ public abstract class GenerationStorage implements INBTSerializable<Tag>, ICompo
     int generationExtracted = Math.min(generation, maxExtract);
     if (!simulate)
       generation -= generationExtracted;
-    onGenerationChanged();
+    onChanged();
     return generationExtracted;
   }
 
@@ -49,7 +50,15 @@ public abstract class GenerationStorage implements INBTSerializable<Tag>, ICompo
 
   public void setGeneration(int generation) {
     this.generation = generation;
-    onGenerationChanged();
+    onChanged();
   }
-  public abstract void onGenerationChanged();
+
+  @Override
+  public ComponentManager getManager() {
+    return manager;
+  }
+
+  public void onChanged() {
+    manager.markDirty();
+  }
 }

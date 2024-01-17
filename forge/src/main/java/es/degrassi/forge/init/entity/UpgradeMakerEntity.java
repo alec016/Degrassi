@@ -13,8 +13,8 @@ import es.degrassi.forge.network.EnergyPacket;
 import es.degrassi.forge.network.FluidPacket;
 import es.degrassi.forge.network.ItemPacket;
 import es.degrassi.forge.network.ProgressPacket;
-import es.degrassi.forge.util.storage.AbstractEnergyStorage;
-import es.degrassi.forge.util.storage.ProgressStorage;
+import es.degrassi.forge.init.gui.component.EnergyComponent;
+import es.degrassi.forge.init.gui.component.ProgressComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -42,26 +42,26 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
   public UpgradeMaker delegate;
   private UpgradeMakerRecipe recipe;
   private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
-  private LazyOptional<AbstractEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
+  private LazyOptional<EnergyComponent> lazyEnergyHandler = LazyOptional.empty();
   private LazyOptional<IFluidHandler> lazyFluidHandler = LazyOptional.empty();
-  private final AbstractEnergyStorage ENERGY_STORAGE = new AbstractEnergyStorage(DegrassiConfig.get().upgradeMakerConfig.upgrade_maker_capacity, DegrassiConfig.get().upgradeMakerConfig.upgrade_maker_transfer) {
+  private final EnergyComponent ENERGY_STORAGE = new EnergyComponent(getManager(), DegrassiConfig.get().upgradeMakerConfig.upgrade_maker_capacity, DegrassiConfig.get().upgradeMakerConfig.upgrade_maker_transfer) {
     @Override
     public boolean canExtract() {
       return false;
     }
 
     @Override
-    public void onEnergyChanged() {
-      setChanged();
+    public void onChanged() {
+      super.onChanged();
       if (level != null && level.getServer() != null && !level.isClientSide())
         new EnergyPacket(this.energy, this.capacity, this.maxReceive, getBlockPos())
           .sendToChunkListeners(level.getChunkAt(getBlockPos()));
     }
   };
-  private final ProgressStorage progressStorage = new ProgressStorage(0) {
+  private final ProgressComponent progressComponent = new ProgressComponent(getManager(), 0) {
     @Override
-    public void onProgressChanged() {
-      setChanged();
+    public void onChanged() {
+      super.onChanged();
       if (level != null && !level.isClientSide())
         new ProgressPacket(this.progress, this.maxProgress, getBlockPos())
           .sendToChunkListeners(level.getChunkAt(getBlockPos()));
@@ -70,7 +70,7 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
   private final ItemStackHandler itemHandler = new ItemStackHandler(5) {
     @Override
     protected void onContentsChanged(int slot) {
-      setChanged();
+      getManager().markDirty();
       if (level != null && !level.isClientSide() && level.getServer() != null) {
         new ItemPacket(this, worldPosition)
           .sendToAll(level.getServer());
@@ -103,7 +103,7 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
   private final FluidTank fluidStorage = new FluidTank(10000) {
     @Override
     public void onContentsChanged() {
-      setChanged();
+      getManager().markDirty();
       if (level != null && !level.isClientSide()) {
         if(level.getServer() != null) {
           new FluidPacket(this.fluid, worldPosition)
@@ -123,31 +123,37 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
 
   private final Map<Direction, LazyOptional<ItemWrapperHandler>> itemWrapperHandlerMap = Map.of(
     Direction.UP, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 4,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
     )),
     Direction.DOWN, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 4,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
     )),
     Direction.NORTH, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 4,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
     )),
     Direction.SOUTH, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 4,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
     )),
     Direction.EAST, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 4,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
     )),
     Direction.WEST, LazyOptional.of(() -> new ItemWrapperHandler(
+      getManager(),
       itemHandler,
       i -> i == 4,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
@@ -193,27 +199,30 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
         entity.getRecipe().endProcess(entity);
       }
     }
-    setChanged(level, pos, state);
+    entity.getManager().markDirty();
   }
 
   @Override
-  public AbstractEnergyStorage getEnergyStorage() {
+  public EnergyComponent getEnergyStorage() {
     return ENERGY_STORAGE;
   }
 
   @Override
   public void setEnergyLevel(int energy) {
     this.ENERGY_STORAGE.setEnergy(energy);
+    getManager().markDirty();
   }
 
   @Override
   public void setCapacityLevel(int capacity) {
     this.ENERGY_STORAGE.setCapacity(capacity);
+    getManager().markDirty();
   }
 
   @Override
   public void setTransferRate(int transfer) {
     this.ENERGY_STORAGE.setTransfer(transfer);
+    getManager().markDirty();
   }
 
 
@@ -228,24 +237,27 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
   }
 
   @Override
-  public ProgressStorage getProgressStorage() {
-    return progressStorage;
+  public ProgressComponent getProgressStorage() {
+    return progressComponent;
   }
 
   @Override
   public void setProgress(int progress) {
-    this.progressStorage.setProgress(progress);
+    this.progressComponent.setProgress(progress);
+    getManager().markDirty();
   }
 
   @Override
   public void setMaxProgress(int maxProgress) {
-    this.progressStorage.setMaxProgress(maxProgress);
+    this.progressComponent.setMaxProgress(maxProgress);
+    getManager().markDirty();
   }
 
   @Override
   public void resetProgress() {
-    this.progressStorage.resetProgress();
+    this.progressComponent.resetProgress();
     this.recipe = null;
+    getManager().markDirty();
   }
 
   @Override
@@ -253,7 +265,7 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
     for (int i = 0; i < handler.getSlots(); i++) {
       itemHandler.setStackInSlot(i, handler.getStackInSlot(i));
     }
-    setChanged();
+    getManager().markDirty();
   }
   public ItemStackHandler getItemHandler() {
     return itemHandler;
@@ -274,6 +286,7 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
   @Override
   public void setFluid(FluidStack fluid) {
     this.fluidStorage.setFluid(fluid);
+    getManager().markDirty();
   }
 
   @Override
@@ -319,7 +332,7 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
     CompoundTag nbt = super.getUpdateTag();
     nbt.put("upgrade_maker.inventory", itemHandler.serializeNBT());
     nbt.put("upgrade_maker.energy", ENERGY_STORAGE.serializeNBT());
-    nbt.put("upgrade_maker.progress", progressStorage.serializeNBT());
+    nbt.put("upgrade_maker.progress", progressComponent.serializeNBT());
     nbt = fluidStorage.writeToNBT(nbt);
     return nbt;
   }
@@ -328,7 +341,7 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
   public void saveAdditional(@NotNull CompoundTag nbt) {
     nbt.put("upgrade_maker.inventory", itemHandler.serializeNBT());
     nbt.put("upgrade_maker.energy", ENERGY_STORAGE.serializeNBT());
-    nbt.put("upgrade_maker.progress", progressStorage.serializeNBT());
+    nbt.put("upgrade_maker.progress", progressComponent.serializeNBT());
     nbt = fluidStorage.writeToNBT(nbt);
     super.saveAdditional(nbt);
   }
@@ -338,7 +351,7 @@ public class UpgradeMakerEntity extends BaseEntity implements IEnergyEntity, IRe
     super.load(nbt);
     itemHandler.deserializeNBT(nbt.getCompound("upgrade_maker.inventory"));
     ENERGY_STORAGE.deserializeNBT(nbt.getCompound("upgrade_maker.energy"));
-    progressStorage.deserializeNBT(nbt.getCompound("upgrade_maker.progress"));
+    progressComponent.deserializeNBT(nbt.getCompound("upgrade_maker.progress"));
     fluidStorage.readFromNBT(nbt);
   }
 

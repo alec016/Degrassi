@@ -1,4 +1,4 @@
-package es.degrassi.forge.init.gui.renderer;
+package es.degrassi.forge.init.gui.element;
 
 import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.Degrassi;

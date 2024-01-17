@@ -5,7 +5,7 @@ import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.registry.registries.Registrar;
 import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.command.DegrassiCommand;
-import es.degrassi.forge.init.gui.renderer.GuiElementType;
+import es.degrassi.forge.init.gui.element.GuiElementType;
 import es.degrassi.forge.init.registration.ElementRegistry;
 import es.degrassi.forge.init.registration.Register;
 import es.degrassi.forge.init.registration.RequirementRegistry;
