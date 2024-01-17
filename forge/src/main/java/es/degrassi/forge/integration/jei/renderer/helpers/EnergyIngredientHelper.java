@@ -33,7 +33,7 @@ public class EnergyIngredientHelper implements IIngredientHelper<EnergyGuiElemen
 
   @Override
   public @NotNull EnergyGuiElement copyIngredient(@NotNull EnergyGuiElement ingredient) {
-    return new EnergyGuiElement(ingredient.getX(), ingredient.getY(), ingredient.getStorage(), ingredient.getWidth(), ingredient.getHeight());
+    return new EnergyGuiElement(ingredient.getX(), ingredient.getY(), ingredient.getStorage(), ingredient.texture, ingredient.mode, ingredient.isVertical());
   }
 
   @Override

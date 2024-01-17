@@ -8,6 +8,7 @@ import es.degrassi.forge.init.gui.element.EnergyGuiElement;
 import es.degrassi.forge.init.gui.element.GuiElementType;
 import es.degrassi.forge.init.gui.element.IGuiElement;
 import es.degrassi.forge.init.gui.element.ProgressGuiElement;
+import es.degrassi.forge.init.gui.element.EfficiencyGuiElement;
 
 public class ElementRegistry {
   public static final Registrar<GuiElementType<? extends IGuiElement>> GUI_ELEMENT_TYPE_REGISTRY = Register.REGISTRIES.builder(GuiElementType.REGISTRY_KEY.location(), new GuiElementType<?>[]{}).build();
@@ -16,6 +17,8 @@ public class ElementRegistry {
 
   public static final RegistrySupplier<GuiElementType<ProgressGuiElement>> PROGRESS_GUI_ELEMENT = GUI_ELEMENTS.register("progress", GuiElementType::create);
   public static final RegistrySupplier<GuiElementType<EnergyGuiElement>> ENERGY_GUI_ELEMENT = GUI_ELEMENTS.register("energy", GuiElementType::create);
+  public static final RegistrySupplier<GuiElementType<EfficiencyGuiElement>> EFFICIENCY_GUI_ELEMENT = GUI_ELEMENTS.register("efficiency", GuiElementType::create);
+  public static final RegistrySupplier<GuiElementType<EfficiencyGuiElement>> FLUID_GUI_ELEMENT = GUI_ELEMENTS.register("fluid", GuiElementType::create);
 
   public static void register() {
     GUI_ELEMENTS.register();

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import es.degrassi.forge.init.block.Melter;
 import es.degrassi.forge.init.entity.MelterEntity;
+import es.degrassi.forge.init.gui.component.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -88,7 +89,7 @@ public class MelterRenderer extends SafeBlockEntityRenderer<MelterEntity> {
       return;
     float clampedLevel = Mth.clamp(level * totalHeight, 0, totalHeight);
 
-    FluidTank tank = be.getFluidStorage();
+    FluidComponent tank = be.getFluidStorage();
     FluidStack fluidStack = tank.getFluid();
 
     if (fluidStack.isEmpty())

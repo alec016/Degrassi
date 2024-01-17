@@ -26,7 +26,7 @@ public class SolarPanelEntity extends PanelEntity {
     this.itemHandler = new ItemStackHandler(4) {
       @Override
       protected void onContentsChanged(int slot) {
-        getManager().markDirty();
+        getComponentManager().markDirty();
         if (level != null && !level.isClientSide() && level.getServer() != null) {
           new ItemPacket(this, worldPosition)
             .sendToAll(level.getServer());
@@ -133,7 +133,7 @@ public class SolarPanelEntity extends PanelEntity {
     tile.setCapacityLevel(tile.capacityCache);
     tile.setTransferRate(tile.transferCache);
     tile.receiveEnergy();
-    tile.getManager().markDirty();
+    tile.getComponentManager().markDirty();
     if (tile.effCacheTime > 0) --tile.effCacheTime;
     if (tile.genCacheTime > 0) --tile.genCacheTime;
     if (tile.capacityCacheTime > 0) --tile.capacityCacheTime;

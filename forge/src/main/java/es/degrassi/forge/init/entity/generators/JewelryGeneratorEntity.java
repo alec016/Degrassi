@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @SuppressWarnings("unchecked")
 public class JewelryGeneratorEntity extends GeneratorEntity<JewelryGeneratorEntity, JewelryGenerator> {
   {
-    ENERGY_STORAGE = new EnergyComponent(getManager(), DegrassiConfig.get().generatorsConfig.jewelry_capacity, DegrassiConfig.get().generatorsConfig.jewelry_transfer) {
+    ENERGY_STORAGE = new EnergyComponent(getComponentManager(), DegrassiConfig.get().generatorsConfig.jewelry_capacity, DegrassiConfig.get().generatorsConfig.jewelry_transfer) {
       @Override
       public boolean canReceive() {
         return false;
@@ -40,7 +40,7 @@ public class JewelryGeneratorEntity extends GeneratorEntity<JewelryGeneratorEnti
     itemHandler = new ItemStackHandler(3) {
       @Override
       protected void onContentsChanged(int slot) {
-        getManager().markDirty();
+        getComponentManager().markDirty();
         if (level != null && !level.isClientSide() && level.getServer() != null) {
           new ItemPacket(this, worldPosition)
             .sendToAll(level.getServer());
@@ -116,6 +116,6 @@ public class JewelryGeneratorEntity extends GeneratorEntity<JewelryGeneratorEnti
         entity.getRecipe().endProcess(entity);
       }
     }
-    entity.getManager().markDirty();
+    entity.getComponentManager().markDirty();
   }
 }

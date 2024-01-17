@@ -5,29 +5,52 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public abstract class GuiElement extends AbstractWidget {
-  protected Rect2i area;
-  protected GuiElement(@NotNull Rect2i area, net.minecraft.network.chat.Component component) {
-    super(area.getX(), area.getY(), area.getWidth(), area.getHeight(), component);
-    this.area = area;
+public abstract class GuiElement extends AbstractWidget implements IGuiElement {
+  protected int x, y, width, height;
+  protected GuiElement(int x, int y, int width, int height, Component component) {
+    super(x, y, width, height, component);
+    this.x = x;
+    this. y = y;
+    this.width = width;
+    this.height = height;
   }
 
   protected GuiElement() {
-    super(0, 0, 1, 1, net.minecraft.network.chat.Component.empty());
+    super(0, 0, 1, 1, Component.empty());
   }
 
-  public abstract void draw(PoseStack transform, int x, int y, ResourceLocation texture);
-  public abstract void draw(PoseStack transform, int x, int y, ResourceLocation texture, boolean vertical);
+  public abstract void draw(PoseStack transform, ResourceLocation texture);
 
   @Override
   public void updateNarration(@NotNull NarrationElementOutput output) {
-    output.add(NarratedElementType.HINT, getTooltips().toArray(new net.minecraft.network.chat.Component[0]));
+    output.add(NarratedElementType.HINT, getTooltips().toArray(new Component[0]));
   }
 
-  protected abstract List<net.minecraft.network.chat.Component> getTooltips();
+  public abstract List<Component> getTooltips();
+
+  @Override
+  public int getY() {
+    return y;
+  }
+
+  @Override
+  public int getX() {
+    return x;
+  }
+
+  @Override
+  public int getWidth() {
+    return width;
+  }
+
+  @Override
+  public int getHeight() {
+    return height;
+  }
 }

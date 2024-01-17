@@ -54,37 +54,37 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
 
   private final Map<Direction, LazyOptional<ItemWrapperHandler>> itemWrapperHandlerMap = Map.of(
     Direction.UP, LazyOptional.of(() -> new ItemWrapperHandler(
-      getManager(),
+      getComponentManager(),
       itemHandler,
       i -> i == 3,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
     )),
     Direction.DOWN, LazyOptional.of(() -> new ItemWrapperHandler(
-      getManager(),
+      getComponentManager(),
       itemHandler,
       i -> i == 3,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
     )),
     Direction.NORTH, LazyOptional.of(() -> new ItemWrapperHandler(
-      getManager(),
+      getComponentManager(),
       itemHandler,
       i -> i == 3,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
     )),
     Direction.SOUTH, LazyOptional.of(() -> new ItemWrapperHandler(
-      getManager(),
+      getComponentManager(),
       itemHandler,
       i -> i == 3,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
     )),
     Direction.EAST, LazyOptional.of(() -> new ItemWrapperHandler(
-      getManager(),
+      getComponentManager(),
       itemHandler,
       i -> i == 3,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
     )),
     Direction.WEST, LazyOptional.of(() -> new ItemWrapperHandler(
-      getManager(),
+      getComponentManager(),
       itemHandler,
       i -> i == 3,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s)
@@ -126,7 +126,7 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
         return 2;
       }
     };
-    this.ENERGY_STORAGE = new EnergyComponent(getManager(), defaultCapacity, defaultTransfer) {
+    this.ENERGY_STORAGE = new EnergyComponent(getComponentManager(), defaultCapacity, defaultTransfer) {
         @Override
         public boolean canExtract() {
           return false;
@@ -140,7 +140,7 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
               .sendToChunkListeners(level.getChunkAt(getBlockPos()));
         }
       };
-    this.progressComponent = new ProgressComponent(getManager(), 0) {
+    this.progressComponent = new ProgressComponent(getComponentManager(), 0) {
       @Override
       public void onChanged() {
         super.onChanged();
@@ -149,7 +149,7 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
             .sendToChunkListeners(level.getChunkAt(getBlockPos()));
       }
     };
-    this.xp = new ExperienceComponent(getManager(), 0) {
+    this.xp = new ExperienceComponent(getComponentManager(), 0) {
       @Override
       public void onChanged() {
         super.onChanged();
@@ -162,7 +162,7 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
     this.itemHandler = new ItemStackHandler(4) {
       @Override
       protected void onContentsChanged(int slot) {
-        getManager().markDirty();
+        getComponentManager().markDirty();
         if (level != null && !level.isClientSide() && level.getServer() != null) {
           new ItemPacket(this, worldPosition)
             .sendToAll(level.getServer());
@@ -187,7 +187,7 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
 
   public void setProgress(int progress) {
     this.progressComponent.setProgress(progress);
-    getManager().markDirty();
+    getComponentManager().markDirty();
   }
 
   public void setMaxProgress(int maxProgress) {
@@ -196,7 +196,7 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
 
   public void setEnergyLevel(int energy) {
     this.ENERGY_STORAGE.setEnergy(energy);
-    getManager().markDirty();
+    getComponentManager().markDirty();
   }
 
   public FurnaceTier tier() {
@@ -205,12 +205,12 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
 
   public void setCapacityLevel(int capacity) {
     this.ENERGY_STORAGE.setCapacity(capacity);
-    getManager().markDirty();
+    getComponentManager().markDirty();
   }
 
   public void setTransferRate(int transfer) {
     ENERGY_STORAGE.setTransfer(transfer);
-    getManager().markDirty();
+    getComponentManager().markDirty();
   }
 
   public EnergyComponent getEnergyStorage() {
@@ -221,7 +221,7 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
     for (int i = 0; i < handler.getSlots(); i++) {
       itemHandler.setStackInSlot(i, handler.getStackInSlot(i));
     }
-    getManager().markDirty();
+    getComponentManager().markDirty();
   }
   
   public void drops() {
@@ -240,7 +240,7 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
       ExperienceOrb.award(Objects.requireNonNull(level.getServer().getLevel(level.dimension())), Vec3.atCenterOf(entity.getBlockPos()), entity.xp.getXp());
       entity.xp.extractXp(entity.xp.getXp());
     }
-    entity.getManager().markDirty();
+    entity.getComponentManager().markDirty();
   }
 
   public static void tick(
@@ -260,13 +260,13 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
         entity.getRecipe().endProcess(entity);
       }
     }
-    entity.getManager().markDirty();
+    entity.getComponentManager().markDirty();
   }
 
   public void resetProgress() {
     this.progressComponent.resetProgressAndMaxProgress();
     this.recipe = null;
-    getManager().markDirty();
+    getComponentManager().markDirty();
   }
 
   @Override
@@ -294,7 +294,7 @@ public class FurnaceEntity extends BaseEntity implements IEnergyEntity, IRecipeE
 
   public void setXp(int xp) {
     this.xp.setXp(xp);
-    getManager().markDirty();
+    getComponentManager().markDirty();
   }
 
   @Override

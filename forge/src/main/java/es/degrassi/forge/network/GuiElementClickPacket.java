@@ -6,6 +6,7 @@ import dev.architectury.networking.simple.MessageType;
 import dev.architectury.utils.Env;
 import es.degrassi.forge.init.gui.container.types.IProgressContainer;
 import es.degrassi.forge.init.gui.element.ProgressGuiElement;
+import net.minecraft.nbt.*;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Contract;
@@ -28,7 +29,7 @@ public class GuiElementClickPacket extends BaseC2SMessage {
 
   @Override
   public void write(@NotNull FriendlyByteBuf buf) {
-    buf.writeNbt(this.element.toNBT());
+    buf.writeNbt((CompoundTag) this.element.serializeNBT());
     buf.writeByte(this.type);
   }
   @Contract("_ -> new")

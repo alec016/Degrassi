@@ -13,7 +13,6 @@ import es.degrassi.forge.integration.jei.ingredients.DegrassiTypes;
 import es.degrassi.forge.integration.jei.renderer.EnergyJeiRenderer;
 import es.degrassi.forge.integration.jei.renderer.ProgressJeiRenderer;
 import es.degrassi.forge.requirements.IRequirement;
-import es.degrassi.forge.util.TextureSizeHelper;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -45,10 +44,8 @@ public class MelterRecipeCategory implements IRecipeCategory<MelterRecipe> {
   private final Map<MelterRecipe, ProgressGuiElement> progressComponents = Maps.newHashMap();
   private ProgressJeiRenderer progress;
   private EnergyJeiRenderer energy;
-  private final IJeiHelpers helper;
 
   public MelterRecipeCategory(@NotNull IJeiHelpers helper) {
-    this. helper = helper;
     IGuiHelper helper1 = helper.getGuiHelper();
     this.background = helper1.drawableBuilder(TEXTURE, 0, 0, 140, 84).setTextureSize(140, 84).build();
     this.icon = helper1.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(BlockRegister.MELTER_BLOCK.get()));
@@ -89,7 +86,6 @@ public class MelterRecipeCategory implements IRecipeCategory<MelterRecipe> {
           tooltip.addAll(energyComponents.get(recipe).getTooltips());
         }
       );
-    IDrawable overlay = helper.getGuiHelper().createBlankDrawable(42, 18);
     builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 70, 33)
       .setCustomRenderer(DegrassiTypes.PROGRESS, progress)
       .addIngredient(DegrassiTypes.PROGRESS, progressComponents.get(recipe))
@@ -138,9 +134,8 @@ public class MelterRecipeCategory implements IRecipeCategory<MelterRecipe> {
         70,
         33,
         progressComponent,
-        TextureSizeHelper.getTextureWidth(FILLED_PROGRESS),
-        TextureSizeHelper.getTextureHeight(FILLED_PROGRESS),
-        FILLED_PROGRESS
+        FILLED_PROGRESS,
+        false, false
       ));
       initRenderers(recipe);
       return;
@@ -150,10 +145,9 @@ public class MelterRecipeCategory implements IRecipeCategory<MelterRecipe> {
         8,
         7,
         energyStorage,
-        16,
-        70,
         null,
-        IRequirement.ModeIO.INPUT
+        IRequirement.ModeIO.INPUT,
+        true
       ) {
         @Override
         public List<Component> getTooltips() {

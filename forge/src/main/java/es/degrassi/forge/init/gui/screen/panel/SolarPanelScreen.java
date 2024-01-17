@@ -29,37 +29,19 @@ public class SolarPanelScreen extends PanelScreen {
   @Override
   public void init() {
     super.init();
-    assignEfficiencyInfoArea(43, 20);
-  }
-
-  @Override
-  protected void renderBg(@NotNull PoseStack pPoseStack, float pPartialTick, int pMouseX, int pMouseY) {
-    RenderSystem.setShader(GameRenderer::getPositionTexShader);
-    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-    RenderSystem.setShaderTexture(0, BACKGROUND);
-    this.imageWidth = TextureSizeHelper.getTextureWidth(BACKGROUND);
-    this.imageHeight = TextureSizeHelper.getTextureHeight(BACKGROUND);
-    this.leftPos = (this.width - this.imageWidth) / 2;
-    this.topPos = (this.height - this.imageHeight) / 2;
-
-    blit(pPoseStack, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight, imageWidth, imageHeight);
-
-    energyComponent.draw(pPoseStack, this.leftPos + 25, this.topPos + 20, ENERGY_FILLED);
-    renderHover(pPoseStack, this.leftPos, this.topPos, 25, 20, pMouseX, pMouseY, TextureSizeHelper.getTextureWidth(ENERGY_FILLED), TextureSizeHelper.getTextureHeight(ENERGY_FILLED));
-    efficiencyComponent.draw(pPoseStack, this.leftPos + 43, this.topPos + 20, EFFICIENCY_FILLED);
-    renderHover(pPoseStack, this.leftPos, this.topPos, 43, 20, pMouseX, pMouseY, TextureSizeHelper.getTextureWidth(EFFICIENCY_FILLED), TextureSizeHelper.getTextureHeight(EFFICIENCY_FILLED));
+    assignEfficiencyElement(43, 20, EFFICIENCY_FILLED, true);
   }
 
   @Override
   protected void renderLabels(@NotNull PoseStack poseStack, int mouseX, int mouseY) {
-    int x = this.leftPos;
-    int y = this.topPos;
     EnergyComponent energy = menu.getEntity().getEnergyStorage();
 
     this.font.draw(poseStack, this.title, (float) this.titleLabelX, (float) this.titleLabelY, 4210752);
 
-    renderEnergyAreaTooltips(poseStack, mouseX, mouseY, x, y);
-    renderEfficiencyAreaTooltips(poseStack, mouseX, mouseY, x, y);
+    getMenu().getEntity().getElementManager().renderLabels(
+      this, poseStack, mouseX, mouseY
+    );
+
     poseStack.pushPose();
     poseStack.scale(0.7F, 0.7F, 0.7F);
     this.font.draw(
@@ -107,45 +89,40 @@ public class SolarPanelScreen extends PanelScreen {
     poseStack.popPose();
   }
 
-
-
-  private void renderEfficiencyAreaTooltips(PoseStack poseStack, int mouseX, int mouseY, int x, int y) {
-    if (
-      isMouseAboveArea(
-        mouseX,
-        mouseY,
-        x,
-        y,
-        43,
-        20,
-        TextureSizeHelper.getTextureWidth(EFFICIENCY_FILLED),
-        TextureSizeHelper.getTextureHeight(EFFICIENCY_FILLED)
-      )
-    ) {
-      renderTooltip(
-        poseStack,
-        efficiencyComponent.getTooltips(),
-        Optional.empty(),
-        mouseX - x,
-        mouseY - y
-      );
-    }
+  @Override
+  public void setProgressElement(ProgressGuiElement progress) {
   }
 
   @Override
-  public void setProgressComponent(ProgressGuiElement progress) {
+  public ProgressGuiElement getProgressElement() {
+    return null;
   }
 
   @Override
-  public void setEnergyComponent(EnergyGuiElement energy) {
+  public void setEnergyElement(EnergyGuiElement energy) {
     this.energyComponent = energy;
   }
 
   @Override
-  public void setFluidComponent(FluidGuiElement fluid) {}
+  public EnergyGuiElement getEnergyElement() {
+    return energyComponent;
+  }
 
   @Override
-  public void setEfficiencyComponent(EfficiencyGuiElement efficiency) {
+  public void setFluidElement(FluidGuiElement fluid) {}
+
+  @Override
+  public FluidGuiElement getFluidElement() {
+    return null;
+  }
+
+  @Override
+  public void setEfficiencyElement(EfficiencyGuiElement efficiency) {
     this.efficiencyComponent = efficiency;
+  }
+
+  @Override
+  public EfficiencyGuiElement getEfficiencyElement() {
+    return efficiencyComponent;
   }
 }

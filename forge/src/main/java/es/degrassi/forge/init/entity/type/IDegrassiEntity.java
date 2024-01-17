@@ -1,6 +1,7 @@
 package es.degrassi.forge.init.entity.type;
 
 import es.degrassi.forge.init.gui.component.*;
+import es.degrassi.forge.init.gui.element.*;
 import net.minecraft.core.BlockPos;
 
 public interface IDegrassiEntity {
@@ -8,5 +9,6 @@ public interface IDegrassiEntity {
 
   void setChanged();
 
-  ComponentManager getManager();
+  ComponentManager getComponentManager();
+  ElementManager getElementManager();
 }

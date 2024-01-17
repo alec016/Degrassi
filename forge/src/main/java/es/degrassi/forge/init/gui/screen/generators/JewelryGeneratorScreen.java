@@ -9,7 +9,9 @@ import es.degrassi.forge.init.gui.element.EfficiencyGuiElement;
 import es.degrassi.forge.init.gui.element.EnergyGuiElement;
 import es.degrassi.forge.init.gui.element.FluidGuiElement;
 import es.degrassi.forge.init.gui.element.ProgressGuiElement;
+import es.degrassi.forge.requirements.*;
 import es.degrassi.forge.util.TextureSizeHelper;
+import net.minecraft.client.renderer.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.*;
 import net.minecraft.world.entity.player.Inventory;
@@ -23,111 +25,71 @@ public class JewelryGeneratorScreen extends GeneratorScreen<JewelryGeneratorEnti
 
   public JewelryGeneratorScreen(GeneratorContainer<JewelryGeneratorEntity> arg, Inventory arg2, Component arg3) {
     super(arg, arg2, arg3);
+    this.imageWidth = TextureSizeHelper.getTextureWidth(BACKGROUND);
+    this.imageHeight = TextureSizeHelper.getTextureHeight(BACKGROUND);
+    this.leftPos = (this.width - this.imageWidth) / 2;
+    this.topPos = (this.height - this.imageHeight) / 2;
   }
 
   @Override
   public void init() {
     super.init();
-    assignEnergyInfoArea(134, 19);
-    assignProgressComponent(82, 46, FILLED_ARROW);
+    assignEnergyElement(134, 19, ENERGY_FILLED, IRequirement.ModeIO.OUTPUT, true);
+    assignProgressElement(82, 46, FILLED_ARROW, true, true);
   }
 
   @Override
   protected void renderBg(@NotNull PoseStack pPoseStack, float pPartialTick, int pMouseX, int pMouseY) {
+    RenderSystem.setShader(GameRenderer::getPositionTexShader);
     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     RenderSystem.setShaderTexture(0, BACKGROUND);
-    this.imageWidth = TextureSizeHelper.getTextureWidth(BACKGROUND);
-    this.imageHeight = TextureSizeHelper.getTextureHeight(BACKGROUND);
-    this.leftPos = (this.width - this.imageWidth) / 2;
-    this.topPos = (this.height - this.imageHeight) / 2;
 
     blit(pPoseStack, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight, imageWidth, imageHeight);
 
-    energyComponent.draw(pPoseStack, this.leftPos + 134, this.topPos + 19, ENERGY_FILLED, true);
-    renderHover(pPoseStack, this.leftPos, this.topPos, 134, 19, pMouseX, pMouseY, TextureSizeHelper.getTextureWidth(ENERGY_FILLED), TextureSizeHelper.getTextureHeight(ENERGY_FILLED));
-
-    if(menu.isCrafting()) {
-      progressComponent.draw(pPoseStack, this.leftPos + 82, this.topPos + 46, FILLED_ARROW, true, true);
-    }
-  }
-
-  @Override
-  protected void renderProgressAreaTooltips(PoseStack poseStack, int mouseX, int mouseY, int x, int y) {
-    if(
-      isMouseAboveArea(
-        mouseX,
-        mouseY,
-        x,
-        y,
-        82,
-        46,
-        TextureSizeHelper.getTextureWidth(FILLED_ARROW),
-        TextureSizeHelper.getTextureHeight(FILLED_ARROW)
-      )
-    ) {
-      renderTooltip(
-        poseStack,
-        progressComponent.getTooltips(),
-        Optional.empty(),
-        mouseX - x,
-        mouseY - y
-      );
-    }
+    getMenu().getEntity().getElementManager().renderBg(
+      pPoseStack, pPartialTick, pMouseX, pMouseY
+    );
   }
 
   public ProgressGuiElement getComponent() {
     return progressComponent;
   }
 
-  protected void renderEnergyAreaTooltips(PoseStack poseStack, int mouseX, int mouseY, int x, int y) {
-    if (
-      isMouseAboveArea(
-        mouseX,
-        mouseY,
-        x,
-        y,
-        134,
-        19,
-        TextureSizeHelper.getTextureWidth(ENERGY_FILLED),
-        TextureSizeHelper.getTextureHeight(ENERGY_FILLED)
-      )
-    ) {
-      renderTooltip(
-        poseStack,
-        energyComponent.getTooltips(),
-        Optional.empty(),
-        mouseX - x,
-        mouseY - y
-      );
-    }
-  }
-
   @Override
-  protected void renderLabels(@NotNull PoseStack poseStack, int mouseX, int mouseY) {
-    int x = this.leftPos;
-    int y = this.topPos;
-
-    this.font.draw(poseStack, this.title, (float) this.titleLabelX, (float) this.titleLabelY, 4210752);
-
-    renderEnergyAreaTooltips(poseStack, mouseX, mouseY, x, y);
-    renderProgressAreaTooltips(poseStack, mouseX, mouseY, x, y);
-  }
-
-  @Override
-  public void setProgressComponent(ProgressGuiElement progress) {
+  public void setProgressElement(ProgressGuiElement progress) {
     this.progressComponent = progress;
   }
 
   @Override
-  public void setEnergyComponent(EnergyGuiElement energy) {
+  public ProgressGuiElement getProgressElement() {
+    return progressComponent;
+  }
+
+  @Override
+  public void setEnergyElement(EnergyGuiElement energy) {
     this.energyComponent = energy;
   }
 
   @Override
-  public void setFluidComponent(FluidGuiElement fluid) {
+  public EnergyGuiElement getEnergyElement() {
+    return energyComponent;
   }
 
   @Override
-  public void setEfficiencyComponent(EfficiencyGuiElement efficiency) {
+  public void setFluidElement(FluidGuiElement fluid) {
+  }
+
+  @Override
+  public FluidGuiElement getFluidElement() {
+    return null;
+  }
+
+  @Override
+  public void setEfficiencyElement(EfficiencyGuiElement efficiency) {
+  }
+
+  @Override
+  public EfficiencyGuiElement getEfficiencyElement() {
+    return null;
   }
 }

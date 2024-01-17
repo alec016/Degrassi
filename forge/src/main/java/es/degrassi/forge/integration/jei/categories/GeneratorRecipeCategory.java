@@ -167,10 +167,9 @@ public class GeneratorRecipeCategory implements IRecipeCategory<GeneratorRecipe>
         progressX,
         progressY,
         progressComponent,
-        TextureSizeHelper.getTextureWidth(FILLED_PROGRESS),
-        TextureSizeHelper.getTextureHeight(FILLED_PROGRESS),
-        FILLED_PROGRESS
-      ).vertical().inverted());
+        FILLED_PROGRESS,
+        true, true
+      ));
       initRenderers(recipe);
       return;
     }
@@ -178,10 +177,9 @@ public class GeneratorRecipeCategory implements IRecipeCategory<GeneratorRecipe>
       energyComponents.put(recipe, new EnergyGuiElement(
         134, 9,
         energyStorage,
-        111,
-        16,
         null,
-        IRequirement.ModeIO.OUTPUT
+        IRequirement.ModeIO.OUTPUT,
+        true
       ) {
         @Override
         public List<Component> getTooltips() {

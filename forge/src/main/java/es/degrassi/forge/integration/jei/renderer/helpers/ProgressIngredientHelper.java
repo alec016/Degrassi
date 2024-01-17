@@ -33,7 +33,7 @@ public class ProgressIngredientHelper implements IIngredientHelper<ProgressGuiEl
 
   @Override
   public @NotNull ProgressGuiElement copyIngredient(@NotNull ProgressGuiElement ingredient) {
-    return new ProgressGuiElement(ingredient.getX(), ingredient.getY(), ingredient.getStorage(), ingredient.getWidth(), ingredient.getHeight());
+    return new ProgressGuiElement(ingredient.getX(), ingredient.getY(), ingredient.getStorage(), ingredient.texture, ingredient.isInverted(), ingredient.isVertical());
   }
 
   @Override

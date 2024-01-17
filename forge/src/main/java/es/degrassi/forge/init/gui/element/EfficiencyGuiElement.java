@@ -3,32 +3,108 @@ package es.degrassi.forge.init.gui.element;
 import com.mojang.blaze3d.vertex.PoseStack;
 import es.degrassi.forge.client.IClientHandler;
 import es.degrassi.forge.init.gui.component.EfficiencyComponent;
+import es.degrassi.forge.init.registration.*;
 import es.degrassi.forge.util.TextureSizeHelper;
 import es.degrassi.forge.util.Utils;
-import net.minecraft.client.renderer.Rect2i;
+import java.util.*;
+import net.minecraft.client.gui.screens.*;
+import net.minecraft.nbt.*;
+import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.List;
+import org.jetbrains.annotations.*;
 
 @SuppressWarnings("unused")
 public class EfficiencyGuiElement extends GuiElement {
-  private final EfficiencyComponent efficiency;
+  private final EfficiencyComponent component;
+  private ResourceLocation texture;
+  private boolean vertical;
 
-  public EfficiencyGuiElement(int xMin, int yMin) {
-    this(xMin, yMin, null, 8, 64);
-  }
-  public EfficiencyGuiElement(int xMin, int yMin, EfficiencyComponent efficiency) {
-    this(xMin, yMin, efficiency, 8, 64);
+  public EfficiencyGuiElement(int xMin, int yMin, EfficiencyComponent efficiency, ResourceLocation texture, boolean vertical) {
+    super(xMin, yMin, TextureSizeHelper.getTextureWidth(texture), TextureSizeHelper.getTextureHeight(texture), Component.literal("Efficiency"));
+    this.component = efficiency;
+    this.texture = texture;
+    this.vertical = vertical;
   }
 
-  public EfficiencyGuiElement(int xMin, int yMin, EfficiencyComponent efficiency, int width, int height) {
-    super(new Rect2i(xMin, yMin, width, height), net.minecraft.network.chat.Component.literal("Efficiency"));
-    this.efficiency = efficiency;
+  public boolean isVertical() {
+    return vertical;
   }
-  public List<net.minecraft.network.chat.Component> getTooltips() {
-    String eff = (efficiency.getEfficiency() + "              ").substring(0, (efficiency.getEfficiency() + "").indexOf(".") + 3).trim();
+
+  public void vertical() {
+    this.vertical = true;
+  }
+
+  public void horizontal() {
+    this.vertical = false;
+  }
+
+  @Override
+  public Tag serializeNBT() {
+    CompoundTag nbt = new CompoundTag();
+    Tag componentTag = component.serializeNBT();
+    nbt.put("component", componentTag);
+    nbt.putString("texture", texture.toString());
+    nbt.putBoolean("vertical", vertical);
+    nbt.putInt("x", x);
+    nbt.putInt("y", y);
+    nbt.putInt("width", width);
+    nbt.putInt("height", height);
+    return nbt;
+  }
+
+  @Override
+  public void deserializeNBT(Tag tag) {
+    if(tag == null) throw new IllegalArgumentException("Tag cant be null");
+    if (tag instanceof CompoundTag nbt) {
+      Tag componentTag = nbt.getCompound("component");
+      component.deserializeNBT(componentTag);
+      texture = new ResourceLocation(nbt.getString("texture"));
+      vertical = nbt.getBoolean("vertical");
+      x = nbt.getInt("x");
+      y = nbt.getInt("y");
+      width = nbt.getInt("width");
+      height = nbt.getInt("height");
+    }
+  }
+
+  @Override
+  public void draw(PoseStack poseStack, float partialTick, int mouseX, int mouseY) {
+    draw(poseStack, texture);
+    renderHover(poseStack, mouseX, mouseY);
+  }
+
+  @Override
+  public void renderLabels(Screen screen, @NotNull PoseStack poseStack, int mouseX, int mouseY) {
+    if(
+      isMouseAboveArea(
+        mouseX,
+        mouseY,
+        getX(),
+        getY(),
+        TextureSizeHelper.getTextureWidth(texture),
+        TextureSizeHelper.getTextureHeight(texture)
+      )
+    ) {
+      screen.renderTooltip(
+        poseStack,
+        getTooltips(),
+        Optional.empty(),
+        mouseX - getX(),
+        mouseY - getY()
+      );
+    }
+  }
+
+  @Override
+  public GuiElementType<? extends IGuiElement> getType() {
+    return ElementRegistry.EFFICIENCY_GUI_ELEMENT.get();
+  }
+
+  public List<Component> getTooltips() {
+    String eff = (component.getEfficiency() + "              ").substring(0, (component.getEfficiency() + "").indexOf(".") + 3).trim();
     return List.of(
-      net.minecraft.network.chat.Component.literal(
+      Component.literal(
         net.minecraft.network.chat.Component.translatable(
           "degrassi.gui.element.efficiency",
           Utils.format(eff)
@@ -37,66 +113,34 @@ public class EfficiencyGuiElement extends GuiElement {
   }
 
   @Override
-  public void draw(PoseStack pose, int x, int y, ResourceLocation texture) {
-    final int height = TextureSizeHelper.getTextureHeight(texture);
-    final int width = TextureSizeHelper.getTextureWidth(texture);
-    int stored = (int) Math.floor(height * efficiency.getEfficiency() / 100);
+  public void draw(PoseStack pose, ResourceLocation texture) {
+    int stored = (int) Math.floor(getHeight() * component.getEfficiency() / 100);
     IClientHandler.bindTexture(texture);
-    if (efficiency.getEfficiency() / 100 > 1)
+    pose.pushPose();
+    if (component.getEfficiency() / 100 > 1)
       blit(
         pose,
-        x,
-        y,
+        getX(),
+        getY(),
         0,
         0,
-        width,
-        height,
-        width,
-        height
+        getWidth(),
+        getHeight(),
+        getWidth(),
+        getHeight()
       );
     else
       blit(
         pose,
-        x,
-        y + height - stored,
+        getX(),
+        getY() + getHeight() - stored,
         0,
-        height - stored,
-        width,
+        getHeight() - stored,
+        getWidth(),
         stored,
-        width,
-        height
+        getWidth(),
+        getHeight()
       );
-  }
-
-  @Override
-  public void draw(PoseStack pose, int x, int y, ResourceLocation texture, boolean vertical) {
-    final int height = TextureSizeHelper.getTextureHeight(texture);
-    final int width = TextureSizeHelper.getTextureWidth(texture);
-    int stored = (int) Math.floor(height * efficiency.getEfficiency() / 100);
-    IClientHandler.bindTexture(texture);
-    if (efficiency.getEfficiency() / 100 > 1)
-      blit(
-        pose,
-        x,
-        y,
-        0,
-        0,
-        width,
-        height,
-        width,
-        height
-      );
-    else
-      blit(
-        pose,
-        x,
-        y + height - stored,
-        0,
-        height - stored,
-        width,
-        stored,
-        width,
-        height
-      );
+    pose.popPose();
   }
 }

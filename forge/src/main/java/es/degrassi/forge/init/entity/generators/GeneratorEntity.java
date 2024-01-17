@@ -45,7 +45,7 @@ public abstract class GeneratorEntity<T extends GeneratorEntity<T, B>, B extends
 
   // storages
   protected EnergyComponent ENERGY_STORAGE;
-  protected final ProgressComponent progressComponent = new ProgressComponent(getManager(), 0) {
+  protected final ProgressComponent progressComponent = new ProgressComponent(getComponentManager(), 0) {
     @Override
     public void onChanged() {
       super.onChanged();
@@ -55,7 +55,7 @@ public abstract class GeneratorEntity<T extends GeneratorEntity<T, B>, B extends
     }
   };
   protected ItemStackHandler itemHandler;
-  protected final GenerationComponent currentGen = new GenerationComponent(getManager()) {
+  protected final GenerationComponent currentGen = new GenerationComponent(getComponentManager()) {
     @Override
     public void onChanged() {
       super.onChanged();
@@ -70,37 +70,37 @@ public abstract class GeneratorEntity<T extends GeneratorEntity<T, B>, B extends
 
   protected final Map<Direction, LazyOptional<ItemWrapperHandler>> itemWrapperHandlerMap = Map.of(
     Direction.UP, LazyOptional.of(() -> new ItemWrapperHandler(
-      getManager(),
+      getComponentManager(),
       itemHandler,
       i -> i == 4,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
     )),
     Direction.DOWN, LazyOptional.of(() -> new ItemWrapperHandler(
-      getManager(),
+      getComponentManager(),
       itemHandler,
       i -> i == 4,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
     )),
     Direction.NORTH, LazyOptional.of(() -> new ItemWrapperHandler(
-      getManager(),
+      getComponentManager(),
       itemHandler,
       i -> i == 4,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
     )),
     Direction.SOUTH, LazyOptional.of(() -> new ItemWrapperHandler(
-      getManager(),
+      getComponentManager(),
       itemHandler,
       i -> i == 4,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
     )),
     Direction.EAST, LazyOptional.of(() -> new ItemWrapperHandler(
-      getManager(),
+      getComponentManager(),
       itemHandler,
       i -> i == 4,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
     )),
     Direction.WEST, LazyOptional.of(() -> new ItemWrapperHandler(
-      getManager(),
+      getComponentManager(),
       itemHandler,
       i -> i == 4,
       (i, s) -> itemHandler.isItemValid(0, s) || itemHandler.isItemValid(1, s) || itemHandler.isItemValid(2, s) || itemHandler.isItemValid(3, s)
@@ -130,19 +130,19 @@ public abstract class GeneratorEntity<T extends GeneratorEntity<T, B>, B extends
   @Override
   public void setEnergyLevel(int energy) {
     this.ENERGY_STORAGE.setEnergy(energy);
-    getManager().markDirty();
+    getComponentManager().markDirty();
   }
 
   @Override
   public void setCapacityLevel(int capacity) {
     this.ENERGY_STORAGE.setCapacity(capacity);
-    getManager().markDirty();
+    getComponentManager().markDirty();
   }
 
   @Override
   public void setTransferRate(int transfer) {
     this.ENERGY_STORAGE.setTransfer(transfer);
-    getManager().markDirty();
+    getComponentManager().markDirty();
   }
 
 
@@ -164,20 +164,20 @@ public abstract class GeneratorEntity<T extends GeneratorEntity<T, B>, B extends
   @Override
   public void setProgress(int progress) {
     this.progressComponent.setProgress(progress);
-    getManager().markDirty();
+    getComponentManager().markDirty();
   }
 
   @Override
   public void setMaxProgress(int maxProgress) {
     this.progressComponent.setMaxProgress(maxProgress);
-    getManager().markDirty();
+    getComponentManager().markDirty();
   }
 
   @Override
   public void resetProgress() {
     this.progressComponent.resetProgress();
     this.recipe = null;
-    getManager().markDirty();
+    getComponentManager().markDirty();
   }
 
   public Component getName() {
@@ -189,7 +189,7 @@ public abstract class GeneratorEntity<T extends GeneratorEntity<T, B>, B extends
     for (int i = 0; i < handler.getSlots(); i++) {
       itemHandler.setStackInSlot(i, handler.getStackInSlot(i));
     }
-    getManager().markDirty();
+    getComponentManager().markDirty();
   }
   public ItemStackHandler getItemHandler() {
     return itemHandler;

@@ -4,6 +4,7 @@ import es.degrassi.forge.client.IClientHandler;
 import es.degrassi.forge.init.entity.generators.GeneratorEntity;
 import es.degrassi.forge.init.gui.container.BaseContainer;
 import es.degrassi.forge.init.gui.container.types.IProgressContainer;
+import es.degrassi.forge.init.gui.element.*;
 import net.minecraft.world.entity.player.*;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.*;
@@ -11,11 +12,13 @@ import org.jetbrains.annotations.*;
 
 public abstract class GeneratorContainer<T extends GeneratorEntity<?, ?>> extends BaseContainer<T> implements IProgressContainer<T> {
   private static int TE_INVENTORY_SLOT_COUNT;
+  private final ElementManager manager;
 
   protected GeneratorContainer(@Nullable MenuType<?> menu, int i, int inventorySlotCount, T entity, Inventory inv) {
     super(menu, i);
     checkContainerSize(inv, inventorySlotCount);
     this.entity = entity;
+    this.manager = entity.getElementManager();
     this.level = inv.player.level;
     this.playerInv = inv;
     TE_INVENTORY_SLOT_COUNT = inventorySlotCount;

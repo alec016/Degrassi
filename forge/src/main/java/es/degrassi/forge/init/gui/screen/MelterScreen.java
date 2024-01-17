@@ -8,6 +8,7 @@ import es.degrassi.forge.init.gui.element.EfficiencyGuiElement;
 import es.degrassi.forge.init.gui.element.EnergyGuiElement;
 import es.degrassi.forge.init.gui.element.FluidGuiElement;
 import es.degrassi.forge.init.gui.element.ProgressGuiElement;
+import es.degrassi.forge.requirements.*;
 import es.degrassi.forge.util.TextureSizeHelper;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -27,14 +28,19 @@ public class MelterScreen extends AbstractContainerScreen<MelterContainer> imple
   private FluidGuiElement fluidComponent;
   public MelterScreen(MelterContainer container, Inventory inv, Component name) {
     super(container, inv, name);
+    this.imageWidth = TextureSizeHelper.getTextureWidth(TEXTURE);
+    this.imageHeight = TextureSizeHelper.getTextureHeight(TEXTURE);
+    this.leftPos = (this.width - this.imageWidth) / 2;
+    this.topPos = (this.height - this.imageHeight) / 2;
   }
 
   @Override
   protected void init() {
     super.init();
-    assignEnergyInfoArea(7, 21);
-    assignProgressComponent(84, 48);
-    assignFluidComponent(152, 22, 16, 70);
+    getMenu().getEntity().getElementManager().getElements().clear();
+    assignEnergyElement(8, 22, ENERGY_FILLED, IRequirement.ModeIO.INPUT, true);
+    assignProgressElement(84, 48, FILLED_ARROW, false, false);
+    assignFluidElement(152, 22, 16, 70);
   }
 
   @Override
@@ -47,20 +53,13 @@ public class MelterScreen extends AbstractContainerScreen<MelterContainer> imple
     RenderSystem.setShader(GameRenderer::getPositionTexShader);
     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     RenderSystem.setShaderTexture(0, TEXTURE);
-    this.imageWidth = TextureSizeHelper.getTextureWidth(TEXTURE);
-    this.imageHeight = TextureSizeHelper.getTextureHeight(TEXTURE);
-    this.leftPos = (this.width - this.imageWidth) / 2;
-    this.topPos = (this.height - this.imageHeight) / 2;
 
     blit(poseStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, this.imageWidth, this.imageHeight);
 
-    this.energyComponent.draw(poseStack, this.leftPos + 8, this.topPos + 22, ENERGY_FILLED, true);
-    renderHover(poseStack, this.leftPos, this.topPos, 8, 22, mouseX, mouseY, TextureSizeHelper.getTextureWidth(ENERGY_FILLED), TextureSizeHelper.getTextureHeight(ENERGY_FILLED));
-    if(this.menu.isCrafting()) {
-      this.progressComponent.draw(poseStack, this.leftPos + 84, this.topPos + 48, this.FILLED_ARROW, false);
-    }
-    fluidComponent.renderFluid(poseStack, this.leftPos + 152, this.topPos + 22);
-    renderHover(poseStack, this.leftPos, this.topPos, 152, 22, mouseX, mouseY, 16, 70);
+    getMenu().getEntity().getElementManager().renderBg(
+      poseStack, partialTick, mouseX, mouseY
+    );
+
   }
 
   @Override
@@ -74,67 +73,9 @@ public class MelterScreen extends AbstractContainerScreen<MelterContainer> imple
   protected void renderLabels(@NotNull PoseStack poseStack, int mouseX, int mouseY) {
     this.font.draw(poseStack, this.title, (float) this.titleLabelX, (float) this.titleLabelY, 4210752);
 
-    renderEnergyAreaTooltips(poseStack, mouseX, mouseY, this.leftPos, this.topPos);
-    renderProgressAreaTooltips(poseStack, mouseX, mouseY, this.leftPos, this.topPos);
-    renderFluidAreaTooltips(poseStack, mouseX, mouseY, this.leftPos, this.topPos);
-  }
-
-  private void renderEnergyAreaTooltips(PoseStack poseStack, int mouseX, int mouseY, int x, int y) {
-    if (
-      isMouseAboveArea(
-        mouseX,
-        mouseY,
-        x,
-        y,
-        7,
-        21,
-        TextureSizeHelper.getTextureWidth(ENERGY_FILLED),
-        TextureSizeHelper.getTextureHeight(ENERGY_FILLED)
-      )
-    ) {
-      renderTooltip(
-        poseStack,
-        this.energyComponent.getTooltips(),
-        Optional.empty(),
-        mouseX - x,
-        mouseY - y
-      );
-    }
-  }
-
-  protected void renderProgressAreaTooltips(PoseStack poseStack, int mouseX, int mouseY, int x, int y) {
-    if(
-      isMouseAboveArea(
-        mouseX,
-        mouseY,
-        x,
-        y,
-        84,
-        48,
-        TextureSizeHelper.getTextureWidth(FILLED_ARROW),
-        TextureSizeHelper.getTextureHeight(FILLED_ARROW)
-      )
-    ) {
-      renderTooltip(
-        poseStack,
-        this.progressComponent.getTooltips(),
-        Optional.empty(),
-        mouseX - x,
-        mouseY - y
-      );
-    }
-  }
-
-  private void renderFluidAreaTooltips(PoseStack poseStack, int mouseX, int mouseY, int x, int y) {
-    if (isMouseAboveArea(mouseX, mouseY, x, y, 152, 22, 16, 70)) {
-      renderTooltip(
-        poseStack,
-        fluidComponent.getTooltips(),
-        Optional.empty(),
-        mouseX - x,
-        mouseY - y
-      );
-    }
+    getMenu().getEntity().getElementManager().renderLabels(
+      this, poseStack, mouseX, mouseY
+    );
   }
 
   public ProgressGuiElement getComponent() {
@@ -150,30 +91,50 @@ public class MelterScreen extends AbstractContainerScreen<MelterContainer> imple
 
   @Override
   public int getX() {
-    return topPos;
+    return this.leftPos;
   }
 
   @Override
   public int getY() {
-    return leftPos;
+    return this.topPos;
   }
 
 
   @Override
-  public void setProgressComponent(ProgressGuiElement progress) {
+  public void setProgressElement(ProgressGuiElement progress) {
     this.progressComponent = progress;
   }
 
   @Override
-  public void setEnergyComponent(EnergyGuiElement energy) {
+  public ProgressGuiElement getProgressElement() {
+    return progressComponent;
+  }
+
+  @Override
+  public void setEnergyElement(EnergyGuiElement energy) {
     this.energyComponent = energy;
   }
 
   @Override
-  public void setFluidComponent(FluidGuiElement fluid) {
+  public EnergyGuiElement getEnergyElement() {
+    return energyComponent;
+  }
+
+  @Override
+  public void setFluidElement(FluidGuiElement fluid) {
     this.fluidComponent = fluid;
   }
 
   @Override
-  public void setEfficiencyComponent(EfficiencyGuiElement efficiency) {}
+  public FluidGuiElement getFluidElement() {
+    return fluidComponent;
+  }
+
+  @Override
+  public void setEfficiencyElement(EfficiencyGuiElement efficiency) {}
+
+  @Override
+  public EfficiencyGuiElement getEfficiencyElement() {
+    return null;
+  }
 }

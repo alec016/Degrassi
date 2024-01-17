@@ -58,7 +58,7 @@ public class EnergyJeiRenderer implements IJeiElementRenderer<EnergyGuiElement>,
   public void render(@NotNull PoseStack stack, @NotNull EnergyGuiElement ingredient) {
     ingredient.draw(stack, ingredient.getX(), ingredient.getY());
     if (ingredient.isHoveredOrFocused()) {
-      ingredient.drawHighlight(stack, ingredient.getX(), ingredient.getY());
+      ingredient.drawHighlight(stack);
     }
   }
 

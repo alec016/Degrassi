@@ -12,7 +12,6 @@ import es.degrassi.forge.integration.jei.DegrassiJEIRecipeTypes;
 import es.degrassi.forge.integration.jei.ingredients.DegrassiTypes;
 import es.degrassi.forge.integration.jei.renderer.EnergyJeiRenderer;
 import es.degrassi.forge.requirements.IRequirement;
-import es.degrassi.forge.util.*;
 import es.degrassi.forge.integration.jei.renderer.ProgressJeiRenderer;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -158,9 +157,8 @@ public class FurnaceRecipeCategory implements IRecipeCategory<FurnaceRecipe> {
         53,
         18,
         progressComponent,
-        TextureSizeHelper.getTextureWidth(FILLED_PROGRESS),
-        TextureSizeHelper.getTextureHeight(FILLED_PROGRESS),
-        FILLED_PROGRESS
+        FILLED_PROGRESS,
+        false, false
       ));
       initRenderers(recipe);
       return;
@@ -170,10 +168,9 @@ public class FurnaceRecipeCategory implements IRecipeCategory<FurnaceRecipe> {
         7,
         50,
         energyStorage,
-        111,
-        16,
         null,
-        IRequirement.ModeIO.INPUT
+        IRequirement.ModeIO.INPUT,
+        false
       ) {
         @Override
         public List<Component> getTooltips() {

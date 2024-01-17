@@ -11,10 +11,7 @@ import es.degrassi.forge.init.gui.element.EfficiencyGuiElement;
 import es.degrassi.forge.init.gui.element.EnergyGuiElement;
 import es.degrassi.forge.init.gui.element.FluidGuiElement;
 import es.degrassi.forge.init.gui.element.ProgressGuiElement;
-import es.degrassi.forge.util.MouseUtil;
-import es.degrassi.forge.util.TextureSizeHelper;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.renderer.Rect2i;
+import es.degrassi.forge.requirements.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -28,56 +25,46 @@ public interface IScreen {
   IScreen getScreen();
   IContainer<?> getMenu();
 
-  default void renderHover(PoseStack pPoseStack, int x, int y, int xOffset, int yOffset, int mouseX, int mouseY, int width, int height) {
-    if(isMouseAboveArea(
-      mouseX,
-      mouseY,
-      x,
-      y,
-      xOffset,
-      yOffset,
-      width,
-      height
-    )) {
-      GuiComponent.fill(pPoseStack, x + xOffset, y + yOffset, x + xOffset + width, y + yOffset + height, -2130706433/*0x45FFFFFF*/);
-    }
-  }
-
-  default boolean isMouseAboveArea(int mouseX, int mouseY, int x, int y, int offsetX, int offsetY, int width, int height) {
-    return MouseUtil.isMouseOver(mouseX, mouseY, x + offsetX, y + offsetY, width, height);
-  }
-
   void drawTooltips(PoseStack poseStack, List<Component> tooltips, int mouseX, int mouseY);
 
   int getX();
 
   int getY();
 
-  void setProgressComponent(ProgressGuiElement progress);
-  void setEnergyComponent(EnergyGuiElement energy);
-  void setFluidComponent(FluidGuiElement fluid);
-  void setEfficiencyComponent(EfficiencyGuiElement efficiency);
+  void setProgressElement(ProgressGuiElement progress);
+  ProgressGuiElement getProgressElement();
+  void setEnergyElement(EnergyGuiElement energy);
+  EnergyGuiElement getEnergyElement();
+  void setFluidElement(FluidGuiElement fluid);
+  FluidGuiElement getFluidElement();
+  void setEfficiencyElement(EfficiencyGuiElement efficiency);
+  EfficiencyGuiElement getEfficiencyElement();
 
-  default void assignEnergyInfoArea(int xOffset, int yOffset) {
-    setEnergyComponent(new EnergyGuiElement(getX() + xOffset, getY() + yOffset, ((IEnergyEntity) getMenu().getEntity()).getEnergyStorage()));
+  default void assignEnergyElement(int xOffset, int yOffset, ResourceLocation texture, IRequirement.ModeIO mode, boolean vertical) {
+    setEnergyElement(new EnergyGuiElement(getX() + xOffset, getY() + yOffset, ((IEnergyEntity) getMenu().getEntity()).getEnergyStorage(), texture, mode, vertical));
+    getMenu().getEntity().getElementManager().addElement(getEnergyElement());
   }
 
-  default void assignProgressComponent(int xOffset, int yOffset) {
-    setProgressComponent(new ProgressGuiElement(getX() + xOffset, getY() + yOffset, ((IProgressEntity) getMenu().getEntity()).getProgressStorage(), TextureSizeHelper.getTextureWidth(FILLED_ARROW), TextureSizeHelper.getTextureHeight(FILLED_ARROW)));
+  default void assignProgressElement(int xOffset, int yOffset, boolean inverted, boolean vertical) {
+    setProgressElement(new ProgressGuiElement(getX() + xOffset, getY() + yOffset, ((IProgressEntity) getMenu().getEntity()).getProgressStorage(), FILLED_ARROW, inverted, vertical));
+    getMenu().getEntity().getElementManager().addElement(getProgressElement());
   }
 
-  default void assignProgressComponent(int xOffset, int yOffset, ResourceLocation texture) {
-    setProgressComponent(new ProgressGuiElement(getX() + xOffset, getY() + yOffset, ((IProgressEntity) getMenu().getEntity()).getProgressStorage(), TextureSizeHelper.getTextureWidth(texture), TextureSizeHelper.getTextureHeight(texture)));
+  default void assignProgressElement(int xOffset, int yOffset, ResourceLocation texture, boolean inverted, boolean vertical) {
+    setProgressElement(new ProgressGuiElement(getX() + xOffset, getY() + yOffset, ((IProgressEntity) getMenu().getEntity()).getProgressStorage(), texture, inverted, vertical));
+    getMenu().getEntity().getElementManager().addElement(getProgressElement());
   }
 
-  default void assignFluidComponent(int xOffset, int yOffset, int width, int height) {
-    setFluidComponent(new FluidGuiElement(new Rect2i(getX() + xOffset, getY() + yOffset, width, height), ((IFluidEntity) getMenu().getEntity()).getFluidStorage().getFluid(), ((IFluidEntity) getMenu().getEntity()).getFluidStorage().getCapacity()));
+  default void assignFluidElement(int xOffset, int yOffset, int width, int height) {
+    IFluidEntity entity = (IFluidEntity) getMenu().getEntity();
+    setFluidElement(new FluidGuiElement(getX() + xOffset, getY() + yOffset, width, height, entity.getFluidStorage()));
+    getMenu().getEntity().getElementManager().addElement(getFluidElement());
   }
 
-  default void assignEfficiencyInfoArea(int xOffset, int yOffset) {
-    int x = getX();
-    int y = getY();
+
+  default void assignEfficiencyElement(int xOffset, int yOffset, ResourceLocation texture, boolean vertical) {
     IEfficiencyEntity entity = (IEfficiencyEntity) getMenu().getEntity();
-    setEfficiencyComponent(new EfficiencyGuiElement(x + xOffset, y + yOffset, entity.getCurrentEfficiency(), 18, 72));
+    setEfficiencyElement(new EfficiencyGuiElement(getX() + xOffset, getY() + yOffset, entity.getCurrentEfficiency(), texture, vertical));
+    getMenu().getEntity().getElementManager().addElement(getEfficiencyElement());
   }
 }

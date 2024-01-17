@@ -65,7 +65,7 @@ public abstract class PanelEntity extends BaseEntity implements IEnergyEntity, I
     this.name = name;
     this.defaultTransfer = defaultTransfer;
     this.defaultCapacity = defaultCapacity;
-    this.efficiency= new EfficiencyComponent(getManager()) {
+    this.efficiency= new EfficiencyComponent(getComponentManager()) {
       @Override
       public void onChanged() {
         super.onChanged();
@@ -81,7 +81,7 @@ public abstract class PanelEntity extends BaseEntity implements IEnergyEntity, I
 
   @Contract(value = "_ -> new", pure = true)
   protected static @NotNull GenerationComponent createGenerationStorage(PanelEntity entity) {
-    return new GenerationComponent(entity.getManager()) {
+    return new GenerationComponent(entity.getComponentManager()) {
       @Override
       public void onChanged() {
         super.onChanged();
@@ -95,7 +95,7 @@ public abstract class PanelEntity extends BaseEntity implements IEnergyEntity, I
 
   @Contract(value = "_ -> new", pure = true)
   protected static @NotNull EnergyComponent createEnergyStorage(@NotNull PanelEntity entity) {
-    return new EnergyComponent(entity.getManager(), entity.defaultCapacity, entity.defaultTransfer) {
+    return new EnergyComponent(entity.getComponentManager(), entity.defaultCapacity, entity.defaultTransfer) {
       @Override
       public boolean canReceive() {
         return false;
@@ -133,7 +133,7 @@ public abstract class PanelEntity extends BaseEntity implements IEnergyEntity, I
     int energy = ENERGY_STORAGE.getEnergyStored() + currentGen.getGeneration();
     if (energy <= ENERGY_STORAGE.getMaxEnergyStored())
       ENERGY_STORAGE.setEnergy(energy);
-    getManager().markDirty();
+    getComponentManager().markDirty();
   }
 
   public boolean doesSeeSky() {
@@ -179,22 +179,22 @@ public abstract class PanelEntity extends BaseEntity implements IEnergyEntity, I
   public void setCapacityLevel(int capacity) {
     this.ENERGY_STORAGE.setCapacity(capacity);
     setEnergyToCapacity();
-    getManager().markDirty();
+    getComponentManager().markDirty();
   }
 
   public void setTransferRate(int transfer) {
     ENERGY_STORAGE.setTransfer(transfer);
-    getManager().markDirty();
+    getComponentManager().markDirty();
   }
 
   public void setEnergyToCapacity() {
     ENERGY_STORAGE.setEnergyToCapacity();
-    getManager().markDirty();
+    getComponentManager().markDirty();
   }
 
   public void setEnergyLevel(int energy) {
     this.ENERGY_STORAGE.setEnergy(energy);
-    getManager().markDirty();
+    getComponentManager().markDirty();
   }
 
   public EnergyComponent getEnergyStorage() {
@@ -205,7 +205,7 @@ public abstract class PanelEntity extends BaseEntity implements IEnergyEntity, I
     for (int i = 0; i < handler.getSlots(); i++) {
       itemHandler.setStackInSlot(i, handler.getStackInSlot(i));
     }
-    getManager().markDirty();
+    getComponentManager().markDirty();
   }
 
 

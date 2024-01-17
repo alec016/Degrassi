@@ -7,46 +7,100 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix4f;
-import es.degrassi.forge.util.DegrassiLogger;
-import es.degrassi.forge.util.Utils;
+import es.degrassi.forge.init.gui.component.*;
+import es.degrassi.forge.init.registration.*;
+import es.degrassi.forge.util.*;
+import java.util.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.*;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.nbt.*;
+import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FluidGuiElement extends GuiElement {
   private static final int MIN_FLUID_HEIGHT = 1;
   private static final int TEXTURE_SIZE = 16;
-  private final FluidStack fluid;
-  private final int capacity;
 
-  public FluidGuiElement(Rect2i area, FluidStack fluid, int capacity) {
-    super(area, net.minecraft.network.chat.Component.literal("Fluid Tank"));
-    this.fluid = fluid;
-    this.capacity = capacity;
+  private final FluidComponent component;
+
+  public FluidGuiElement(int x, int y, int width, int height, FluidComponent component) {
+    super(x, y, width, height, Component.literal("Fluid Tank"));
+    this.component = component;
+  }
+
+
+  @Override
+  public void draw(PoseStack poseStack, float partialTick, int mouseX, int mouseY) {
+    renderFluid(poseStack, getX(), getY());
+    renderHover(poseStack, mouseX, mouseY);
   }
 
   @Override
-  public void draw(PoseStack transform, int x, int y, ResourceLocation texture) {}
+  public void renderLabels(Screen screen, @NotNull PoseStack poseStack, int mouseX, int mouseY) {
+    if(
+      isMouseAboveArea(
+        mouseX,
+        mouseY,
+        getX(),
+        getY(),
+        getWidth(),
+        getHeight()
+      )
+    ) {
+      screen.renderTooltip(
+        poseStack,
+        getTooltips(),
+        Optional.empty(),
+        mouseX - getX(),
+        mouseY - getY()
+      );
+    }
+  }
 
   @Override
-  public void draw(PoseStack transform, int x, int y, ResourceLocation texture, boolean vertical) {}
+  public void draw(PoseStack transform, ResourceLocation texture) {}
 
   @Override
-  public List<net.minecraft.network.chat.Component> getTooltips() {
+  public Tag serializeNBT() {
+    CompoundTag nbt = new CompoundTag();
+    Tag componentTag = component.serializeNBT();
+    nbt.put("component", componentTag);
+    nbt.putInt("x", getX());
+    nbt.putInt("y", getY());
+    nbt.putInt("width", getWidth());
+    nbt.putInt("height", getHeight());
+    return nbt;
+  }
+
+  @Override
+  public void deserializeNBT(Tag tag) {
+    if(tag == null) throw new IllegalArgumentException("Tag cant be null");
+    if (tag instanceof CompoundTag nbt) {
+      Tag componentTag = nbt.getCompound("component");
+      component.deserializeNBT(componentTag);
+      x = nbt.getInt("x");
+      y = nbt.getInt("y");
+      width = nbt.getInt("width");
+      height = nbt.getInt("height");
+    }
+  }
+
+  @Override
+  public GuiElementType<? extends IGuiElement> getType() {
+    return ElementRegistry.FLUID_GUI_ELEMENT.get();
+  }
+
+  @Override
+  public List<Component> getTooltips() {
     return getTooltip(TooltipMode.SHOW_AMOUNT_AND_CAPACITY);
   }
 
@@ -56,7 +110,7 @@ public class FluidGuiElement extends GuiElement {
   }
 
   public void renderFluid(PoseStack poseStack, int x, int y) {
-    Fluid fluid = this.fluid.getFluid();
+    Fluid fluid = this.component.getFluid().getFluid();
     if (fluid == null || fluid == Fluids.EMPTY)
       return;
 
@@ -65,19 +119,19 @@ public class FluidGuiElement extends GuiElement {
     poseStack.pushPose();
     poseStack.translate(x, y, 0);
 
-    TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(this.fluid.getFluid()).getStillTexture(this.fluid));
-    int fluidColor = IClientFluidTypeExtensions.of(this.fluid.getFluid()).getTintColor(this.fluid);
+    TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(this.component.getFluid().getFluid()).getStillTexture(this.component.getFluid()));
+    int fluidColor = IClientFluidTypeExtensions.of(this.component.getFluid().getFluid()).getTintColor(this.component.getFluid());
 
-    long amount = this.fluid.getAmount();
-    int scaledAmount = (int) ((amount * height) / capacity);
+    long amount = this.component.getFluid().getAmount();
+    int scaledAmount = (int) ((amount * getHeight()) / this.component.getCapacity());
     if (amount > 0 && scaledAmount < MIN_FLUID_HEIGHT) {
       scaledAmount = MIN_FLUID_HEIGHT;
     }
-    if (scaledAmount > height) {
-      scaledAmount = height;
+    if (scaledAmount > getHeight()) {
+      scaledAmount = getHeight();
     }
 
-    drawTiledSprite(poseStack, width, height, fluidColor, scaledAmount, sprite);
+    drawTiledSprite(poseStack, getWidth(), getHeight(), fluidColor, scaledAmount, sprite);
 
     poseStack.popPose();
 
@@ -141,27 +195,27 @@ public class FluidGuiElement extends GuiElement {
     tesselator.end();
   }
 
-  public List<net.minecraft.network.chat.Component> getTooltip(TooltipMode mode) {
-    List<net.minecraft.network.chat.Component> tooltip = new ArrayList<>();
+  public List<Component> getTooltip(TooltipMode mode) {
+    List<Component> tooltip = new ArrayList<>();
 
-    Fluid fluidType = fluid.getFluid();
+    Fluid fluidType = component.getFluid().getFluid();
     try {
       if (fluidType.isSame(Fluids.EMPTY)) {
-        tooltip.add(net.minecraft.network.chat.Component.translatable("degrassi.gui.element.fluid.empty", 0, capacity));
+        tooltip.add(Component.translatable("degrassi.gui.element.fluid.empty", 0, this.component.getCapacity()));
         return tooltip;
       }
 
-      net.minecraft.network.chat.Component displayName = fluid.getDisplayName();
+      Component displayName = this.component.getFluid().getDisplayName();
       tooltip.add(displayName);
 
-      long amount = fluid.getAmount();
+      long amount = component.getFluid().getAmount();
       long milliBuckets = (amount * 1000) / FluidType.BUCKET_VOLUME;
 
       if (mode == TooltipMode.SHOW_AMOUNT_AND_CAPACITY) {
-        MutableComponent amountString = net.minecraft.network.chat.Component.translatable("degrassi.gui.element.fluid.tooltip", Utils.format(milliBuckets), Utils.format(capacity));
+        MutableComponent amountString = Component.translatable("degrassi.gui.element.fluid.tooltip", Utils.format(milliBuckets), Utils.format(this.component.getCapacity()));
         tooltip.add(amountString.withStyle(ChatFormatting.GRAY));
       } else if (mode == TooltipMode.SHOW_AMOUNT) {
-        MutableComponent amountString = net.minecraft.network.chat.Component.translatable("degrassi.gui.element.fluid.tooltip.amount", Utils.format(milliBuckets));
+        MutableComponent amountString = Component.translatable("degrassi.gui.element.fluid.tooltip.amount", Utils.format(milliBuckets));
         tooltip.add(amountString.withStyle(ChatFormatting.GRAY));
       }
     } catch (RuntimeException e) {

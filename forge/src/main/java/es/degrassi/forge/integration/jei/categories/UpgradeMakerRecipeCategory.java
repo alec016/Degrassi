@@ -45,10 +45,8 @@ public class UpgradeMakerRecipeCategory implements IRecipeCategory<UpgradeMakerR
   private final Map<UpgradeMakerRecipe, ProgressGuiElement> progressComponents = Maps.newHashMap();
   private ProgressJeiRenderer progress;
   private EnergyJeiRenderer energy;
-  private final IJeiHelpers helper;
 
   public UpgradeMakerRecipeCategory(@NotNull IJeiHelpers helper) {
-    this. helper = helper;
     IGuiHelper helper1 = helper.getGuiHelper();
     this.background = helper1.drawableBuilder(TEXTURE, 0, 0, 136, 86).setTextureSize(136, 86).build();
     this.icon = helper1.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(BlockRegister.UPGRADE_MAKER.get()));
@@ -144,9 +142,8 @@ public class UpgradeMakerRecipeCategory implements IRecipeCategory<UpgradeMakerR
         66,
         36,
         progressComponent,
-        TextureSizeHelper.getTextureWidth(FILLED_PROGRESS),
-        TextureSizeHelper.getTextureHeight(FILLED_PROGRESS),
-        FILLED_PROGRESS
+        FILLED_PROGRESS,
+        false, false
       ));
       initRenderers(recipe);
       return;
@@ -156,10 +153,9 @@ public class UpgradeMakerRecipeCategory implements IRecipeCategory<UpgradeMakerR
         8,
         8,
         energyStorage,
-        16,
-        70,
         null,
-        IRequirement.ModeIO.INPUT
+        IRequirement.ModeIO.INPUT,
+        true
       ) {
         @Override
         public List<Component> getTooltips() {

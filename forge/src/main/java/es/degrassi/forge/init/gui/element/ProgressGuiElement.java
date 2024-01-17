@@ -7,53 +7,36 @@ import es.degrassi.forge.init.registration.ElementRegistry;
 import es.degrassi.forge.integration.jei.ingredients.DegrassiTypes;
 import es.degrassi.forge.util.TextureSizeHelper;
 import es.degrassi.forge.init.gui.component.ProgressComponent;
+import java.util.*;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.ITypedIngredient;
 import mezz.jei.api.runtime.IClickableIngredient;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.*;
 import net.minecraft.client.renderer.Rect2i;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.*;
+import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @SuppressWarnings("unused")
 public class ProgressGuiElement extends GuiElement implements IDrawableAnimated, IGuiElement, IClickableIngredient<ProgressGuiElement> {
-  private ProgressComponent progress;
+  private ProgressComponent component;
   public ResourceLocation texture;
-  private int x, y, width, height;
   private Orientation orientation = Orientation.RIGHT;
   private boolean inverted = false, vertical = false;
 
   public ProgressGuiElement(CompoundTag tag){
     processTag(tag);
   }
-  public ProgressGuiElement(int xMin, int yMin) {
-    this(xMin, yMin, null, 8, 64);
-  }
-  public ProgressGuiElement(int xMin, int yMin, ProgressComponent progress) {
-    this(xMin, yMin, progress, 8, 64);
-  }
-  public ProgressGuiElement(int xMin, int yMin, ProgressComponent progress, int width, int height) {
-    super(new Rect2i(xMin, yMin, width, height), net.minecraft.network.chat.Component.literal("Progress"));
-    this.x = xMin;
-    this.y = yMin;
-    this.width = width;
-    this.height = height;
-    this.progress = progress;
-  }
-  public ProgressGuiElement(int xMin, int yMin, ProgressComponent progress, int width, int height, ResourceLocation texture) {
-    super(new Rect2i(xMin, yMin, width, height), net.minecraft.network.chat.Component.literal("Progress"));
-    this.progress = progress;
+  public ProgressGuiElement(int xMin, int yMin, ProgressComponent progress, ResourceLocation texture, boolean inverted, boolean vertical) {
+    super(xMin, yMin, TextureSizeHelper.getTextureWidth(texture), TextureSizeHelper.getTextureHeight(texture), Component.literal("Progress"));
+    this.component = progress;
     this.texture = texture;
-    this.x = xMin;
-    this.y = yMin;
-    this.width = width;
-    this.height = height;
+    this.inverted = inverted;
+    this.vertical = vertical;
   }
 
   public ProgressGuiElement inverted() {
@@ -75,87 +58,109 @@ public class ProgressGuiElement extends GuiElement implements IDrawableAnimated,
   }
 
   @Override
-  public void draw(PoseStack transform, int x, int y, ResourceLocation texture) {
-    this.texture = texture;
-    draw(transform, x, y, texture, vertical, inverted);
+  public void draw(PoseStack poseStack, float partialTick, int mouseX, int mouseY) {
+    if (component.getProgress() > 0) {
+      draw(poseStack, texture);
+    }
   }
 
-  public List<net.minecraft.network.chat.Component> getTooltips() {
+  @Override
+  public void renderLabels(Screen screen, @NotNull PoseStack poseStack, int mouseX, int mouseY) {
+    if(
+      isMouseAboveArea(
+        mouseX,
+        mouseY,
+        getX(),
+        getY(),
+        getWidth(),
+        getHeight()
+      )
+    ) {
+      screen.renderTooltip(
+        poseStack,
+        getTooltips(),
+        Optional.empty(),
+        mouseX - getX(),
+        mouseY - getY()
+      );
+    }
+  }
+
+
+  @Override
+  public void draw(PoseStack transform, ResourceLocation texture) {
+    this.texture = texture;
+    draw(transform, texture, vertical, inverted);
+  }
+
+  public List<Component> getTooltips() {
     return List.of();
   }
 
-  public List<net.minecraft.network.chat.Component> getTooltips(@NotNull IDegrassiRecipe recipe) {
-    List<net.minecraft.network.chat.Component> tooltips = new ArrayList<>();
+  public List<Component> getTooltips(@NotNull IDegrassiRecipe recipe) {
+    List<Component> tooltips = new ArrayList<>();
     if(recipe.getTime() > 0)
-      tooltips.add(net.minecraft.network.chat.Component.translatable("degrassi.jei.recipe.time", recipe.getTime()));
+      tooltips.add(Component.translatable("degrassi.jei.recipe.time", recipe.getTime()));
     else
-      tooltips.add(net.minecraft.network.chat.Component.translatable("degrassi.jei.recipe.instant"));
+      tooltips.add(Component.translatable("degrassi.jei.recipe.instant"));
     if(Minecraft.getInstance().options.advancedItemTooltips)
-      tooltips.add(net.minecraft.network.chat.Component.translatable("degrassi.jei.recipe.id", recipe.getId().toString()).withStyle(ChatFormatting.DARK_GRAY));
+      tooltips.add(Component.translatable("degrassi.jei.recipe.id", recipe.getId().toString()).withStyle(ChatFormatting.DARK_GRAY));
     return tooltips;
   }
 
-  public void draw(PoseStack pose, int x, int y, ResourceLocation texture, boolean vertical, boolean inverted) {
+  public void draw(PoseStack pose, ResourceLocation texture, boolean vertical, boolean inverted) {
     this.texture = texture;
     this.inverted = inverted;
     this.vertical = vertical;
-    final int width = TextureSizeHelper.getTextureWidth(texture);
-    final int height = TextureSizeHelper.getTextureHeight(texture);
     IClientHandler.bindTexture(texture);
     int current;
-    if (getScaledProgress(height, inverted) == height || getScaledProgress(width, inverted) == width) {
+    if (getScaledProgress(getHeight(), inverted) == getHeight() || getScaledProgress(getWidth(), inverted) == getWidth()) {
       blit(
         pose,
-        x,
-        y,
+        getX(),
+        getY(),
         0,
         0,
-        width,
-        height,
-        width,
-        height
+        getWidth(),
+        getHeight(),
+        getWidth(),
+        getHeight()
       );
       return;
     }
     if (vertical) {
-      current = getScaledProgress(height, inverted);
+      current = getScaledProgress(getHeight(), inverted);
       blit(
         pose,
-        x,
-        y + height - current,
+        getX(),
+        getY() + getHeight() - current,
         0,
-        height - current,
-        width,
+        getHeight() - current,
+        getWidth(),
         current,
-        width,
-        height
+        getWidth(),
+        getHeight()
       );
       return;
     }
-    current = getScaledProgress(width, inverted);
+    current = getScaledProgress(getWidth(), inverted);
     blit(
       pose,
-      x,
-      y,
+      getX(),
+      getY(),
       0,
       0,
       current,
-      height,
-      width,
-      height
+      getHeight(),
+      getWidth(),
+      getHeight()
     );
-  }
-
-  @Override
-  public void draw(PoseStack pose, int x, int y, ResourceLocation texture, boolean vertical) {
-    this.vertical = vertical;
-    draw(pose, x, y, texture, vertical, inverted);
   }
 
   public int getScaledProgress(int renderSize, boolean inverted) {
     this.inverted = inverted;
-    int progress = this.progress.getProgress();
-    int maxProgress = this.progress.getMaxProgress();
+    int progress = this.component.getProgress();
+    int maxProgress = this.component.getMaxProgress();
 
     return progress != 0 ? (int) Math.floor(Math.abs((inverted ? 1 : 0) - (progress / (float) maxProgress)) * renderSize) : 0;
   }
@@ -166,30 +171,10 @@ public class ProgressGuiElement extends GuiElement implements IDrawableAnimated,
   }
 
   @Override
-  public int getX() {
-    return x;
-  }
-
-  @Override
-  public int getY() {
-    return y;
-  }
-
-  @Override
-  public int getWidth() {
-    return width;
-  }
-
-  @Override
-  public int getHeight() {
-    return height;
-  }
-
-  @Override
   public void draw(@NotNull PoseStack poseStack, int xOffset, int yOffset) {
     poseStack.pushPose();
     {
-      draw(poseStack, xOffset, yOffset, texture, vertical, inverted);
+      draw(poseStack, texture, vertical, inverted);
     }
     poseStack.popPose();
   }
@@ -208,7 +193,7 @@ public class ProgressGuiElement extends GuiElement implements IDrawableAnimated,
   }
 
   public ProgressComponent getStorage() {
-    return progress;
+    return component;
   }
 
   @Override
@@ -228,12 +213,12 @@ public class ProgressGuiElement extends GuiElement implements IDrawableAnimated,
 
   @Override
   public @NotNull Rect2i getArea() {
-    return area;
+    return new Rect2i(getX(), getY(), getWidth(), getHeight());
   }
 
   @Override
   public void renderButton(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
-    draw(poseStack, mouseX, mouseY, texture, vertical, inverted);
+    draw(poseStack, texture, vertical, inverted);
   }
 
   @Override
@@ -241,34 +226,39 @@ public class ProgressGuiElement extends GuiElement implements IDrawableAnimated,
     return super.clicked(mouseX, mouseY);
   }
 
-  public CompoundTag toNBT() {
+  public Tag serializeNBT() {
     CompoundTag nbt = new CompoundTag();
-    nbt.put("progress", progress.serializeNBT());
+    nbt.put("progress", component.serializeNBT());
     if (texture != null)
       nbt.putString("texture", texture.getNamespace() + ":" + texture.getPath());
-    nbt.putInt("x", x);
-    nbt.putInt("y", y);
-    nbt.putInt("width", width);
-    nbt.putInt("height", height);
+    nbt.putInt("x", getX());
+    nbt.putInt("y", getY());
+    nbt.putInt("width", getWidth());
+    nbt.putInt("height", getHeight());
     nbt.putString("orientation", orientation.name());
     nbt.putBoolean("inverted", inverted);
+    nbt.putBoolean("vertical", vertical);
     return nbt;
   }
 
-  public void fromNBT(CompoundTag nbt) {
-    progress.deserializeNBT(nbt.getCompound("progress"));
-    if (nbt.contains("texture"))
-      texture = new ResourceLocation(nbt.getString("texture"));
-    x = nbt.getInt("x");
-    y = nbt.getInt("y");
-    width = nbt.getInt("width");
-    height = nbt.getInt("height");
-    orientation = Orientation.valueOf(nbt.getString("orientation"));
-    inverted = nbt.getBoolean("inverted");
+  public void deserializeNBT(Tag tag) {
+    if (tag == null) throw new IllegalArgumentException("Tag cant be null");
+    if (tag instanceof CompoundTag nbt) {
+      component.deserializeNBT(nbt.getCompound("progress"));
+      if (nbt.contains("texture"))
+        texture = new ResourceLocation(nbt.getString("texture"));
+      x = nbt.getInt("x");
+      y = nbt.getInt("y");
+      width = nbt.getInt("width");
+      height = nbt.getInt("height");
+      orientation = Orientation.valueOf(nbt.getString("orientation"));
+      inverted = nbt.getBoolean("inverted");
+      vertical = nbt.getBoolean("vertical");
+    }
   }
 
   protected void processTag(CompoundTag nbt) {
-    progress.deserializeNBT(nbt.getCompound("progress"));
+    component.deserializeNBT(nbt.getCompound("progress"));
     if (nbt.contains("texture"))
       texture = new ResourceLocation(nbt.getString("texture"));
     x = nbt.getInt("x");
@@ -277,6 +267,7 @@ public class ProgressGuiElement extends GuiElement implements IDrawableAnimated,
     height = nbt.getInt("height");
     orientation = Orientation.valueOf(nbt.getString("orientation"));
     inverted = nbt.getBoolean("inverted");
+    vertical = nbt.getBoolean("vertical");
   }
 
   public enum Orientation {

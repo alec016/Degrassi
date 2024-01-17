@@ -3,8 +3,8 @@ package es.degrassi.forge.init.recipe.helpers;
 import es.degrassi.forge.init.entity.BaseEntity;
 import es.degrassi.forge.init.entity.type.IEnergyEntity;
 import es.degrassi.forge.init.entity.type.IRecipeEntity;
+import es.degrassi.forge.init.gui.component.*;
 import es.degrassi.forge.init.recipe.*;
-import es.degrassi.forge.init.gui.component.EnergyComponent;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.*;
@@ -57,22 +57,22 @@ public abstract class RecipeHelper<T extends IDegrassiRecipe, E extends BaseEnti
     return inventory.getEnergyStored() + energyProduced <= inventory.getMaxEnergyStored();
   }
 
-  public boolean canInsertAmountIntoOutputSlot(@NotNull FluidTank storage) {
+  public boolean canInsertAmountIntoOutputSlot(@NotNull FluidComponent storage) {
     return storage.getCapacity() > storage.getFluidAmount();
   }
 
-  public boolean hasEnoughFluid(@NotNull FluidTank storage, @NotNull E entity) {
+  public boolean hasEnoughFluid(@NotNull FluidComponent storage, @NotNull E entity) {
     return entity.getRecipe().getFluid().getAmount() <= storage.getFluidAmount();
   }
 
-  public void extractFluid(@NotNull FluidTank storage, @NotNull E entity) {
+  public void extractFluid(@NotNull FluidComponent storage, @NotNull E entity) {
     FluidStack fluid = storage.getFluid();
     fluid.setAmount(fluid.getAmount() - entity.getRecipe().getFluid().getAmount());
     storage.setFluid(fluid);
   }
 
 
-  public boolean hasSameFluidInTank(@NotNull FluidTank storage, @NotNull E entity) {
+  public boolean hasSameFluidInTank(@NotNull FluidComponent storage, @NotNull E entity) {
     return entity.getRecipe().getFluid().equals(storage.getFluid());
   }
 }

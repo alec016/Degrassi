@@ -1,60 +1,34 @@
 package es.degrassi.forge.init.gui.element;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.client.IClientHandler;
 import es.degrassi.forge.init.registration.ElementRegistry;
 import es.degrassi.forge.requirements.IRequirement.ModeIO;
 import es.degrassi.forge.init.gui.component.EnergyComponent;
 import es.degrassi.forge.util.TextureSizeHelper;
 import es.degrassi.forge.util.Utils;
+import java.util.*;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.client.gui.screens.*;
+import net.minecraft.nbt.*;
+import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 @SuppressWarnings("unused")
 public class EnergyGuiElement extends GuiElement implements IDrawableAnimated, IGuiElement {
-  private final EnergyComponent energy;
-  private final int x, y, width, height;
+  private final EnergyComponent component;
   public ResourceLocation texture;
-  public boolean vertical = true;
+  public boolean vertical;
   public ModeIO mode;
 
-  public EnergyGuiElement(int xMin, int yMin, ModeIO mode) {
-    this(xMin, yMin, null, 8, 64, null, mode);
-  }
-  public EnergyGuiElement(int xMin, int yMin) {
-    this(xMin, yMin, null, 8, 64, null, ModeIO.INPUT);
-  }
-  public EnergyGuiElement(int xMin, int yMin, EnergyComponent energy, ModeIO mode) {
-    this(xMin, yMin, energy, 8, 64, null, mode);
-  }
-  public EnergyGuiElement(int xMin, int yMin, EnergyComponent energy) {
-    this(xMin, yMin, energy, 8, 64, null, ModeIO.INPUT);
-  }
-
-  public EnergyGuiElement(int xMin, int yMin, EnergyComponent energy, int width, int height, ModeIO mode) {
-    this(xMin, yMin, energy, width, height, new DegrassiLocation(""), mode);
-  }
-  public EnergyGuiElement(int xMin, int yMin, EnergyComponent energy, int width, int height) {
-    this(xMin, yMin, energy, width, height, new DegrassiLocation(""));
-  }
-  public EnergyGuiElement(int xMin, int yMin, EnergyComponent energy, int width, int height, ResourceLocation texture, ModeIO mode) {
-    super(new Rect2i(xMin, yMin, width, height), net.minecraft.network.chat.Component.literal("Energy"));
-    this.energy = energy;
-    this.x = xMin;
-    this.y = yMin;
-    this.width = width;
-    this.height = height;
+  public EnergyGuiElement(int xMin, int yMin, EnergyComponent energy, ResourceLocation texture, ModeIO mode, boolean vertical) {
+    super(xMin, yMin, TextureSizeHelper.getTextureWidth(texture), TextureSizeHelper.getTextureHeight(texture), Component.literal("Energy"));
+    this.component = energy;
     this.texture = texture;
     this.mode = mode;
-  }
-  public EnergyGuiElement(int xMin, int yMin, EnergyComponent energy, int width, int height, ResourceLocation texture) {
-    this(xMin, yMin, energy, width, height, texture, ModeIO.INPUT);
+    this.vertical = vertical;
   }
 
   @Override
@@ -63,103 +37,146 @@ public class EnergyGuiElement extends GuiElement implements IDrawableAnimated, I
   }
 
   @Override
-  public int getX() {
-    return x;
+  public Tag serializeNBT() {
+    CompoundTag nbt = new CompoundTag();
+    Tag componentTag = component.serializeNBT();
+    nbt.put("component", componentTag);
+    nbt.putString("texture", texture.toString());
+    nbt.putString("mode", mode.name());
+    nbt.putBoolean("vertical", vertical);
+    nbt.putInt("x", getX());
+    nbt.putInt("y", getY());
+    nbt.putInt("width", getWidth());
+    nbt.putInt("height", getHeight());
+    return nbt;
   }
 
   @Override
-  public int getY() {
-    return y;
+  public void deserializeNBT(Tag tag) {
+    if(tag == null) throw new IllegalArgumentException("Tag cant be null");
+    if (tag instanceof CompoundTag nbt) {
+      Tag componentTag = nbt.getCompound("component");
+      component.deserializeNBT(componentTag);
+      texture = new ResourceLocation(nbt.getString("texture"));
+      mode = ModeIO.valueOf(nbt.getString("mode"));
+      vertical = nbt.getBoolean("vertical");
+      x = nbt.getInt("x");
+      y = nbt.getInt("y");
+      width = nbt.getInt("width");
+      height = nbt.getInt("height");
+    }
   }
 
-  public List<net.minecraft.network.chat.Component> getTooltips() {
+  public List<Component> getTooltips() {
     return List.of(
-      net.minecraft.network.chat.Component.translatable("degrassi.gui.element.energy.tooltip", Utils.format(energy.getEnergyStored()), net.minecraft.network.chat.Component.translatable("unit.energy.forge"), Utils.format(energy.getMaxEnergyStored()), net.minecraft.network.chat.Component.translatable("unit.energy.forge"))
+      Component.translatable("degrassi.gui.element.energy.tooltip", Utils.format(component.getEnergyStored()), net.minecraft.network.chat.Component.translatable("unit.energy.forge"), Utils.format(component.getMaxEnergyStored()), net.minecraft.network.chat.Component.translatable("unit.energy.forge"))
     );
   }
 
   @Override
-  public void draw(PoseStack pose, int x, int y, ResourceLocation texture) {
-    this.texture = texture;
-    draw(pose, x, y, texture, true);
+  public void draw(PoseStack poseStack, float partialTick, int mouseX, int mouseY) {
+    draw(poseStack, texture);
+    renderHover(poseStack, mouseX, mouseY);
   }
 
   @Override
-  public void draw(PoseStack pose, int x, int y, ResourceLocation texture, boolean vertical) {
+  public void renderLabels(Screen screen, @NotNull PoseStack poseStack, int mouseX, int mouseY) {
+    if(
+      isMouseAboveArea(
+        mouseX,
+        mouseY,
+        getX(),
+        getY(),
+        getWidth(),
+        getHeight()
+      )
+    ) {
+      screen.renderTooltip(
+        poseStack,
+        getTooltips(),
+        Optional.empty(),
+        mouseX - getX(),
+        mouseY - getY()
+      );
+    }
+  }
+
+  @Override
+  public void draw(PoseStack pose, ResourceLocation texture) {
     if (texture == null) return;
-    this.texture = texture;
-    this.vertical = vertical;
-    final int height = TextureSizeHelper.getTextureHeight(texture);
-    final int width = TextureSizeHelper.getTextureWidth(texture);
-    final float energyPercent = energy.getEnergyStored() / (float) energy.getMaxEnergyStored();
+    final float energyPercent = component.getEnergyStored() / (float) component.getMaxEnergyStored();
     int stored;
     IClientHandler.bindTexture(texture);
+    pose.pushPose();
     if (energyPercent > 1)
       GuiComponent.blit(
         pose,
-        x,
-        y,
+        getX(),
+        getY(),
         0,
         0,
-        width,
-        height,
-        width,
-        height
+        getWidth(),
+        getHeight(),
+        getWidth(),
+        getHeight()
       );
     else
       if (vertical) {
-        stored = (int) (height * energyPercent);
+        stored = (int) (getHeight() * energyPercent);
         GuiComponent.blit(
           pose,
-          x,
-          y + height - stored,
+          getX(),
+          getY() + getHeight() - stored,
           0,
-          height - stored,
-          width,
+          getHeight() - stored,
+          getWidth(),
           stored,
-          width,
-          height
+          getWidth(),
+          getHeight()
         );
       } else {
-        stored = (int) (width * energyPercent);
+        stored = (int) (getWidth() * energyPercent);
         GuiComponent.blit(
           pose,
-          x,
-          y,
+          getX(),
+          getY(),
           0,
           0,
           stored,
-          height,
-          width,
-          height
+          getHeight(),
+          getWidth(),
+          getHeight()
         );
       }
-  }
-
-  @Override
-  public int getWidth() {
-    return width;
-  }
-
-  @Override
-  public int getHeight() {
-    return height;
+    pose.popPose();
   }
 
   @Override
   public void draw(@NotNull PoseStack poseStack, int xOffset, int yOffset) {
     poseStack.pushPose();
     {
-      draw(poseStack, xOffset, yOffset, texture, true);
+      draw(poseStack, texture);
     }
     poseStack.popPose();
   }
 
   public EnergyComponent getStorage() {
-    return energy;
+    return component;
   }
 
-  public void drawHighlight(PoseStack stack, int x, int y) {
-    GuiComponent.fill(stack, x, y, x + width, y + height, -2130706433);
+  public void drawHighlight(PoseStack stack) {
+    GuiComponent.fill(stack, getX(), getY(), getX() + getWidth(), getY() + getHeight(), -2130706433);
+  }
+
+  public boolean isVertical() {
+    return vertical;
+  }
+
+  public void vertical() {
+    this.vertical = true;
+  }
+
+  public void horizontal() {
+    this.vertical = false;
   }
 }

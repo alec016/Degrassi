@@ -19,7 +19,7 @@ import org.jetbrains.annotations.*;
 @SuppressWarnings("unchecked")
 public class CombustionGeneratorEntity extends GeneratorEntity<CombustionGeneratorEntity, CombustionGenerator> {
   {
-    ENERGY_STORAGE = new EnergyComponent(getManager(), DegrassiConfig.get().generatorsConfig.combustion_capacity, DegrassiConfig.get().generatorsConfig.combustion_transfer) {
+    ENERGY_STORAGE = new EnergyComponent(getComponentManager(), DegrassiConfig.get().generatorsConfig.combustion_capacity, DegrassiConfig.get().generatorsConfig.combustion_transfer) {
       @Override
       public boolean canReceive() {
         return false;
@@ -37,7 +37,7 @@ public class CombustionGeneratorEntity extends GeneratorEntity<CombustionGenerat
     itemHandler = new ItemStackHandler(3) {
       @Override
       protected void onContentsChanged(int slot) {
-        getManager().markDirty();
+        getComponentManager().markDirty();
         if (level != null && !level.isClientSide() && level.getServer() != null) {
           new ItemPacket(this, worldPosition)
             .sendToAll(level.getServer());
@@ -114,6 +114,6 @@ public class CombustionGeneratorEntity extends GeneratorEntity<CombustionGenerat
         entity.getRecipe().endProcess(entity);
       }
     }
-    entity.getManager().markDirty();
+    entity.getComponentManager().markDirty();
   }
 }
