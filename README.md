@@ -5,7 +5,7 @@
 [![](http://cf.way2muchnoise.eu/short_932731.svg)](https://www.curseforge.com/minecraft/mc-mods/degrassi)
 [![](https://img.shields.io/discord/1071821610836828200?color=7289DA)](https://discord.gg/kS7uEb38SX)
 
-Degrassi is a Minecraft Forge mod currently developed for Minecraft 1.19.2
+Degrassi is a Minecraft Forge mod currently developed for Minecraft 1.20.1
 
 ## Download
 

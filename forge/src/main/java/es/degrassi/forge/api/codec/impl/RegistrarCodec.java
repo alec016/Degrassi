@@ -5,20 +5,28 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import dev.architectury.registry.registries.Registrar;
 import es.degrassi.common.DegrassiLocation;
+import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.api.codec.NamedCodec;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
 
 public class RegistrarCodec<V> implements NamedCodec<V> {
 
     /** Vanilla registries **/
-//    public static final NamedCodec<Item> ITEM = of(Degrassi.registrar(Registry.ITEM_REGISTRY), false);
-//    public static final NamedCodec<Block> BLOCK = of(Degrassi.registrar(Registry.BLOCK_REGISTRY), false);
-//    public static final NamedCodec<Fluid> FLUID = of(Degrassi.registrar(Registry.FLUID_REGISTRY), false);
-//    public static final NamedCodec<EntityType<?>> ENTITY = of(Degrassi.registrar(Registry.ENTITY_TYPE_REGISTRY), false);
-//    public static final NamedCodec<Enchantment> ENCHANTMENT = of(Degrassi.registrar(Registry.ENCHANTMENT_REGISTRY), false);
-//    public static final NamedCodec<MobEffect> EFFECT = of(Degrassi.registrar(Registry.MOB_EFFECT_REGISTRY), false);
-//
-//    /**CM registries**/
+    public static final NamedCodec<Item> ITEM = of(Degrassi.registrar(Registries.ITEM), false);
+    public static final NamedCodec<Block> BLOCK = of(Degrassi.registrar(Registries.BLOCK), false);
+    public static final NamedCodec<Fluid> FLUID = of(Degrassi.registrar(Registries.FLUID), false);
+    public static final NamedCodec<EntityType<?>> ENTITY = of(Degrassi.registrar(Registries.ENTITY_TYPE), false);
+    public static final NamedCodec<Enchantment> ENCHANTMENT = of(Degrassi.registrar(Registries.ENCHANTMENT), false);
+    public static final NamedCodec<MobEffect> EFFECT = of(Degrassi.registrar(Registries.MOB_EFFECT), false);
+
+    /**CM registries**/
 //    public static final NamedCodec<RequirementType<?>> REQUIREMENT = of(Degrassi.requirementRegistrar(), true);
 //    public static final NamedCodec<GuiElementType<?>> GUI_ELEMENT = of(Degrassi.guiElementRegistrar(), true);
 
