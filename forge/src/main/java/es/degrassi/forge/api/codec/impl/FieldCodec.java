@@ -6,7 +6,6 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapLike;
 import com.mojang.serialization.RecordBuilder;
 import es.degrassi.forge.api.codec.NamedCodec;
-import es.degrassi.forge.util.DegrassiLogger;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
@@ -32,8 +31,8 @@ public class FieldCodec<A> extends NamedMapCodec<A> {
     public <T> DataResult<A> decode(DynamicOps<T> ops, MapLike<T> input) {
         final T value = tryGetValue(ops, input, fieldName);
         if (value == null) {
-            DegrassiLogger.INSTANCE.error("Missing mandatory property \"{}\" of type \"{}\" in {}", fieldName, name, input);
-            return DataResult.error("No key " + fieldName + " in " + input);
+//            DegrassiLogger.INSTANCE.error("Missing mandatory property \"{}\" of type \"{}\" in {}", fieldName, name, input);
+            return DataResult.error(() -> "No key " + fieldName + " in " + input);
         }
         return elementCodec.read(ops, value);
     }

@@ -59,7 +59,7 @@ dependencies {
     modApi "org.joml:joml:1.10.5"
     modApi "me.shedaniel.cloth:cloth-config:${project.cloth_config_version}"
     modApi "me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}"
-    modApi "curse.maven:probejs-585406:4842668"
+    modApi "curse.maven:probejs-585406:5054324"
 
     // common module
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
@@ -71,16 +71,13 @@ dependencies {
     modLocalRuntime("mezz.jei:jei-${project.minecraft_version}-forge:${project.jei_version}") { transitive = false }
 
     // Mekanism
-    modLocalRuntime "curse.maven:mekanism-268560:3922056"
+    modLocalRuntime "curse.maven:mekanism-268560:5125665"
 
     // Jade
-    modImplementation "curse.maven:jade-324717:4719987"
+    modImplementation "curse.maven:jade-324717:5072729"
 
     // KubeJS
     modImplementation "dev.latvian.mods:kubejs-forge:${kubejs_version}"
-
-    // GeckoLib
-    modImplementation "software.bernie.geckolib:geckolib-forge-1.19:${geckolib_version}"
 }
 
 processResources {

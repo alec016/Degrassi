@@ -28,24 +28,22 @@ public class DefaultCodecs {
     public static final NamedCodec<CompoundTag> NBT_FROM_JSON = NamedCodec.of(CompoundTag.CODEC, "NBT from JSON");
     public static final NamedCodec<CompoundTag> COMPOUND_TAG = NamedCodec.either(NBT_FROM_STRING, NBT_FROM_JSON, "Compound nbt").xmap(either -> either.map(Function.identity(), Function.identity()), Either::left, "Compound nbt");
 
-    public static final NamedCodec<SoundEvent> SOUND_EVENT = RESOURCE_LOCATION.xmap(SoundEvent::new, SoundEvent::getLocation, "Sound event");
-
     public static final NamedCodec<Direction> DIRECTION = NamedCodec.enumCodec(Direction.class);
 
-    public static final NamedCodec<ItemStack> ITEM_STACK = NamedCodec.record(itemStackInstance ->
-            itemStackInstance.group(
-                    RegistrarCodec.ITEM.fieldOf("id").forGetter(ItemStack::getItem),
-                    NamedCodec.INT.optionalFieldOf("Count", 1).forGetter(ItemStack::getCount),
-                    COMPOUND_TAG.optionalFieldOf("tag").forGetter(stack -> Optional.ofNullable(stack.getTag()))
-            ).apply(itemStackInstance, (item, count, nbt) -> {
-                ItemStack stack = item.getDefaultInstance();
-                stack.setCount(count);
-                nbt.ifPresent(stack::setTag);
-                return stack;
-            }), "Item stack"
-    );
+//    public static final NamedCodec<ItemStack> ITEM_STACK = NamedCodec.record(itemStackInstance ->
+//            itemStackInstance.group(
+//                    RegistrarCodec.ITEM.fieldOf("id").forGetter(ItemStack::getItem),
+//                    NamedCodec.INT.optionalFieldOf("Count", 1).forGetter(ItemStack::getCount),
+//                    COMPOUND_TAG.optionalFieldOf("tag").forGetter(stack -> Optional.ofNullable(stack.getTag()))
+//            ).apply(itemStackInstance, (item, count, nbt) -> {
+//                ItemStack stack = item.getDefaultInstance();
+//                stack.setCount(count);
+//                nbt.ifPresent(stack::setTag);
+//                return stack;
+//            }), "Item stack"
+//    );
 
-    public static final NamedCodec<ItemStack> ITEM_OR_STACK = NamedCodec.either(RegistrarCodec.ITEM, ITEM_STACK).xmap(either -> either.map(Item::getDefaultInstance, Function.identity()), Either::right, "Item Stack");
+//    public static final NamedCodec<ItemStack> ITEM_OR_STACK = NamedCodec.either(RegistrarCodec.ITEM, ITEM_STACK).xmap(either -> either.map(Item::getDefaultInstance, Function.identity()), Either::right, "Item Stack");
 
     public static <T> NamedCodec<TagKey<T>> tagKey(ResourceKey<Registry<T>> registry) {
         return RESOURCE_LOCATION.xmap(rl -> TagKey.create(registry, rl), TagKey::location, "Tag: " + registry.location());
@@ -55,13 +53,13 @@ public class DefaultCodecs {
         try {
             return DataResult.success(new ResourceLocation(encoded));
         } catch (ResourceLocationException e) {
-            return DataResult.error(e.getMessage());
+            return DataResult.error(e::getMessage);
         }
     }
 
     private static DataResult<Character> decodeCharacter(String encoded) {
         if(encoded.length() != 1)
-            return DataResult.error("Invalid character : \"" + encoded + "\" must be a single character !");
+            return DataResult.error(() -> "Invalid character : \"" + encoded + "\" must be a single character !");
         return DataResult.success(encoded.charAt(0));
     }
 
@@ -70,7 +68,7 @@ public class DefaultCodecs {
         try {
             return DataResult.success(parser.readStruct());
         } catch (CommandSyntaxException e) {
-            return DataResult.error(e.getMessage());
+            return DataResult.error(e::getMessage);
         }
     }
 }

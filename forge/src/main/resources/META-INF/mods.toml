@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[43,)"
+loaderVersion = "[47.2.0,)"
 license = "MIT"
 issueTrackerURL="https://github.com/alec016/Degrassi/issues"
 
@@ -16,14 +16,14 @@ Degrassi Mod
 [[dependencies.degrassi]]
 modId = "forge"
 mandatory = true
-versionRange = "[43,)"
+versionRange = "[47.2.0,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.degrassi]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.19.2,1.20)"
+versionRange = "[1.20.1, 1.20.2)"
 ordering = "NONE"
 side = "BOTH"
 
@@ -38,12 +38,5 @@ side = "BOTH"
 modId = "cloth_config"
 mandatory = true
 versionRange = "[${cloth_config_version},)"
-ordering = "AFTER"
-side = "BOTH"
-
-[[dependencies.degrassi]]
-modId = "geckolib3"
-mandatory = true
-versionRange = "[${geckolib_version},)"
 ordering = "AFTER"
 side = "BOTH"

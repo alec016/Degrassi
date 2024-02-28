@@ -1,15 +1,6 @@
 package es.degrassi.forge;
 
 import dev.architectury.platform.forge.EventBuses;
-import es.degrassi.forge.init.entity.renderer.MelterRenderer;
-import es.degrassi.forge.init.geckolib.renderer.CircuitFabricatorRenderer;
-import es.degrassi.forge.init.registration.EntityRegister;
-import es.degrassi.forge.init.registration.Register;
-import es.degrassi.forge.integration.config.DegrassiConfig;
-import es.degrassi.forge.util.DegrassiLogger;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
-import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -26,20 +17,15 @@ public class DegrassiForge {
   public DegrassiForge() {
     EventBuses.registerModEventBus(Degrassi.MODID, FMLJavaModLoadingContext.get().getModEventBus());
 
-    AutoConfig.register(DegrassiConfig.class, PartitioningSerializer.wrap(JanksonConfigSerializer::new));
+//    AutoConfig.register(DegrassiConfig.class, PartitioningSerializer.wrap(JanksonConfigSerializer::new));
 
     Degrassi.init();
     IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-    Register.register(bus);
 
     MinecraftForge.EVENT_BUS.register(DegrassiForge.class);
   }
 
   @SubscribeEvent
   public static void registerRenderers(final EntityRenderersEvent.@NotNull RegisterRenderers event){
-    DegrassiLogger.INSTANCE.info("Registering melter renderer");
-    event.registerBlockEntityRenderer(EntityRegister.MELTER.get(), MelterRenderer::new);
-    DegrassiLogger.INSTANCE.info("Registering circuit fabricator renderer");
-    event.registerBlockEntityRenderer(EntityRegister.CIRCUIT_FABRICATOR.get(), CircuitFabricatorRenderer::new);
   }
 }

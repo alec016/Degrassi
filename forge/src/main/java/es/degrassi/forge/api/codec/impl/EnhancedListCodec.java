@@ -5,7 +5,6 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.ListBuilder;
 import es.degrassi.forge.api.codec.NamedCodec;
-import es.degrassi.forge.util.DegrassiLogger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,8 +55,8 @@ public class EnhancedListCodec<A> implements NamedCodec<List<A>> {
                 DataResult<A> a = this.elementCodec.read(ops, t);
                 if(a.result().isPresent())
                     result.add(a.result().get());
-                else if(a.error().isPresent())
-                    DegrassiLogger.INSTANCE.warn("Error when parsing {} in list.\n{}", this.elementCodec.name(), a.error().get().message());
+//                else if(a.error().isPresent())
+//                    DegrassiLogger.INSTANCE.warn("Error when parsing {} in list.\n{}", this.elementCodec.name(), a.error().get().message());
             });
             return DataResult.success(Pair.of(result, ops.empty()));
         }

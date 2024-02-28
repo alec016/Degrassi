@@ -138,7 +138,7 @@ public interface NamedCodec<A> {
             if (value.compareTo(minInclusive) >= 0 && value.compareTo(maxInclusive) <= 0) {
                 return DataResult.success(value);
             }
-            return DataResult.error("Value " + value + " outside of range [" + minInclusive + ":" + maxInclusive + "]", value);
+            return DataResult.error(() -> "Value " + value + " outside of range [" + minInclusive + ":" + maxInclusive + "]", value);
         };
     }
 
@@ -504,7 +504,7 @@ public interface NamedCodec<A> {
                 final List<T> list = stream.toList();
                 if (list.stream().allMatch(element -> ops.getNumberValue(element).result().isPresent()))
                     return DataResult.success(list.stream().mapToDouble(element -> ops.getNumberValue(element).result().get().doubleValue()));
-                return DataResult.error("Some elements are not doubles: " + input);
+                return DataResult.error(() -> "Some elements are not doubles: " + input);
             }).map(r -> Pair.of(r, ops.empty()));
         }
 

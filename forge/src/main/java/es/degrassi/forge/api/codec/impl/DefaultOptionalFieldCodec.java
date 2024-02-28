@@ -5,7 +5,6 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapLike;
 import com.mojang.serialization.RecordBuilder;
 import es.degrassi.forge.api.codec.NamedCodec;
-import es.degrassi.forge.util.DegrassiLogger;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -38,8 +37,8 @@ public class DefaultOptionalFieldCodec<A> extends NamedMapCodec<A> {
         DataResult<A> result = elementCodec.read(ops, value);
         if(result.result().isPresent())
             return result;
-        if(result.error().isPresent())
-            DegrassiLogger.INSTANCE.warn("Couldn't parse \"{}\" for key \"{}\", using default value: {}\nError: {}", name, fieldName, defaultValue.get(), result.error().get().message());
+//        if(result.error().isPresent())
+//            DegrassiLogger.INSTANCE.warn("Couldn't parse \"{}\" for key \"{}\", using default value: {}\nError: {}", name, fieldName, defaultValue.get(), result.error().get().message());
         return DataResult.success(defaultValue.get());
     }
 
