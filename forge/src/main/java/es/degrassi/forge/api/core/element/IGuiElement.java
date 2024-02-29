@@ -1,8 +1,6 @@
 package es.degrassi.forge.api.core.element;
 
-import es.degrassi.forge.api.codec.NamedCodec;
-import es.degrassi.forge.api.impl.codec.RegistrarCodec;
-import es.degrassi.forge.api.core.machine.MachineTile;
+import es.degrassi.forge.init.tile.MachineTile;
 import java.util.List;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;

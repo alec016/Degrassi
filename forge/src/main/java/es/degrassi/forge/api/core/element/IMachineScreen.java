@@ -2,7 +2,7 @@ package es.degrassi.forge.api.core.element;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import es.degrassi.forge.api.core.machine.IMachine;
-import es.degrassi.forge.api.core.machine.MachineTile;
+import es.degrassi.forge.init.tile.MachineTile;
 import java.util.List;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
