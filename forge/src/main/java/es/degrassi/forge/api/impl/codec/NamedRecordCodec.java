@@ -5,8 +5,14 @@ import com.mojang.datafixers.kinds.Applicative;
 import com.mojang.datafixers.kinds.K1;
 import com.mojang.datafixers.util.Function3;
 import com.mojang.datafixers.util.Function4;
-import com.mojang.serialization.*;
-
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Decoder;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.Encoder;
+import com.mojang.serialization.MapDecoder;
+import com.mojang.serialization.MapEncoder;
+import com.mojang.serialization.MapLike;
+import com.mojang.serialization.RecordBuilder;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;

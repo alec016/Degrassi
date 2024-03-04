@@ -1,7 +1,6 @@
 package es.degrassi.forge;
 
 import dev.architectury.platform.forge.EventBuses;
-import es.degrassi.forge.init.registration.Register;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -18,11 +17,8 @@ public class DegrassiForge {
   public DegrassiForge() {
     EventBuses.registerModEventBus(Degrassi.MODID, FMLJavaModLoadingContext.get().getModEventBus());
 
-//    AutoConfig.register(DegrassiConfig.class, PartitioningSerializer.wrap(JanksonConfigSerializer::new));
-
     Degrassi.init();
     IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-    Register.register(bus);
 
     MinecraftForge.EVENT_BUS.register(DegrassiForge.class);
   }

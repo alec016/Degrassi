@@ -5,12 +5,12 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapLike;
 import com.mojang.serialization.RecordBuilder;
+import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.api.codec.NamedCodec;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Stream;
+import org.jetbrains.annotations.Nullable;
 
 public class EnumMapCodec<K extends Enum<K>, V> extends NamedMapCodec<Map<K, V>> {
 
@@ -59,8 +59,8 @@ public class EnumMapCodec<K extends Enum<K>, V> extends NamedMapCodec<Map<K, V>>
             DataResult<V> defaultResult = this.valueCodec.read(ops, input.get("default"));
             if(defaultResult.result().isPresent())
                 defaultValue = defaultResult.result().get();
-//            else if(defaultResult.error().isPresent())
-//                DegrassiLogger.INSTANCE.warn("Couldn't parse value for key {} in MapLike {}, {}", "default", input.toString(), defaultResult.error().get().message());
+            else if(defaultResult.error().isPresent())
+                Degrassi.LOGGER.warn("Couldn't parse value for key {} in MapLike {}, {}", "default", input.toString(), defaultResult.error().get().message());
         }
 
         input.entries().forEach(entry -> {
@@ -70,8 +70,8 @@ public class EnumMapCodec<K extends Enum<K>, V> extends NamedMapCodec<Map<K, V>>
                 DataResult<V> valueResult = this.valueCodec.read(ops, entry.getSecond());
                 if(valueResult.result().isPresent())
                     map.put(key, valueResult.result().get());
-//                else if(valueResult.error().isPresent())
-//                    DegrassiLogger.INSTANCE.warn("Couldn't parse value for key {} in MapLike {}, {}", key.toString(), input.toString(), valueResult.error().get().message());
+                else if(valueResult.error().isPresent())
+                    Degrassi.LOGGER.warn("Couldn't parse value for key {} in MapLike {}, {}", key.toString(), input.toString(), valueResult.error().get().message());
             }
         });
 

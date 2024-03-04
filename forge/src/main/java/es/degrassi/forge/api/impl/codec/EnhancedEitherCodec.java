@@ -5,7 +5,6 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import es.degrassi.forge.api.codec.NamedCodec;
-
 import java.util.Objects;
 
 public class EnhancedEitherCodec<F, S> implements NamedCodec<Either<F, S>> {
@@ -35,6 +34,8 @@ public class EnhancedEitherCodec<F, S> implements NamedCodec<Either<F, S>> {
         if (firstRead.result().isPresent())
             return firstRead;
         String firstError = firstRead.error().map(DataResult.PartialResult::message).orElse("");
+//        if(ICustomMachineryAPI.INSTANCE.config().logFirstEitherError())
+//            ICustomMachineryAPI.INSTANCE.logger().warn("Can't deserialize {} with {}, trying with {} now.\n{}", this, this.first.name(), this.second.name(), firstError);
         return second.decode(ops, input).mapError(s -> String.format(this.error, this, this.first.name(), this.second.name(), firstError, s)).map(vo -> vo.mapFirst(Either::right));
     }
 

@@ -4,7 +4,6 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import es.degrassi.forge.api.codec.NamedCodec;
-
 import java.util.Locale;
 
 public class EnumCodec<E extends Enum<E>> implements NamedCodec<E> {

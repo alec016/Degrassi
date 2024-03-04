@@ -2,10 +2,17 @@ package es.degrassi.forge.api.impl.codec;
 
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.*;
+import com.mojang.serialization.CompressorHolder;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.Lifecycle;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.MapCodec.ResultFunction;
+import com.mojang.serialization.MapDecoder;
+import com.mojang.serialization.MapEncoder;
+import com.mojang.serialization.MapLike;
+import com.mojang.serialization.RecordBuilder;
 import es.degrassi.forge.api.codec.NamedCodec;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

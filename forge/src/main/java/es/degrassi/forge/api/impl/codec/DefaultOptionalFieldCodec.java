@@ -4,15 +4,16 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapLike;
 import com.mojang.serialization.RecordBuilder;
+import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.api.codec.NamedCodec;
-
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class DefaultOptionalFieldCodec<A> extends NamedMapCodec<A> {
 
-    public static <A> DefaultOptionalFieldCodec<A> of(String fieldName, NamedCodec<A> elementCodec, Supplier<A> defaultValue, String name) {
+    public static <A> NamedMapCodec<A> of(String fieldName, NamedCodec<A> elementCodec, Supplier<A> defaultValue, String name) {
         return new DefaultOptionalFieldCodec<>(fieldName, elementCodec, defaultValue, name);
     }
 
@@ -28,17 +29,31 @@ public class DefaultOptionalFieldCodec<A> extends NamedMapCodec<A> {
         this.name = name;
     }
 
+    public DefaultOptionalFieldCodec<A> aliases(String... aliases) {
+        this.aliases.addAll(Arrays.asList(aliases));
+        return this;
+    }
+
     @Override
     public <T> DataResult<A> decode(DynamicOps<T> ops, MapLike<T> input) {
-        final T value = FieldCodec.tryGetValue(ops, input, fieldName);
+        T value = FieldCodec.tryGetValue(ops, input, fieldName);
+        if(value == null) {
+            for(String alias : this.aliases) {
+                value = input.get(alias);
+                if(value != null)
+                    break;
+            }
+        }
         if (value == null) {
+//            if(ICustomMachineryAPI.INSTANCE.config().logMissingOptional())
+//                ICustomMachineryAPI.INSTANCE.logger().debug("Missing optional property: \"{}\" of type: {}, using default value: {}", fieldName, name, defaultValue.get());
             return DataResult.success(defaultValue.get());
         }
         DataResult<A> result = elementCodec.read(ops, value);
         if(result.result().isPresent())
             return result;
-//        if(result.error().isPresent())
-//            DegrassiLogger.INSTANCE.warn("Couldn't parse \"{}\" for key \"{}\", using default value: {}\nError: {}", name, fieldName, defaultValue.get(), result.error().get().message());
+        if(result.error().isPresent())
+            Degrassi.LOGGER.warn("Couldn't parse \"{}\" for key \"{}\", using default value: {}\nError: {}", name, fieldName, defaultValue.get(), result.error().get().message());
         return DataResult.success(defaultValue.get());
     }
 

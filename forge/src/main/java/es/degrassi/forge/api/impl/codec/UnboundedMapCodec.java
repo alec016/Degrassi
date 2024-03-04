@@ -9,7 +9,6 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.RecordBuilder;
 import es.degrassi.forge.api.codec.NamedCodec;
-
 import java.util.Map;
 
 public class UnboundedMapCodec<K, V> implements NamedCodec<Map<K, V>> {

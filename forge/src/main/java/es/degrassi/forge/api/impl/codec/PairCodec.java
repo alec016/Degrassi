@@ -4,7 +4,6 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import es.degrassi.forge.api.codec.NamedCodec;
-
 import java.util.Objects;
 
 public class PairCodec<F, S> implements NamedCodec<Pair<F, S>> {
