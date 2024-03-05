@@ -1,12 +1,16 @@
 package es.degrassi.forge.api.codec;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonSyntaxException;
 import com.mojang.datafixers.kinds.App;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.Lifecycle;
 import dev.architectury.registry.registries.Registrar;
 import es.degrassi.forge.api.impl.codec.DefaultOptionalFieldCodec;
 import es.degrassi.forge.api.impl.codec.EnhancedDispatchCodec;
@@ -23,6 +27,8 @@ import es.degrassi.forge.api.impl.codec.PairCodec;
 import es.degrassi.forge.api.impl.codec.RegistrarCodec;
 import es.degrassi.forge.api.impl.codec.UnboundedMapCodec;
 import io.netty.handler.codec.EncoderException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
@@ -200,6 +206,42 @@ public interface NamedCodec<A> {
 
     static <F, S> PairCodec<F, S> pair(NamedCodec<F> first, NamedCodec<S> second) {
         return PairCodec.of(first, second);
+    }
+
+    static <T> NamedCodec<T> fromJson(Function<JsonElement, T> parser, Function<T, JsonElement> encoder, String name) {
+        return PASSTHROUGH.flatXmap(d -> {
+            JsonElement json = getJson(d);
+            try {
+                return DataResult.success(parser.apply(json));
+            } catch (JsonSyntaxException e) {
+                return DataResult.error(e::getMessage);
+            }
+        }, t -> {
+            try {
+                JsonElement json = encoder.apply(t);
+                return DataResult.success(new Dynamic<>(JsonOps.INSTANCE, json));
+            } catch (JsonSyntaxException e) {
+                return DataResult.error(e::getMessage);
+            }
+        }, name);
+    }
+
+    @SuppressWarnings("unchecked")
+    static <U> JsonElement getJson(Dynamic<?> dynamic) {
+        Dynamic<U> typed = (Dynamic<U>) dynamic;
+        return typed.getValue() instanceof JsonElement ?
+            (JsonElement) typed.getValue() :
+            typed.getOps().convertTo(JsonOps.INSTANCE, typed.getValue());
+    }
+
+    static DataResult<double[]> validateDoubleStreamSize(DoubleStream stream, int size) {
+        double[] array = stream.limit(size + 1).toArray();
+        if (array.length != size) {
+            String s = "Input is not a list of " + size + " doubles";
+            return array.length >= size ? DataResult.error(() -> s, Arrays.copyOf(array, size)) : DataResult.error(() -> s);
+        } else {
+            return DataResult.success(array);
+        }
     }
 
     /** Decoder **/
@@ -529,6 +571,40 @@ public interface NamedCodec<A> {
         @Override
         public String name() {
             return "DoubleStream";
+        }
+    };
+
+    NamedCodec<Dynamic<?>> PASSTHROUGH = new NamedCodec<Dynamic<?>>() {
+        @Override
+        public <T> DataResult<Pair<Dynamic<?>, T>> decode(final DynamicOps<T> ops, final T input) {
+            return DataResult.success(Pair.of(new Dynamic<>(ops, input), ops.empty()));
+        }
+
+        @Override
+        public <T> DataResult<T> encode(final DynamicOps<T> ops, final Dynamic<?> input, final T prefix) {
+            if (input.getValue() == input.getOps().empty()) {
+                // nothing to merge, return rest
+                return DataResult.success(prefix, Lifecycle.experimental());
+            }
+
+            final T casted = input.convert(ops).getValue();
+            if (prefix == ops.empty()) {
+                // no need to merge anything, return the old value
+                return DataResult.success(casted, Lifecycle.experimental());
+            }
+
+            final DataResult<T> toMap = ops.getMap(casted).flatMap(map -> ops.mergeToMap(prefix, map));
+            return toMap.result().map(DataResult::success).orElseGet(() -> {
+                final DataResult<T> toList = ops.getStream(casted).flatMap(stream -> ops.mergeToList(prefix, stream.collect(Collectors.toList())));
+                return toList.result().map(DataResult::success).orElseGet(() ->
+                  DataResult.error(() -> "Don't know how to merge " + prefix + " and " + casted, prefix, Lifecycle.experimental())
+                );
+            });
+        }
+
+        @Override
+        public String name() {
+            return "passthrough";
         }
     };
 }

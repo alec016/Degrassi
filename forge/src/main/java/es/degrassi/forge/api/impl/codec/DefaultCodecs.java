@@ -35,22 +35,22 @@ public class DefaultCodecs {
 
     public static final NamedCodec<Direction> DIRECTION = NamedCodec.enumCodec(Direction.class);
 
-//    public static final NamedCodec<ItemStack> ITEM_STACK = NamedCodec.record(itemStackInstance ->
-//            itemStackInstance.group(
-//                    RegistrarCodec.ITEM.fieldOf("id").forGetter(ItemStack::getItem),
-//                    NamedCodec.INT.optionalFieldOf("Count", 1).forGetter(ItemStack::getCount),
-//                    COMPOUND_TAG.optionalFieldOf("tag").forGetter(stack -> Optional.ofNullable(stack.getTag()))
-//            ).apply(itemStackInstance, (item, count, nbt) -> {
-//                ItemStack stack = item.getDefaultInstance();
-//                stack.setCount(count);
-//                nbt.ifPresent(stack::setTag);
-//                return stack;
-//            }), "Item stack"
-//    );
+    public static final NamedCodec<ItemStack> ITEM_STACK = NamedCodec.record(itemStackInstance ->
+            itemStackInstance.group(
+                    RegistrarCodec.ITEM.fieldOf("id").forGetter(ItemStack::getItem),
+                    NamedCodec.INT.optionalFieldOf("Count", 1).forGetter(ItemStack::getCount),
+                    COMPOUND_TAG.optionalFieldOf("tag").forGetter(stack -> Optional.ofNullable(stack.getTag()))
+            ).apply(itemStackInstance, (item, count, nbt) -> {
+                ItemStack stack = item.getDefaultInstance();
+                stack.setCount(count);
+                nbt.ifPresent(stack::setTag);
+                return stack;
+            }), "Item stack"
+    );
 
-//    public static final NamedCodec<ItemStack> ITEM_OR_STACK = NamedCodec.either(RegistrarCodec.ITEM, ITEM_STACK).xmap(either -> either.map(Item::getDefaultInstance, Function.identity()), Either::right, "Item Stack");
-//
-//    public static final NamedCodec<Ingredient> INGREDIENT = NamedCodec.fromJson(Ingredient::fromJson, Ingredient::toJson, "Ingredient");
+    public static final NamedCodec<ItemStack> ITEM_OR_STACK = NamedCodec.either(RegistrarCodec.ITEM, ITEM_STACK).xmap(either -> either.map(Item::getDefaultInstance, Function.identity()), Either::right, "Item Stack");
+
+    public static final NamedCodec<Ingredient> INGREDIENT = NamedCodec.fromJson(Ingredient::fromJson, Ingredient::toJson, "Ingredient");
 
     public static final NamedCodec<AABB> BOX = NamedCodec.DOUBLE_STREAM.comapFlatMap(stream -> {
         double[] arr = stream.toArray();
