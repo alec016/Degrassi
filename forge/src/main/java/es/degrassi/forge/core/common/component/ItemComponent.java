@@ -122,4 +122,12 @@ public class ItemComponent implements IComponent, IItemHandlerModifiable {
   public void setStackInSlot(int slot, @NotNull ItemStack item) {
     setItem(item);
   }
+
+  @Override
+  public String toString() {
+    return "ItemComponent{" +
+      "id='" + id + '\'' +
+      ", item=" + item.getHoverName().getString() +
+      '}';
+  }
 }

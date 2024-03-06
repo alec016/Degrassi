@@ -47,4 +47,9 @@ public class ComponentManager extends Manager<IComponent> {
       default -> throw new IllegalStateException("Unexpected value: " + type);
     };
   }
+
+  @Override
+  public String toString() {
+    return "Component" + super.toString();
+  }
 }

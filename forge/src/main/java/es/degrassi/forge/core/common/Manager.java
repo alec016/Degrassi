@@ -57,4 +57,11 @@ public abstract class Manager<T extends IType> implements IManager<T> {
   public void deserializeNBT(CompoundTag nbt) {
     get().forEach(type -> type.deserialize(nbt));
   }
+
+  @Override
+  public String toString() {
+    return "Manager{" +
+      "list=" + list +
+      '}';
+  }
 }

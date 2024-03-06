@@ -12,4 +12,9 @@ public class RequirementManager extends Manager<IRequirement<?>> {
   public RequirementManager(List<IRequirement<?>> requirements, MachineEntity entity) {
     super(requirements, entity);
   }
+
+  @Override
+  public String toString() {
+    return "Requirement" + super.toString();
+  }
 }

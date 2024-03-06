@@ -95,4 +95,16 @@ public class ItemElement extends AbstractWidget implements IElement<ItemComponen
   public void deserialize(CompoundTag nbt) {
 
   }
+
+  @Override
+  public String toString() {
+    return "ItemElement{" +
+      "x=" + getX() +
+      ", y=" + getY() +
+      ", id='" + id + '\'' +
+      ", texture=" + texture +
+      ", width=" + width +
+      ", height=" + height +
+      '}';
+  }
 }

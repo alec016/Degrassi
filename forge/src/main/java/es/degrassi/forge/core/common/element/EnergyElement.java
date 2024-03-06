@@ -105,7 +105,7 @@ public class EnergyElement extends AbstractWidget implements IElement<EnergyComp
   @Override
   public void deserialize(CompoundTag nbt) {
     CompoundTag tag = nbt.getCompound(id);
-    if (tag.contains(EMPTY_TEXTURE_KEY, Tag.TAG_STRING)) emptyTexture = new ResourceLocation(tag.getString(EMPTY_TEXTURE_KEY));
+    emptyTexture = new ResourceLocation(tag.getString(EMPTY_TEXTURE_KEY));
     filledTexture = new ResourceLocation(tag.getString(FILLED_TEXTURE_KEY));
   }
 

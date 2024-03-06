@@ -63,4 +63,15 @@ public class PlayerInventoryElement extends AbstractWidget implements IElement {
   @Override
   public void deserialize(CompoundTag nbt) {
   }
+
+  @Override
+  public String toString() {
+    return "PlayerInventoryElement{" +
+      "x=" + getX() +
+      ", y=" + getY() +
+      ", texture=" + texture +
+      ", width=" + width +
+      ", height=" + height +
+      '}';
+  }
 }

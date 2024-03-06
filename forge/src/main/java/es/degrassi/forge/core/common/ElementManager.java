@@ -44,4 +44,9 @@ public class ElementManager extends Manager<IElement<?>> {
   public Optional<IElement<?>> getElement(String id) {
     return get().stream().filter(element -> element.getId().equals(id)).findFirst();
   }
+
+  @Override
+  public String toString() {
+    return "Element" + super.toString();
+  }
 }
