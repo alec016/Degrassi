@@ -1,6 +1,6 @@
 package es.degrassi.forge.api.core.common;
 
-public interface IComponent<C> extends IType {
+public interface IComponent extends IType {
 
-  IManager<IComponent<?>> getManager();
+  IManager<IComponent> getManager();
 }

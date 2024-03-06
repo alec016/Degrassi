@@ -5,15 +5,24 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.core.common.machines.entity.FurnaceEntity;
 import es.degrassi.forge.core.tiers.Furnace;
+import java.util.Set;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public class EntityRegistration {
   public static final DeferredRegister<BlockEntityType<?>> ENTITIES = DeferredRegister.create(Degrassi.MODID, Registries.BLOCK_ENTITY_TYPE);
-  public static final RegistrySupplier<BlockEntityType<FurnaceEntity>> IRON_FURNACE = ENTITIES.register("iron_furnace", () -> BlockEntityType.Builder.of(
-    (pos, state) -> new FurnaceEntity(pos, state, Furnace.IRON),
-    BlockRegistration.IRON_FURNACE.get()
-  ).build(null));
+  public static final RegistrySupplier<BlockEntityType<FurnaceEntity>> IRON_FURNACE = ENTITIES.register(
+    "iron_furnace",
+//    () -> BlockEntityType.Builder.of(
+//      (pos, state) -> new FurnaceEntity(pos, state, Furnace.IRON),
+//      BlockRegistration.IRON_FURNACE.get()
+//    ).build(null)
+    () -> new BlockEntityType<>(
+      (pos, state) -> new FurnaceEntity(pos, state, Furnace.IRON),
+      Set.of(BlockRegistration.IRON_FURNACE.get()),
+      null
+    )
+  );
   public static final RegistrySupplier<BlockEntityType<FurnaceEntity>> GOLD_FURNACE = ENTITIES.register("gold_furnace", () -> BlockEntityType.Builder.of(
     (pos, state) -> new FurnaceEntity(pos, state, Furnace.GOLD),
     BlockRegistration.GOLD_FURNACE.get()

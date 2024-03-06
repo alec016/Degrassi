@@ -1,5 +1,6 @@
 package es.degrassi.forge.core.init;
 
+import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.registry.menu.MenuRegistry;
 import dev.architectury.registry.registries.RegistrarManager;
 import es.degrassi.forge.Degrassi;
@@ -14,5 +15,7 @@ public class Registration {
     ItemRegistration.ITEMS.register();
     EntityRegistration.ENTITIES.register();
     ContainerRegistration.MENUS.register();
+
+    LifecycleEvent.SETUP.register(Degrassi::setup);
   }
 }

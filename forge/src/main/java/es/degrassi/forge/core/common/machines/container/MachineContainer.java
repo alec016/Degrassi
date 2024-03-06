@@ -1,7 +1,10 @@
 package es.degrassi.forge.core.common.machines.container;
 
-import es.degrassi.forge.core.common.machines.entity.FurnaceEntity;
+import es.degrassi.forge.core.common.component.ItemComponent;
+import es.degrassi.forge.core.common.element.ItemElement;
+import es.degrassi.forge.core.common.element.PlayerInventoryElement;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -9,6 +12,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class MachineContainer<T extends MachineEntity> extends AbstractContainerMenu {
@@ -30,6 +34,28 @@ public abstract class MachineContainer<T extends MachineEntity> extends Abstract
     this.entity = entity;
     this.playerInv = inventory;
     this.level = inventory.player.level();
+    AtomicInteger index = new AtomicInteger(0);
+    entity.getComponentManager().getComponentsByType("item").stream().map(component -> (ItemComponent) component)
+      .forEach(component -> {
+        ItemElement element = (ItemElement) entity.getElementManager().getElement(component.getId()).orElse(null);
+        if (element == null) return;
+        addSlot(new SlotItemHandler(component, index.getAndIncrement(), element.getX() + 1, element.getY() + 1));
+      });
+    entity.getElementManager().getElement("player_inventory").ifPresent(element -> {
+      PlayerInventoryElement playerElement = (PlayerInventoryElement) element;
+      int x = playerElement.getX() + 1;
+      int y = playerElement.getY() + 1;
+      AtomicInteger slotIndex = new AtomicInteger(0);
+      int i;
+      for (i = 0; i < 9; ++i) {
+        addSlot(new Slot(playerInv, slotIndex.getAndIncrement(), x + i * 18, y + 58));
+      }
+      for (i = 0; i < 3; ++i) {
+        for (int j = 0; j < 9; ++j) {
+          addSlot(new Slot(playerInv, slotIndex.getAndIncrement(), x + j * 18, y + i * 18));
+        }
+      }
+    });
   }
 
   public T getEntity() {

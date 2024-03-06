@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import org.jetbrains.annotations.NotNull;
 
 public class FurnaceScreen extends MachineScreen<FurnaceContainer> {
   public static final ResourceLocation BACKGROUND = new DegrassiLocation("textures/gui/furnace_gui.png");
@@ -24,31 +25,30 @@ public class FurnaceScreen extends MachineScreen<FurnaceContainer> {
   }
 
   @Override
-  protected void init() {
-    super.init();
-  }
-
-  @Override
-  protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
+  protected void renderBg(@NotNull GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
+    renderBackground(guiGraphics);
     super.renderBg(guiGraphics, partialTick, mouseX, mouseY);
     RenderSystem.setShader(GameRenderer::getPositionTexShader);
     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-    RenderSystem.setShaderTexture(0, BACKGROUND);
 
-    guiGraphics.blit(BACKGROUND, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight, imageWidth, imageHeight);
+    guiGraphics.blit(BACKGROUND, this.leftPos, this.topPos, 0F, 0F, imageWidth, imageHeight, imageWidth, imageHeight);
 
-    manager.get().forEach(element -> element.render(guiGraphics, partialTick, mouseX, mouseY));
-  }
+    guiGraphics.pose().pushPose();
+    guiGraphics.pose().translate(leftPos, topPos, 0);
 
-  @Override
-  public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-    renderBackground(guiGraphics);
-    super.render(guiGraphics, mouseX, mouseY, partialTick);
+    manager.get().forEach(element -> element.renderWidget(guiGraphics, mouseX, mouseY, partialTick));
+
     renderTooltip(guiGraphics, mouseX, mouseY);
+    guiGraphics.pose().popPose();
   }
 
   @Override
-  protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-    guiGraphics.drawString(font, this.title, this.titleLabelX, this.titleLabelY, 4210752);
+  protected void renderTooltip(@NotNull GuiGraphics guiGraphics, int x, int y) {
+    manager.get().forEach(element -> element.renderTooltip(guiGraphics, x - this.leftPos, y - this.topPos));
+  }
+
+  @Override
+  protected void renderLabels(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY) {
+    guiGraphics.drawString(font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false);
   }
 }
