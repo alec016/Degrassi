@@ -11,5 +11,5 @@ public interface IElement<E extends IComponent> extends IType {
   void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick);
   void renderTooltip(GuiGraphics guiGraphics, int x, int y);
 
-  void renderHighlight(@NotNull GuiGraphics guiGraphics);
+  void renderHighlight(@NotNull GuiGraphics guiGraphics, int x, int y);
 }

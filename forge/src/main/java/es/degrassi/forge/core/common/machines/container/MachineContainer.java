@@ -24,7 +24,7 @@ public abstract class MachineContainer<T extends MachineEntity> extends Abstract
   int VANILLA_FIRST_SLOT_INDEX = 0;
   int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
   // THIS YOU HAVE TO DEFINE!
-  protected static final int TE_INVENTORY_SLOT_COUNT = 4;  // must be the number of slots you have!
+  protected static int TE_INVENTORY_SLOT_COUNT = 0;  // must be the number of slots you have!
 
   private final T entity;
   private final Level level;
@@ -35,27 +35,26 @@ public abstract class MachineContainer<T extends MachineEntity> extends Abstract
     this.playerInv = inventory;
     this.level = inventory.player.level();
     AtomicInteger index = new AtomicInteger(0);
-    entity.getComponentManager().getComponentsByType("item").stream().map(component -> (ItemComponent) component)
-      .forEach(component -> {
-        ItemElement element = (ItemElement) entity.getElementManager().getElement(component.getId()).orElse(null);
-        if (element == null) return;
-        addSlot(new SlotItemHandler(component, index.getAndIncrement(), element.getX() + 1, element.getY() + 1));
-      });
-    entity.getElementManager().getElement("player_inventory").ifPresent(element -> {
-      PlayerInventoryElement playerElement = (PlayerInventoryElement) element;
-      int x = playerElement.getX() + 1;
-      int y = playerElement.getY() + 1;
-      AtomicInteger slotIndex = new AtomicInteger(0);
+    entity.getElementManager().getElement("player_inventory").map(element -> (PlayerInventoryElement) element).ifPresent(element -> {
+      int x = element.getX() + 1;
+      int y = element.getY() + 1;
       int i;
       for (i = 0; i < 9; ++i) {
-        addSlot(new Slot(playerInv, slotIndex.getAndIncrement(), x + i * 18, y + 58));
+        addSlot(new Slot(playerInv, index.getAndIncrement(), x + i * 18, y + 58));
       }
       for (i = 0; i < 3; ++i) {
         for (int j = 0; j < 9; ++j) {
-          addSlot(new Slot(playerInv, slotIndex.getAndIncrement(), x + j * 18, y + i * 18));
+          addSlot(new Slot(playerInv, index.getAndIncrement(), x + j * 18, y + i * 18));
         }
       }
     });
+    entity.getComponentManager().getComponentsByType("item").stream().map(component -> (ItemComponent) component)
+      .forEach(component -> {
+        entity.getElementManager().getElement(component.getId()).map(element -> (ItemElement) element).ifPresent(element -> {
+          addSlot(new SlotItemHandler(component, index.getAndIncrement(), element.getX() + 1, element.getY() + 1));
+        });
+      });
+    TE_INVENTORY_SLOT_COUNT = index.get();
   }
 
   public T getEntity() {

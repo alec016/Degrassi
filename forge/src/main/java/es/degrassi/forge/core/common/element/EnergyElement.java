@@ -59,7 +59,7 @@ public class EnergyElement extends AbstractWidget implements IElement<EnergyComp
     if (component == null) return;
 
     if (this.isMouseOver(x, y)) {
-      renderHighlight(guiGraphics);
+      renderHighlight(guiGraphics, x, y);
       guiGraphics.renderTooltip(
         Minecraft.getInstance().font, List.of(
           Component.literal(
@@ -75,7 +75,7 @@ public class EnergyElement extends AbstractWidget implements IElement<EnergyComp
   }
 
   @Override
-  public void renderHighlight(@NotNull GuiGraphics guiGraphics) {
+  public void renderHighlight(@NotNull GuiGraphics guiGraphics, int x, int y) {
     guiGraphics.fillGradient(RenderType.guiOverlay(), getX() + 1, getY() + 1, getX() + getWidth() - 1, getY() + getHeight() - 1, -2130706433, -2130706433, 0);
   }
 

@@ -59,7 +59,7 @@ public class ItemElement extends AbstractWidget implements IElement<ItemComponen
     ItemComponent component = (ItemComponent) manager.getEntity().getComponentManager().getComponent(id).orElse(null);;
     if (component == null) return;
     if (isMouseOver(x, y)) {
-      renderHighlight(guiGraphics);
+      renderHighlight(guiGraphics, x, y);
       if (component.getStackInSlot(0).isEmpty() || component.getStackInSlot(0).is(Items.AIR)) return;
       guiGraphics.renderTooltip(
         Minecraft.getInstance().font, List.of(
@@ -72,7 +72,7 @@ public class ItemElement extends AbstractWidget implements IElement<ItemComponen
   }
 
   @Override
-  public void renderHighlight(@NotNull GuiGraphics guiGraphics) {
+  public void renderHighlight(@NotNull GuiGraphics guiGraphics, int x, int y) {
     guiGraphics.fillGradient(RenderType.guiOverlay(), getX() + 1, getY() + 1, getX() + getWidth() - 1, getY() + getWidth() - 1, -2130706433, -2130706433, 0);
   }
 

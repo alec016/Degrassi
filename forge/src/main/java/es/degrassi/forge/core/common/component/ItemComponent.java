@@ -6,10 +6,10 @@ import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.network.component.ItemPacket;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 
-public class ItemComponent implements IComponent, IItemHandler {
+public class ItemComponent implements IComponent, IItemHandlerModifiable {
   private final String id;
   private ItemStack item = ItemStack.EMPTY;
   private final ComponentManager manager;
@@ -114,7 +114,12 @@ public class ItemComponent implements IComponent, IItemHandler {
   }
 
   @Override
-  public boolean isItemValid(int i, @NotNull ItemStack item) {
+  public boolean isItemValid(int slot, @NotNull ItemStack item) {
     return this.item.isEmpty() || this.item.is(item.getItem());
+  }
+
+  @Override
+  public void setStackInSlot(int slot, @NotNull ItemStack item) {
+    setItem(item);
   }
 }
