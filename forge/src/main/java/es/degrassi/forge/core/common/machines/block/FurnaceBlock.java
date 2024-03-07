@@ -72,7 +72,6 @@ public class FurnaceBlock extends MachineBlock {
           public AbstractContainerMenu createMenu(int id, @NotNull Inventory inv, @NotNull Player player) {
             entity.getComponentManager().markDirty();
             entity.getElementManager().markDirty();
-            entity.getRequirementManager().markDirty();
             return new FurnaceContainer(id, inv, entity);
           }
         }, buf -> buf.writeBlockPos(pos));

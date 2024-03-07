@@ -25,7 +25,6 @@ public abstract class MachineEntity extends BlockEntity {
   private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
   private LazyOptional<EnergyComponent> lazyEnergyHandler = LazyOptional.empty();
   private final ComponentManager componentManager;
-  private final RequirementManager requirementManager;
   private final ElementManager elementManager;
   private final MachineProcessor processor;
 
@@ -33,8 +32,7 @@ public abstract class MachineEntity extends BlockEntity {
     super(type, pos, blockState);
     this.componentManager = new ComponentManager(this);
     this.elementManager = new ElementManager(this);
-    this.requirementManager = new RequirementManager(this);
-    this.processor = new MachineProcessor(requirementManager, this);
+    this.processor = new MachineProcessor(this);
   }
 
   public ComponentManager getComponentManager() {
@@ -43,10 +41,6 @@ public abstract class MachineEntity extends BlockEntity {
 
   public ElementManager getElementManager() {
     return elementManager;
-  }
-
-  public RequirementManager getRequirementManager() {
-    return requirementManager;
   }
 
   public MachineProcessor getProcessor() {
@@ -72,7 +66,6 @@ public abstract class MachineEntity extends BlockEntity {
     super.load(tag);
     componentManager.deserializeNBT(tag.getCompound("componentManager"));
     elementManager.deserializeNBT(tag.getCompound("elementManager"));
-    requirementManager.deserializeNBT(tag.getCompound("requirementManager"));
     processor.deserializeNBT(tag.getCompound("processor"));
   }
 
@@ -81,7 +74,6 @@ public abstract class MachineEntity extends BlockEntity {
     super.saveAdditional(tag);
     tag.put("componentManager", componentManager.serializeNBT());
     tag.put("elementManager", elementManager.serializeNBT());
-    tag.put("requirementManager", requirementManager.serializeNBT());
     tag.put("processor", processor.serializeNBT());
   }
 
@@ -121,7 +113,6 @@ public abstract class MachineEntity extends BlockEntity {
   ) {
     entity.getComponentManager().clientTick();
     entity.getElementManager().clientTick();
-    entity.getRequirementManager().clientTick();
   }
 
   public static void serverTick(
@@ -132,7 +123,6 @@ public abstract class MachineEntity extends BlockEntity {
   ) {
     entity.getComponentManager().serverTick();
     entity.getElementManager().serverTick();
-    entity.getRequirementManager().serverTick();
   }
 
   @Override

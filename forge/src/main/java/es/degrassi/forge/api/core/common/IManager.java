@@ -5,16 +5,9 @@ import java.util.List;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.util.INBTSerializable;
 
-public interface IManager<T extends IType> extends INBTSerializable<CompoundTag> {
+public interface IManager<T extends IType> {
   List<T> get();
   void add(T value);
 
   MachineEntity getEntity();
-
-  void clientTick();
-  void serverTick();
-
-  default void markDirty() {
-    get().forEach(IType::markDirty);
-  }
 }

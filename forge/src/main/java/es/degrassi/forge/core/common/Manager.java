@@ -5,7 +5,6 @@ import es.degrassi.forge.api.core.common.IType;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import java.util.LinkedList;
 import java.util.List;
-import net.minecraft.nbt.CompoundTag;
 
 public abstract class Manager<T extends IType> implements IManager<T> {
   private final List<T> list;
@@ -34,28 +33,6 @@ public abstract class Manager<T extends IType> implements IManager<T> {
   @Override
   public MachineEntity getEntity() {
     return entity;
-  }
-
-  @Override
-  public void clientTick() {
-    get().forEach(IType::clientTick);
-  }
-
-  @Override
-  public void serverTick() {
-    get().forEach(IType::serverTick);
-  }
-
-  @Override
-  public CompoundTag serializeNBT() {
-    CompoundTag nbt = new CompoundTag();
-    get().forEach(type -> type.serialize(nbt));
-    return nbt;
-  }
-
-  @Override
-  public void deserializeNBT(CompoundTag nbt) {
-    get().forEach(type -> type.deserialize(nbt));
   }
 
   @Override

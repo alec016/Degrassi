@@ -13,6 +13,9 @@ public class Registration {
     ItemRegistration.ITEMS.register();
     EntityRegistration.ENTITIES.register();
     ContainerRegistration.MENUS.register();
+    RecipeRegistration.RECIPE_SERIALIZERS.register();
+
+    RequirementRegistration.REQUIREMENTS.register();
 
     LifecycleEvent.SETUP.register(Degrassi::setup);
   }

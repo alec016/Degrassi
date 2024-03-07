@@ -7,7 +7,9 @@ import dev.architectury.registry.registries.Registrar;
 import dev.architectury.registry.registries.RegistrarManager;
 import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.api.codec.NamedCodec;
+import es.degrassi.forge.api.core.common.RequirementType;
 import es.degrassi.forge.core.init.Registration;
+import es.degrassi.forge.core.init.RequirementRegistration;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -29,13 +31,14 @@ public class RegistrarCodec<V> implements NamedCodec<V> {
     public static final NamedCodec<Enchantment> ENCHANTMENT = of(registrar(Registries.ENCHANTMENT), false);
     public static final NamedCodec<MobEffect> EFFECT = of(registrar(Registries.MOB_EFFECT), false);
 
-    /**CM registries**/
+    /**Degrassi registries**/
+    public static final NamedCodec<RequirementType<?>> REQUIREMENT = of(RequirementType.requirementRegistrar(), true);
 
     public static <T> Registrar<T> registrar(ResourceKey<Registry<T>> registryKey) {
         return Registration.REGISTRIES.get(registryKey);
     }
 
-    public static final NamedCodec<ResourceLocation> CM_LOC_CODEC = NamedCodec.STRING.comapFlatMap(
+    public static final NamedCodec<ResourceLocation> DEGRASSI_LOC_CODEC = NamedCodec.STRING.comapFlatMap(
             s -> {
                 try {
                     if(s.contains(":"))
@@ -47,7 +50,7 @@ public class RegistrarCodec<V> implements NamedCodec<V> {
                 }
             },
             ResourceLocation::toString,
-            "CM Resource location"
+            "Degrassi Resource location"
     );
 
     public static <V> RegistrarCodec<V> of(Registrar<V> registrar, boolean isCM) {
@@ -55,16 +58,16 @@ public class RegistrarCodec<V> implements NamedCodec<V> {
     }
 
     private final Registrar<V> registrar;
-    private final boolean isCM;
+    private final boolean isDegrassi;
 
-    private RegistrarCodec(Registrar<V> registrar, boolean isCM) {
+    private RegistrarCodec(Registrar<V> registrar, boolean isDegrassi) {
         this.registrar = registrar;
-        this.isCM = isCM;
+        this.isDegrassi = isDegrassi;
     }
 
     @Override
     public <T> DataResult<Pair<V, T>> decode(DynamicOps<T> ops, T input) {
-        return (this.isCM ? CM_LOC_CODEC : DefaultCodecs.RESOURCE_LOCATION).decode(ops, input).flatMap(keyValuePair ->
+        return (this.isDegrassi ? DEGRASSI_LOC_CODEC : DefaultCodecs.RESOURCE_LOCATION).decode(ops, input).flatMap(keyValuePair ->
                 !this.registrar.contains(keyValuePair.getFirst())
                         ? DataResult.error(() -> "Unknown registry key in " + this.registrar.key() + ": " + keyValuePair.getFirst())
                         : DataResult.success(keyValuePair.mapFirst(this.registrar::get))
