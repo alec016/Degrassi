@@ -13,14 +13,14 @@ import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 public class MachineScreen<T extends MachineContainer<?>> extends AbstractContainerScreen<T> {
-  protected static ResourceLocation BACKGROUND;
+  protected final ResourceLocation background;
   protected final ElementManager manager;
   public MachineScreen(T menu, Inventory playerInventory, Component title, ResourceLocation background) {
     super(menu, playerInventory, title);
-    BACKGROUND = background;
+    this.background = background;
     this.manager = menu.getEntity().getElementManager();
-    this.imageWidth = TextureSizeHelper.getTextureWidth(BACKGROUND);
-    this.imageHeight = TextureSizeHelper.getTextureHeight(BACKGROUND);
+    this.imageWidth = TextureSizeHelper.getTextureWidth(background);
+    this.imageHeight = TextureSizeHelper.getTextureHeight(background);
     this.leftPos = (this.width - this.imageWidth) / 2;
     this.topPos = (this.height - this.imageHeight) / 2;
   }
@@ -31,7 +31,7 @@ public class MachineScreen<T extends MachineContainer<?>> extends AbstractContai
     RenderSystem.setShader(GameRenderer::getPositionTexShader);
     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
-    guiGraphics.blit(BACKGROUND, this.leftPos, this.topPos, 0F, 0F, imageWidth, imageHeight, imageWidth, imageHeight);
+    guiGraphics.blit(this.background, this.leftPos, this.topPos, 0F, 0F, imageWidth, imageHeight, imageWidth, imageHeight);
 
     guiGraphics.pose().pushPose();
     guiGraphics.pose().translate(leftPos, topPos, 0);

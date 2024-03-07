@@ -26,7 +26,7 @@ public class ItemPacket extends BaseS2CMessage {
   }
   @Override
   public MessageType getType() {
-    return PacketRegistration.ITEM_COMPONENT;
+    return PacketRegistration.ITEM;
   }
 
   @Override

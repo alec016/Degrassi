@@ -3,6 +3,7 @@ package es.degrassi.forge.core.common;
 import es.degrassi.forge.api.core.common.ElementDirection;
 import es.degrassi.forge.api.core.common.IElement;
 import es.degrassi.forge.core.common.element.EnergyElement;
+import es.degrassi.forge.core.common.element.ExperienceElement;
 import es.degrassi.forge.core.common.element.ItemElement;
 import es.degrassi.forge.core.common.element.PlayerInventoryElement;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
@@ -39,6 +40,15 @@ public class ElementManager extends Manager<IElement<?>> {
   public ElementManager addPlayerInventory(int x, int y, Component message, ResourceLocation texture) {
     get().add(new PlayerInventoryElement(this, x, y, texture, message));
     return this;
+  }
+
+  public ElementManager addExperience(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id, ElementDirection direction) {
+    get().add(new ExperienceElement(this, x, y, id, message, emptyTexture, filledTexture, direction));
+    return this;
+  }
+
+  public ElementManager addExperience(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id) {
+    return addExperience(x, y, message, emptyTexture, filledTexture, id, ElementDirection.HORIZONTAL);
   }
 
   public Optional<IElement<?>> getElement(String id) {

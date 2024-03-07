@@ -4,6 +4,7 @@ import dev.architectury.networking.NetworkManager;
 import dev.architectury.networking.simple.BaseS2CMessage;
 import dev.architectury.networking.simple.MessageType;
 import es.degrassi.forge.core.common.component.EnergyComponent;
+import es.degrassi.forge.core.common.component.ExperienceComponent;
 import es.degrassi.forge.core.common.machines.container.MachineContainer;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.network.PacketRegistration;
@@ -13,30 +14,31 @@ import net.minecraft.network.FriendlyByteBuf;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public class EnergyPacket extends BaseS2CMessage {
-  private final int energy;
+public class ExperiencePacket extends BaseS2CMessage {
+  private final float experience;
   private final String id;
   private final BlockPos pos;
-  public EnergyPacket(int energy, String id, BlockPos pos) {
-    this.energy = energy;
+  public ExperiencePacket(float experience, String id, BlockPos pos) {
+    this.experience = experience;
     this.id = id;
     this.pos = pos;
   }
+
   @Override
   public MessageType getType() {
-    return PacketRegistration.ENERGY;
+    return PacketRegistration.EXPERIENCE;
   }
 
   @Override
   public void write(@NotNull FriendlyByteBuf buf) {
-    buf.writeInt(energy);
+    buf.writeFloat(experience);
     buf.writeUtf(id);
     buf.writeBlockPos(pos);
   }
 
   @Contract("_ -> new")
-  public static @NotNull EnergyPacket read(@NotNull FriendlyByteBuf buf) {
-    return new EnergyPacket(buf.readInt(), buf.readUtf(), buf.readBlockPos());
+  public static @NotNull ExperiencePacket read(@NotNull FriendlyByteBuf buf) {
+    return new ExperiencePacket(buf.readFloat(), buf.readUtf(), buf.readBlockPos());
   }
 
   @Override
@@ -45,20 +47,17 @@ public class EnergyPacket extends BaseS2CMessage {
       if (Minecraft.getInstance().level != null && Minecraft.getInstance().level.getBlockEntity(pos) instanceof MachineEntity entity) {
         entity
           .getComponentManager()
-          .getComponent(id).ifPresent(component -> {
-            EnergyComponent energyComponent = (EnergyComponent) component;
-            energyComponent.setEnergy(energy);
-          });
+          .getComponent(id)
+          .map(component -> (ExperienceComponent) component)
+          .ifPresent(component -> component.setExperience(experience));
         if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.containerMenu instanceof MachineContainer<?> menu &&
           menu.getEntity().getBlockPos().equals(pos)
         ) {
           entity
             .getComponentManager()
             .getComponent(id)
-            .ifPresent(component -> {
-              EnergyComponent energyComponent = (EnergyComponent) component;
-              energyComponent.setEnergy(energy);
-            });
+            .map(component -> (ExperienceComponent) component)
+            .ifPresent(component -> component.setExperience(experience));
         }
       }
     });

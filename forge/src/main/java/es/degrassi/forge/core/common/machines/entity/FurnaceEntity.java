@@ -12,11 +12,12 @@ public class FurnaceEntity extends MachineEntity {
   public FurnaceEntity(BlockPos pos, BlockState blockState, Furnace tier) {
     super(tier.getType().get(), pos, blockState);
     this.getComponentManager()
-      .addEnergy(tier.getCapacity(), "energy")
+      .addEnergy(tier.getEnergyCapacity(), "energy")
       .addItem("upgrade1")
       .addItem("upgrade2")
       .addItem("input")
-      .addItem("output");
+      .addItem("output")
+      .addExperience(tier.getExperienceCapacity(), "experience");
     this.getElementManager()
       .addEnergy(
         7,
@@ -55,6 +56,13 @@ public class FurnaceEntity extends MachineEntity {
         97,
         Component.literal("player_inventory"),
         new DegrassiLocation("textures/gui/base_inventory.png")
+      ).addExperience(
+        66,
+        57,
+        Component.literal("experience"),
+        new DegrassiLocation("textures/gui/base_experience_empty.png"),
+        new DegrassiLocation("textures/gui/base_experience_filled.png"),
+        "experience"
       );
     this.tier = tier;
   }
