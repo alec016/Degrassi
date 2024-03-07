@@ -17,7 +17,8 @@ public class FurnaceEntity extends MachineEntity {
       .addItem("upgrade2")
       .addItem("input")
       .addItem("output")
-      .addExperience(tier.getExperienceCapacity(), "experience");
+      .addExperience(tier.getExperienceCapacity(), "experience")
+      .addProgress();
     this.getElementManager()
       .addEnergy(
         7,
@@ -63,6 +64,12 @@ public class FurnaceEntity extends MachineEntity {
         new DegrassiLocation("textures/gui/base_experience_empty.png"),
         new DegrassiLocation("textures/gui/base_experience_filled.png"),
         "experience"
+      ).addProgress(
+        66,
+        33,
+        Component.literal("progress"),
+        new DegrassiLocation("textures/gui/furnace_progress_empty.png"),
+        new DegrassiLocation("textures/gui/furnace_progress_filled.png")
       );
     this.tier = tier;
   }

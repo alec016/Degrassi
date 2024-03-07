@@ -24,7 +24,7 @@ public abstract class MachineContainer<T extends MachineEntity> extends Abstract
   int VANILLA_FIRST_SLOT_INDEX = 0;
   int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
   // THIS YOU HAVE TO DEFINE!
-  protected static int TE_INVENTORY_SLOT_COUNT = 0;  // must be the number of slots you have!
+  protected int TE_INVENTORY_SLOT_COUNT;  // must be the number of slots you have!
 
   private final T entity;
   private final Level level;

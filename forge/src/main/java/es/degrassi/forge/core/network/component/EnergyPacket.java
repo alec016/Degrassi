@@ -4,6 +4,7 @@ import dev.architectury.networking.NetworkManager;
 import dev.architectury.networking.simple.BaseS2CMessage;
 import dev.architectury.networking.simple.MessageType;
 import es.degrassi.forge.core.common.component.EnergyComponent;
+import es.degrassi.forge.core.common.component.ExperienceComponent;
 import es.degrassi.forge.core.common.machines.container.MachineContainer;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.network.PacketRegistration;
@@ -45,20 +46,17 @@ public class EnergyPacket extends BaseS2CMessage {
       if (Minecraft.getInstance().level != null && Minecraft.getInstance().level.getBlockEntity(pos) instanceof MachineEntity entity) {
         entity
           .getComponentManager()
-          .getComponent(id).ifPresent(component -> {
-            EnergyComponent energyComponent = (EnergyComponent) component;
-            energyComponent.setEnergy(energy);
-          });
+          .getComponent(id)
+          .map(component -> (EnergyComponent) component)
+          .ifPresent(component -> component.setEnergy(energy));
         if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.containerMenu instanceof MachineContainer<?> menu &&
           menu.getEntity().getBlockPos().equals(pos)
         ) {
           entity
             .getComponentManager()
             .getComponent(id)
-            .ifPresent(component -> {
-              EnergyComponent energyComponent = (EnergyComponent) component;
-              energyComponent.setEnergy(energy);
-            });
+            .map(component -> (EnergyComponent) component)
+            .ifPresent(component -> component.setEnergy(energy));
         }
       }
     });

@@ -4,6 +4,7 @@ import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.core.common.component.EnergyComponent;
 import es.degrassi.forge.core.common.component.ExperienceComponent;
 import es.degrassi.forge.core.common.component.ItemComponent;
+import es.degrassi.forge.core.common.component.ProgressComponent;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +40,11 @@ public class ComponentManager extends Manager<IComponent> {
 
   public ComponentManager addExperience(float capacity, String id) {
     get().add(new ExperienceComponent(this, capacity, getEntity(), id));
+    return this;
+  }
+
+  public ComponentManager addProgress() {
+    get().add(new ProgressComponent(this, getEntity()));
     return this;
   }
 
