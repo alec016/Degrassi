@@ -12,12 +12,20 @@ public interface IRequirement<R extends IComponent> extends IType {
   );
   RequirementType<? extends IRequirement<?>> getType();
 
-  CraftingResult processStart(R component);
-  CraftingResult processEnd(R component);
-  default CraftingResult processTick(R component) {
+  default CraftingResult processStart(IComponent component) {
+    return CraftingResult.PASS;
+  }
+  default CraftingResult processEnd(IComponent component) {
+    return CraftingResult.PASS;
+  }
+  default CraftingResult processTick(IComponent component) {
     return CraftingResult.PASS;
   }
 
-  boolean matches(R component);
+  boolean componentMatches(IComponent component);
+
+  boolean matches(IComponent component);
   NamedCodec<? extends IRequirement<R>> getCodec();
+
+  String getId();
 }

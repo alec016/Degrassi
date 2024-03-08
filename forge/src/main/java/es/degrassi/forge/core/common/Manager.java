@@ -8,14 +8,14 @@ import java.util.List;
 
 public abstract class Manager<T extends IType> implements IManager<T> {
   private final List<T> list;
-  private final MachineEntity entity;
+  private final MachineEntity<?> entity;
 
-  protected Manager(MachineEntity entity) {
+  protected Manager(MachineEntity<?> entity) {
     list = new LinkedList<>();
     this.entity = entity;
   }
 
-  protected Manager(List<T> list, MachineEntity entity) {
+  protected Manager(List<T> list, MachineEntity<?> entity) {
     this.list = list;
     this.entity = entity;
   }
@@ -31,7 +31,7 @@ public abstract class Manager<T extends IType> implements IManager<T> {
   }
 
   @Override
-  public MachineEntity getEntity() {
+  public MachineEntity<?> getEntity() {
     return entity;
   }
 

@@ -11,12 +11,12 @@ import java.util.Optional;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.util.INBTSerializable;
 
-public class ComponentManager extends Manager<IComponent> implements INBTSerializable<CompoundTag> {
-  public ComponentManager(MachineEntity entity) {
+public final class ComponentManager extends Manager<IComponent> implements INBTSerializable<CompoundTag> {
+  public ComponentManager(MachineEntity<?> entity) {
     super(entity);
   }
 
-  public ComponentManager(List<IComponent> components, MachineEntity entity) {
+  public ComponentManager(List<IComponent> components, MachineEntity<?> entity) {
     super(components, entity);
   }
 

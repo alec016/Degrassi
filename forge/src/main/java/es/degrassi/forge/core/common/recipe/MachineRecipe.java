@@ -3,10 +3,12 @@ package es.degrassi.forge.core.common.recipe;
 import es.degrassi.forge.api.core.common.IRequirement;
 import java.util.List;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
+import org.checkerframework.checker.units.qual.C;
 
 public abstract class MachineRecipe implements Recipe<Container> {
   private final List<IRequirement<?>> requirements;

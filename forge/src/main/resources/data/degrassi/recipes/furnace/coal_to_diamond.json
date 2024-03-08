@@ -1,0 +1,12 @@
+{
+  "type": "degrassi:furnace",
+  "time": 100,
+  "requirements": [
+    {
+      "type": "degrassi:energy",
+      "amount": 1000,
+      "mode": "input_per_tick",
+      "id": "energy"
+    }
+  ]
+}

@@ -21,6 +21,11 @@ public class RecipeRegistration {
 
   public static final RegistrySupplier<RecipeType<FurnaceRecipe>> FURNACE_TYPE = RECIPE_TYPES.register(
     "furnace",
-    () -> RecipeType.register("furnace")
+    () -> new RecipeType<>() {
+      @Override
+      public String toString() {
+        return "furnace";
+      }
+    }
   );
 }

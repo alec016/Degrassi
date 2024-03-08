@@ -4,7 +4,6 @@ import dev.architectury.networking.NetworkManager;
 import dev.architectury.networking.simple.BaseS2CMessage;
 import dev.architectury.networking.simple.MessageType;
 import es.degrassi.forge.core.common.component.EnergyComponent;
-import es.degrassi.forge.core.common.component.ExperienceComponent;
 import es.degrassi.forge.core.common.machines.container.MachineContainer;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.network.PacketRegistration;
@@ -43,7 +42,7 @@ public class EnergyPacket extends BaseS2CMessage {
   @Override
   public void handle(NetworkManager.@NotNull PacketContext context) {
     context.queue(() -> {
-      if (Minecraft.getInstance().level != null && Minecraft.getInstance().level.getBlockEntity(pos) instanceof MachineEntity entity) {
+      if (Minecraft.getInstance().level != null && Minecraft.getInstance().level.getBlockEntity(pos) instanceof MachineEntity<?> entity) {
         entity
           .getComponentManager()
           .getComponent(id)

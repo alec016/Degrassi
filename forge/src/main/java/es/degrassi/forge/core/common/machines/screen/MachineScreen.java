@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
-public class MachineScreen<T extends MachineContainer<?>> extends AbstractContainerScreen<T> {
+public abstract class MachineScreen<T extends MachineContainer<?>> extends AbstractContainerScreen<T> {
   protected final ResourceLocation background;
   protected final ElementManager manager;
   public MachineScreen(T menu, Inventory playerInventory, Component title, ResourceLocation background) {

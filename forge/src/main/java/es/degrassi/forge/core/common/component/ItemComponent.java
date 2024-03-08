@@ -13,8 +13,8 @@ public class ItemComponent implements IComponent, IItemHandlerModifiable {
   private final String id;
   private ItemStack item = ItemStack.EMPTY;
   private final ComponentManager manager;
-  private final MachineEntity entity;
-  public ItemComponent(ComponentManager manager, String id, MachineEntity entity) {
+  private final MachineEntity<?> entity;
+  public ItemComponent(ComponentManager manager, String id, MachineEntity<?> entity) {
     this.manager = manager;
     this.id = id;
     this.entity = entity;

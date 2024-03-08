@@ -14,6 +14,7 @@ public class Registration {
     EntityRegistration.ENTITIES.register();
     ContainerRegistration.MENUS.register();
     RecipeRegistration.RECIPE_SERIALIZERS.register();
+    RecipeRegistration.RECIPE_TYPES.register();
 
     RequirementRegistration.REQUIREMENTS.register();
 

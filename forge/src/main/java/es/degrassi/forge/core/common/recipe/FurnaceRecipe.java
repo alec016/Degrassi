@@ -21,12 +21,12 @@ public class FurnaceRecipe extends MachineRecipe {
   }
 
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<FurnaceRecipe> getSerializer() {
     return RecipeRegistration.FURNACE_SERIALIZER.get();
   }
 
   @Override
-  public RecipeType<?> getType() {
+  public RecipeType<FurnaceRecipe> getType() {
     return RecipeRegistration.FURNACE_TYPE.get();
   }
 }

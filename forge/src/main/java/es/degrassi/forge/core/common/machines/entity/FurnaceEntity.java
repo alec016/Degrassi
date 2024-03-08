@@ -2,15 +2,17 @@ package es.degrassi.forge.core.common.machines.entity;
 
 import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.api.core.common.ElementDirection;
+import es.degrassi.forge.core.common.recipe.FurnaceRecipe;
+import es.degrassi.forge.core.init.RecipeRegistration;
 import es.degrassi.forge.core.tiers.Furnace;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class FurnaceEntity extends MachineEntity {
+public class FurnaceEntity extends MachineEntity<FurnaceRecipe> {
   private final Furnace tier;
   public FurnaceEntity(BlockPos pos, BlockState blockState, Furnace tier) {
-    super(tier.getType().get(), pos, blockState);
+    super(tier.getType().get(), pos, blockState, RecipeRegistration.FURNACE_TYPE.get());
     this.getComponentManager()
       .addEnergy(tier.getEnergyCapacity(), "energy")
       .addItem("upgrade1")

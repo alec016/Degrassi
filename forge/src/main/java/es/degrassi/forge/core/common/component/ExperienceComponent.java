@@ -10,9 +10,9 @@ public class ExperienceComponent implements IComponent {
   private float experience;
   private final ComponentManager manager;
   private final float capacity;
-  private final MachineEntity entity;
+  private final MachineEntity<?> entity;
   private final String id;
-  public ExperienceComponent(ComponentManager manager, float capacity, MachineEntity entity, String id) {
+  public ExperienceComponent(ComponentManager manager, float capacity, MachineEntity<?> entity, String id) {
     this.manager = manager;
     this.capacity = capacity;
     this.entity = entity;

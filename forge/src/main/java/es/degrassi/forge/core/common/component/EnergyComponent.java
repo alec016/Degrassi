@@ -11,15 +11,15 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
   private int energy;
   private final ComponentManager manager;
   private final int capacity, maxInput, maxOutput;
-  private final MachineEntity entity;
+  private final MachineEntity<?> entity;
   private final String id;
-  public EnergyComponent(ComponentManager manager, int capacity, MachineEntity entity, String id) {
+  public EnergyComponent(ComponentManager manager, int capacity, MachineEntity<?> entity, String id) {
     this(manager, capacity, capacity, entity, id);
   }
-  public EnergyComponent(ComponentManager manager, int capacity, int transfer, MachineEntity entity, String id) {
+  public EnergyComponent(ComponentManager manager, int capacity, int transfer, MachineEntity<?> entity, String id) {
     this(manager, capacity, transfer, transfer, entity, id);
   }
-  public EnergyComponent(ComponentManager manager, int capacity, int maxInput, int maxOutput, MachineEntity entity, String id) {
+  public EnergyComponent(ComponentManager manager, int capacity, int maxInput, int maxOutput, MachineEntity<?> entity, String id) {
     this.manager = manager;
     this.capacity = capacity;
     this.maxInput = Math.min(capacity, maxInput);

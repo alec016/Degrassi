@@ -10,8 +10,8 @@ public class ProgressComponent implements IComponent {
   public static final String id = "progress";
   private int progress, maxProgress;
   private final ComponentManager manager;
-  private final MachineEntity entity;
-  public ProgressComponent(ComponentManager manager, MachineEntity entity) {
+  private final MachineEntity<?> entity;
+  public ProgressComponent(ComponentManager manager, MachineEntity<?> entity) {
     this.manager = manager;
     this.entity = entity;
   }
@@ -62,10 +62,6 @@ public class ProgressComponent implements IComponent {
   }
 
   public void tick() {
-    if (this.progress >= this.maxProgress) {
-      resetProgress();
-      return;
-    }
     this.progress++;
     markDirty();
   }
@@ -85,6 +81,10 @@ public class ProgressComponent implements IComponent {
 
   public float getProgressPercentage() {
     return progress / (maxProgress * 1F);
+  }
+
+  public boolean hasEnded() {
+    return this.progress >= this.maxProgress;
   }
 
   @Override

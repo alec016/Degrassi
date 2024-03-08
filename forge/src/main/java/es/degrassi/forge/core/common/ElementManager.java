@@ -1,9 +1,7 @@
 package es.degrassi.forge.core.common;
 
 import es.degrassi.forge.api.core.common.ElementDirection;
-import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IElement;
-import es.degrassi.forge.api.core.common.IType;
 import es.degrassi.forge.core.common.element.EnergyElement;
 import es.degrassi.forge.core.common.element.ExperienceElement;
 import es.degrassi.forge.core.common.element.ItemElement;
@@ -15,15 +13,14 @@ import java.util.Optional;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.common.util.INBTSerializable;
 
-public class ElementManager extends Manager<IElement<?>> implements INBTSerializable<CompoundTag> {
-  public ElementManager(MachineEntity entity) {
+public final class ElementManager extends Manager<IElement<?>> implements INBTSerializable<CompoundTag> {
+  public ElementManager(MachineEntity<?> entity) {
     super(entity);
   }
 
-  public ElementManager(List<IElement<?>> elements, MachineEntity entity) {
+  public ElementManager(List<IElement<?>> elements, MachineEntity<?> entity) {
     super(elements, entity);
   }
 

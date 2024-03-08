@@ -2,6 +2,7 @@ package es.degrassi.forge.core.common.requirement;
 
 import es.degrassi.forge.api.codec.NamedCodec;
 import es.degrassi.forge.api.core.common.CraftingResult;
+import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.api.core.common.RequirementMode;
 import es.degrassi.forge.api.core.common.RequirementType;
@@ -12,15 +13,18 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
   public static final NamedCodec<EnergyRequirement> CODEC = NamedCodec.record(
     requirement -> requirement.group(
       NamedCodec.INT.fieldOf("amount").forGetter(req -> req.amount),
-      RequirementMode.CODEC.fieldOf("mode").forGetter(EnergyRequirement::getMode)
+      RequirementMode.CODEC.fieldOf("mode").forGetter(EnergyRequirement::getMode),
+      NamedCodec.STRING.fieldOf("id").forGetter(EnergyRequirement::getId)
     ).apply(requirement, EnergyRequirement::new),
     "Energy requirement"
   );
   private final int amount;
   private final RequirementMode mode;
-  public EnergyRequirement(int amount, RequirementMode mode) {
+  private final String id;
+  public EnergyRequirement(int amount, RequirementMode mode, String id) {
     this.amount = amount;
     this.mode = mode;
+    this.id = id;
   }
 
   @Override
@@ -33,11 +37,17 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
   }
 
   @Override
-  public CraftingResult processStart(EnergyComponent component) {
+  public String getId() {
+    return id;
+  }
+
+  @Override
+  public CraftingResult processStart(IComponent component) {
     if (component == null || this.mode == null) return CraftingResult.ERROR;
+    EnergyComponent comp = (EnergyComponent) component;
     if (this.mode.isInput() && !this.mode.isPerTick()) {
-      if(this.amount == component.extractEnergy(this.amount, true)) {
-        component.extractEnergy(this.amount, false);
+      if(this.amount == comp.extractEnergy(this.amount, true)) {
+        comp.extractEnergy(this.amount, false);
         return CraftingResult.SUCCESS;
       }
       return CraftingResult.ERROR;
@@ -46,11 +56,12 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
   }
 
   @Override
-  public CraftingResult processEnd(EnergyComponent component) {
+  public CraftingResult processEnd(IComponent component) {
     if (component == null || this.mode == null) return CraftingResult.ERROR;
+    EnergyComponent comp = (EnergyComponent) component;
     if(this.mode.isOutput() && !this.mode.isPerTick()) {
-      if (this.amount == component.extractEnergy(this.amount, true)) {
-        component.extractEnergy(this.amount, false);
+      if (this.amount == comp.extractEnergy(this.amount, true)) {
+        comp.extractEnergy(this.amount, false);
         return CraftingResult.SUCCESS;
       }
       return CraftingResult.ERROR;
@@ -59,18 +70,19 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
   }
 
   @Override
-  public CraftingResult processTick(EnergyComponent component) {
+  public CraftingResult processTick(IComponent component) {
     if (component == null || this.mode == null) return CraftingResult.ERROR;
+    EnergyComponent comp = (EnergyComponent) component;
     if (this.mode.isPerTick()) {
       if (this.mode.isInput()) {
-        if (this.amount == component.receiveEnergy(this.amount, true)) {
-          component.receiveEnergy(this.amount, false);
+        if (this.amount == comp.extractEnergy(this.amount, true)) {
+          comp.extractEnergy(this.amount, false);
           return CraftingResult.SUCCESS;
         }
         return CraftingResult.ERROR;
       } else if(this.mode.isOutput()) {
-        if (this.amount == component.extractEnergy(this.amount, true)) {
-          component.extractEnergy(this.amount, false);
+        if (this.amount == comp.receiveEnergy(this.amount, true)) {
+          comp.receiveEnergy(this.amount, false);
           return CraftingResult.SUCCESS;
         }
         return CraftingResult.ERROR;
@@ -80,9 +92,15 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
   }
 
   @Override
-  public boolean matches(EnergyComponent component) {
+  public boolean componentMatches(IComponent component) {
+    return component instanceof EnergyComponent;
+  }
+
+  @Override
+  public boolean matches(IComponent component) {
     if (component == null || this.mode == null) return false;
-    return component.getEnergyStored() >= amount;
+    EnergyComponent comp = (EnergyComponent) component;
+    return comp.getEnergyStored() >= amount;
   }
 
   @Override

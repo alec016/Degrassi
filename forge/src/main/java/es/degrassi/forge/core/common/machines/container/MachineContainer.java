@@ -15,7 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class MachineContainer<T extends MachineEntity> extends AbstractContainerMenu {
+public abstract class MachineContainer<T extends MachineEntity<?>> extends AbstractContainerMenu {
   int HOTBAR_SLOT_COUNT = 9;
   int PLAYER_INVENTORY_ROW_COUNT = 3;
   int PLAYER_INVENTORY_COLUMN_COUNT = 9;
