@@ -7,9 +7,12 @@ import net.minecraftforge.common.util.INBTSerializable;
 
 public interface IProcessor<T extends MachineRecipe> extends INBTSerializable<CompoundTag> {
   List<T> getRecipes();
-  void processTick(List<? extends IComponent> components);
-  void processStart(List<? extends IComponent> components);
-  void processEnd(List<? extends IComponent> components);
+  void processTick();
+  void processStart();
+  void processEnd();
+  void tick();
   MachineRecipe getOldRecipe();
-  void setRecipe(MachineRecipe recipe);
+
+  void setRecipe(T recipe);
+  void searchForRecipe(List<? extends IComponent> components);
 }

@@ -13,19 +13,21 @@ public interface IRequirement<R extends IComponent> extends IType {
   RequirementType<? extends IRequirement<?>> getType();
 
   default CraftingResult processStart(IComponent component) {
-    return CraftingResult.PASS;
+    return CraftingResult.pass();
   }
   default CraftingResult processEnd(IComponent component) {
-    return CraftingResult.PASS;
+    return CraftingResult.pass();
   }
   default CraftingResult processTick(IComponent component) {
-    return CraftingResult.PASS;
+    return CraftingResult.pass();
   }
 
   boolean componentMatches(IComponent component);
 
-  boolean matches(IComponent component);
+  boolean matches(IComponent component, int recipeTime);
   NamedCodec<? extends IRequirement<R>> getCodec();
+
+  RequirementMode getMode();
 
   String getId();
 }

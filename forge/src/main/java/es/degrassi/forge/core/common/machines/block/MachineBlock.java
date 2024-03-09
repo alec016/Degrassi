@@ -18,7 +18,7 @@ public abstract class MachineBlock extends Block implements EntityBlock {
   @Nullable
   @Override
   public abstract <T extends BlockEntity> BlockEntityTicker<T> getTicker(
-    Level level,
+    @NotNull Level level,
     @NotNull BlockState state,
     @NotNull BlockEntityType<T> type
   );

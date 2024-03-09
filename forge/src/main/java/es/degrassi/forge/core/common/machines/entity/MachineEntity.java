@@ -1,17 +1,21 @@
 package es.degrassi.forge.core.common.machines.entity;
 
+import es.degrassi.forge.api.utils.DegrassiLogger;
 import es.degrassi.forge.core.common.ComponentManager;
 import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.component.EnergyComponent;
+import es.degrassi.forge.core.common.component.ItemComponent;
 import es.degrassi.forge.core.common.component.ProgressComponent;
+import es.degrassi.forge.core.common.machines.MachineStatus;
 import es.degrassi.forge.core.common.processor.MachineProcessor;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
+import java.util.Timer;
+import java.util.TimerTask;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -28,14 +32,14 @@ public abstract class MachineEntity<R extends MachineRecipe> extends BlockEntity
   private LazyOptional<EnergyComponent> lazyEnergyHandler = LazyOptional.empty();
   private final ComponentManager componentManager;
   private final ElementManager elementManager;
-  private final MachineProcessor<R> processor;
+  protected MachineProcessor<R> processor;
   private MachineStatus status = MachineStatus.IDLE;
+  private Component errorMessage = Component.empty();
 
-  public MachineEntity(BlockEntityType<?> type, BlockPos pos, BlockState blockState, RecipeType<R> recipeType) {
+  public MachineEntity(BlockEntityType<?> type, BlockPos pos, BlockState blockState) {
     super(type, pos, blockState);
     this.componentManager = new ComponentManager(this);
     this.elementManager = new ElementManager(this);
-    this.processor = new MachineProcessor<>(this, recipeType);
   }
 
   public ComponentManager getComponentManager() {
@@ -48,10 +52,6 @@ public abstract class MachineEntity<R extends MachineRecipe> extends BlockEntity
 
   public MachineProcessor<R> getProcessor() {
     return processor;
-  }
-
-  public void setStatus(MachineStatus status) {
-    this.status = status;
   }
 
   public abstract Component getName();
@@ -75,6 +75,7 @@ public abstract class MachineEntity<R extends MachineRecipe> extends BlockEntity
     elementManager.deserializeNBT(tag.getCompound("elementManager"));
     processor.deserializeNBT(tag.getCompound("processor"));
     status = MachineStatus.value(tag.getString("status"));
+    errorMessage = Component.literal(tag.getString("errorMessage"));
   }
 
   @Override
@@ -84,6 +85,7 @@ public abstract class MachineEntity<R extends MachineRecipe> extends BlockEntity
     tag.put("elementManager", elementManager.serializeNBT());
     tag.put("processor", processor.serializeNBT());
     tag.putString("status", status.toString());
+    tag.putString("errorMessage", errorMessage.getString());
   }
 
   @Override
@@ -91,6 +93,10 @@ public abstract class MachineEntity<R extends MachineRecipe> extends BlockEntity
     if (cap == ForgeCapabilities.ENERGY) {
       if (!componentManager.get().stream().filter(component -> component instanceof EnergyComponent).toList().isEmpty()) {
         return lazyEnergyHandler.cast();
+      }
+    } else if (cap == ForgeCapabilities.ITEM_HANDLER) {
+      if (!componentManager.get().stream().filter(component -> component instanceof ItemComponent).toList().isEmpty()) {
+        return lazyItemHandler.cast();
       }
     }
     return super.getCapability(cap, side);
@@ -106,12 +112,20 @@ public abstract class MachineEntity<R extends MachineRecipe> extends BlockEntity
       .map(component -> (EnergyComponent) component)
       .findFirst()
       .ifPresent(energy -> lazyEnergyHandler = LazyOptional.of(() -> energy));
+    getComponentManager()
+      .get()
+      .stream()
+      .filter(component -> component instanceof ItemComponent)
+      .map(component -> (ItemComponent) component)
+      .findFirst()
+      .ifPresent(item -> lazyItemHandler = LazyOptional.of(() -> item));
   }
 
   @Override
   public void invalidateCaps() {
     super.invalidateCaps();
     lazyEnergyHandler.invalidate();
+    lazyItemHandler.invalidate();
   }
 
   public static <R extends MachineRecipe> void clientTick (
@@ -122,6 +136,7 @@ public abstract class MachineEntity<R extends MachineRecipe> extends BlockEntity
   ) {
     entity.getComponentManager().clientTick();
     entity.getElementManager().clientTick();
+    setChanged(level, pos, state);
   }
 
   public static <R extends MachineRecipe> void serverTick(
@@ -132,19 +147,28 @@ public abstract class MachineEntity<R extends MachineRecipe> extends BlockEntity
   ) {
     entity.getComponentManager().serverTick();
     entity.getElementManager().serverTick();
-    switch (entity.status) {
+    switch (entity.getStatus()) {
       case IDLE -> entity.getProcessor().searchForRecipe(entity.getComponentManager().get());
-      case RUNNING -> entity.getProcessor().tick(entity.getComponentManager().get());
-      case ERROR ->
+      case RUNNING -> entity.getProcessor().tick();
+      case ERROR -> {
+        DegrassiLogger.INSTANCE.info("error occurred: {}", entity.errorMessage.getString());
         entity.getComponentManager().getComponent(ProgressComponent.id).map(component -> (ProgressComponent) component).ifPresent(component -> {
-          if (entity.getStatus() == MachineStatus.ERROR) {
-            if (entity.getProcessor().shouldReset()) {
-              component.resetProgress();
-            }
-//            entity.setStatus(MachineStatus.RUNNING);
+          if (entity.getProcessor().shouldReset()) {
+            component.resetProgress();
           }
+          Timer timer = new Timer();
+          timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+              entity.setRunning();
+              this.cancel();
+              timer.cancel();
+            }
+          }, 1000);
         });
+      }
     }
+    setChanged(level, pos, state);
   }
 
   @Override
@@ -156,13 +180,25 @@ public abstract class MachineEntity<R extends MachineRecipe> extends BlockEntity
     return status;
   }
 
-  public enum MachineStatus {
-    IDLE, RUNNING, ERROR;
-    public static MachineStatus value(String value) {
-      if (value.equalsIgnoreCase("idle")) return IDLE;
-      if (value.equalsIgnoreCase("running")) return RUNNING;
-      if (value.equalsIgnoreCase("error")) return ERROR;
-      return null;
-    }
+  public void resetErrorMessage() {
+    this.errorMessage = Component.empty();
+  }
+
+  public void setErrored(Component errorMessage) {
+    setStatus(MachineStatus.ERROR);
+    this.errorMessage = errorMessage;
+  }
+
+  public void setRunning() {
+    setStatus(MachineStatus.RUNNING);
+  }
+
+  public void setIdle() {
+    setStatus(MachineStatus.IDLE);
+  }
+
+  private void setStatus(MachineStatus status) {
+    this.status = status;
+    setChanged();
   }
 }

@@ -58,6 +58,7 @@ public final class ComponentManager extends Manager<IComponent> implements INBTS
     return switch (type) {
       case "item", "ITEM" -> get().stream().filter(component -> component instanceof ItemComponent).toList();
       case "energy", "ENERGY" -> get().stream().filter(component -> component instanceof EnergyComponent).toList();
+      case "experience", "EXPERIENCE" -> get().stream().filter(component -> component instanceof ExperienceComponent).toList();
       default -> throw new IllegalStateException("Unexpected value: " + type);
     };
   }

@@ -85,7 +85,7 @@ public class FurnaceBlock extends MachineBlock {
 
   @Nullable
   @Override
-  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
+  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
     return Utils.createTickerHelper(
       type, getTier().getType().get(),
       level.isClientSide()

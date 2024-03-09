@@ -4,9 +4,15 @@
   "requirements": [
     {
       "type": "degrassi:energy",
-      "amount": 1000,
-      "mode": "input_per_tick",
+      "amount": 500,
+      "mode": "input",
       "id": "energy"
+    },
+    {
+      "type": "degrassi:experience",
+      "amount": 0.8,
+      "mode": "output",
+      "id": "experience"
     }
   ]
 }

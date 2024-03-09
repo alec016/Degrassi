@@ -49,11 +49,9 @@ public abstract class MachineContainer<T extends MachineEntity<?>> extends Abstr
       }
     });
     entity.getComponentManager().getComponentsByType("item").stream().map(component -> (ItemComponent) component)
-      .forEach(component -> {
-        entity.getElementManager().getElement(component.getId()).map(element -> (ItemElement) element).ifPresent(element -> {
-          addSlot(new SlotItemHandler(component, index.getAndIncrement(), element.getX() + 1, element.getY() + 1));
-        });
-      });
+      .forEach(component -> entity.getElementManager().getElement(component.getId()).map(element -> (ItemElement) element).ifPresent(element -> {
+        addSlot(new SlotItemHandler(component, index.getAndIncrement(), element.getX() + 1, element.getY() + 1));
+      }));
     TE_INVENTORY_SLOT_COUNT = index.get();
   }
 

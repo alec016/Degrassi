@@ -24,7 +24,7 @@ public class ProgressComponent implements IComponent {
   public void markDirty() {
     entity.setChanged();
     if(entity.getLevel() != null && !entity.getLevel().isClientSide())
-      new ProgressPacket(progress, id, entity.getBlockPos())
+      new ProgressPacket(progress, maxProgress, id, entity.getBlockPos())
         .sendToChunkListeners(entity.getLevel().getChunkAt(entity.getBlockPos()));
   }
 
