@@ -9,6 +9,7 @@ import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.common.util.INBTSerializable;
 
 public final class ComponentManager extends Manager<IComponent> implements INBTSerializable<CompoundTag> {
@@ -37,6 +38,16 @@ public final class ComponentManager extends Manager<IComponent> implements INBTS
 
   public ComponentManager addItem(String id) {
     get().add(new ItemComponent(this, id, getEntity()));
+    return this;
+  }
+
+  public ComponentManager addItem(String id, boolean whitelist, Item...filter) {
+    get().add(new ItemComponent(this, id, whitelist, getEntity(), filter));
+    return this;
+  }
+
+  public ComponentManager addItem(String id, Item... filter) {
+    get().add(new ItemComponent(this, id, false, getEntity(), filter));
     return this;
   }
 

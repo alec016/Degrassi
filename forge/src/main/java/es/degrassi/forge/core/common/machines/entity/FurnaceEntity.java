@@ -16,8 +16,8 @@ public class FurnaceEntity extends MachineEntity<FurnaceRecipe> {
 
     this.getComponentManager()
       .addEnergy(tier.getEnergyCapacity(), "energy")
-      .addItem("upgrade1")
-      .addItem("upgrade2")
+      .addItem("upgrade1", true)
+      .addItem("upgrade2", true)
       .addItem("input")
       .addItem("output")
       .addExperience(tier.getExperienceCapacity(), "experience")

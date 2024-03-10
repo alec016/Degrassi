@@ -4,7 +4,10 @@ import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.core.common.ComponentManager;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.network.component.ItemPacket;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
@@ -13,11 +16,24 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
   private final String id;
   private final ComponentManager manager;
   private final MachineEntity<?> entity;
+  private final List<Item> filter;
+  private final boolean whitelist;
   public ItemComponent(ComponentManager manager, String id, MachineEntity<?> entity) {
     this.manager = manager;
     this.id = id;
     this.entity = entity;
+    this.filter = new ArrayList<>();
+    this.whitelist = false;
   }
+
+  public ItemComponent(ComponentManager manager, String id, boolean whitelist, MachineEntity<?> entity, Item...filter) {
+    this.manager = manager;
+    this.id = id;
+    this.whitelist = whitelist;
+    this.entity = entity;
+    this.filter = List.of(filter);
+  }
+
   @Override
   public ComponentManager getManager() {
     return manager;
@@ -52,7 +68,7 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
 
   @Override
   public boolean isItemValid(int slot, @NotNull ItemStack item) {
-    return this.getStackInSlot(0).isEmpty() || this.getStackInSlot(0).is(item.getItem());
+    return filter.stream().filter(item::is).findFirst().map(i -> whitelist).orElse(!whitelist);
   }
 
   @Override
