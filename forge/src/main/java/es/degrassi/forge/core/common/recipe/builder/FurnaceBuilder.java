@@ -2,6 +2,7 @@ package es.degrassi.forge.core.common.recipe.builder;
 
 import es.degrassi.forge.api.codec.NamedCodec;
 import es.degrassi.forge.api.core.common.IRequirement;
+import es.degrassi.forge.api.utils.DegrassiLogger;
 import es.degrassi.forge.core.common.recipe.FurnaceRecipe;
 import java.util.Collections;
 import net.minecraft.resources.ResourceLocation;
@@ -30,6 +31,8 @@ public class FurnaceBuilder extends MachineBuilder<FurnaceRecipe> {
 
   @Override
   public FurnaceRecipe build(ResourceLocation id) {
-    return new FurnaceRecipe(id, getTime(), getRequirements());
+    FurnaceRecipe recipe = new FurnaceRecipe(id, getTime(), getRequirements());
+    DegrassiLogger.INSTANCE.info("FurnaceRecipeBuilder$build -> recipe: {}", recipe);
+    return recipe;
   }
 }

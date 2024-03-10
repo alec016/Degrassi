@@ -13,8 +13,10 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.SlotItemHandler;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("unused")
 public abstract class MachineContainer<T extends MachineEntity<?>> extends AbstractContainerMenu {
   int HOTBAR_SLOT_COUNT = 9;
   int PLAYER_INVENTORY_ROW_COUNT = 3;
@@ -48,11 +50,26 @@ public abstract class MachineContainer<T extends MachineEntity<?>> extends Abstr
         }
       }
     });
+    int te_inventory_first_slot_index = index.get();
     entity.getComponentManager().getComponentsByType("item").stream().map(component -> (ItemComponent) component)
-      .forEach(component -> entity.getElementManager().getElement(component.getId()).map(element -> (ItemElement) element).ifPresent(element -> {
-        addSlot(new SlotItemHandler(component, index.getAndIncrement(), element.getX() + 1, element.getY() + 1));
-      }));
-    TE_INVENTORY_SLOT_COUNT = index.get();
+      .forEach(
+        component -> entity
+          .getElementManager()
+          .getElement(component.getId())
+          .map(element -> (ItemElement) element)
+          .ifPresent(
+            element -> addSlot(
+              new SlotItemHandler(
+                component,
+                index.getAndIncrement(),
+                element.getX() + 1,
+                element.getY() + 1
+              )
+            )
+          )
+      );
+
+    TE_INVENTORY_SLOT_COUNT = index.get() - te_inventory_first_slot_index;
   }
 
   public T getEntity() {
@@ -68,7 +85,7 @@ public abstract class MachineContainer<T extends MachineEntity<?>> extends Abstr
   }
 
   @Override
-  public ItemStack quickMoveStack(Player player, int index) {
+  public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
     Slot sourceSlot = slots.get(index);
     if (!sourceSlot.hasItem()) return ItemStack.EMPTY;  //EMPTY_ITEM
     ItemStack sourceStack = sourceSlot.getItem();

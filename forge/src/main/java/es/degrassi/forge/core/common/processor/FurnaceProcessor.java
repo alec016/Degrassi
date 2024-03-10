@@ -18,7 +18,7 @@ import net.minecraft.world.item.crafting.SmokingRecipe;
 
 public class FurnaceProcessor extends MachineProcessor<FurnaceRecipe> {
   public FurnaceProcessor(MachineEntity<FurnaceRecipe> entity, boolean reset) {
-    super(entity, RecipeRegistration.FURNACE_TYPE.get(), reset);
+    super(entity, reset);
   }
 
   public FurnaceProcessor(MachineEntity<FurnaceRecipe> entity) {
@@ -30,7 +30,7 @@ public class FurnaceProcessor extends MachineProcessor<FurnaceRecipe> {
     initialized = true;
     RecipeManager recipeManager = Objects.requireNonNull(entity.getLevel()).getRecipeManager();
     recipes = new ArrayList<>();
-    recipes.addAll(recipeManager.getAllRecipesFor(recipeType));
+    recipes.addAll(recipeManager.getAllRecipesFor(RecipeRegistration.FURNACE_TYPE.get()));
     List<SmeltingRecipe> smeltingRecipes = recipeManager.getAllRecipesFor(RecipeType.SMELTING);
     List<BlastingRecipe> blastingRecipes = recipeManager.getAllRecipesFor(RecipeType.BLASTING);
     List<SmokingRecipe> smokingRecipes = recipeManager.getAllRecipesFor(RecipeType.SMOKING);
@@ -45,6 +45,8 @@ public class FurnaceProcessor extends MachineProcessor<FurnaceRecipe> {
         .clear()
         .requireEnergyPerTick(100, "energy")
         .produceExperience(xp, "experience")
+        .requireItem(input.getItem(), input.getCount(), "input")
+        .produceItem(result.getItem(), result.getCount(), "output")
         .get();
       if (recipes.stream().filter(recipe -> recipe.getId().equals(recipeId)).toList().isEmpty())
         recipes.add(new FurnaceRecipe(recipeId, time, requirements));
@@ -59,6 +61,8 @@ public class FurnaceProcessor extends MachineProcessor<FurnaceRecipe> {
         .clear()
         .requireEnergyPerTick(100, "energy")
         .produceExperience(xp, "experience")
+        .requireItem(input.getItem(), input.getCount(), "input")
+        .produceItem(result.getItem(), result.getCount(), "output")
         .get();
 
       if (recipes.stream().filter(recipe -> recipe.getId().equals(recipeId)).toList().isEmpty())
@@ -74,6 +78,8 @@ public class FurnaceProcessor extends MachineProcessor<FurnaceRecipe> {
         .clear()
         .requireEnergyPerTick(100, "energy")
         .produceExperience(xp, "experience")
+        .requireItem(input.getItem(), input.getCount(), "input")
+        .produceItem(result.getItem(), result.getCount(), "output")
         .get();
       if (recipes.stream().filter(recipe -> recipe.getId().equals(recipeId)).toList().isEmpty())
         recipes.add(new FurnaceRecipe(recipeId, time, requirements));
@@ -86,5 +92,11 @@ public class FurnaceProcessor extends MachineProcessor<FurnaceRecipe> {
         .ifPresent(this::setRecipe);
       this.futureRecipeID = null;
     }
+  }
+
+  @Override
+  public void setRecipe(FurnaceRecipe recipe) {
+    this.currentRecipe = recipe == null ? null : recipe.copy();
+    entity.setChanged();
   }
 }

@@ -14,7 +14,7 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
   public static final NamedCodec<EnergyRequirement> CODEC = NamedCodec.record(
     requirement -> requirement.group(
       NamedCodec.INT.fieldOf("amount").forGetter(req -> req.amount),
-      RequirementMode.CODEC.fieldOf("mode").forGetter(EnergyRequirement::getMode),
+      RequirementMode.CODEC.optionalFieldOf("mode", RequirementMode.INPUT).forGetter(EnergyRequirement::getMode),
       NamedCodec.STRING.fieldOf("id").forGetter(EnergyRequirement::getId)
     ).apply(requirement, EnergyRequirement::new),
     "Energy requirement"
@@ -121,7 +121,21 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
   }
 
   @Override
-  public NamedCodec<? extends IRequirement<EnergyComponent>> getCodec() {
+  public NamedCodec<EnergyRequirement> getCodec() {
     return CODEC;
+  }
+
+  @Override
+  public IRequirement<?> copy() {
+    return new EnergyRequirement(amount, mode, id);
+  }
+
+  @Override
+  public String toString() {
+    return "EnergyRequirement{" +
+      "amount=" + amount +
+      ", mode=" + mode +
+      ", id='" + id + '\'' +
+      '}';
   }
 }

@@ -3,20 +3,15 @@ package es.degrassi.forge.core.common.processor;
 import es.degrassi.forge.api.core.common.CraftingResult;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IProcessor;
-import es.degrassi.forge.api.core.common.IRequirement;
+import es.degrassi.forge.api.utils.DegrassiLogger;
 import es.degrassi.forge.core.common.component.ProgressComponent;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.crafting.RecipeType;
 
 public abstract class MachineProcessor<T extends MachineRecipe> implements IProcessor<T> {
   protected List<T> recipes;
@@ -25,15 +20,10 @@ public abstract class MachineProcessor<T extends MachineRecipe> implements IProc
   protected T currentRecipe;
   //Recipe that was processed when the machine was unloaded, and we need to resume
   protected ResourceLocation futureRecipeID;
-  protected final RecipeType<T> recipeType;
   protected Phase phase = Phase.NONE;
   private final boolean resetOnError;
-  private final Map<IRequirement<?>, IComponent> tickRequirements = new LinkedHashMap<>();
-  private final Map<IRequirement<?>, IComponent> startRequirements = new LinkedHashMap<>();
-  private final Map<IRequirement<?>, IComponent> endRequirements = new LinkedHashMap<>();
-  public MachineProcessor(MachineEntity<T> entity, RecipeType<T> recipeType, boolean reset) {
+  public MachineProcessor(MachineEntity<T> entity, boolean reset) {
     this.entity = entity;
-    this.recipeType = recipeType;
     this.resetOnError = reset;
   }
 
@@ -53,6 +43,7 @@ public abstract class MachineProcessor<T extends MachineRecipe> implements IProc
    * <br />
    * Example
    * <pre>{@code
+   *  @Override
    *  protected void init() {
    *    initialized = true;
    *    recipes = Objects.requireNonNull(entity.getLevel()).getRecipeManager().getAllRecipesFor(recipeType);
@@ -122,7 +113,7 @@ public abstract class MachineProcessor<T extends MachineRecipe> implements IProc
 
   @Override
   public void processTick() {
-    tickRequirements.forEach((requirement, component) -> {
+    currentRecipe.getTickRequirements().forEach((requirement, component) -> {
       CraftingResult result = requirement.processTick(component);
       if (!result.isSuccess()) entity.setErrored(result.getMessage());
     });
@@ -130,7 +121,7 @@ public abstract class MachineProcessor<T extends MachineRecipe> implements IProc
 
   @Override
   public void processStart() {
-    startRequirements.forEach((requirement, component) -> {
+    currentRecipe.getStartRequirements().forEach((requirement, component) -> {
       CraftingResult result = requirement.processStart(component);
       if (!result.isSuccess()) entity.setErrored(result.getMessage());
     });
@@ -138,7 +129,7 @@ public abstract class MachineProcessor<T extends MachineRecipe> implements IProc
 
   @Override
   public void processEnd() {
-    endRequirements.forEach((requirement, component) -> {
+    currentRecipe.getEndRequirements().forEach((requirement, component) -> {
       CraftingResult result = requirement.processEnd(component);
       if (!result.isSuccess()) entity.setErrored(result.getMessage());
     });
@@ -148,12 +139,6 @@ public abstract class MachineProcessor<T extends MachineRecipe> implements IProc
   @Override
   public T getOldRecipe() {
     return currentRecipe;
-  }
-
-  @Override
-  public void setRecipe(T recipe) {
-    this.currentRecipe = recipe;
-    entity.setChanged();
   }
 
   @Override
@@ -176,32 +161,12 @@ public abstract class MachineProcessor<T extends MachineRecipe> implements IProc
   public void searchForRecipe(List<? extends IComponent> components) {
     if (!initialized) init();
     AtomicReference<T> r = new AtomicReference<>(null);
-    List<IComponent> componentMatches = new ArrayList<>();
     recipes.forEach(recipe -> {
       if (r.get() != null) return;
-      AtomicInteger count = new AtomicInteger(0);
-      recipe.getRequirements().forEach(requirement -> components.forEach(component -> {
-        if (component.getId().equals(requirement.getId())) {
-          if (requirement.matches(component, recipe.getTime())) {
-            count.getAndIncrement();
-            componentMatches.add(component);
-          }
-        }
-      }));
-      if (count.get() == recipe.getRequirements().size()) r.set(recipe);
-      else componentMatches.clear();
+      if (recipe.matches(components)) r.set(recipe);
     });
     if (r.get() != null) {
       setRecipe(r.get());
-      r.get().getRequirements().forEach(requirement -> componentMatches.forEach(component -> {
-        if (requirement.getId().equals(component.getId())) {
-          if (requirement.getMode().isPerTick()) tickRequirements.put(requirement, component);
-          else {
-            if (requirement.getMode().isInput()) startRequirements.put(requirement, component);
-            else if (requirement.getMode().isOutput()) endRequirements.put(requirement, component);
-          }
-        }
-      }));
       entity.setRunning();
     }
   }

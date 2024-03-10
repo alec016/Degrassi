@@ -5,8 +5,11 @@ import es.degrassi.forge.api.core.common.RequirementMode;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.common.requirement.EnergyRequirement;
 import es.degrassi.forge.core.common.requirement.ExperienceRequirement;
+import es.degrassi.forge.core.common.requirement.ItemRequirement;
 import java.util.List;
+import net.minecraft.world.item.Item;
 
+@SuppressWarnings("unused")
 public final class RequirementManager extends Manager<IRequirement<?>> {
   public RequirementManager (MachineEntity<?> entity) {
     super(entity);
@@ -60,6 +63,27 @@ public final class RequirementManager extends Manager<IRequirement<?>> {
 
   public RequirementManager produceExperiencePerTick(float amount, String id) {
     return addExperience(amount, RequirementMode.OUTPUT_PER_TICK, id);
+  }
+
+  private RequirementManager addItem(Item item, int amount, String id, RequirementMode mode) {
+    get().add(new ItemRequirement(item, amount, id, mode));
+    return this;
+  }
+
+  public RequirementManager requireItem(Item item, int amount, String id) {
+    return addItem(item, amount, id, RequirementMode.INPUT);
+  }
+
+  public RequirementManager requireItem(Item item, String id) {
+    return requireItem(item , 1, id);
+  }
+
+  public RequirementManager produceItem(Item item, int amount, String id) {
+    return addItem(item, amount, id, RequirementMode.OUTPUT);
+  }
+
+  public RequirementManager produceItem(Item item, String id) {
+    return produceItem(item, 1, id);
   }
 
   public RequirementManager clear() {

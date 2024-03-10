@@ -14,8 +14,6 @@ public class FurnaceEntity extends MachineEntity<FurnaceRecipe> {
   public FurnaceEntity(BlockPos pos, BlockState blockState, Furnace tier) {
     super(tier.getType().get(), pos, blockState);
 
-    this.processor = new FurnaceProcessor(this);
-
     this.getComponentManager()
       .addEnergy(tier.getEnergyCapacity(), "energy")
       .addItem("upgrade1")
@@ -78,6 +76,8 @@ public class FurnaceEntity extends MachineEntity<FurnaceRecipe> {
         new DegrassiLocation("textures/gui/furnace_progress_filled.png")
       );
     this.tier = tier;
+
+    this.processor = new FurnaceProcessor(this);
   }
 
   public Furnace getTier() {

@@ -29,5 +29,7 @@ public interface IRequirement<R extends IComponent> extends IType {
 
   RequirementMode getMode();
 
+  IRequirement<?> copy();
+
   String getId();
 }

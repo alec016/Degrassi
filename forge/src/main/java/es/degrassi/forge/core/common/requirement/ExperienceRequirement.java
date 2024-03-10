@@ -14,7 +14,7 @@ public class ExperienceRequirement implements IRequirement<ExperienceComponent> 
   public static final NamedCodec<ExperienceRequirement> CODEC = NamedCodec.record(
     requirementInstance -> requirementInstance.group(
       NamedCodec.FLOAT.fieldOf("amount").forGetter(ExperienceRequirement::getXp),
-      RequirementMode.CODEC.fieldOf("mode").forGetter(ExperienceRequirement::getMode),
+      RequirementMode.CODEC.optionalFieldOf("mode", RequirementMode.INPUT).forGetter(ExperienceRequirement::getMode),
       NamedCodec.STRING.fieldOf("id").forGetter(ExperienceRequirement::getId)
     ).apply(requirementInstance, ExperienceRequirement::new),
     "Experience requirement"
@@ -30,7 +30,7 @@ public class ExperienceRequirement implements IRequirement<ExperienceComponent> 
   }
 
   @Override
-  public RequirementType<? extends IRequirement<?>> getType() {
+  public RequirementType<ExperienceRequirement> getType() {
     return RequirementRegistration.EXPERIENCE.get();
   }
 
@@ -103,7 +103,7 @@ public class ExperienceRequirement implements IRequirement<ExperienceComponent> 
   }
 
   @Override
-  public NamedCodec<? extends IRequirement<ExperienceComponent>> getCodec() {
+  public NamedCodec<ExperienceRequirement> getCodec() {
     return CODEC;
   }
 
@@ -119,5 +119,19 @@ public class ExperienceRequirement implements IRequirement<ExperienceComponent> 
   @Override
   public String getId() {
     return id;
+  }
+
+  @Override
+  public IRequirement<?> copy() {
+    return new ExperienceRequirement(xp, mode, id);
+  }
+
+  @Override
+  public String toString() {
+    return "ExperienceRequirement{" +
+      "xp=" + xp +
+      ", mode=" + mode +
+      ", id='" + id + '\'' +
+      '}';
   }
 }

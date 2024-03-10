@@ -5,7 +5,6 @@
     {
       "type": "degrassi:energy",
       "amount": 500,
-      "mode": "input",
       "id": "energy"
     },
     {
@@ -13,6 +12,17 @@
       "amount": 0.8,
       "mode": "output",
       "id": "experience"
+    },
+    {
+      "type": "degrassi:item",
+      "item": "minecraft:coal",
+      "id": "input"
+    },
+    {
+      "type": "degrassi:item",
+      "item": "minecraft:diamond",
+      "mode": "output",
+      "id": "output"
     }
   ]
 }
