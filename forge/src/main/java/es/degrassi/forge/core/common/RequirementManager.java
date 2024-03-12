@@ -86,11 +86,6 @@ public final class RequirementManager extends Manager<IRequirement<?>> {
     return produceItem(item, 1, id);
   }
 
-  public RequirementManager clear() {
-    get().clear();
-    return this;
-  }
-
   @Override
   public String toString() {
     return "Requirement" + super.toString();

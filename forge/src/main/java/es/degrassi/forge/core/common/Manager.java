@@ -35,6 +35,10 @@ public abstract class Manager<T extends IType> implements IManager<T> {
     return entity;
   }
 
+  public Manager<T> clear() {
+    get().clear();
+    return this;
+  }
   @Override
   public String toString() {
     return "Manager{" +

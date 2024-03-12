@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.resources.ResourceLocation;
 
-public abstract class MachineBuilder<T extends MachineRecipe> {
+public abstract class MachineBuilder<T extends MachineRecipe<T>> {
   private List<IRequirement<?>> requirements = new ArrayList<>();
   private final int time;
 

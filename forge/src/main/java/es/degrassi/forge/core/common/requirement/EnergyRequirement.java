@@ -19,7 +19,7 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
     ).apply(requirement, EnergyRequirement::new),
     "Energy requirement"
   );
-  private final int amount;
+  private int amount;
   private final RequirementMode mode;
   private final String id;
   public EnergyRequirement(int amount, RequirementMode mode, String id) {
@@ -136,6 +136,14 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
       "amount=" + amount +
       ", mode=" + mode +
       ", id='" + id + '\'' +
-      '}';
+      "}";
+  }
+
+  public int getAmount() {
+    return amount;
+  }
+
+  public void setAmount(int amount) {
+    this.amount = amount;
   }
 }

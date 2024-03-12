@@ -3,6 +3,7 @@ package es.degrassi.forge.core.common;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.core.common.component.EnergyComponent;
 import es.degrassi.forge.core.common.component.ExperienceComponent;
+import es.degrassi.forge.core.common.component.FluidComponent;
 import es.degrassi.forge.core.common.component.ItemComponent;
 import es.degrassi.forge.core.common.component.ProgressComponent;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
@@ -10,8 +11,10 @@ import java.util.List;
 import java.util.Optional;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.util.INBTSerializable;
 
+@SuppressWarnings("unused")
 public final class ComponentManager extends Manager<IComponent> implements INBTSerializable<CompoundTag> {
   public ComponentManager(MachineEntity<?> entity) {
     super(entity);
@@ -61,6 +64,15 @@ public final class ComponentManager extends Manager<IComponent> implements INBTS
     return this;
   }
 
+  public ComponentManager addFluid(int capacity, String id, boolean whiteList, Fluid...filter) {
+    get().add(new FluidComponent(this, id, whiteList, capacity, getEntity(), filter));
+    return this;
+  }
+
+  public ComponentManager addFluid(int capacity, String id) {
+    return addFluid(capacity, id, false);
+  }
+
   public Optional<IComponent> getComponent(String id) {
     return get().stream().filter(component -> component.getId().equals(id)).findFirst();
   }
@@ -70,6 +82,7 @@ public final class ComponentManager extends Manager<IComponent> implements INBTS
       case "item", "ITEM" -> get().stream().filter(component -> component instanceof ItemComponent).toList();
       case "energy", "ENERGY" -> get().stream().filter(component -> component instanceof EnergyComponent).toList();
       case "experience", "EXPERIENCE" -> get().stream().filter(component -> component instanceof ExperienceComponent).toList();
+      case "fluid", "FLUID" -> get().stream().filter(component -> component instanceof FluidComponent).toList();
       default -> throw new IllegalStateException("Unexpected value: " + type);
     };
   }

@@ -50,7 +50,7 @@ public class ItemRequirement implements IRequirement<ItemComponent> {
     if (!componentMatches(component)) return false;
     ItemComponent item = (ItemComponent) component;
     return switch (getMode()) {
-      case INPUT -> item.extractItem(0, amount, true).getCount() == amount;
+      case INPUT -> item.getStackInSlot(0).is(this.item) && item.extractItem(0, amount, true).getCount() == amount;
       case OUTPUT -> {
         ItemStack toInsert = new ItemStack(this.item, this.amount);
         ItemStack inserted = item.insertItem(0, toInsert.copy(), true);
@@ -88,8 +88,7 @@ public class ItemRequirement implements IRequirement<ItemComponent> {
     ItemComponent item = (ItemComponent) component;
     if (getMode().isPerTick()) return CraftingResult.error(Component.literal("Item requirement can not be per tick"));
     else if (getMode().isOutput()) {
-      ItemStack toInsert = new ItemStack(this.item, amount);
-      item.insertItem(0, toInsert, false);
+      item.insertItem(0, new ItemStack(this.item, amount), false);
       return CraftingResult.success();
     }
     return CraftingResult.pass();
@@ -122,6 +121,6 @@ public class ItemRequirement implements IRequirement<ItemComponent> {
       ", amount=" + amount +
       ", id='" + id + '\'' +
       ", mode=" + mode +
-      '}';
+      "}";
   }
 }

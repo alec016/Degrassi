@@ -132,6 +132,6 @@ public class ExperienceRequirement implements IRequirement<ExperienceComponent> 
       "xp=" + xp +
       ", mode=" + mode +
       ", id='" + id + '\'' +
-      '}';
+      "}";
   }
 }

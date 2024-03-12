@@ -4,6 +4,7 @@ import es.degrassi.forge.api.utils.DegrassiLogger;
 import es.degrassi.forge.core.common.ComponentManager;
 import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.component.EnergyComponent;
+import es.degrassi.forge.core.common.component.FluidComponent;
 import es.degrassi.forge.core.common.component.ItemComponent;
 import es.degrassi.forge.core.common.component.ProgressComponent;
 import es.degrassi.forge.core.common.machines.MachineStatus;
@@ -23,16 +24,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class MachineEntity<R extends MachineRecipe> extends BlockEntity {
-  private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
+public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEntity {
+  private LazyOptional<ItemComponent> lazyItemHandler = LazyOptional.empty();
   private LazyOptional<EnergyComponent> lazyEnergyHandler = LazyOptional.empty();
+  private LazyOptional<FluidComponent> lazyFluidHandler = LazyOptional.empty();
   private final ComponentManager componentManager;
   private final ElementManager elementManager;
-  protected MachineProcessor<R> processor;
+  protected MachineProcessor<R, ? extends MachineEntity<R>> processor;
   private MachineStatus status = MachineStatus.IDLE;
   private Component errorMessage = Component.empty();
 
@@ -50,7 +51,7 @@ public abstract class MachineEntity<R extends MachineRecipe> extends BlockEntity
     return elementManager;
   }
 
-  public MachineProcessor<R> getProcessor() {
+  public MachineProcessor<R, ? extends MachineEntity<R>> getProcessor() {
     return processor;
   }
 
@@ -98,6 +99,10 @@ public abstract class MachineEntity<R extends MachineRecipe> extends BlockEntity
       if (!componentManager.get().stream().filter(component -> component instanceof ItemComponent).toList().isEmpty()) {
         return lazyItemHandler.cast();
       }
+    } else if (cap == ForgeCapabilities.FLUID_HANDLER) {
+      if (!componentManager.get().stream().filter(component -> component instanceof FluidComponent).toList().isEmpty()) {
+        return lazyFluidHandler.cast();
+      }
     }
     return super.getCapability(cap, side);
   }
@@ -119,6 +124,13 @@ public abstract class MachineEntity<R extends MachineRecipe> extends BlockEntity
       .map(component -> (ItemComponent) component)
       .findFirst()
       .ifPresent(item -> lazyItemHandler = LazyOptional.of(() -> item));
+    getComponentManager()
+      .get()
+      .stream()
+      .filter(component -> component instanceof FluidComponent)
+      .map(component -> (FluidComponent) component)
+      .findFirst()
+      .ifPresent(fluid -> lazyFluidHandler = LazyOptional.of(() -> fluid));
   }
 
   @Override
@@ -126,9 +138,10 @@ public abstract class MachineEntity<R extends MachineRecipe> extends BlockEntity
     super.invalidateCaps();
     lazyEnergyHandler.invalidate();
     lazyItemHandler.invalidate();
+    lazyFluidHandler.invalidate();
   }
 
-  public static <R extends MachineRecipe> void clientTick (
+  public static <R extends MachineRecipe<R>> void clientTick (
     @NotNull Level level,
     BlockPos pos,
     BlockState state,
@@ -139,7 +152,7 @@ public abstract class MachineEntity<R extends MachineRecipe> extends BlockEntity
     setChanged(level, pos, state);
   }
 
-  public static <R extends MachineRecipe> void serverTick(
+  public static <R extends MachineRecipe<R>> void serverTick(
     @NotNull Level level,
     BlockPos pos,
     BlockState state,

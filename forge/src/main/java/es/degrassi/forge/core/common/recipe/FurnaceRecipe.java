@@ -11,7 +11,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import org.jetbrains.annotations.NotNull;
 
-public class FurnaceRecipe extends MachineRecipe {
+public class FurnaceRecipe extends MachineRecipe<FurnaceRecipe> {
   private final ResourceLocation id;
 
   @SuppressWarnings("unchecked")
@@ -36,26 +36,24 @@ public class FurnaceRecipe extends MachineRecipe {
   }
 
   public boolean matches(List<? extends IComponent> components) {
-    tickRequirements.clear();
-    endRequirements.clear();
-    startRequirements.clear();
     List<IComponent> componentMatches = new ArrayList<>();
     AtomicInteger count = new AtomicInteger(0);
     getRequirements().forEach(requirement -> components.forEach(component -> {
-      if (component.getId().equals(requirement.getId())) {
-        if (requirement.matches(component, getTime())) {
-          count.getAndIncrement();
-          componentMatches.add(component);
-        }
+      if (component.getId().equals(requirement.getId()) && requirement.matches(component, getTime())) {
+        count.getAndIncrement();
+        componentMatches.add(component);
       }
     }));
+    tickRequirements.clear();
+    endRequirements.clear();
+    startRequirements.clear();
     if (count.get() == getRequirements().size()) {
       getRequirements().forEach(requirement -> componentMatches.forEach(component -> {
         if (requirement.getId().equals(component.getId())) {
           if (requirement.getMode().isPerTick()) tickRequirements.put(requirement, component);
           else {
             if (requirement.getMode().isInput()) startRequirements.put(requirement, component);
-            else if (requirement.getMode().isOutput()) endRequirements.put(requirement, component);
+            else endRequirements.put(requirement, component);
           }
         }
       }));
@@ -67,9 +65,6 @@ public class FurnaceRecipe extends MachineRecipe {
   @Override
   public FurnaceRecipe copy() {
     FurnaceRecipe recipe = new FurnaceRecipe(getId(), getTime(), getRequirements().stream().map(IRequirement::copy).toList());
-    recipe.startRequirements.clear();
-    recipe.endRequirements.clear();
-    recipe.tickRequirements.clear();
     recipe.startRequirements.putAll(startRequirements);
     recipe.endRequirements.putAll(endRequirements);
     recipe.tickRequirements.putAll(tickRequirements);
@@ -78,6 +73,6 @@ public class FurnaceRecipe extends MachineRecipe {
 
   @Override
   public String toString() {
-    return "FurnaceRecipe" + super.toString();
+    return "Furnace" + super.toString();
   }
 }

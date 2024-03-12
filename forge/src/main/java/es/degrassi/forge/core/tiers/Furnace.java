@@ -5,6 +5,8 @@ import es.degrassi.forge.core.common.machines.entity.FurnaceEntity;
 import es.degrassi.forge.core.init.EntityRegistration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public enum Furnace {
   IRON(
@@ -52,14 +54,14 @@ public enum Furnace {
   private final float experienceCapacity;
   private final RegistrySupplier<BlockEntityType<FurnaceEntity>> type;
   private final Component name;
-  private final double recipeModifier, speedModifier;
+  private final double energyModifier, speedModifier;
 
-  Furnace(int energyCapacity, float experienceCapacity, double recipeModifier, double speedModifier, RegistrySupplier<BlockEntityType<FurnaceEntity>> type, Component name) {
+  Furnace(int energyCapacity, float experienceCapacity, double energyModifier, double speedModifier, RegistrySupplier<BlockEntityType<FurnaceEntity>> type, Component name) {
     this.energyCapacity = energyCapacity;
     this.experienceCapacity = experienceCapacity;
     this.type = type;
     this.name = name;
-    this.recipeModifier = recipeModifier;
+    this.energyModifier = energyModifier;
     this.speedModifier = speedModifier;
   }
 
@@ -78,15 +80,15 @@ public enum Furnace {
     return name;
   }
 
-  public double getRecipeModifier () {
-    return recipeModifier;
+  public double getEnergyModifier () {
+    return energyModifier;
   }
 
   public double getSpeedModifier() {
     return speedModifier;
   }
 
-  public static Furnace value (String tier) {
+  public static @Nullable Furnace value (@NotNull String tier) {
     if (tier.equalsIgnoreCase("iron")) return IRON;
     if (tier.equalsIgnoreCase("gold")) return GOLD;
     if (tier.equalsIgnoreCase("diamond")) return DIAMOND;

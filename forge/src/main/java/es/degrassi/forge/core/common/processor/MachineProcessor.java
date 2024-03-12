@@ -3,7 +3,6 @@ package es.degrassi.forge.core.common.processor;
 import es.degrassi.forge.api.core.common.CraftingResult;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IProcessor;
-import es.degrassi.forge.api.utils.DegrassiLogger;
 import es.degrassi.forge.core.common.component.ProgressComponent;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
@@ -13,21 +12,21 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 
-public abstract class MachineProcessor<T extends MachineRecipe> implements IProcessor<T> {
+public abstract class MachineProcessor<T extends MachineRecipe<T>, E extends MachineEntity<T>> implements IProcessor<T> {
   protected List<T> recipes;
-  protected final MachineEntity<T> entity;
+  protected final E entity;
   protected boolean initialized = false;
   protected T currentRecipe;
   //Recipe that was processed when the machine was unloaded, and we need to resume
   protected ResourceLocation futureRecipeID;
   protected Phase phase = Phase.NONE;
   private final boolean resetOnError;
-  public MachineProcessor(MachineEntity<T> entity, boolean reset) {
+  public MachineProcessor(E entity, boolean reset) {
     this.entity = entity;
     this.resetOnError = reset;
   }
 
-  public MachineEntity<T> getEntity() {
+  public E getEntity() {
     return entity;
   }
 
@@ -169,6 +168,12 @@ public abstract class MachineProcessor<T extends MachineRecipe> implements IProc
       setRecipe(r.get());
       entity.setRunning();
     }
+  }
+
+  @Override
+  public void setRecipe(T recipe) {
+    this.currentRecipe = recipe == null ? null : recipe.copy();
+    entity.setChanged();
   }
 
   public boolean shouldReset() {

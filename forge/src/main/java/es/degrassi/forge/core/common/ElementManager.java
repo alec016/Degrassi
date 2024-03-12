@@ -4,6 +4,7 @@ import es.degrassi.forge.api.core.common.ElementDirection;
 import es.degrassi.forge.api.core.common.IElement;
 import es.degrassi.forge.core.common.element.EnergyElement;
 import es.degrassi.forge.core.common.element.ExperienceElement;
+import es.degrassi.forge.core.common.element.FluidElement;
 import es.degrassi.forge.core.common.element.ItemElement;
 import es.degrassi.forge.core.common.element.PlayerInventoryElement;
 import es.degrassi.forge.core.common.element.ProgressElement;
@@ -15,6 +16,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.util.INBTSerializable;
 
+@SuppressWarnings("unused")
 public final class ElementManager extends Manager<IElement<?>> implements INBTSerializable<CompoundTag> {
   public ElementManager(MachineEntity<?> entity) {
     super(entity);
@@ -62,6 +64,11 @@ public final class ElementManager extends Manager<IElement<?>> implements INBTSe
     return this;
   }
 
+  public ElementManager addFluid(int x, int y, Component message, ResourceLocation texture, String id) {
+    get().add(new FluidElement(this, x, y, texture, message, id));
+    return this;
+  }
+
   public Optional<IElement<?>> getElement(String id) {
     return get().stream().filter(element -> element.getId().equals(id)).findFirst();
   }
@@ -85,7 +92,6 @@ public final class ElementManager extends Manager<IElement<?>> implements INBTSe
   public void deserializeNBT(CompoundTag nbt) {
     get().forEach(type -> type.deserialize(nbt));
   }
-
 
   public void markDirty() {
     get().forEach(IElement::markDirty);

@@ -12,12 +12,12 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class MachineRecipe implements Recipe<Container> {
+public abstract class MachineRecipe<T extends MachineRecipe<T>> implements Recipe<Container> {
   private final List<IRequirement<?>> requirements;
   protected final Map<IRequirement<?>, IComponent> tickRequirements = new LinkedHashMap<>();
   protected final Map<IRequirement<?>, IComponent> startRequirements = new LinkedHashMap<>();
   protected final Map<IRequirement<?>, IComponent> endRequirements = new LinkedHashMap<>();
-  private final int time;
+  private int time;
   public MachineRecipe(int time, List<IRequirement<?>> requirements) {
     this.time = time;
     this.requirements = requirements;
@@ -65,13 +65,20 @@ public abstract class MachineRecipe implements Recipe<Container> {
 
   public abstract boolean matches(List<? extends IComponent> components);
 
-  public abstract MachineRecipe copy();
+  public abstract T copy();
 
   @Override
   public String toString() {
-    return "{" +
-      "time=" + time +
+    return "Recipe{" +
+      "id=" + getId() +
+      ", time=" + time +
       ", requirements=" + requirements +
-      '}';
+      "}";
+  }
+
+  @SuppressWarnings("unchecked")
+  public T setTime(int time) {
+    this.time = time;
+    return (T) this;
   }
 }

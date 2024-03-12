@@ -46,7 +46,6 @@ public class ItemElement extends AbstractWidget implements IElement<ItemComponen
     ItemComponent component = (ItemComponent) manager.getEntity().getComponentManager().getComponent(id).orElse(null);
     if (component == null) return;
     renderTexture(guiGraphics, texture, getX(), getY(), 0, 0, 0, getWidth(), getHeight(), getWidth(), getHeight());
-//    guiGraphics.renderItem(component.getStackInSlot(0), getX(), getY());
   }
 
   @Override

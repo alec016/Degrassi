@@ -23,6 +23,12 @@
       "item": "minecraft:diamond",
       "mode": "output",
       "id": "output"
+    },
+    {
+      "type": "degrassi:fluid",
+      "fluid": "minecraft:water",
+      "amount": 1000,
+      "id": "fluid"
     }
   ]
 }

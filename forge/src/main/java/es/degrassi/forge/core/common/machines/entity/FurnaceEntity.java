@@ -21,6 +21,7 @@ public class FurnaceEntity extends MachineEntity<FurnaceRecipe> {
       .addItem("input")
       .addItem("output")
       .addExperience(tier.getExperienceCapacity(), "experience")
+      .addFluid(100_000, "fluid")
       .addProgress();
 
     this.getElementManager()
@@ -74,6 +75,12 @@ public class FurnaceEntity extends MachineEntity<FurnaceRecipe> {
         Component.literal("progress"),
         new DegrassiLocation("textures/gui/furnace_progress_empty.png"),
         new DegrassiLocation("textures/gui/furnace_progress_filled.png")
+      ).addFluid(
+        151,
+        20,
+        Component.literal("fluid"),
+        new DegrassiLocation("textures/gui/base_fluid_storage.png"),
+        "fluid"
       );
     this.tier = tier;
 
