@@ -20,6 +20,7 @@ import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 
+@SuppressWarnings("deprecation, unused")
 public class DegrassiLogger {
 
     public static final Logger INSTANCE = Degrassi.LOGGER;

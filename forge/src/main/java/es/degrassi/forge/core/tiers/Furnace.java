@@ -10,7 +10,8 @@ import org.jetbrains.annotations.Nullable;
 
 public enum Furnace {
   IRON(
-    10_000,
+    25_000,
+    5_000,
     1_000,
     1,
     1,
@@ -19,6 +20,7 @@ public enum Furnace {
   ),
   GOLD(
     50_000,
+    10_000,
     5_000,
     1.5,
     0.75,
@@ -27,6 +29,7 @@ public enum Furnace {
   ),
   DIAMOND(
     100_000,
+    25_000,
     10_000,
     2.5,
     0.55,
@@ -34,7 +37,8 @@ public enum Furnace {
     Component.translatable("block.degrassi.diamond_furnace")
   ),
   EMERALD(
-    500_000,
+    250_000,
+    50_000,
     50_000,
     3.75,
     0.3,
@@ -42,7 +46,8 @@ public enum Furnace {
     Component.translatable("block.degrassi.emerald_furnace")
   ),
   NETHERITE(
-    1_000_000,
+    500_000,
+    100_000,
     100_000,
     4.5,
     0.1,
@@ -50,14 +55,23 @@ public enum Furnace {
     Component.translatable("block.degrassi.netherite_furnace")
   );
 
-  private final int energyCapacity;
+  private final int energyCapacity, fluidCapacity;
   private final float experienceCapacity;
   private final RegistrySupplier<BlockEntityType<FurnaceEntity>> type;
   private final Component name;
   private final double energyModifier, speedModifier;
 
-  Furnace(int energyCapacity, float experienceCapacity, double energyModifier, double speedModifier, RegistrySupplier<BlockEntityType<FurnaceEntity>> type, Component name) {
+  Furnace(
+    int energyCapacity,
+    int fluidCapacity,
+    float experienceCapacity,
+    double energyModifier,
+    double speedModifier,
+    RegistrySupplier<BlockEntityType<FurnaceEntity>> type,
+    Component name
+  ) {
     this.energyCapacity = energyCapacity;
+    this.fluidCapacity = fluidCapacity;
     this.experienceCapacity = experienceCapacity;
     this.type = type;
     this.name = name;
@@ -68,6 +82,11 @@ public enum Furnace {
   public int getEnergyCapacity() {
     return energyCapacity;
   }
+
+  public int getFluidCapacity() {
+    return fluidCapacity;
+  }
+
   public float getExperienceCapacity() {
     return experienceCapacity;
   }

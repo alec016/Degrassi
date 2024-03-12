@@ -32,13 +32,15 @@ public class FurnaceProcessor extends MachineProcessor<FurnaceRecipe, FurnaceEnt
     initialized = true;
     RecipeManager recipeManager = Objects.requireNonNull(entity.getLevel()).getRecipeManager();
     recipes = new ArrayList<>();
-    recipes.addAll(recipeManager.getAllRecipesFor(RecipeRegistration.FURNACE_TYPE.get()).stream().peek(recipe -> {
+    recipes.addAll(recipeManager.getAllRecipesFor(RecipeRegistration.FURNACE_TYPE.get()).stream().map(recipe -> {
+      recipe = recipe.copy();
       recipe.setTime((int) (recipe.getTime() * entity.getTier().getSpeedModifier()));
       recipe.getRequirements().forEach(req -> {
         if (req instanceof EnergyRequirement energy) {
           energy.setAmount((int) (energy.getAmount() * entity.getTier().getEnergyModifier()));
         }
       });
+      return recipe;
     }).toList());
     List<SmeltingRecipe> smeltingRecipes = recipeManager.getAllRecipesFor(RecipeType.SMELTING);
     List<BlastingRecipe> blastingRecipes = recipeManager.getAllRecipesFor(RecipeType.BLASTING);

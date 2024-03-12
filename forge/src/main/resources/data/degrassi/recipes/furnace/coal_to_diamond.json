@@ -5,6 +5,7 @@
     {
       "type": "degrassi:energy",
       "amount": 500,
+      "mode": "input_per_tick",
       "id": "energy"
     },
     {

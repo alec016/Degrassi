@@ -21,7 +21,7 @@ public class FurnaceEntity extends MachineEntity<FurnaceRecipe> {
       .addItem("input")
       .addItem("output")
       .addExperience(tier.getExperienceCapacity(), "experience")
-      .addFluid(100_000, "fluid")
+      .addFluid(tier.getFluidCapacity(), "fluid")
       .addProgress();
 
     this.getElementManager()
