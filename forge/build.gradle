@@ -7,6 +7,16 @@ architectury {
     forge()
 }
 
+def generatedResources = file('src/generated/resources')
+
+sourceSets {
+    main {
+        resources {
+            srcDirs += generatedResources
+        }
+    }
+}
+
 loom {
     accessWidenerPath = file("src/main/resources/degrassi.accesswidener")
 
@@ -15,32 +25,19 @@ loom {
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
     }
 
-    def generatedResources = file("src/generated")
-
-    sourceSets {
-        main {
-            resources {
-                srcDirs += generatedResources
-            }
-        }
-    }
-
     runs {
         data {
             data()
 
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-
-            programArgs "--mod", "degrassi"
+            programArgs "--all", "--mod", "degrassi"
             programArgs "--output", generatedResources.absolutePath
-            programArgs "--existing", generatedResources.absolutePath
+            programArgs "--existing", file("src/main/resources").absolutePath
 
-            mods {
-                degrassi {
-                    source sourceSets.main
-                }
-            }
+//            mods {
+//                degrassi {
+//                    source sourceSets.main
+//                }
+//            }
         }
     }
 }
@@ -151,7 +148,6 @@ unifiedPublishing {
                 relations {
                     depends "architectury-api"
                     depends "cloth-config"
-                    depends "geckolib"
                     optional "jei"
                     optional "kubejs"
                 }

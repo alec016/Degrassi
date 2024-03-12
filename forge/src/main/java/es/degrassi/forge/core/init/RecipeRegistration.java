@@ -13,7 +13,7 @@ public class RecipeRegistration {
   public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(Degrassi.MODID, Registries.RECIPE_SERIALIZER);
   public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(Degrassi.MODID, Registries.RECIPE_TYPE);
 
-  public static final RegistrySupplier<RecipeSerializer<FurnaceRecipe>> FURNACE_SERIALIZER = RECIPE_SERIALIZERS.register(
+  public static final RegistrySupplier<FurnaceSerializer> FURNACE_SERIALIZER = RECIPE_SERIALIZERS.register(
     "furnace",
     FurnaceSerializer::new
   );

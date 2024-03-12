@@ -1,5 +1,6 @@
 package es.degrassi.forge.core.common.requirement;
 
+import com.google.gson.JsonObject;
 import es.degrassi.forge.api.codec.NamedCodec;
 import es.degrassi.forge.api.core.common.CraftingResult;
 import es.degrassi.forge.api.core.common.IComponent;
@@ -9,9 +10,11 @@ import es.degrassi.forge.api.core.common.RequirementType;
 import es.degrassi.forge.api.impl.codec.RegistrarCodec;
 import es.degrassi.forge.core.common.component.ItemComponent;
 import es.degrassi.forge.core.init.RequirementRegistration;
+import java.util.Objects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemRequirement implements IRequirement<ItemComponent> {
   public static final NamedCodec<ItemRequirement> CODEC = NamedCodec.record(
@@ -34,6 +37,18 @@ public class ItemRequirement implements IRequirement<ItemComponent> {
     this.id = id;
     this.mode = mode;
   }
+
+  @Override
+  public JsonObject toJson() {
+    JsonObject json = new JsonObject();
+    json.addProperty("type", "degrassi:item");
+    json.addProperty("item", Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item)).toString());
+    json.addProperty("amount", amount);
+    if (!mode.isInput() && !mode.isPerTick()) json.addProperty("mode", mode.toString().toLowerCase());
+    json.addProperty("id", id);
+    return json;
+  }
+
   @Override
   public RequirementType<ItemRequirement> getType() {
     return RequirementRegistration.ITEM.get();

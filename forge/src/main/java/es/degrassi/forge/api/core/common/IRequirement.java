@@ -1,5 +1,6 @@
 package es.degrassi.forge.api.core.common;
 
+import com.google.gson.JsonObject;
 import es.degrassi.forge.api.codec.NamedCodec;
 import es.degrassi.forge.api.impl.codec.RegistrarCodec;
 
@@ -32,4 +33,6 @@ public interface IRequirement<R extends IComponent> extends IType {
   IRequirement<?> copy();
 
   String getId();
+
+  JsonObject toJson();
 }

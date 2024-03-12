@@ -5,12 +5,15 @@ import es.degrassi.forge.api.core.common.RequirementMode;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.common.requirement.EnergyRequirement;
 import es.degrassi.forge.core.common.requirement.ExperienceRequirement;
+import es.degrassi.forge.core.common.requirement.FluidRequirement;
 import es.degrassi.forge.core.common.requirement.ItemRequirement;
 import java.util.List;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
 
 @SuppressWarnings("unused")
-public final class RequirementManager extends Manager<IRequirement<?>> {
+public class RequirementManager extends Manager<IRequirement<?>> {
   public RequirementManager (MachineEntity<?> entity) {
     super(entity);
   }
@@ -86,8 +89,30 @@ public final class RequirementManager extends Manager<IRequirement<?>> {
     return produceItem(item, 1, id);
   }
 
+  private RequirementManager addFluid(Fluid fluid, int amount, String id, RequirementMode mode) {
+    get().add(new FluidRequirement(fluid, amount, id, mode));
+    return this;
+  }
+
+  public RequirementManager requireFluid(Fluid fluid, int amount, String id) {
+    return addFluid(fluid, amount, id, RequirementMode.INPUT);
+  }
+
+  public RequirementManager requireFluidPerTick(Fluid fluid, int amount, String id) {
+    return addFluid(fluid, amount, id, RequirementMode.INPUT_PER_TICK);
+  }
+
+  public RequirementManager produceFluid(Fluid fluid, int amount, String id) {
+    return addFluid(fluid, amount, id, RequirementMode.OUTPUT);
+  }
+
+  public RequirementManager produceFluidPerTick(Fluid fluid, int amount, String id) {
+    return addFluid(fluid, amount, id, RequirementMode.OUTPUT_PER_TICK);
+  }
+
   @Override
   public String toString() {
     return "Requirement" + super.toString();
   }
+
 }

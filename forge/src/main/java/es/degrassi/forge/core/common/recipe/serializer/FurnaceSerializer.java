@@ -8,6 +8,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import es.degrassi.forge.api.utils.DegrassiLogger;
 import es.degrassi.forge.core.common.recipe.FurnaceRecipe;
+import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import es.degrassi.forge.core.common.recipe.builder.FurnaceBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -17,7 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import org.jetbrains.annotations.Nullable;
 
-public class FurnaceSerializer implements RecipeSerializer<FurnaceRecipe> {
+public class FurnaceSerializer extends MachineSerializer<FurnaceRecipe> {
   @Override
   public FurnaceRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
     DegrassiLogger.INSTANCE.info("Parsing recipe json: {}", recipeId);

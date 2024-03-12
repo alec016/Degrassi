@@ -1,5 +1,6 @@
 package es.degrassi.forge.core.common.requirement;
 
+import com.google.gson.JsonObject;
 import es.degrassi.forge.api.codec.NamedCodec;
 import es.degrassi.forge.api.core.common.CraftingResult;
 import es.degrassi.forge.api.core.common.IComponent;
@@ -40,6 +41,16 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
   @Override
   public String getId() {
     return id;
+  }
+
+  @Override
+  public JsonObject toJson() {
+    JsonObject json = new JsonObject();
+    json.addProperty("type", "degrassi:energy");
+    json.addProperty("amount", amount);
+    if (!mode.isInput() && !mode.isPerTick()) json.addProperty("mode", mode.toString().toLowerCase());
+    json.addProperty("id", id);
+    return json;
   }
 
   @Override

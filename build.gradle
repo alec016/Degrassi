@@ -1,4 +1,5 @@
 plugins {
+    id 'idea'
     id "architectury-plugin" version "3.4.146"
     id "dev.architectury.loom" version "1.3+" apply false
     id "maven-publish"

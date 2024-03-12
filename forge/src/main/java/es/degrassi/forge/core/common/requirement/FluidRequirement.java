@@ -1,5 +1,6 @@
 package es.degrassi.forge.core.common.requirement;
 
+import com.google.gson.JsonObject;
 import es.degrassi.forge.api.codec.NamedCodec;
 import es.degrassi.forge.api.core.common.CraftingResult;
 import es.degrassi.forge.api.core.common.IComponent;
@@ -9,10 +10,14 @@ import es.degrassi.forge.api.core.common.RequirementType;
 import es.degrassi.forge.api.impl.codec.RegistrarCodec;
 import es.degrassi.forge.core.common.component.FluidComponent;
 import es.degrassi.forge.core.init.RequirementRegistration;
+import java.util.Objects;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class FluidRequirement implements IRequirement<FluidComponent> {
   public static final NamedCodec<FluidRequirement> CODEC = NamedCodec.record(
@@ -37,6 +42,17 @@ public class FluidRequirement implements IRequirement<FluidComponent> {
     this.mode = mode;
   }
 
+
+  @Override
+  public JsonObject toJson() {
+    JsonObject json = new JsonObject();
+    json.addProperty("type", "degrassi:fluid");
+    json.addProperty("fluid", Objects.requireNonNull(ForgeRegistries.FLUIDS.getKey(fluid)).toString());
+    json.addProperty("amount", amount);
+    if (!mode.isInput() && !mode.isPerTick()) json.addProperty("mode", mode.toString().toLowerCase());
+    json.addProperty("id", id);
+    return json;
+  }
   @Override
   public RequirementType<? extends IRequirement<?>> getType() {
     return RequirementRegistration.FLUID.get();
