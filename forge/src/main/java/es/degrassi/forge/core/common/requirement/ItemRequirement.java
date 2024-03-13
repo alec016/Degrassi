@@ -26,6 +26,7 @@ public class ItemRequirement implements IRequirement<ItemComponent> {
     ).apply(instance, ItemRequirement::new),
     "Item requirement"
   );
+
   private final Item item;
   private final int amount;
   private final String id;
@@ -39,13 +40,17 @@ public class ItemRequirement implements IRequirement<ItemComponent> {
   }
 
   @Override
-  public JsonObject toJson() {
-    JsonObject json = new JsonObject();
-    json.addProperty("type", "degrassi:item");
-    json.addProperty("item", Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item)).toString());
-    json.addProperty("amount", amount);
-    if (!mode.isInput() && !mode.isPerTick()) json.addProperty("mode", mode.toString().toLowerCase());
-    json.addProperty("id", id);
+  public JsonObject toJson(JsonObject json) {
+    switch (getMode()) {
+      case INPUT -> {
+        json.addProperty("input", Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item)).toString());
+        json.addProperty("inputAmount", amount);
+      }
+      case OUTPUT -> {
+        json.addProperty("output", Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item)).toString());
+        json.addProperty("outputAmount", amount);
+      }
+    }
     return json;
   }
 
@@ -137,5 +142,9 @@ public class ItemRequirement implements IRequirement<ItemComponent> {
       ", id='" + id + '\'' +
       ", mode=" + mode +
       "}";
+  }
+
+  public Item getItem () {
+    return item;
   }
 }

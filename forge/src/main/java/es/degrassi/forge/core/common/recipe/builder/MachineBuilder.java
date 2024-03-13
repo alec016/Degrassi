@@ -1,13 +1,12 @@
 package es.degrassi.forge.core.common.recipe.builder;
 
 import es.degrassi.forge.api.core.common.IRequirement;
+import es.degrassi.forge.core.common.RequirementManager;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
-import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.resources.ResourceLocation;
 
-public abstract class MachineBuilder<T extends MachineRecipe<T>> {
-  private List<IRequirement<?>> requirements = new ArrayList<>();
+public abstract class MachineBuilder<T extends MachineRecipe<T>> extends RequirementManager {
   private final int time;
 
   public MachineBuilder(int time) {
@@ -16,12 +15,7 @@ public abstract class MachineBuilder<T extends MachineRecipe<T>> {
 
   public MachineBuilder(T recipe) {
     this(recipe.getTime());
-    this.requirements = recipe.getRequirements();
-  }
-
-  public MachineBuilder<T> withRequirement(IRequirement<?> requirement) {
-    this.requirements.add(requirement);
-    return this;
+    get().addAll(recipe.getRequirements());
   }
 
   public int getTime() {
@@ -29,7 +23,7 @@ public abstract class MachineBuilder<T extends MachineRecipe<T>> {
   }
 
   public List<IRequirement<?>> getRequirements() {
-    return requirements;
+    return get();
   }
 
   public abstract T build(ResourceLocation id);

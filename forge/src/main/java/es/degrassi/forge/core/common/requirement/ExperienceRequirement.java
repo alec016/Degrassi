@@ -31,12 +31,8 @@ public class ExperienceRequirement implements IRequirement<ExperienceComponent> 
   }
 
   @Override
-  public JsonObject toJson() {
-    JsonObject json = new JsonObject();
-    json.addProperty("type", "degrassi:experience");
-    json.addProperty("amount", xp);
-    if (!mode.isInput() && !mode.isPerTick()) json.addProperty("mode", mode.toString().toLowerCase());
-    json.addProperty("id", id);
+  public JsonObject toJson(JsonObject json) {
+    json.addProperty("experience", xp);
     return json;
   }
 

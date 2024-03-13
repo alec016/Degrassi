@@ -2,6 +2,8 @@ package es.degrassi.forge.core.common;
 
 import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.api.core.common.RequirementMode;
+import es.degrassi.forge.api.core.common.RequirementType;
+import es.degrassi.forge.api.impl.codec.RegistrarCodec;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.common.requirement.EnergyRequirement;
 import es.degrassi.forge.core.common.requirement.ExperienceRequirement;
@@ -108,6 +110,14 @@ public class RequirementManager extends Manager<IRequirement<?>> {
 
   public RequirementManager produceFluidPerTick(Fluid fluid, int amount, String id) {
     return addFluid(fluid, amount, id, RequirementMode.OUTPUT_PER_TICK);
+  }
+
+  public IRequirement<?> getById(String id) {
+    return get().stream().filter(req -> req.getId().equals(id)).findFirst().orElse(null);
+  }
+
+  public List<IRequirement<?>> getByType (RequirementType<? extends IRequirement<?>> type) {
+    return get().stream().filter(req -> req.getType().equals(type)).toList();
   }
 
   @Override

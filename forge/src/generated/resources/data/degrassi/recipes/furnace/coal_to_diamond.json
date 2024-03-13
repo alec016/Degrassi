@@ -1,36 +1,10 @@
 {
   "type": "degrassi:furnace",
-  "requirements": [
-    {
-      "type": "degrassi:energy",
-      "amount": 500,
-      "id": "energy"
-    },
-    {
-      "type": "degrassi:experience",
-      "amount": 0.8,
-      "id": "experience",
-      "mode": "output"
-    },
-    {
-      "type": "degrassi:item",
-      "amount": 1,
-      "id": "input",
-      "item": "minecraft:coal"
-    },
-    {
-      "type": "degrassi:fluid",
-      "amount": 1000,
-      "fluid": "minecraft:water",
-      "id": "fluid"
-    },
-    {
-      "type": "degrassi:item",
-      "amount": 1,
-      "id": "output",
-      "item": "minecraft:diamond",
-      "mode": "output"
-    }
-  ],
+  "energy": 500,
+  "experience": 0.8,
+  "input": "minecraft:coal",
+  "inputAmount": 1,
+  "output": "minecraft:diamond",
+  "outputAmount": 1,
   "time": 100
 }

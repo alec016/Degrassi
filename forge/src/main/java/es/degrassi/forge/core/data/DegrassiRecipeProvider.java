@@ -23,7 +23,6 @@ public class DegrassiRecipeProvider extends RecipeProvider implements ICondition
       .requireEnergy(500, "energy")
       .produceExperience(0.8f, "experience")
       .requireItem(Items.COAL, "input")
-      .requireFluid(Fluids.WATER, 1000, "fluid")
       .produceItem(Items.DIAMOND, "output");
     builder.save(writer, new DegrassiLocation("coal_to_diamond"));
   }

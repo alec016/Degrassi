@@ -43,13 +43,8 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
     return id;
   }
 
-  @Override
-  public JsonObject toJson() {
-    JsonObject json = new JsonObject();
-    json.addProperty("type", "degrassi:energy");
-    json.addProperty("amount", amount);
-    if (!mode.isInput() && !mode.isPerTick()) json.addProperty("mode", mode.toString().toLowerCase());
-    json.addProperty("id", id);
+  public JsonObject toJson(JsonObject json) {
+    json.addProperty("energy", amount);
     return json;
   }
 
