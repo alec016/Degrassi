@@ -34,5 +34,6 @@ public class DataGenerators {
       event.includeServer(),
       new DegrassiItemTagProvider(packOutput, lookupProvider, blockTagProvider.contentsGetter(), fileHelper)
     );
+    DegrassiLangProvider.generate(event, generator);
   }
 }
