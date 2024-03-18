@@ -3,8 +3,13 @@ package es.degrassi.forge.core.init;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.forge.Degrassi;
+import es.degrassi.forge.core.common.cables.block.CableBlockEntity;
+import es.degrassi.forge.core.common.cables.block.FacadeBlockEntity;
+import es.degrassi.forge.core.common.cables.energy.EnergyCableBlockEntity;
 import es.degrassi.forge.core.common.machines.entity.FurnaceEntity;
 import es.degrassi.forge.core.common.machines.entity.SolarPanelEntity;
+import es.degrassi.forge.core.tiers.CableTier;
+import es.degrassi.forge.core.tiers.EnergyCableTier;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import net.minecraft.core.registries.Registries;
@@ -26,6 +31,11 @@ public class EntityRegistration {
   public static final RegistrySupplier<BlockEntityType<SolarPanelEntity>> SP6;
   public static final RegistrySupplier<BlockEntityType<SolarPanelEntity>> SP7;
   public static final RegistrySupplier<BlockEntityType<SolarPanelEntity>> SP8;
+
+  public static final RegistrySupplier<BlockEntityType<EnergyCableBlockEntity>> BASIC_ENERGY_CABLE;
+  public static final RegistrySupplier<BlockEntityType<EnergyCableBlockEntity>> ADVANCE_ENERGY_CABLE;
+  public static final RegistrySupplier<BlockEntityType<EnergyCableBlockEntity>> EXTREME_ENERGY_CABLE;
+  public static final RegistrySupplier<BlockEntityType<FacadeBlockEntity>> CABLE_FACADE;
 
   // Furnaces
   static {
@@ -122,6 +132,38 @@ public class EntityRegistration {
       () -> BlockEntityType.Builder.of(
         (pos, state) -> new SolarPanelEntity(pos, state, SolarPanel.T8),
         BlockRegistration.SP8.get()
+      ).build(null)
+    );
+  }
+
+  // cables
+  static {
+    BASIC_ENERGY_CABLE = ENTITIES.register(
+      "basic_energy_cable",
+      () -> BlockEntityType.Builder.of(
+        (pos, state) -> new EnergyCableBlockEntity(pos, state, CableTier.BASIC),
+        BlockRegistration.BASIC_ENERGY_CABLE.get()
+      ).build(null)
+    );
+    ADVANCE_ENERGY_CABLE = ENTITIES.register(
+      "advance_energy_cable",
+      () -> BlockEntityType.Builder.of(
+        (pos, state) -> new EnergyCableBlockEntity(pos, state, CableTier.ADVANCE),
+        BlockRegistration.ADVANCE_ENERGY_CABLE.get()
+      ).build(null)
+    );
+    EXTREME_ENERGY_CABLE = ENTITIES.register(
+      "extreme_energy_cable",
+      () -> BlockEntityType.Builder.of(
+        (pos, state) -> new EnergyCableBlockEntity(pos, state, CableTier.EXTREME),
+        BlockRegistration.EXTREME_ENERGY_CABLE.get()
+      ).build(null)
+    );
+    CABLE_FACADE = ENTITIES.register(
+      "facade",
+      () -> BlockEntityType.Builder.of(
+        FacadeBlockEntity::new,
+        BlockRegistration.CABLE_FACADE.get()
       ).build(null)
     );
   }

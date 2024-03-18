@@ -3,6 +3,7 @@ package es.degrassi.forge.core.init;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.forge.Degrassi;
+import es.degrassi.forge.core.common.cables.block.FacadeBlockItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -22,6 +23,10 @@ public class ItemRegistration {
   public static final RegistrySupplier<BlockItem> SP6;
   public static final RegistrySupplier<BlockItem> SP7;
   public static final RegistrySupplier<BlockItem> SP8;
+  public static final RegistrySupplier<BlockItem> BASIC_ENERGY_CABLE;
+  public static final RegistrySupplier<BlockItem> ADVANCE_ENERGY_CABLE;
+  public static final RegistrySupplier<BlockItem> EXTREME_ENERGY_CABLE;
+  public static final RegistrySupplier<BlockItem> CABLE_FACADE;
 
   // Furnaces
   static {
@@ -79,6 +84,26 @@ public class ItemRegistration {
     ));
     SP8 = ITEMS.register("sp8", () -> new BlockItem(
       BlockRegistration.SP8.get(),
+      new Item.Properties()
+    ));
+  }
+
+  // Cables
+  static {
+    BASIC_ENERGY_CABLE = ITEMS.register("basic_energy_cable", () -> new BlockItem(
+      BlockRegistration.BASIC_ENERGY_CABLE.get(),
+      new Item.Properties()
+    ));
+    ADVANCE_ENERGY_CABLE = ITEMS.register("advance_energy_cable", () -> new BlockItem(
+      BlockRegistration.ADVANCE_ENERGY_CABLE.get(),
+      new Item.Properties()
+    ));
+    EXTREME_ENERGY_CABLE = ITEMS.register("extreme_energy_cable", () -> new BlockItem(
+      BlockRegistration.EXTREME_ENERGY_CABLE.get(),
+      new Item.Properties()
+    ));
+    CABLE_FACADE = ITEMS.register("facade", () -> new FacadeBlockItem(
+      BlockRegistration.CABLE_FACADE.get(),
       new Item.Properties()
     ));
   }

@@ -7,6 +7,8 @@ import dev.architectury.utils.EnvExecutor;
 import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.core.client.DegrassiResourcePack;
 import es.degrassi.forge.core.client.model.SolarPanelModel;
+import es.degrassi.forge.core.client.model.loader.CableModelLoader;
+import es.degrassi.forge.core.common.cables.block.FacadeBlockColor;
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.ContainerRegistration;
 import es.degrassi.forge.core.init.ItemRegistration;
@@ -20,6 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -59,6 +62,16 @@ public class DegrassiForge {
   }
 
   @SubscribeEvent
+  public static void registerLoaders(ModelEvent.RegisterGeometryLoaders event) {
+    CableModelLoader.register(event);
+  }
+
+  @SubscribeEvent
+  public static void registerBlockColor(RegisterColorHandlersEvent.Block event) {
+    event.register(new FacadeBlockColor(), BlockRegistration.CABLE_FACADE.get());
+  }
+
+  @SubscribeEvent
   @OnlyIn(Dist.CLIENT)
   public static void modelBake(ModelEvent.BakingCompleted event) {
     BlockRegistration.listPanels().forEach(panel ->
@@ -86,6 +99,10 @@ public class DegrassiForge {
         output.accept(new ItemStack(ItemRegistration.SP6.get()));
         output.accept(new ItemStack(ItemRegistration.SP7.get()));
         output.accept(new ItemStack(ItemRegistration.SP8.get()));
+        output.accept(new ItemStack(ItemRegistration.CABLE_FACADE.get()));
+        output.accept(new ItemStack(ItemRegistration.BASIC_ENERGY_CABLE.get()));
+        output.accept(new ItemStack(ItemRegistration.ADVANCE_ENERGY_CABLE.get()));
+        output.accept(new ItemStack(ItemRegistration.EXTREME_ENERGY_CABLE.get()));
     }).withSearchBar().icon(() -> new ItemStack(ItemRegistration.IRON_FURNACE.get())).build()));
   }
 
@@ -107,6 +124,10 @@ public class DegrassiForge {
       entries.put(new ItemStack(ItemRegistration.SP6.get()), vis);
       entries.put(new ItemStack(ItemRegistration.SP7.get()), vis);
       entries.put(new ItemStack(ItemRegistration.SP8.get()), vis);
+      entries.put(new ItemStack(ItemRegistration.CABLE_FACADE.get()), vis);
+      entries.put(new ItemStack(ItemRegistration.BASIC_ENERGY_CABLE.get()), vis);
+      entries.put(new ItemStack(ItemRegistration.ADVANCE_ENERGY_CABLE.get()), vis);
+      entries.put(new ItemStack(ItemRegistration.EXTREME_ENERGY_CABLE.get()), vis);
     }
   }
 }

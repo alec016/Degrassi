@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube",
+  "cable_tier": "advance",
+  "cable_type": "energy",
+  "facade": false,
+  "loader": "degrassi:cableloader"
+}

@@ -3,8 +3,13 @@ package es.degrassi.forge.core.init;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.forge.Degrassi;
+import es.degrassi.forge.core.common.cables.block.CableBlock;
+import es.degrassi.forge.core.common.cables.block.FacadeBlock;
+import es.degrassi.forge.core.common.cables.energy.EnergyCableBlock;
 import es.degrassi.forge.core.common.machines.block.FurnaceBlock;
 import es.degrassi.forge.core.common.machines.block.SolarPanelBlock;
+import es.degrassi.forge.core.tiers.CableTier;
+import es.degrassi.forge.core.tiers.EnergyCableTier;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import java.util.List;
@@ -21,6 +26,7 @@ public class BlockRegistration {
   public static final RegistrySupplier<FurnaceBlock> DIAMOND_FURNACE;
   public static final RegistrySupplier<FurnaceBlock> EMERALD_FURNACE;
   public static final RegistrySupplier<FurnaceBlock> NETHERITE_FURNACE;
+
   public static final RegistrySupplier<SolarPanelBlock> SP1;
   public static final RegistrySupplier<SolarPanelBlock> SP2;
   public static final RegistrySupplier<SolarPanelBlock> SP3;
@@ -29,6 +35,11 @@ public class BlockRegistration {
   public static final RegistrySupplier<SolarPanelBlock> SP6;
   public static final RegistrySupplier<SolarPanelBlock> SP7;
   public static final RegistrySupplier<SolarPanelBlock> SP8;
+
+  public static final RegistrySupplier<EnergyCableBlock> BASIC_ENERGY_CABLE;
+  public static final RegistrySupplier<EnergyCableBlock> ADVANCE_ENERGY_CABLE;
+  public static final RegistrySupplier<EnergyCableBlock> EXTREME_ENERGY_CABLE;
+  public static final RegistrySupplier<FacadeBlock> CABLE_FACADE;
 
   // Furnaces
   static {
@@ -88,6 +99,14 @@ public class BlockRegistration {
       BlockBehaviour.Properties.of().destroyTime(500).requiresCorrectToolForDrops().dynamicShape().noOcclusion(),
       SolarPanel.T8
     ));
+  }
+
+  // Cables
+  static {
+    BASIC_ENERGY_CABLE = BLOCKS.register("basic_energy_cable", () -> new EnergyCableBlock(CableTier.BASIC));
+    ADVANCE_ENERGY_CABLE = BLOCKS.register("advance_energy_cable", () -> new EnergyCableBlock(CableTier.ADVANCE));
+    EXTREME_ENERGY_CABLE = BLOCKS.register("extreme_energy_cable", () -> new EnergyCableBlock(CableTier.EXTREME));
+    CABLE_FACADE = BLOCKS.register("facade", FacadeBlock::new);
   }
 
   @Contract(value = " -> new", pure = true)

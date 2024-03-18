@@ -29,6 +29,10 @@ public class BlockLootTables extends BlockLootSubProvider {
     dropSelf(BlockRegistration.SP6.get());
     dropSelf(BlockRegistration.SP7.get());
     dropSelf(BlockRegistration.SP8.get());
+    dropSelf(BlockRegistration.BASIC_ENERGY_CABLE.get());
+    dropSelf(BlockRegistration.ADVANCE_ENERGY_CABLE.get());
+    dropSelf(BlockRegistration.EXTREME_ENERGY_CABLE.get());
+    dropSelf(BlockRegistration.CABLE_FACADE.get());
   }
 
   @Override

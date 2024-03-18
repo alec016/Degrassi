@@ -29,6 +29,11 @@ public class EN extends DegrassiLangProvider {
     addBlock(BlockRegistration.SP6, "Solar Panel VI");
     addBlock(BlockRegistration.SP7, "Solar Panel VII");
     addBlock(BlockRegistration.SP8, "Solar Panel VIII");
+    addBlock(BlockRegistration.BASIC_ENERGY_CABLE, "Basic Energy Cable");
+    addBlock(BlockRegistration.ADVANCE_ENERGY_CABLE, "Advance Energy Cable");
+    addBlock(BlockRegistration.EXTREME_ENERGY_CABLE, "Extreme Energy Cable");
+    addBlock(BlockRegistration.CABLE_FACADE, "Facade");
+    add("degrassi.facade.is_mimicking", "Mimicking %s");
 
   }
 

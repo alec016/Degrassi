@@ -10,8 +10,8 @@ import net.minecraft.world.item.crafting.RecipeType;
 /**
  * DO NOT USE
  */
-public abstract class SolarPanelRecipe extends MachineRecipe<SolarPanelRecipe> {
-  public SolarPanelRecipe(int time, List<IRequirement<?>> requirements) {
+public abstract class CableRecipe extends MachineRecipe<CableRecipe>{
+  public CableRecipe(int time, List<IRequirement<?>> requirements) {
     super(time, requirements);
   }
 
@@ -21,7 +21,7 @@ public abstract class SolarPanelRecipe extends MachineRecipe<SolarPanelRecipe> {
   }
 
   @Override
-  public SolarPanelRecipe copy() {
+  public CableRecipe copy() {
     return null;
   }
 

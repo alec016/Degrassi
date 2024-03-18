@@ -25,18 +25,22 @@ public class DegrassiItemModelProvider extends ItemModelProvider {
     simpleBlockItem(BlockRegistration.DIAMOND_FURNACE);
     simpleBlockItem(BlockRegistration.EMERALD_FURNACE);
     simpleBlockItem(BlockRegistration.NETHERITE_FURNACE);
-    simpleBlockItem(BlockRegistration.SP1);
-    simpleBlockItem(BlockRegistration.SP2);
-    simpleBlockItem(BlockRegistration.SP3);
-    simpleBlockItem(BlockRegistration.SP4);
-    simpleBlockItem(BlockRegistration.SP5);
-    simpleBlockItem(BlockRegistration.SP6);
-    simpleBlockItem(BlockRegistration.SP7);
-    simpleBlockItem(BlockRegistration.SP8);
+//    simpleBlockItem(BlockRegistration.SP1);
+//    simpleBlockItem(BlockRegistration.SP2);
+//    simpleBlockItem(BlockRegistration.SP3);
+//    simpleBlockItem(BlockRegistration.SP4);
+//    simpleBlockItem(BlockRegistration.SP5);
+//    simpleBlockItem(BlockRegistration.SP6);
+//    simpleBlockItem(BlockRegistration.SP7);
+//    simpleBlockItem(BlockRegistration.SP8);
+    simpleBlockItem(BlockRegistration.BASIC_ENERGY_CABLE);
+    simpleBlockItem(BlockRegistration.ADVANCE_ENERGY_CABLE);
+    simpleBlockItem(BlockRegistration.EXTREME_ENERGY_CABLE);
+    simpleBlockItem(BlockRegistration.CABLE_FACADE);
   }
 
-  private void simpleBlockItem(@NotNull RegistrySupplier<? extends Block> supplier) {
-    withExistingParent(
+  private ItemModelBuilder simpleBlockItem(@NotNull RegistrySupplier<? extends Block> supplier) {
+    return withExistingParent(
       supplier.getId().getPath(),
       new DegrassiLocation("block/" + supplier.getId().getPath())
     );

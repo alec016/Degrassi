@@ -29,6 +29,11 @@ public class ES extends DegrassiLangProvider {
     addBlock(BlockRegistration.SP6, "Panel Solar VI");
     addBlock(BlockRegistration.SP7, "Panel Solar VII");
     addBlock(BlockRegistration.SP8, "Panel Solar VIII");
+    addBlock(BlockRegistration.BASIC_ENERGY_CABLE, "Cable de Energía Básico");
+    addBlock(BlockRegistration.ADVANCE_ENERGY_CABLE, "Cable de Energía Avanzado");
+    addBlock(BlockRegistration.EXTREME_ENERGY_CABLE, "Cable de Energía Extremo");
+    addBlock(BlockRegistration.CABLE_FACADE, "Cobertura");
+    add("degrassi.facade.is_mimicking", "Copiando %s");
   }
 
   @Override

@@ -1,6 +1,10 @@
 {
+  "block.degrassi.advance_energy_cable": "Cable de Energía Avanzado",
+  "block.degrassi.basic_energy_cable": "Cable de Energía Básico",
   "block.degrassi.diamond_furnace": "Horno de Diamante",
   "block.degrassi.emerald_furnace": "Horno de Esmeralda",
+  "block.degrassi.extreme_energy_cable": "Cable de Energía Extremo",
+  "block.degrassi.facade": "Cobertura",
   "block.degrassi.gold_furnace": "Horno de Oro",
   "block.degrassi.iron_furnace": "Horno de Hierro",
   "block.degrassi.netherite_furnace": "Horno de Netherite",
@@ -12,6 +16,7 @@
   "block.degrassi.sp6": "Panel Solar VI",
   "block.degrassi.sp7": "Panel Solar VII",
   "block.degrassi.sp8": "Panel Solar VIII",
+  "degrassi.facade.is_mimicking": "Copiando %s",
   "degrassi.tabs.machines": "Maquinaria Degrassi",
   "unit.energy.forge": "FE"
 }
