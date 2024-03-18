@@ -51,6 +51,7 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
     return elementManager;
   }
 
+  @Nullable
   public MachineProcessor<R, ? extends MachineEntity<R>> getProcessor() {
     return processor;
   }
@@ -74,7 +75,7 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
     super.load(tag);
     componentManager.deserializeNBT(tag.getCompound("componentManager"));
     elementManager.deserializeNBT(tag.getCompound("elementManager"));
-    processor.deserializeNBT(tag.getCompound("processor"));
+    if (tag.contains("processor") && processor != null) processor.deserializeNBT(tag.getCompound("processor"));
     status = MachineStatus.value(tag.getString("status"));
     errorMessage = Component.literal(tag.getString("errorMessage"));
   }
@@ -84,7 +85,7 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
     super.saveAdditional(tag);
     tag.put("componentManager", componentManager.serializeNBT());
     tag.put("elementManager", elementManager.serializeNBT());
-    tag.put("processor", processor.serializeNBT());
+    if (processor != null) tag.put("processor", processor.serializeNBT());
     tag.putString("status", status.toString());
     tag.putString("errorMessage", errorMessage.getString());
   }
@@ -160,6 +161,7 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
   ) {
     entity.getComponentManager().serverTick();
     entity.getElementManager().serverTick();
+    if (entity.getProcessor() == null) return;
     switch (entity.getStatus()) {
       case IDLE -> entity.getProcessor().searchForRecipe(entity.getComponentManager().get());
       case RUNNING -> entity.getProcessor().tick();
@@ -212,6 +214,7 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
 
   private void setStatus(MachineStatus status) {
     this.status = status;
+    requestModelDataUpdate();
     setChanged();
   }
 }

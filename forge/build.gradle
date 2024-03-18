@@ -23,6 +23,7 @@ loom {
     forge {
         convertAccessWideners = true
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
+        mixinConfig "degrassi.mixins.json"
     }
 
     runs {
@@ -63,6 +64,9 @@ dependencies {
     // common module
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+
+    // hammer lib
+    modImplementation "org.zeith.hammerlib:HammerLib-${project.minecraft_version}:${project.hammerlib_version}"
 
     //JEI 10
     modCompileOnly "mezz.jei:jei-${project.minecraft_version}-common-api:${project.jei_version}"

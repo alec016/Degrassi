@@ -1,5 +1,6 @@
 package es.degrassi.forge.core.common.machines.block;
 
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("unused")
 public abstract class MachineBlock extends Block implements EntityBlock {
   public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
   public MachineBlock(Properties properties) {
@@ -31,22 +33,53 @@ public abstract class MachineBlock extends Block implements EntityBlock {
   );
   @Override
   public BlockState getStateForPlacement(@NotNull BlockPlaceContext pContext) {
-    return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite());
-  }
-  @Override
-  protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
-    builder.add(FACING);
+    return getFacing() != Facing.NONE ? this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite()) : defaultBlockState();
   }
 
   @SuppressWarnings("deprecation")
   @Override
   public @NotNull BlockState rotate(@NotNull BlockState pState, @NotNull Rotation pRotation) {
-    return pState.setValue(FACING, pRotation.rotate(pState.getValue(FACING)));
+    return getFacing() != Facing.NONE ? pState.setValue(FACING, pRotation.rotate(pState.getValue(FACING))) : pState;
   }
 
   @SuppressWarnings("deprecation")
   @Override
   public @NotNull BlockState mirror(@NotNull BlockState pState, @NotNull Mirror pMirror) {
-    return pState.rotate(pMirror.getRotation(pState.getValue(FACING)));
+    return getFacing() != Facing.NONE ? pState.rotate(pMirror.getRotation(pState.getValue(FACING))) : pState;
+  }
+
+  protected void setDefaultState() {
+    setStateProps(state -> state);
+  }
+
+  protected Facing getFacing() {
+    return Facing.NONE;
+  }
+
+  protected void setStateProps(BaseState baseState) {
+    BlockState state = this.stateDefinition.any();
+    if (!getFacing().equals(Facing.NONE)) {
+      state = state.setValue(FACING, Direction.NORTH);
+    }
+
+    registerDefaultState(baseState.get(state));
+  }
+
+  @Override
+  protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
+    if (getFacing() != Facing.NONE)
+      builder.add(FACING);
+  }
+
+  @FunctionalInterface
+  protected interface BaseState {
+    BlockState get(BlockState state);
+  }
+
+  @SuppressWarnings("unused")
+  protected enum Facing {
+    HORIZONTAL,
+    ALL,
+    NONE
   }
 }

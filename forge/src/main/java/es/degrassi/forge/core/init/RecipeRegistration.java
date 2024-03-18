@@ -18,7 +18,6 @@ public class RecipeRegistration {
     FurnaceSerializer::new
   );
 
-
   public static final RegistrySupplier<RecipeType<FurnaceRecipe>> FURNACE_TYPE = RECIPE_TYPES.register(
     "furnace",
     () -> new RecipeType<>() {

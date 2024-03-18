@@ -26,13 +26,28 @@ public class DegrassiBlockTagProvider extends BlockTagsProvider {
         BlockRegistration.NETHERITE_FURNACE.get()
       );
 
+    this.tag(DegrassiTags.Blocks.SP.get())
+      .add(
+        BlockRegistration.SP1.get(),
+        BlockRegistration.SP2.get(),
+        BlockRegistration.SP3.get(),
+        BlockRegistration.SP4.get(),
+        BlockRegistration.SP5.get(),
+        BlockRegistration.SP6.get(),
+        BlockRegistration.SP7.get(),
+        BlockRegistration.SP8.get()
+      );
+
     this.tag(DegrassiTags.Blocks.MACHINE.get())
-      .addTag(DegrassiTags.Blocks.FURNACE.get());
+      .addTag(DegrassiTags.Blocks.FURNACE.get())
+      .addTag(DegrassiTags.Blocks.SP.get());
 
     this.tag(BlockTags.NEEDS_IRON_TOOL)
-      .addTag(DegrassiTags.Blocks.FURNACE.get());
+      .addTag(DegrassiTags.Blocks.FURNACE.get())
+      .addTag(DegrassiTags.Blocks.SP.get());
 
     this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
-      .addTag(DegrassiTags.Blocks.FURNACE.get());
+      .addTag(DegrassiTags.Blocks.FURNACE.get())
+      .addTag(DegrassiTags.Blocks.SP.get());
   }
 }

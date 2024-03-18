@@ -21,6 +21,14 @@ public class BlockLootTables extends BlockLootSubProvider {
     dropSelf(BlockRegistration.DIAMOND_FURNACE.get());
     dropSelf(BlockRegistration.EMERALD_FURNACE.get());
     dropSelf(BlockRegistration.NETHERITE_FURNACE.get());
+    dropSelf(BlockRegistration.SP1.get());
+    dropSelf(BlockRegistration.SP2.get());
+    dropSelf(BlockRegistration.SP3.get());
+    dropSelf(BlockRegistration.SP4.get());
+    dropSelf(BlockRegistration.SP5.get());
+    dropSelf(BlockRegistration.SP6.get());
+    dropSelf(BlockRegistration.SP7.get());
+    dropSelf(BlockRegistration.SP8.get());
   }
 
   @Override

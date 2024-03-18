@@ -21,6 +21,14 @@ public class EN extends DegrassiLangProvider {
     addBlock(BlockRegistration.DIAMOND_FURNACE, "Diamond Furnace");
     addBlock(BlockRegistration.EMERALD_FURNACE, "Emerald Furnace");
     addBlock(BlockRegistration.NETHERITE_FURNACE, "Netherite Furnace");
+    addBlock(BlockRegistration.SP1, "Solar Panel I");
+    addBlock(BlockRegistration.SP2, "Solar Panel II");
+    addBlock(BlockRegistration.SP3, "Solar Panel III");
+    addBlock(BlockRegistration.SP4, "Solar Panel IV");
+    addBlock(BlockRegistration.SP5, "Solar Panel V");
+    addBlock(BlockRegistration.SP6, "Solar Panel VI");
+    addBlock(BlockRegistration.SP7, "Solar Panel VII");
+    addBlock(BlockRegistration.SP8, "Solar Panel VIII");
 
   }
 

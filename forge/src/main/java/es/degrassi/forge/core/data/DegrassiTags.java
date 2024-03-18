@@ -30,6 +30,7 @@ public class DegrassiTags {
 
   public static class Blocks extends Tag<Block> {
     public static final Blocks FURNACE = new Blocks(false, "furnace");
+    public static final Blocks SP = new Blocks(false, "solar_panel");
     public static final Blocks MACHINE = new Blocks(false, "machine");
     private Blocks(boolean isForge, String name) {
       super(blockTag(name, isForge));
@@ -38,6 +39,7 @@ public class DegrassiTags {
 
   public static class Items extends Tag<Item> {
     public static final Items FURNACE = new Items(false, "furnace");
+    public static final Items SP = new Items(false, "solar_panel");
     public static final Items MACHINE = new Items(false, "machine");
     private Items(boolean isForge, String name) {
       super(itemTag(name, isForge));

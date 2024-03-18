@@ -21,6 +21,14 @@ public class ES extends DegrassiLangProvider {
     addBlock(BlockRegistration.DIAMOND_FURNACE, "Horno de Diamante");
     addBlock(BlockRegistration.EMERALD_FURNACE, "Horno de Esmeralda");
     addBlock(BlockRegistration.NETHERITE_FURNACE, "Horno de Netherite");
+    addBlock(BlockRegistration.SP1, "Panel Solar I");
+    addBlock(BlockRegistration.SP2, "Panel Solar II");
+    addBlock(BlockRegistration.SP3, "Panel Solar III");
+    addBlock(BlockRegistration.SP4, "Panel Solar IV");
+    addBlock(BlockRegistration.SP5, "Panel Solar V");
+    addBlock(BlockRegistration.SP6, "Panel Solar VI");
+    addBlock(BlockRegistration.SP7, "Panel Solar VII");
+    addBlock(BlockRegistration.SP8, "Panel Solar VIII");
   }
 
   @Override

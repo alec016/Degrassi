@@ -4,6 +4,14 @@
   "block.degrassi.gold_furnace": "Gold Furnace",
   "block.degrassi.iron_furnace": "Iron Furnace",
   "block.degrassi.netherite_furnace": "Netherite Furnace",
+  "block.degrassi.sp1": "Solar Panel I",
+  "block.degrassi.sp2": "Solar Panel II",
+  "block.degrassi.sp3": "Solar Panel III",
+  "block.degrassi.sp4": "Solar Panel IV",
+  "block.degrassi.sp5": "Solar Panel V",
+  "block.degrassi.sp6": "Solar Panel VI",
+  "block.degrassi.sp7": "Solar Panel VII",
+  "block.degrassi.sp8": "Solar Panel VIII",
   "degrassi.tabs.machines": "Degrassi Machines",
   "unit.energy.forge": "FE"
 }

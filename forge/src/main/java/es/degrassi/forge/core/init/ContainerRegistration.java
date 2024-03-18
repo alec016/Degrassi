@@ -5,7 +5,9 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.core.common.machines.container.FurnaceContainer;
+import es.degrassi.forge.core.common.machines.container.SolarPanelContainer;
 import es.degrassi.forge.core.common.machines.screen.FurnaceScreen;
+import es.degrassi.forge.core.common.machines.screen.SolarPanelScreen;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.MenuType;
 
@@ -16,11 +18,19 @@ public class ContainerRegistration {
     "furnace",
     () -> MenuRegistry.ofExtended(FurnaceContainer::new)
   );
+  public static final RegistrySupplier<MenuType<SolarPanelContainer>> SOLAR_PANEL = MENUS.register(
+    "solar_panel",
+    () -> MenuRegistry.ofExtended(SolarPanelContainer::new)
+  );
 
   public static void registerScreens() {
     MenuRegistry.registerScreenFactory(
       ContainerRegistration.FURNACE.get(),
       FurnaceScreen::new
+    );
+    MenuRegistry.registerScreenFactory(
+      ContainerRegistration.SOLAR_PANEL.get(),
+      SolarPanelScreen::new
     );
   }
 }

@@ -27,7 +27,20 @@ public class DegrassiItemTagProvider extends ItemTagsProvider {
         BlockRegistration.NETHERITE_FURNACE.get().asItem()
       );
 
+    this.tag(DegrassiTags.Items.SP.get())
+      .add(
+        BlockRegistration.SP1.get().asItem(),
+        BlockRegistration.SP2.get().asItem(),
+        BlockRegistration.SP3.get().asItem(),
+        BlockRegistration.SP4.get().asItem(),
+        BlockRegistration.SP5.get().asItem(),
+        BlockRegistration.SP6.get().asItem(),
+        BlockRegistration.SP7.get().asItem(),
+        BlockRegistration.SP8.get().asItem()
+      );
+
     this.tag(DegrassiTags.Items.MACHINE.get())
-      .addTag(DegrassiTags.Items.FURNACE.get());
+      .addTag(DegrassiTags.Items.FURNACE.get())
+      .addTag(DegrassiTags.Items.SP.get());
   }
 }

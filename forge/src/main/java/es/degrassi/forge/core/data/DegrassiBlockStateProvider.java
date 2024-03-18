@@ -17,7 +17,6 @@ public class DegrassiBlockStateProvider extends BlockStateProvider {
 
   @Override
   public void registerStatesAndModels() {
-
     horizontalBlock(
       BlockRegistration.IRON_FURNACE,
       new DegrassiLocation("block/furnace/iron_furnace_side"),
@@ -48,10 +47,6 @@ public class DegrassiBlockStateProvider extends BlockStateProvider {
       new DegrassiLocation("block/furnace/netherite_furnace"),
       new DegrassiLocation("block/furnace/netherite_furnace_side")
     );
-//    horizontalBlock(BlockRegistration.GOLD_FURNACE, new DegrassiLocation("textures/block/furnace/gold_furnace_side.png"), new DegrassiLocation("textures/block/furnace/gold_furnace.png"), new DegrassiLocation("textures/block/furnace/gold_furnace_side"));
-//    horizontalBlock(BlockRegistration.DIAMOND_FURNACE, new DegrassiLocation("textures/block/furnace/diamond_furnace_side.png"), new DegrassiLocation("textures/block/furnace/diamond_furnace.png"), new DegrassiLocation("textures/block/furnace/diamond_furnace_side"));
-//    horizontalBlock(BlockRegistration.EMERALD_FURNACE, new DegrassiLocation("textures/block/furnace/emerald_furnace_side.png"), new DegrassiLocation("textures/block/furnace/emerald_furnace.png"), new DegrassiLocation("textures/block/furnace/emerald_furnace_side"));
-//    horizontalBlock(BlockRegistration.NETHERITE_FURNACE, new DegrassiLocation("textures/block/furnace/netherite_furnace_side.png"), new DegrassiLocation("textures/block/furnace/netherite_furnace.png"), new DegrassiLocation("textures/block/furnace/netherite_furnace_side"));
   }
 
   private void horizontalBlock(RegistrySupplier<? extends Block> supplier, ResourceLocation side, ResourceLocation front, ResourceLocation top) {

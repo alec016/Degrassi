@@ -1,0 +1,7 @@
+{
+  "parent": "degrassi:block/sp1",
+	"textures": {
+		"0": "degrassi:block/panel/sp/sp5",
+		"particle": "degrassi:item/panel/pc5"
+	}
+}

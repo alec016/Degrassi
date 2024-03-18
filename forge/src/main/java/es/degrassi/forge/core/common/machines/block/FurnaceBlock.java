@@ -24,11 +24,17 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("unused")
 public class FurnaceBlock extends MachineBlock {
   private Furnace tier;
   public FurnaceBlock(Properties properties, Furnace tier) {
     super(properties);
     this.tier = tier;
+  }
+
+  @Override
+  protected Facing getFacing() {
+    return Facing.HORIZONTAL;
   }
 
   public Furnace getTier() {

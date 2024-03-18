@@ -78,6 +78,11 @@ allprojects {
                 includeGroup "dev.ftb.mods"
             }
         }
+
+        maven {
+            name = "Zeitheron Maven"
+            url = "https://maven.zeith.org/"
+        }
     }
 
     tasks.withType(JavaCompile) {
