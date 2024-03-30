@@ -31,6 +31,7 @@ public abstract class MachineBlock extends Block implements EntityBlock {
     @NotNull BlockState state,
     @NotNull BlockEntityType<T> type
   );
+
   @Override
   public BlockState getStateForPlacement(@NotNull BlockPlaceContext pContext) {
     return getFacing() != Facing.NONE ? this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite()) : defaultBlockState();

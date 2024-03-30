@@ -58,8 +58,7 @@ public class DegrassiResourcePack implements PackResources {
     resourceMap.clear();
 
     BlockRegistration.listPanels().forEach(si -> {
-      SolarPanelBlock blk = si.get();
-      ResourceLocation reg = ForgeRegistries.BLOCKS.getKey(blk);
+      ResourceLocation reg = ForgeRegistries.BLOCKS.getKey(si);
 
       ResourceLocation blockState = new ResourceLocation(reg.getNamespace(), "blockstates/" + reg.getPath() + ".json");
       ResourceLocation models_block = new ResourceLocation(reg.getNamespace(), "models/block/" + reg.getPath() + ".json");

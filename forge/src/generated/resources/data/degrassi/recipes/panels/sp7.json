@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "p": {
+      "item": "degrassi:photovoltaic_cell_7"
+    },
+    "r": {
+      "item": "degrassi:black_pearl"
+    },
+    "s": {
+      "item": "degrassi:sp_t6"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "srs",
+    "srs"
+  ],
+  "result": {
+    "item": "degrassi:sp_t7"
+  },
+  "show_notification": true
+}

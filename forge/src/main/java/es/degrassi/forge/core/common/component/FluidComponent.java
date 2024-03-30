@@ -33,7 +33,7 @@ public class FluidComponent extends FluidTank implements IComponent {
 
   @Override
   public boolean isFluidValid(FluidStack stack) {
-    return filter.stream().filter(fluid -> fluid.isSame(stack.getFluid())).findFirst().map(i -> whitelist).orElse(!whitelist);
+    return filter.stream().filter(fluid -> fluid.isSame(stack.getFluid())).findFirst().map(i -> whitelist).orElse(stack.isFluidEqual(getFluid()));
   }
 
   @Override
@@ -70,5 +70,12 @@ public class FluidComponent extends FluidTank implements IComponent {
   public void deserialize(CompoundTag nbt) {
     CompoundTag tag = nbt.getCompound(id);
     super.readFromNBT(tag);
+  }
+  public int toComparatorPower() {
+    return (int) (subSized() * 15);
+  }
+
+  public float subSized() {
+    return this.capacity > 0 ? (float) this.getFluidAmount() / this.capacity : 0;
   }
 }

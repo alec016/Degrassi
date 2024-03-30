@@ -20,23 +20,6 @@ public class SolarPanelContainer extends MachineContainer<SolarPanelEntity> {
 
   @Override
   public boolean stillValid(@NotNull Player player) {
-    return switch(getEntity().getTier()) {
-      case T1 -> stillValid(ContainerLevelAccess.create(getLevel(), getEntity().getBlockPos()),
-        player, BlockRegistration.SP1.get());
-      case T2 -> stillValid(ContainerLevelAccess.create(getLevel(), getEntity().getBlockPos()),
-        player, BlockRegistration.SP2.get());
-      case T3 -> stillValid(ContainerLevelAccess.create(getLevel(), getEntity().getBlockPos()),
-        player, BlockRegistration.SP3.get());
-      case T4 -> stillValid(ContainerLevelAccess.create(getLevel(), getEntity().getBlockPos()),
-        player, BlockRegistration.SP4.get());
-      case T5 -> stillValid(ContainerLevelAccess.create(getLevel(), getEntity().getBlockPos()),
-        player, BlockRegistration.SP5.get());
-      case T6 -> stillValid(ContainerLevelAccess.create(getLevel(), getEntity().getBlockPos()),
-        player, BlockRegistration.SP6.get());
-      case T7 -> stillValid(ContainerLevelAccess.create(getLevel(), getEntity().getBlockPos()),
-        player, BlockRegistration.SP7.get());
-      case T8 -> stillValid(ContainerLevelAccess.create(getLevel(), getEntity().getBlockPos()),
-        player, BlockRegistration.SP8.get());
-    };
+    return stillValid(ContainerLevelAccess.create(getLevel(), getEntity().getBlockPos()), player, BlockRegistration.SP.get(getEntity().getTier()));
   }
 }

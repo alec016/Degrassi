@@ -4,10 +4,13 @@ import dev.architectury.registry.menu.MenuRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.forge.Degrassi;
+import es.degrassi.forge.core.client.book.DegrassiBook;
 import es.degrassi.forge.core.common.machines.container.FurnaceContainer;
 import es.degrassi.forge.core.common.machines.container.SolarPanelContainer;
 import es.degrassi.forge.core.common.machines.screen.FurnaceScreen;
 import es.degrassi.forge.core.common.machines.screen.SolarPanelScreen;
+import es.degrassi.forge.lib.client.screen.wiki.WikiScreen;
+import es.degrassi.forge.lib.client.wiki.Wiki;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.MenuType;
 
@@ -32,5 +35,10 @@ public class ContainerRegistration {
       ContainerRegistration.SOLAR_PANEL.get(),
       SolarPanelScreen::new
     );
+    DegrassiBook.register();
+  }
+
+  public static void openManualScreen() {
+    WikiScreen.open(Wiki.WIKIS.get(Degrassi.MODID).getCategories().get(0));
   }
 }

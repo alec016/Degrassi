@@ -4,6 +4,7 @@ import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.api.core.common.ElementDirection;
 import es.degrassi.forge.core.common.machines.block.SolarPanelBlock;
 import es.degrassi.forge.core.common.recipe.SolarPanelRecipe;
+import es.degrassi.forge.core.init.EntityRegistration;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import java.util.Objects;
 import net.minecraft.core.BlockPos;
@@ -23,7 +24,7 @@ public class SolarPanelEntity extends MachineEntity<SolarPanelRecipe> {
   int voxelTimer = 0;
   VoxelShape shape;
   public SolarPanelEntity(BlockPos pos, BlockState blockState, SolarPanel tier) {
-    super(tier.getType().get(), pos, blockState);
+    super(EntityRegistration.SP.get(), pos, blockState);
 
     this.getComponentManager()
       .addEnergy(tier.getEnergyCapacity(), "energy");
@@ -83,7 +84,7 @@ public class SolarPanelEntity extends MachineEntity<SolarPanelRecipe> {
 
   @Override
   public Component getName() {
-    return getTier().getName();
+    return getTier().getTranslation();
   }
 
   public VoxelShape getShape(SolarPanelBlock block) {

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "d": {
+      "tag": "forge:ingots/iron"
+    },
+    "f": {
+      "item": "minecraft:furnace"
+    }
+  },
+  "pattern": [
+    "ddd",
+    "dfd",
+    "ddd"
+  ],
+  "result": {
+    "item": "degrassi:iron_furnace"
+  },
+  "show_notification": true
+}

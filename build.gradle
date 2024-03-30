@@ -83,6 +83,7 @@ allprojects {
             name = "Zeitheron Maven"
             url = "https://maven.zeith.org/"
         }
+        maven { url = 'https://maven.maxhenkel.de/repository/public' }
     }
 
     tasks.withType(JavaCompile) {

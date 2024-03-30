@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "d": {
+      "tag": "forge:gems/emerald"
+    },
+    "f": {
+      "item": "degrassi:diamond_furnace"
+    }
+  },
+  "pattern": [
+    "ddd",
+    "dfd",
+    "ddd"
+  ],
+  "result": {
+    "item": "degrassi:emerald_furnace"
+  },
+  "show_notification": true
+}

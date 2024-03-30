@@ -1,0 +1,127 @@
+package es.degrassi.forge.core.client.book;
+
+import es.degrassi.forge.core.init.BlockRegistration;
+import es.degrassi.forge.core.init.ItemRegistration;
+import es.degrassi.forge.core.tiers.CableTier;
+import es.degrassi.forge.core.tiers.SolarPanel;
+import es.degrassi.forge.lib.client.wiki.Icon;
+import es.degrassi.forge.lib.client.wiki.Wiki;
+import es.degrassi.forge.lib.client.wiki.page.GridPage;
+import es.degrassi.forge.lib.client.wiki.page.Info;
+import es.degrassi.forge.lib.client.wiki.page.panel.CraftingPanel;
+import es.degrassi.forge.lib.client.wiki.page.panel.EnergyPanel;
+import es.degrassi.forge.lib.client.wiki.page.panel.FluidPanel;
+import es.degrassi.forge.lib.client.wiki.page.panel.ItemPanel;
+import es.degrassi.forge.lib.client.wiki.page.panel.WelcomePanel;
+
+public class DegrassiBook {
+  public static final Wiki WIKI = new Wiki();
+  static {
+    WIKI
+      .e(
+        "storage_transfer",
+        new Icon(BlockRegistration.ENERGY_CABLE.get(CableTier.EXTREME)),
+        ae -> ae.s(
+          as -> as.p(
+            new GridPage(as).e(
+              "energy_cable",
+              e -> e.s(
+                s -> s.p(
+                  new Info(IMG.ENERGY_CABLE, s),
+                  new EnergyPanel<>(s).next(new CraftingPanel<>(s))
+                )
+              )
+            ).e(
+              "fluid_cable",
+              e -> e.s(
+                s -> s.p(
+                  new Info(IMG.ENERGY_CABLE, s),
+                  new FluidPanel<>(s).next(new CraftingPanel<>(s))
+                )
+              )
+            ),
+            new WelcomePanel(as)
+          )
+        )
+      )
+      .e(
+        "generators",
+        new Icon(BlockRegistration.SP.get(SolarPanel.T1)),
+        ae -> ae.s(
+          as -> as.p(
+            new GridPage(as).e(
+              "sp",
+              e -> e.s(
+                s -> s.p(
+                  new Info(s),
+                  new EnergyPanel<>(s).next(new CraftingPanel<>(s))
+                )
+              )
+            ),
+            new WelcomePanel(as)
+          )
+        )
+      ).e(
+        "machines",
+        new Icon(BlockRegistration.IRON_FURNACE.get()),
+        ae -> ae.s(
+          as -> as.p(
+            new GridPage(as).e(
+              "furnace",
+              e -> e.s(
+                s -> s.p(
+                  new Info(s),
+                  new EnergyPanel<>(s).next(new CraftingPanel<>(s))
+                )
+              )
+            ),
+            new WelcomePanel(as)
+          )
+        )
+      ).e(
+        "items",
+        new Icon(ItemRegistration.MACHINE_CASING.get()),
+        ae -> ae.s(
+          as -> as.p(
+            new GridPage(as).e(
+              "wrench",
+              e -> e.s(
+                s -> s.p(
+                  new Info(s),
+                  new ItemPanel<>(s).next(new CraftingPanel<>(s))
+                )
+              )
+            ).e(
+              "photovoltaic_cell",
+              e -> e.s(
+                s -> s.p(
+                  new Info(s),
+                  new ItemPanel<>(s).next(new CraftingPanel<>(s))
+                )
+              )
+            ).e(
+              "red_matter",
+              e -> e.s(
+                s -> s.p(
+                  new Info(s),
+                  new ItemPanel<>(s).next(new CraftingPanel<>(s))
+                )
+              )
+            ).e(
+              "black_pearl",
+              e -> e.s(
+                s -> s.p(
+                  new Info(s),
+                  new ItemPanel<>(s).next(new CraftingPanel<>(s))
+                )
+              )
+            ),
+            new WelcomePanel(as)
+          )
+        )
+      );
+  }
+
+  public static void register() {
+  }
+}

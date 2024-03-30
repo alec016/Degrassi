@@ -1,10 +1,14 @@
 package es.degrassi.forge.core.common.machines.block;
 
 import dev.architectury.registry.menu.MenuRegistry;
+import es.degrassi.forge.EnvHandler;
 import es.degrassi.forge.api.utils.Utils;
+import es.degrassi.forge.core.common.cables.IBlock;
 import es.degrassi.forge.core.common.machines.container.SolarPanelContainer;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.common.machines.entity.SolarPanelEntity;
+import es.degrassi.forge.core.common.machines.item.SolarPanelItem;
+import es.degrassi.forge.core.init.EntityRegistration;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import java.util.stream.Stream;
 import net.minecraft.core.BlockPos;
@@ -16,6 +20,9 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -33,11 +40,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
-public class SolarPanelBlock extends MachineBlock {
+public class SolarPanelBlock extends MachineBlock implements IBlock<SolarPanel, SolarPanelBlock> {
   private SolarPanel tier;
   public SolarPanelBlock(Properties properties, SolarPanel tier) {
     super(properties);
     this.tier = tier;
+  }
+
+  public BlockItem getBlockItem(Item.Properties properties) {
+    return new SolarPanelItem(this, new Item.Properties());
   }
 
   @SuppressWarnings("deprecation")
@@ -117,7 +128,7 @@ public class SolarPanelBlock extends MachineBlock {
   @Nullable
   @Override
   public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-    return new SolarPanelEntity(pos, state, tier);
+    return EnvHandler.INSTANCE.createSP(pos, state, tier);
   }
 
   @SuppressWarnings("deprecation")
@@ -156,10 +167,20 @@ public class SolarPanelBlock extends MachineBlock {
   @Override
   public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
     return Utils.createTickerHelper(
-      type, getTier().getType().get(),
+      type, EntityRegistration.SP.get(),
       level.isClientSide()
         ? MachineEntity::clientTick
         : SolarPanelEntity::serverTick
     );
+//    return (l, p, s, be) -> level.isClientSide ? MachineEntity.clientTick(l, p, s, be);
+  }
+
+  @Override
+  public SolarPanel getVariant() {
+    return getTier();
+  }
+
+  public Component getDisplayName(ItemStack stack) {
+    return Component.translatable(asItem().getDescriptionId(stack));
   }
 }

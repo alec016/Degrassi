@@ -28,9 +28,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEntity {
-  private LazyOptional<ItemComponent> lazyItemHandler = LazyOptional.empty();
-  private LazyOptional<EnergyComponent> lazyEnergyHandler = LazyOptional.empty();
-  private LazyOptional<FluidComponent> lazyFluidHandler = LazyOptional.empty();
+  protected LazyOptional<ItemComponent> lazyItemHandler = LazyOptional.empty();
+  protected LazyOptional<EnergyComponent> lazyEnergyHandler = LazyOptional.empty();
+  protected LazyOptional<FluidComponent> lazyFluidHandler = LazyOptional.empty();
   private final ComponentManager componentManager;
   private final ElementManager elementManager;
   protected MachineProcessor<R, ? extends MachineEntity<R>> processor;
@@ -93,15 +93,15 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
   @Override
   public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
     if (cap == ForgeCapabilities.ENERGY) {
-      if (!componentManager.get().stream().filter(component -> component instanceof EnergyComponent).toList().isEmpty()) {
+      if (!componentManager.getComponentsByType("energy").isEmpty()) {
         return lazyEnergyHandler.cast();
       }
     } else if (cap == ForgeCapabilities.ITEM_HANDLER) {
-      if (!componentManager.get().stream().filter(component -> component instanceof ItemComponent).toList().isEmpty()) {
+      if (!componentManager.getComponentsByType("item").isEmpty()) {
         return lazyItemHandler.cast();
       }
     } else if (cap == ForgeCapabilities.FLUID_HANDLER) {
-      if (!componentManager.get().stream().filter(component -> component instanceof FluidComponent).toList().isEmpty()) {
+      if (!componentManager.getComponentsByType("fluid").isEmpty()) {
         return lazyFluidHandler.cast();
       }
     }

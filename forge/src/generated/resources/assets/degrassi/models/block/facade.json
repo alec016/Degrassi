@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube",
-  "cable_type": "facade",
-  "facade": true,
-  "loader": "degrassi:cableloader"
-}

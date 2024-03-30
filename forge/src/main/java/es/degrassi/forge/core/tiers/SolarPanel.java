@@ -1,66 +1,63 @@
 package es.degrassi.forge.core.tiers;
 
-import dev.architectury.registry.registries.RegistrySupplier;
-import es.degrassi.forge.core.common.machines.entity.SolarPanelEntity;
-import es.degrassi.forge.core.init.EntityRegistration;
+import es.degrassi.common.registry.IVariant;
+import java.util.Locale;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public enum SolarPanel {
+public enum SolarPanel implements IVariant<SolarPanel> {
   T1(
     25_000,
-    EntityRegistration.SP1,
-    Component.translatable("block.degrassi.sp1")
+    8,
+    Component.translatable("block.degrassi.sp_t1")
   ),
   T2(
     50_000,
-    EntityRegistration.SP2,
-    Component.translatable("block.degrassi.sp2")
+    16,
+    Component.translatable("block.degrassi.sp_t2")
   ),
   T3(
     100_000,
-    EntityRegistration.SP3,
-    Component.translatable("block.degrassi.sp3")
+    64,
+    Component.translatable("block.degrassi.sp_t3")
   ),
   T4(
     250_000,
-    EntityRegistration.SP4,
-    Component.translatable("block.degrassi.sp4")
+    256,
+    Component.translatable("block.degrassi.sp_t4")
   ),
   T5(
     500_000,
-    EntityRegistration.SP5,
-    Component.translatable("block.degrassi.sp5")
+    1_024,
+    Component.translatable("block.degrassi.sp_t5")
   ),
   T6(
     1_000_000,
-    EntityRegistration.SP6,
-    Component.translatable("block.degrassi.sp6")
+    4_196,
+    Component.translatable("block.degrassi.sp_t6")
   ),
   T7(
     10_000_000,
-    EntityRegistration.SP7,
-    Component.translatable("block.degrassi.sp7")
+    16_784,
+    Component.translatable("block.degrassi.sp_t7")
   ),
   T8(
     100_000_000,
-    EntityRegistration.SP8,
-    Component.translatable("block.degrassi.sp8")
+    33_568,
+    Component.translatable("block.degrassi.sp_t8")
   );
 
-  private final int energyCapacity;
-  private final RegistrySupplier<BlockEntityType<SolarPanelEntity>> type;
+  private final int energyCapacity, maxGeneration;
   private final Component name;
 
   SolarPanel(
     int energyCapacity,
-    RegistrySupplier<BlockEntityType<SolarPanelEntity>> type,
+    int maxGeneration,
     Component name
   ) {
     this.energyCapacity = energyCapacity;
-    this.type = type;
+    this.maxGeneration = maxGeneration;
     this.name = name;
   }
 
@@ -68,25 +65,24 @@ public enum SolarPanel {
     return energyCapacity;
   }
 
-  public RegistrySupplier<BlockEntityType<SolarPanelEntity>> getType() {
-    return type;
+  public int getMaxGeneration() {
+    return maxGeneration;
+  }
+  @Override
+  public SolarPanel[] getVariants() {
+    return values();
   }
 
-  public Component getName() {
+  public static SolarPanel[] getNormalVariants() {
+    return new SolarPanel[] { T1, T2, T3, T4, T5, T6, T7, T8 };
+  }
+
+  public Component getTranslation() {
     return name;
   }
 
-  public String getTextureName() {
-    return switch (this) {
-      case T1 -> "sp1";
-      case T2 -> "sp2";
-      case T3 -> "sp3";
-      case T4 -> "sp4";
-      case T5 -> "sp5";
-      case T6 -> "sp6";
-      case T7 -> "sp7";
-      case T8 -> "sp8";
-    };
+  public String getName() {
+    return name().toLowerCase(Locale.ROOT);
   }
 
   public static @Nullable SolarPanel value (@NotNull String tier) {

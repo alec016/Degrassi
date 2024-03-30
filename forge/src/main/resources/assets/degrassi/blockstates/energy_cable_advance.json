@@ -1,0 +1,42 @@
+{
+  "multipart": [
+	{
+	  "apply": {"model": "degrassi:block/energy_cable_advance"}
+	}, {
+	  "when": {
+		"north": true
+	  },
+	  "apply": {"model": "degrassi:block/energy_cable_advance_multipart"}
+	},
+	{
+	  "when": {
+		"east": true
+	  },
+	  "apply": {"model": "degrassi:block/energy_cable_advance_multipart", "y": 90}
+	},
+	{
+	  "when": {
+		"south": true
+	  },
+	  "apply": {"model": "degrassi:block/energy_cable_advance_multipart", "x": 180}
+	},
+	{
+	  "when": {
+		"west": true
+	  },
+	  "apply": {"model": "degrassi:block/energy_cable_advance_multipart", "y": 270}
+	},
+	{
+	  "when": {
+		"up": true
+	  },
+	  "apply": {"model": "degrassi:block/energy_cable_advance_multipart", "x": 270}
+	},
+	{
+	  "when": {
+		"down": true
+	  },
+	  "apply": {"model": "degrassi:block/energy_cable_advance_multipart", "x": 90}
+	}
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "c": {
+      "item": "degrassi:machine_casing"
+    },
+    "i": {
+      "tag": "forge:storage_blocks/iron"
+    },
+    "p": {
+      "item": "degrassi:photovoltaic_cell_1"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "ici",
+    "iii"
+  ],
+  "result": {
+    "item": "degrassi:sp_t1"
+  },
+  "show_notification": true
+}

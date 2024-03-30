@@ -1,6 +1,8 @@
 package es.degrassi.forge.core.data.loot;
 
 import es.degrassi.forge.core.init.BlockRegistration;
+import es.degrassi.forge.core.tiers.CableTier;
+import es.degrassi.forge.core.tiers.SolarPanel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -16,23 +18,26 @@ public class BlockLootTables extends BlockLootSubProvider {
 
   @Override
   public void generate() {
+    dropSelf(BlockRegistration.MACHINE_CASING.get());
     dropSelf(BlockRegistration.IRON_FURNACE.get());
     dropSelf(BlockRegistration.GOLD_FURNACE.get());
     dropSelf(BlockRegistration.DIAMOND_FURNACE.get());
     dropSelf(BlockRegistration.EMERALD_FURNACE.get());
     dropSelf(BlockRegistration.NETHERITE_FURNACE.get());
-    dropSelf(BlockRegistration.SP1.get());
-    dropSelf(BlockRegistration.SP2.get());
-    dropSelf(BlockRegistration.SP3.get());
-    dropSelf(BlockRegistration.SP4.get());
-    dropSelf(BlockRegistration.SP5.get());
-    dropSelf(BlockRegistration.SP6.get());
-    dropSelf(BlockRegistration.SP7.get());
-    dropSelf(BlockRegistration.SP8.get());
-    dropSelf(BlockRegistration.BASIC_ENERGY_CABLE.get());
-    dropSelf(BlockRegistration.ADVANCE_ENERGY_CABLE.get());
-    dropSelf(BlockRegistration.EXTREME_ENERGY_CABLE.get());
-    dropSelf(BlockRegistration.CABLE_FACADE.get());
+    dropSelf(BlockRegistration.SP.get(SolarPanel.T1));
+    dropSelf(BlockRegistration.SP.get(SolarPanel.T2));
+    dropSelf(BlockRegistration.SP.get(SolarPanel.T3));
+    dropSelf(BlockRegistration.SP.get(SolarPanel.T4));
+    dropSelf(BlockRegistration.SP.get(SolarPanel.T5));
+    dropSelf(BlockRegistration.SP.get(SolarPanel.T6));
+    dropSelf(BlockRegistration.SP.get(SolarPanel.T7));
+    dropSelf(BlockRegistration.SP.get(SolarPanel.T8));
+    dropSelf(BlockRegistration.ENERGY_CABLE.get(CableTier.BASIC));
+    dropSelf(BlockRegistration.ENERGY_CABLE.get(CableTier.ADVANCE));
+    dropSelf(BlockRegistration.ENERGY_CABLE.get(CableTier.EXTREME));
+    dropSelf(BlockRegistration.FLUID_CABLE.get(CableTier.BASIC));
+    dropSelf(BlockRegistration.FLUID_CABLE.get(CableTier.ADVANCE));
+    dropSelf(BlockRegistration.FLUID_CABLE.get(CableTier.EXTREME));
   }
 
   @Override

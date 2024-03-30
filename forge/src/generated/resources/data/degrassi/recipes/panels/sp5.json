@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "i": {
+      "tag": "forge:storage_blocks/gold"
+    },
+    "p": {
+      "item": "degrassi:photovoltaic_cell_5"
+    },
+    "r": {
+      "tag": "forge:dusts/glowstone"
+    },
+    "s": {
+      "item": "degrassi:sp_t4"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "srs",
+    "sis"
+  ],
+  "result": {
+    "item": "degrassi:sp_t5"
+  },
+  "show_notification": true
+}

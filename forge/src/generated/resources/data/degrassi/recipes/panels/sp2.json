@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "c": {
+      "tag": "forge:storage_blocks/iron"
+    },
+    "f": {
+      "tag": "forge:pistons"
+    },
+    "i": {
+      "item": "degrassi:sp_t1"
+    },
+    "p": {
+      "item": "degrassi:photovoltaic_cell_2"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "ici",
+    "ifi"
+  ],
+  "result": {
+    "item": "degrassi:sp_t2"
+  },
+  "show_notification": true
+}

@@ -1,101 +1,73 @@
 package es.degrassi.forge.core.tiers;
 
-import es.degrassi.forge.core.common.cables.CableType;
-import es.degrassi.forge.core.init.EntityRegistration;
-import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import org.jetbrains.annotations.NotNull;
+import es.degrassi.common.registry.IVariant;
+import java.util.Locale;
 
-public enum CableTier implements StringRepresentable {
-  BASIC(new Energy("basic", 1_000, 100)),
-  ADVANCE(new Energy("advance", 10_000, 1_000)),
-  EXTREME(new Energy("extreme", 1_000_000, 100_000)),
-  EMPTY;
+public enum CableTier implements IVariant<CableTier> {
+  BASIC(
+    0,
+    10_000,
+    1_000,
+    10_000,
+    100
+  ),
+  ADVANCE(
+    0,
+    100_000,
+    10_000,
+    50_000,
+    1_000
+  ),
+  EXTREME(
+    0,
+    1_000_000,
+    100_000,
+    100_000,
+    10_000
+  );
 
-  private final Energy energy;
-  CableTier () {
-    this.energy = null;
-  }
-  CableTier(Energy energy) {
-    this.energy = energy;
-  }
+  private final int color;
+  private final int energyCapacity, energyTransfer;
+  private final int fluidCapacity, fluidTransfer;
 
-  public static CableTier empty() {
-    return EMPTY;
-  }
-
-  public static Tier of(String tier, CableType type) {
-    if (type == CableType.ENERGY) return Energy.of(tier);
-    return new Tier();
-  }
-
-  public static CableTier of(String tier) {
-    return switch (tier) {
-      case "basic" -> BASIC;
-      case "advance" -> ADVANCE;
-      case "extreme" -> EXTREME;
-      default -> EMPTY;
-    };
-  }
-
-  public Energy energy() {
-    return energy;
+  CableTier(int color, int energyCapacity, int energyTransfer, int fluidCapacity, int fluidTransfer) {
+    this.color = color;
+    this.energyCapacity = energyCapacity;
+    this.energyTransfer = energyTransfer;
+    this.fluidCapacity = fluidCapacity;
+    this.fluidTransfer = fluidTransfer;
   }
 
   @Override
-  public @NotNull String getSerializedName() {
-    return name().toLowerCase();
+  public CableTier[] getVariants() {
+    return values();
   }
 
-  public static class Tier {
-    public Tier() {
-    }
-    public String getTexture() {
-      return "";
-    }
-    public BlockEntityType<?> getType() {
-      return null;
-    }
+  public int getEnergyCapacity() {
+    return energyCapacity;
   }
 
-  public static class Energy extends Tier {
-    private final String tier;
-    private final int capacity, transfer;
-    public Energy(String tier, int capacity, int transfer) {
-      super();
-      this.tier = tier;
-      this.capacity = capacity;
-      this.transfer = transfer;
-    }
+  public int getEnergyTransfer() {
+    return energyTransfer;
+  }
 
-    public int getCapacity() {
-      return capacity;
-    }
+  public int getFluidCapacity() {
+    return fluidCapacity;
+  }
 
-    public int getTransfer() {
-      return transfer;
-    }
+  public int getFluidTransfer() {
+    return fluidTransfer;
+  }
 
-    public String getTexture() {
-      return tier + "_";
-    }
+  public static CableTier[] getNormalVariants() {
+    return new CableTier[] { BASIC, ADVANCE, EXTREME };
+  }
 
-    public static Energy of(String tier) {
-      return switch (tier) {
-        case "basic" -> BASIC.energy;
-        case "advance" -> ADVANCE.energy;
-        case "extreme" -> EXTREME.energy;
-        default -> null;
-      };
-    }
+  public int getColor() {
+    return color;
+  }
 
-    public BlockEntityType<?> getType() {
-      return switch (tier) {
-        case "basic" -> EntityRegistration.BASIC_ENERGY_CABLE.get();
-        case "advance" -> EntityRegistration.ADVANCE_ENERGY_CABLE.get();
-        case "extreme" -> EntityRegistration.EXTREME_ENERGY_CABLE.get();
-        default -> null;
-      };
-    }
+  public String getName() {
+    return name().toLowerCase(Locale.ENGLISH);
   }
 }

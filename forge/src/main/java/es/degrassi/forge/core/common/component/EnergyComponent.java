@@ -10,7 +10,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 public class EnergyComponent implements IComponent, IEnergyStorage {
   private int energy;
   private final ComponentManager manager;
-  private final int capacity, maxInput, maxOutput;
+  private int capacity, maxInput, maxOutput;
   private final MachineEntity<?> entity;
   private final String id;
   public EnergyComponent(ComponentManager manager, int capacity, MachineEntity<?> entity, String id) {
@@ -45,6 +45,9 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
   public void serialize(CompoundTag nbt) {
     CompoundTag tag = new CompoundTag();
     tag.putInt("energy", energy);
+    tag.putInt("capacity", capacity);
+    tag.putInt("max_input", maxInput);
+    tag.putInt("max_output", maxOutput);
     nbt.put(id, tag);
   }
 
@@ -53,6 +56,9 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
     if (nbt.contains(id)) {
       CompoundTag tag = nbt.getCompound(id);
       this.energy = tag.getInt("energy");
+      this.capacity = tag.getInt("capacity");
+      this.maxInput = tag.getInt("max_input");
+      this.maxOutput = tag.getInt("max_output");
     }
   }
 
@@ -106,6 +112,30 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
     return id;
   }
 
+  public int toComparatorPower() {
+    return (int) (subSized() * 15);
+  }
+
+  public float subSized() {
+    return this.capacity > 0 ? (float) this.energy / this.capacity : 0;
+  }
+
+  public int getMaxInput() {
+    return maxInput;
+  }
+
+  public int getMaxOutput() {
+    return maxOutput;
+  }
+
+  public void setMaxInput(int maxInput) {
+    this.maxInput = maxInput;
+  }
+
+  public void setMaxOutput(int maxOutput) {
+    this.maxOutput = maxOutput;
+  }
+
   @Override
   public String toString() {
     return "EnergyComponent{" +
@@ -115,5 +145,17 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
       ", maxOutput=" + maxOutput +
       ", id='" + id + '\'' +
       '}';
+  }
+
+  public EnergyComponent setCapacity(int capacity) {
+    if (this.capacity != capacity)
+      this.capacity = capacity;
+    return this;
+  }
+
+  public EnergyComponent setTransfer(int energyTransfer) {
+    setMaxInput(energyTransfer);
+    setMaxOutput(energyTransfer);
+    return this;
   }
 }

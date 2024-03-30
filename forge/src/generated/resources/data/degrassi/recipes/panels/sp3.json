@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "i": {
+      "tag": "forge:storage_blocks/iron"
+    },
+    "p": {
+      "item": "degrassi:photovoltaic_cell_3"
+    },
+    "r": {
+      "item": "minecraft:repeater"
+    },
+    "s": {
+      "item": "degrassi:sp_t2"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "srs",
+    "sis"
+  ],
+  "result": {
+    "count": 2,
+    "item": "degrassi:sp_t3"
+  },
+  "show_notification": true
+}
