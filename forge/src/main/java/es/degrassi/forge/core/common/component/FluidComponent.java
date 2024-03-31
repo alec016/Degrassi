@@ -12,6 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import org.jetbrains.annotations.NotNull;
 
 public class FluidComponent extends FluidTank implements IComponent {
   private final ComponentManager manager;
@@ -19,8 +20,9 @@ public class FluidComponent extends FluidTank implements IComponent {
   private final boolean whitelist;
   private final List<Fluid> filter;
   private final MachineEntity<?> entity;
+  private ComponentIOMode mode;
 
-  public FluidComponent(ComponentManager manager, String id, boolean whitelist, int capacity, MachineEntity<?> entity, Fluid...fluids) {
+  public FluidComponent(ComponentManager manager, String id, boolean whitelist, int capacity, MachineEntity<?> entity, ComponentIOMode mode, Fluid...fluids) {
     super(capacity);
     this.manager = manager;
     this.capacity = capacity;
@@ -28,12 +30,21 @@ public class FluidComponent extends FluidTank implements IComponent {
     this.whitelist = whitelist;
     this.entity = entity;
     this.filter = new ArrayList<>();
+    this.mode = mode;
     filter.addAll(Arrays.asList(fluids));
+  }
+
+  public ComponentIOMode getMode() {
+    return mode;
+  }
+
+  public void setMode(ComponentIOMode mode) {
+    this.mode = mode;
   }
 
   @Override
   public boolean isFluidValid(FluidStack stack) {
-    return filter.stream().filter(fluid -> fluid.isSame(stack.getFluid())).findFirst().map(i -> whitelist).orElse(stack.isFluidEqual(getFluid()));
+    return filter.stream().filter(fluid -> mode.receive() && fluid.isSame(stack.getFluid())).findFirst().map(i -> mode.receive() && whitelist).orElse(mode.receive() && (stack.isFluidEqual(getFluid()) || fluid.isEmpty()));
   }
 
   @Override
@@ -63,6 +74,7 @@ public class FluidComponent extends FluidTank implements IComponent {
   public void serialize(CompoundTag nbt) {
     CompoundTag tag = new CompoundTag();
     super.writeToNBT(tag);
+    tag.putString("mode", mode.serialize());
     nbt.put(id, tag);
   }
 
@@ -70,12 +82,32 @@ public class FluidComponent extends FluidTank implements IComponent {
   public void deserialize(CompoundTag nbt) {
     CompoundTag tag = nbt.getCompound(id);
     super.readFromNBT(tag);
+    mode = ComponentIOMode.deserialize(tag.getString("mode"));
   }
+
   public int toComparatorPower() {
     return (int) (subSized() * 15);
   }
 
   public float subSized() {
     return this.capacity > 0 ? (float) this.getFluidAmount() / this.capacity : 0;
+  }
+
+  @Override
+  public int fill(FluidStack resource, FluidAction action) {
+    if (mode.extract()) return 0;
+    return super.fill(resource, action);
+  }
+
+  @Override
+  public @NotNull FluidStack drain(int maxDrain, FluidAction action) {
+    if (mode.receive()) return FluidStack.EMPTY;
+    return super.drain(maxDrain, action);
+  }
+
+  @Override
+  public @NotNull FluidStack drain(FluidStack resource, FluidAction action) {
+    if (mode.receive()) return FluidStack.EMPTY;
+    return super.drain(resource, action);
   }
 }

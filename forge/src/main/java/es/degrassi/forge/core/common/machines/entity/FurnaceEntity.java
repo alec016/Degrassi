@@ -2,6 +2,7 @@ package es.degrassi.forge.core.common.machines.entity;
 
 import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.api.core.common.ElementDirection;
+import es.degrassi.forge.core.common.component.ComponentIOMode;
 import es.degrassi.forge.core.common.processor.FurnaceProcessor;
 import es.degrassi.forge.core.common.recipe.FurnaceRecipe;
 import es.degrassi.forge.core.tiers.Furnace;

@@ -1,29 +1,29 @@
-package es.degrassi.forge.core.client.model;
+package es.degrassi.forge.core.client.model.cable;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.EnvHandler;
-import es.degrassi.forge.core.client.renderer.EnergyCableRenderer;
-import es.degrassi.forge.core.common.cables.energy.EnergyCableEntity;
+import es.degrassi.forge.core.client.renderer.cable.FluidCableRenderer;
 import es.degrassi.forge.core.common.cables.Transfer;
+import es.degrassi.forge.core.common.cables.fluid.FluidCableEntity;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-public class EnergyCableModel extends CableModel<EnergyCableEntity, EnergyCableRenderer, EnergyCableModel> {
+public class FluidCableModel extends CableModel<FluidCableEntity, FluidCableRenderer, FluidCableModel> {
 
-  public EnergyCableModel(ModelPart root) {
+  public FluidCableModel(ModelPart root) {
     super(root);
     TEXTURES.put(Transfer.ALL, new DegrassiLocation("textures/model/tile/energy_cable_all.png"));
-    TEXTURES.put(Transfer.RECEIVE, new DegrassiLocation("textures/model/tile/energy_cable_out.png"));
-    TEXTURES.put(Transfer.EXTRACT, new DegrassiLocation("textures/model/tile/energy_cable_in.png"));
+    TEXTURES.put(Transfer.EXTRACT, new DegrassiLocation("textures/model/tile/energy_cable_out.png"));
+    TEXTURES.put(Transfer.RECEIVE, new DegrassiLocation("textures/model/tile/energy_cable_in.png"));
   }
 
   @Override
-  public void render(EnergyCableEntity te, EnergyCableRenderer renderer, PoseStack matrix, MultiBufferSource rtb, int light, int ov) {
+  public void render(FluidCableEntity te, FluidCableRenderer renderer, PoseStack matrix, MultiBufferSource rtb, int light, int ov) {
     if (te.getLevel() == null)
       return;
     final Direction[] flags = new Direction[6];
@@ -31,8 +31,8 @@ public class EnergyCableModel extends CableModel<EnergyCableEntity, EnergyCableR
       final BlockPos pos = te.getBlockPos().relative(side);
       final BlockEntity tile = te.getLevel().getBlockEntity(pos);
       final Transfer config = te.getSideConfig().getType(side);
-      if (!(tile instanceof EnergyCableEntity) && EnvHandler.INSTANCE.hasEnergy(te.getLevel(), pos, side.getOpposite())
-        && (config.canExtract || config.canReceive)) {
+      if (!(tile instanceof FluidCableEntity) && EnvHandler.INSTANCE.hasFluid(te.getLevel(), pos, side.getOpposite())
+        && (config.canExtract() || config.canReceive())) {
         flags[side.get3DDataValue()] = side;
       }
     }

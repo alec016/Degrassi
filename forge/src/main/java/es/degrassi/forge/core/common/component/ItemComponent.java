@@ -18,20 +18,31 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
   private final MachineEntity<?> entity;
   private final List<Item> filter;
   private final boolean whitelist;
-  public ItemComponent(ComponentManager manager, String id, MachineEntity<?> entity) {
+  private ComponentIOMode mode;
+  public ItemComponent(ComponentManager manager, String id, MachineEntity<?> entity, ComponentIOMode mode) {
     this.manager = manager;
     this.id = id;
     this.entity = entity;
     this.filter = new ArrayList<>();
     this.whitelist = false;
+    this.mode = mode;
   }
 
-  public ItemComponent(ComponentManager manager, String id, boolean whitelist, MachineEntity<?> entity, Item...filter) {
+  public ItemComponent(ComponentManager manager, String id, boolean whitelist, MachineEntity<?> entity, ComponentIOMode mode, Item...filter) {
     this.manager = manager;
     this.id = id;
     this.whitelist = whitelist;
     this.entity = entity;
     this.filter = List.of(filter);
+    this.mode = mode;
+  }
+
+  public ComponentIOMode getMode() {
+    return mode;
+  }
+
+  public void setMode(ComponentIOMode mode) {
+    this.mode = mode;
   }
 
   @Override
@@ -54,12 +65,16 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
 
   @Override
   public void serialize(CompoundTag nbt) {
-    nbt.put(id, serializeNBT());
+    CompoundTag tag = serializeNBT();
+    tag.putString("mode", mode.serialize());
+    nbt.put(id, tag);
   }
 
   @Override
   public void deserialize(CompoundTag nbt) {
-    deserializeNBT(nbt.getCompound(id));
+    CompoundTag tag = nbt.getCompound(id);
+    deserializeNBT(tag);
+    mode = ComponentIOMode.deserialize(tag.getString("mode"));
   }
 
   public void setItem(ItemStack item) {
@@ -68,7 +83,7 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
 
   @Override
   public boolean isItemValid(int slot, @NotNull ItemStack item) {
-    return filter.stream().filter(item::is).findFirst().map(i -> whitelist).orElse(!whitelist);
+    return filter.stream().filter(stack -> mode.receiveWillAll() && item.is(stack)).findFirst().map(i -> mode.receiveWillAll() && whitelist).orElse(mode.receiveWillAll() && !whitelist);
   }
 
   @Override
@@ -83,11 +98,13 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
 
   @Override
   public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+    if (mode.extract()) return ItemStack.EMPTY;
     return super.insertItem(0, stack, simulate);
   }
 
   @Override
   public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
+    if (mode.receive()) return ItemStack.EMPTY;
     return super.extractItem(0, amount, simulate);
   }
 

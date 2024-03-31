@@ -1,6 +1,7 @@
-package es.degrassi.forge.core.client.model;
+package es.degrassi.forge.core.client.model.cable;
 
-import es.degrassi.forge.core.client.renderer.CableRenderer;
+import es.degrassi.forge.core.client.model.AbstractModel;
+import es.degrassi.forge.core.client.renderer.cable.CableRenderer;
 import es.degrassi.forge.core.common.cables.CableEntity;
 import es.degrassi.forge.core.common.cables.Transfer;
 import java.util.HashMap;
@@ -13,7 +14,7 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
-public abstract class CableModel<T extends CableEntity<?>, R extends CableRenderer<T, M, R>, M extends CableModel<T, R, M>> extends AbstractModel<T, R>{
+public abstract class CableModel<T extends CableEntity<?, ?>, R extends CableRenderer<T, M, R>, M extends CableModel<T, R, M>> extends AbstractModel<T, R> {
 
   private static final String NORTH = "north";
   private static final String NORTH_PLATE = "north_plate";

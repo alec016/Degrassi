@@ -1,6 +1,6 @@
-package es.degrassi.forge.core.client.renderer;
+package es.degrassi.forge.core.client.renderer.cable;
 
-import es.degrassi.forge.core.client.model.EnergyCableModel;
+import es.degrassi.forge.core.client.model.cable.EnergyCableModel;
 import es.degrassi.forge.core.client.model.DegrassiLayerDefinition;
 import es.degrassi.forge.core.common.cables.energy.EnergyCableEntity;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;

@@ -5,19 +5,27 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 
 public enum Transfer {
-  NONE(false, false, ChatFormatting.DARK_RED),
   ALL(true, true, ChatFormatting.DARK_GRAY),
   EXTRACT(true, false, ChatFormatting.DARK_GRAY),
-  RECEIVE(false, true, ChatFormatting.DARK_GRAY);
+  RECEIVE(false, true, ChatFormatting.DARK_GRAY),
+  NONE(false, false, ChatFormatting.DARK_RED);
 
-  public final boolean canExtract;
-  public final boolean canReceive;
+  private final boolean canExtract;
+  private final boolean canReceive;
   private final ChatFormatting color;
 
   Transfer(boolean canExtract, boolean canReceive, ChatFormatting color) {
     this.canExtract = canExtract;
     this.canReceive = canReceive;
     this.color = color;
+  }
+
+  public boolean canExtract() {
+    return canExtract;
+  }
+
+  public boolean canReceive() {
+    return canReceive;
   }
 
   public Transfer next(Transfer type) {

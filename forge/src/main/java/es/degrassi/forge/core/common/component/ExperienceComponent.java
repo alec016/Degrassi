@@ -12,17 +12,26 @@ public class ExperienceComponent implements IComponent {
   private final float capacity;
   private final MachineEntity<?> entity;
   private final String id;
-  public ExperienceComponent(ComponentManager manager, float capacity, MachineEntity<?> entity, String id) {
+  private ComponentIOMode mode;
+  public ExperienceComponent(ComponentManager manager, float capacity, MachineEntity<?> entity, String id, ComponentIOMode mode) {
     this.manager = manager;
     this.capacity = capacity;
     this.entity = entity;
     this.id = id;
+    this.mode = mode;
   }
   @Override
   public ComponentManager getManager() {
     return manager;
   }
 
+  public ComponentIOMode getMode() {
+    return mode;
+  }
+
+  public void setMode(ComponentIOMode mode) {
+    this.mode = mode;
+  }
   @Override
   public void markDirty() {
     entity.setChanged();
@@ -40,6 +49,7 @@ public class ExperienceComponent implements IComponent {
   public void serialize(CompoundTag nbt) {
     CompoundTag tag = new CompoundTag();
     tag.putFloat("experience", experience);
+    tag.putString("mode", mode.serialize());
     nbt.put(id, tag);
   }
 
@@ -48,6 +58,7 @@ public class ExperienceComponent implements IComponent {
     if (nbt.contains(id)) {
       CompoundTag tag = nbt.getCompound(id);
       this.experience = tag.getFloat("experience");
+      this.mode = ComponentIOMode.deserialize(tag.getString("mode"));
     }
   }
 
@@ -58,6 +69,7 @@ public class ExperienceComponent implements IComponent {
   }
 
   public float receiveExperience(float experience, boolean simulate) {
+    if(mode.extract()) return 0;
     float toReceive = Math.min(this.capacity - this.experience, experience);
     if (!simulate) {
       this.experience += toReceive;
@@ -67,6 +79,7 @@ public class ExperienceComponent implements IComponent {
   }
 
   public float extractExperience(float experience, boolean simulate) {
+    if (mode.receive()) return 0;
     float toExtract = Math.min(this.experience, experience);
     if (!simulate) {
       this.experience -= toExtract;
@@ -84,11 +97,11 @@ public class ExperienceComponent implements IComponent {
   }
 
   public boolean canExtract() {
-    return true;
+    return mode.extractWithAll();
   }
 
   public boolean canReceive() {
-    return true;
+    return mode.receiveWillAll();
   }
 
   @Override

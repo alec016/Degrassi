@@ -81,6 +81,8 @@ public class ES extends DegrassiLangProvider {
     addInfo("wrench.mode.rotate", "Rotate");
     // wiki info
     addInfo("io.mode", "I/O Mode");
+    addInfo("io.mode.prev", "From: %s");
+    addInfo("io.mode.next", "To: %s");
     addInfo("io.mode.all", "Rec/Ext");
     addInfo("io.mode.extract", "Extract");
     addInfo("io.mode.none", "Off");

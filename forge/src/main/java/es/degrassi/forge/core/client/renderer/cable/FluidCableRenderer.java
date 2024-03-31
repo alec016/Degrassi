@@ -1,7 +1,7 @@
-package es.degrassi.forge.core.client.renderer;
+package es.degrassi.forge.core.client.renderer.cable;
 
 import es.degrassi.forge.core.client.model.DegrassiLayerDefinition;
-import es.degrassi.forge.core.client.model.FluidCableModel;
+import es.degrassi.forge.core.client.model.cable.FluidCableModel;
 import es.degrassi.forge.core.common.cables.fluid.FluidCableEntity;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 

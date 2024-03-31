@@ -25,11 +25,11 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FluidCableEntity extends CableEntity<FluidCableNet> {
-  protected final FluidSideConfig sideConfig = new FluidSideConfig(this);
+public class FluidCableEntity extends CableEntity<FluidCableNet, FluidSideConfig> {
 
   public FluidCableEntity(BlockPos pos, BlockState blockState, CableTier tier) {
     super(EntityRegistration.FLUID_CABLE.get(), pos, blockState, tier);
+    sideConfig = new FluidSideConfig(this);
     getComponentManager().addFluid(0, "fluid");
   }
 
@@ -86,23 +86,42 @@ public class FluidCableEntity extends CableEntity<FluidCableNet> {
   protected void serverTick(Level world) {
     super.serverTick(world);
     for (Direction direction : Direction.values()) {
-      if (getSideConfig().getType(direction).canExtract) {
+      if (getSideConfig().getType(direction).canExtract()) {
         BlockEntity te = world.getBlockEntity(worldPosition.relative(direction));
-        if (te == null) continue;
-        te.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(fluidHandler -> {
+        if (te == null || te instanceof CableEntity<?,?>) continue;
+        te.getCapability(ForgeCapabilities.FLUID_HANDLER, direction.getOpposite()).ifPresent(fluidHandler -> {
+          DegrassiLogger.INSTANCE.info("FluidCableEntity$serverTick() -> foundFluidCap in {}", direction.getOpposite());
+          int mbToTransfer = tier.getFluidTransfer();
           for (int i = 0; i < fluidHandler.getTanks(); i++) {
-            FluidStack fluid = fluidHandler.getFluidInTank(i).copy();
+            DegrassiLogger.INSTANCE.info("FluidCableEntity$serverTick()$forLoop -> {}", i);
+            FluidStack fluid = new FluidStack(fluidHandler.getFluidInTank(i).getFluid(), mbToTransfer, fluidHandler.getFluidInTank(i).getTag());
             if (fluid.isEmpty()) continue;
-            fluid.setAmount(Math.min(fluid.getAmount(), tier.getFluidTransfer()));
+            DegrassiLogger.INSTANCE.info("FluidCableEntity$serverTick()$forLoop -> fluidNotEmpty");
+            DegrassiLogger.INSTANCE.info("FluidCableEntity$serverTick()$forLoop$fluid -> [fluid={}, amount={}]",
+              Component.translatable(fluid.getTranslationKey()),
+              fluid.getAmount()
+            );
             FluidStack stack = fluidHandler.drain(fluid, IFluidHandler.FluidAction.SIMULATE);
-            if (!stack.isEmpty() && receiveFluid(stack, IFluidHandler.FluidAction.SIMULATE, direction) > 0) {
-              fluidHandler.drain(stack, IFluidHandler.FluidAction.EXECUTE);
-              receiveFluid(stack, IFluidHandler.FluidAction.EXECUTE, direction);
-            }
+            DegrassiLogger.INSTANCE.info("FluidCableEntity$serverTick()$forLoop$fluid -> [fluid={}, amount={}]",
+              Component.translatable(stack.getTranslationKey()),
+              stack.getAmount()
+            );
+            if (stack.isEmpty()) continue;
+            fluidHandler.drain(stack, IFluidHandler.FluidAction.EXECUTE);
+            receiveFluid(stack, IFluidHandler.FluidAction.EXECUTE, direction);
           }
         });
       }
     }
+  }
+
+  private boolean canInsert(FluidStack stack) {
+    AtomicBoolean insertion = new AtomicBoolean(false);
+    getComponentManager().getComponentsByType("fluid").stream().map(comp -> (FluidComponent) comp).toList().forEach(fluid -> {
+      insertion.set(insertion.get() || fluid.isEmpty() || fluid.isFluidValid(stack));
+    });
+
+    return insertion.get();
   }
 
   @Override
@@ -138,9 +157,15 @@ public class FluidCableEntity extends CableEntity<FluidCableNet> {
 
           @Override
           public int fill(FluidStack fluidStack, IFluidHandler.FluidAction fluidAction) {
-            if (!canReceiveFluid(side)) return 0;
-            int toReturn = (int) receiveFluid(fluidStack, fluidAction, side);
-            DegrassiLogger.INSTANCE.info("FluidCableEntity$getCapability<IFluidHandler>({}).fill() -> {}", side, toReturn);
+            if (!canReceiveFluid(side) || !canInsert(fluidStack)) return 0;
+            int toReturn = receiveFluid(fluidStack, fluidAction, side);
+            DegrassiLogger.INSTANCE.info("FluidCableEntity$getCapability<IFluidHandler>({}).fill([fluid= {}, amount= {}], {}) -> {}",
+              side,
+              Component.translatable(fluidStack.getTranslationKey()),
+              fluidStack.getAmount(),
+              fluidAction,
+              toReturn
+            );
             return toReturn;
           }
 
@@ -148,7 +173,13 @@ public class FluidCableEntity extends CableEntity<FluidCableNet> {
           public @NotNull FluidStack drain(int i, IFluidHandler.FluidAction fluidAction) {
             if (!canExtractFluid(side)) return FluidStack.EMPTY;
             FluidStack toReturn = extractFluid(i, fluidAction, side);
-            DegrassiLogger.INSTANCE.info("FluidCableEntity$getCapability<IFluidHandler>({}).drain({}) -> fluid: {}, amount: {}", side, i, toReturn.getFluid().getFluidType().getDescription(), toReturn.getAmount());
+            DegrassiLogger.INSTANCE.info("FluidCableEntity$getCapability<IFluidHandler>({}).drain({}, {}) -> [fluid= {}, amount= {}]",
+              side,
+              i,
+              fluidAction,
+              Component.translatable(toReturn.getTranslationKey()),
+              toReturn.getAmount()
+            );
             return toReturn;
           }
 
@@ -156,7 +187,14 @@ public class FluidCableEntity extends CableEntity<FluidCableNet> {
           public @NotNull FluidStack drain(FluidStack fluidStack, IFluidHandler.FluidAction fluidAction) {
             if (!canExtractFluid(side)) return FluidStack.EMPTY;
             FluidStack toReturn = extractFluid(fluidStack, fluidAction, side);
-            DegrassiLogger.INSTANCE.info("FluidCableEntity$getCapability<IFluidHandler>({}).drain({}) -> fluid: {}, amount: {}", side, fluidStack.getFluid().getFluidType().getDescription(), toReturn.getFluid().getFluidType().getDescription(), toReturn.getAmount());
+            DegrassiLogger.INSTANCE.info("FluidCableEntity$getCapability<IFluidHandler>({}).drain([fluid= {}, amount= {}], {}) -> [fluid= {}, amount= {}]",
+              side,
+              Component.translatable(fluidStack.getTranslationKey()),
+              fluidStack.getAmount(),
+              fluidAction,
+              toReturn.getFluid().getFluidType().getDescription(),
+              toReturn.getAmount()
+            );
             return toReturn;
           }
         }).cast();
@@ -170,6 +208,7 @@ public class FluidCableEntity extends CableEntity<FluidCableNet> {
       return FluidStack.EMPTY;
     final FluidComponent fluid = (FluidComponent) getComponentManager().getComponent("fluid").orElse(null);
     if (fluid == null || !fluid.isFluidValid(fluidStack)) return FluidStack.EMPTY;
+    if (fluid.getMode().receive()) return FluidStack.EMPTY;
     long extracted = Math.min(fluid.getFluidAmount(), Math.min(tier.getFluidTransfer(), fluidStack.getAmount()));
     FluidStack extract = FluidStack.EMPTY;
     if (simulate.execute() && extracted > 0) {
@@ -189,7 +228,7 @@ public class FluidCableEntity extends CableEntity<FluidCableNet> {
     return extractFluid(f, simulate, side);
   }
 
-  public long receiveFluid(FluidStack fluid, IFluidHandler.FluidAction simulate, @Nullable Direction direction) {
+  public int receiveFluid(FluidStack fluid, IFluidHandler.FluidAction simulate, @Nullable Direction direction) {
     if (this.level == null || isRemote() || direction == null || !checkRedstone() || !canReceiveFluid(direction))
       return 0;
     int received = 0;
@@ -253,12 +292,12 @@ public class FluidCableEntity extends CableEntity<FluidCableNet> {
   }
 
   public boolean canExtractFluid(@Nullable Direction side) {
-    boolean value = side == null || isFluidPresent(side) && this.sideConfig.getType(side).canExtract;
+    boolean value = side == null || isFluidPresent(side) && this.sideConfig.getType(side).canExtract();
     return value;
   }
 
   public boolean canReceiveFluid(@Nullable Direction side) {
-    boolean value = side == null || isFluidPresent(side) && this.sideConfig.getType(side).canReceive;
+    boolean value = side == null || isFluidPresent(side) && this.sideConfig.getType(side).canReceive();
     return value;
   }
 }

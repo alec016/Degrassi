@@ -2,6 +2,7 @@ package es.degrassi.forge.core.common.machines.entity;
 
 import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.api.core.common.ElementDirection;
+import es.degrassi.forge.core.common.component.ComponentIOMode;
 import es.degrassi.forge.core.common.machines.block.SolarPanelBlock;
 import es.degrassi.forge.core.common.recipe.SolarPanelRecipe;
 import es.degrassi.forge.core.init.EntityRegistration;
@@ -27,7 +28,7 @@ public class SolarPanelEntity extends MachineEntity<SolarPanelRecipe> {
     super(EntityRegistration.SP.get(), pos, blockState);
 
     this.getComponentManager()
-      .addEnergy(tier.getEnergyCapacity(), "energy");
+      .addEnergy(tier.getEnergyCapacity(), "energy", ComponentIOMode.EXTRACT);
 
     this.getElementManager()
       .addEnergy(

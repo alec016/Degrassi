@@ -1,7 +1,8 @@
-package es.degrassi.forge.core.client.renderer;
+package es.degrassi.forge.core.client.renderer.cable;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import es.degrassi.forge.core.client.model.CableModel;
+import es.degrassi.forge.core.client.model.cable.CableModel;
+import es.degrassi.forge.core.client.renderer.MachineRenderer;
 import es.degrassi.forge.core.common.cables.CableEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -9,7 +10,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 
-public abstract class CableRenderer<T extends CableEntity<?>, M extends CableModel<T, R, M>, R extends CableRenderer<T, M, R>> extends MachineRenderer<T>{
+public abstract class CableRenderer<T extends CableEntity<?, ?>, M extends CableModel<T, R, M>, R extends CableRenderer<T, M, R>> extends MachineRenderer<T> {
   private final M model;
   protected CableRenderer(BlockEntityRendererProvider.Context context, M model) {
     super(context);

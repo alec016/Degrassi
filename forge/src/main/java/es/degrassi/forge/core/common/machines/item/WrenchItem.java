@@ -30,8 +30,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("unused, deprecation")
 public class WrenchItem extends Item implements IItem, IWrench, IHudItem {
   private static final Direction[] DIRECTIONS = Direction.values();
   public WrenchItem() {
@@ -39,7 +41,7 @@ public class WrenchItem extends Item implements IItem, IWrench, IHudItem {
   }
 
   @Override
-  public InteractionResult useOn(UseOnContext context) {
+  public @NotNull InteractionResult useOn(UseOnContext context) {
     return context.getPlayer() != null ? onItemUse(context.getLevel(), context.getClickedPos(), context.getPlayer(), context.getHand(),
       context.getClickedFace(), context.getClickLocation()) : super.useOn(context);
   }
@@ -67,15 +69,22 @@ public class WrenchItem extends Item implements IItem, IWrench, IHudItem {
       return InteractionResult.SUCCESS;
     } else {
       if (!world.isClientSide && getWrenchMode(stack).config()) {
-        if (te instanceof CableEntity<?>) {
-          CableEntity<?> cable = (CableEntity<?>) te;
+        if (te instanceof CableEntity<?, ?> cable) {
           if (stack.getItem() instanceof WrenchItem) {
             Optional<Direction> sides = CableBlock.getHitSide(hit, pos);
             boolean[] flag = { false };
             sides.ifPresent(direction -> {
               SideConfig<?> config = cable.getSideConfig();
+              player.displayClientMessage(Component.translatable(
+                "info.degrassi.io.mode.prev",
+                config.getType(direction).getDisplayName()
+              ), true);
               config.nextType(direction);
               cable.sync();
+              player.displayClientMessage(Component.translatable(
+                "info.degrassi.io.mode.next",
+                config.getType(direction).getDisplayName()
+              ), true);
             });
             return InteractionResult.SUCCESS;
           }
@@ -120,7 +129,7 @@ public class WrenchItem extends Item implements IItem, IWrench, IHudItem {
   }
 
   @Override
-  public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
+  public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level worldIn, Player playerIn, @NotNull InteractionHand handIn) {
     ItemStack stack = playerIn.getItemInHand(handIn);
     if (playerIn.isShiftKeyDown()) {
       nextWrenchMode(stack);
@@ -135,16 +144,15 @@ public class WrenchItem extends Item implements IItem, IWrench, IHudItem {
   }
 
   @Override
-  public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+  public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
     tooltip.add(Component.translatable("info.degrassi.wrench.mode",
       Component.translatable("info.degrassi.wrench.mode." + getWrenchMode(stack).name().toLowerCase())
         .withStyle(ChatFormatting.YELLOW)));
   }
 
   @Override
-  public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-    if (entityIn instanceof Player) {
-      Player player = (Player) entityIn;
+  public void inventoryTick(@NotNull ItemStack stack, @NotNull Level worldIn, @NotNull Entity entityIn, int itemSlot, boolean isSelected) {
+    if (entityIn instanceof Player player) {
       oneTimeInfo(player, stack,
         Component.translatable("info.degrassi.wrench.mode",
           Component.translatable("info.degrassi.wrench.mode." + getWrenchMode(stack).name().toLowerCase())
@@ -180,7 +188,7 @@ public class WrenchItem extends Item implements IItem, IWrench, IHudItem {
     CompoundTag nbt = getWrenchNBT(stack);
     int i = nbt.getInt("WrenchMode") - 1;
     int j = WrenchMode.values().length - 1;
-    nbt.putInt("WrenchMode", i < j ? j : i);
+    nbt.putInt("WrenchMode", Math.max(i, j));
   }
 
   @Override

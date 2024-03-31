@@ -49,8 +49,8 @@ public class FluidCableItem extends BlockItem implements IVariantEntry<CableTier
   @Override
   public IFluidContainingItem.Info getFluidInfo() {
     long transfer = getVariant().getFluidTransfer();
-    return new IFluidContainingItem.Info(getVariant().getFluidCapacity(), getTransferType().canReceive ? transfer : 0,
-      getTransferType().canExtract ? transfer : 0);
+    return new IFluidContainingItem.Info(getVariant().getFluidCapacity(), getTransferType().canReceive() ? transfer : 0,
+      getTransferType().canExtract() ? transfer : 0);
   }
 
   @Override

@@ -1,5 +1,6 @@
 package es.degrassi.forge.core.common.cables;
 
+import es.degrassi.forge.core.common.cables.energy.EnergySideConfig;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.common.recipe.CableRecipe;
 import es.degrassi.forge.core.tiers.CableTier;
@@ -18,7 +19,8 @@ import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class CableEntity<T extends CableNet<?>> extends MachineEntity<CableRecipe> {
+public abstract class CableEntity<T extends CableNet<?>, S extends SideConfig<?>> extends MachineEntity<CableRecipe> {
+  protected S sideConfig;
   private static final String NBT_SIDES = "cs";
   public final EnumSet<Direction> sides = EnumSet.noneOf(Direction.class);
   @Nullable
@@ -42,6 +44,7 @@ public abstract class CableEntity<T extends CableNet<?>> extends MachineEntity<C
   }
 
   public void readSync(CompoundTag nbt) {
+    this.sideConfig.read(nbt);
     if (!this.tier.isEmpty() && nbt.contains("variant", 3)) {
       this.tier = this.tier.read(nbt, "variant");
     }
@@ -49,6 +52,7 @@ public abstract class CableEntity<T extends CableNet<?>> extends MachineEntity<C
   }
 
   public CompoundTag writeSync(CompoundTag nbt) {
+    this.sideConfig.write(nbt);
     if (!this.tier.isEmpty()) {
       this.tier.write(nbt, this.tier, "variant");
     }

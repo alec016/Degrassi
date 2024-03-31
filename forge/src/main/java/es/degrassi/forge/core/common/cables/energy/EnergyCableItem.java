@@ -28,8 +28,8 @@ public class EnergyCableItem extends BlockItem implements IVariantEntry<CableTie
 
   public IEnergyContainingItem.Info getEnergyInfo() {
     long transfer = getVariant().getEnergyTransfer();
-    return new IEnergyContainingItem.Info(getVariant().getEnergyCapacity(), getTransferType().canReceive ? transfer : 0,
-      getTransferType().canExtract ? transfer : 0);
+    return new IEnergyContainingItem.Info(getVariant().getEnergyCapacity(), getTransferType().canReceive() ? transfer : 0,
+      getTransferType().canExtract() ? transfer : 0);
   }
 
   @Override

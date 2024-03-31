@@ -22,11 +22,11 @@ import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class EnergyCableEntity extends CableEntity<EnergyCableNet> {
-  protected final EnergySideConfig sideConfig = new EnergySideConfig(this);
+public class EnergyCableEntity extends CableEntity<EnergyCableNet, EnergySideConfig> {
 
   public EnergyCableEntity(BlockPos pos, BlockState state, CableTier tier) {
     super(EntityRegistration.ENERGY_CABLE.get(), pos, state, tier);
+    sideConfig = new EnergySideConfig(this);
     getComponentManager().addEnergy(0, tier.getEnergyTransfer(), "energy");
   }
 
@@ -49,14 +49,12 @@ public class EnergyCableEntity extends CableEntity<EnergyCableNet> {
   }
 
   public void readSync(CompoundTag nbt) {
-    this.sideConfig.read(nbt);
     super.readSync(nbt);
     readSides(nbt);
   }
 
   public CompoundTag writeSync(CompoundTag nbt) {
     writeSides(nbt);
-    this.sideConfig.write(nbt);
     return super.writeSync(nbt);
   }
 
@@ -83,14 +81,14 @@ public class EnergyCableEntity extends CableEntity<EnergyCableNet> {
   protected void serverTick(Level world) {
     super.serverTick(world);
     for (Direction direction : Direction.values()) {
-      if (getSideConfig().getType(direction).canExtract) {
-        BlockEntity te = world.getBlockEntity(worldPosition.relative(direction));
-        if (te == null) continue;
-        te.getCapability(ForgeCapabilities.ENERGY).ifPresent(energyHandler -> {
+      BlockEntity te = world.getBlockEntity(worldPosition.relative(direction));
+      if (te == null || te instanceof CableEntity<?,?>) continue;
+      te.getCapability(ForgeCapabilities.ENERGY, direction.getOpposite()).ifPresent(energyHandler -> {
+        if (getSideConfig().getType(direction).canExtract()) {
           energyHandler.extractEnergy(tier.getEnergyTransfer(), false);
           receiveEnergy(tier.getEnergyTransfer(), false, direction);
-        });
-      }
+        }
+      });
     }
   }
 
@@ -206,7 +204,7 @@ public class EnergyCableEntity extends CableEntity<EnergyCableNet> {
       if (!this.sides.contains(side))
         continue;
 
-      long amount = Math.min(maxReceive - received, getComponentManager().getComponent("energy").map(comp -> (EnergyComponent) comp).map(EnergyComponent::getMaxInput).orElse(0));
+      long amount = Math.min(maxReceive - received, tier.getEnergyTransfer());
       if (amount <= 0)
         break;
       if (cable.equals(this) && side.equals(direction) || !canExtractEnergy(side))
@@ -226,10 +224,10 @@ public class EnergyCableEntity extends CableEntity<EnergyCableNet> {
   }
 
   public boolean canExtractEnergy(@Nullable Direction side) {
-    return side == null || isEnergyPresent(side) && this.sideConfig.getType(side).canExtract;
+    return side == null || isEnergyPresent(side) && this.sideConfig.getType(side).canExtract();
   }
 
   public boolean canReceiveEnergy(@Nullable Direction side) {
-    return side == null || isEnergyPresent(side) && this.sideConfig.getType(side).canReceive;
+    return side == null || isEnergyPresent(side) && this.sideConfig.getType(side).canReceive();
   }
 }

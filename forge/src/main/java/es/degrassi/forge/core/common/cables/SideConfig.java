@@ -8,7 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class SideConfig<T extends CableEntity<?>> {
+public abstract class SideConfig<T extends CableEntity<?, ?>> {
   protected final Transfer[] transfers = new Transfer[6];
   protected final T storage;
   private boolean isSetFromNBT;
