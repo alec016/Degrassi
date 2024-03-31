@@ -1,12 +1,13 @@
 package es.degrassi.forge.integration.config.panels;
 
+import es.degrassi.forge.integration.config.DefaultConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
 @Config(name = "solar_panels")
-public class SolarPanelConfig implements ConfigData {
+public class SolarPanelConfig extends DefaultConfig {
   // panels
   @ConfigEntry.Category("Solar Panel Tier I")
   @Comment("base generation - default 1")

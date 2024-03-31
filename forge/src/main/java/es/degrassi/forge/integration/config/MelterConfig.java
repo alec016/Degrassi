@@ -6,7 +6,7 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
 @Config(name = "melter")
-public class MelterConfig implements ConfigData {
+public class MelterConfig extends DefaultConfig {
   // melter
   @ConfigEntry.Category("Melter")
   @Comment("energy capacity - Default 100000")

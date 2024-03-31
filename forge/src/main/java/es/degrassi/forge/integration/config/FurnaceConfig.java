@@ -6,7 +6,7 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
 @Config(name = "furnaces")
-public class FurnaceConfig implements ConfigData {
+public class FurnaceConfig extends DefaultConfig {
   // furnaces
   @ConfigEntry.Category("Iron Furnace")
   @Comment("energy capacity - Default 10000")

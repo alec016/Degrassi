@@ -85,6 +85,8 @@ allprojects {
                 includeGroup "software.bernie.geckolib"
             }
         }
+
+        maven { url "https://maven.shedaniel.me/" }
     }
 
     tasks.withType(JavaCompile) {

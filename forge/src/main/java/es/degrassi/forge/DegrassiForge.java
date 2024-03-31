@@ -6,6 +6,7 @@ import es.degrassi.forge.init.geckolib.renderer.CircuitFabricatorRenderer;
 import es.degrassi.forge.init.registration.EntityRegister;
 import es.degrassi.forge.init.registration.Register;
 import es.degrassi.forge.integration.config.DegrassiConfig;
+import es.degrassi.forge.integration.config.panels.SolarPanelConfig;
 import es.degrassi.forge.util.DegrassiLogger;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;

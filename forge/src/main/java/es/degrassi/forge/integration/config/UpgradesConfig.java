@@ -7,7 +7,7 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
 @Config(name = "upgrades")
-public class UpgradesConfig implements ConfigData {
+public class UpgradesConfig extends DefaultConfig {
   // upgrades
   @ConfigEntry.Category("Efficiency Upgrade")
   @Comment("efficiency augment - default 5")

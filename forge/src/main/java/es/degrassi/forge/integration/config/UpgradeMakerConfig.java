@@ -6,7 +6,7 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
 @Config(name = "upgrade_maker")
-public class UpgradeMakerConfig implements ConfigData {
+public class UpgradeMakerConfig extends DefaultConfig {
   // upgrade maker
   @ConfigEntry.Category("Upgrade Maker")
   @Comment("energy capacity - Default 1000000")
