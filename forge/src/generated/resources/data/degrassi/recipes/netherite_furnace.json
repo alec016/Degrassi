@@ -6,7 +6,7 @@
       "tag": "forge:ingots/netherite"
     },
     "f": {
-      "item": "degrassi:emerald_furnace"
+      "item": "degrassi:furnace_emerald"
     }
   },
   "pattern": [
@@ -15,7 +15,7 @@
     "ddd"
   ],
   "result": {
-    "item": "degrassi:netherite_furnace"
+    "item": "degrassi:furnace_netherite"
   },
   "show_notification": true
 }

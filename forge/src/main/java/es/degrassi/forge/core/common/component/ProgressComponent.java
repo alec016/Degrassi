@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 
 public class ProgressComponent implements IComponent {
   public static final String id = "progress";
+  private static final ComponentIOMode mode = ComponentIOMode.NONE;
   private int progress, maxProgress;
   private final ComponentManager manager;
   private final MachineEntity<?> entity;
@@ -35,7 +36,7 @@ public class ProgressComponent implements IComponent {
 
   @Override
   public ComponentIOMode getMode() {
-    return ComponentIOMode.NONE;
+    return mode;
   }
 
   @Override
@@ -89,18 +90,18 @@ public class ProgressComponent implements IComponent {
   }
 
   public float getProgressPercentage() {
-    return progress / (maxProgress * 1F);
+    return getProgress() / (getMaxProgress() * 1F);
   }
 
   public boolean hasEnded() {
-    return this.progress >= this.maxProgress;
+    return this.getProgress() >= this.getMaxProgress();
   }
 
   @Override
   public String toString() {
     return "ProgressComponent{" +
-      "progress=" + progress +
-      ", maxProgress=" + maxProgress +
+      "progress=" + getProgress() +
+      ", maxProgress=" + getMaxProgress() +
       ", id='" + id + "'" +
       '}';
   }

@@ -1,6 +1,7 @@
 package es.degrassi.forge.core.common;
 
 import es.degrassi.forge.api.core.common.IComponent;
+import es.degrassi.forge.core.common.component.BarComponent;
 import es.degrassi.forge.core.common.component.ComponentIOMode;
 import es.degrassi.forge.core.common.component.EnergyComponent;
 import es.degrassi.forge.core.common.component.ExperienceComponent;
@@ -26,8 +27,7 @@ public final class ComponentManager extends Manager<IComponent> implements INBTS
   }
 
   public ComponentManager addEnergy(int capacity, int maxInput, int maxOutput, String id) {
-    get().add(new EnergyComponent(this, capacity, maxInput, maxOutput, getEntity(), id));
-    return this;
+    return addEnergy(capacity, maxInput, maxOutput, id, ComponentIOMode.BOTH);
   }
 
   public ComponentManager addEnergy(int capacity, int maxInput, int maxOutput, String id, ComponentIOMode mode) {
@@ -36,28 +36,23 @@ public final class ComponentManager extends Manager<IComponent> implements INBTS
   }
 
   public ComponentManager addEnergy(int capacity, int transfer, String id) {
-    get().add(new EnergyComponent(this, capacity, transfer, getEntity(), id));
-    return this;
+    return addEnergy(capacity, transfer, transfer, id);
   }
 
   public ComponentManager addEnergy(int capacity, int transfer, String id, ComponentIOMode mode) {
-    get().add(new EnergyComponent(this, capacity, transfer, getEntity(), id, mode));
-    return this;
+    return addEnergy(capacity, transfer, transfer, id, mode);
   }
 
   public ComponentManager addEnergy(int capacity, String id) {
-    get().add(new EnergyComponent(this, capacity, getEntity(), id));
-    return this;
+    return addEnergy(capacity, capacity, id);
   }
 
   public ComponentManager addEnergy(int capacity, String id, ComponentIOMode mode) {
-    get().add(new EnergyComponent(this, capacity, getEntity(), id, mode));
-    return this;
+    return addEnergy(capacity, capacity, id, mode);
   }
 
   public ComponentManager addItem(String id) {
-    get().add(new ItemComponent(this, id, getEntity(), ComponentIOMode.ALL));
-    return this;
+    return addItem(id, ComponentIOMode.BOTH);
   }
   public ComponentManager addItem(String id, ComponentIOMode mode) {
     get().add(new ItemComponent(this, id, getEntity(), mode));
@@ -65,8 +60,7 @@ public final class ComponentManager extends Manager<IComponent> implements INBTS
   }
 
   public ComponentManager addItem(String id, boolean whitelist, Item...filter) {
-    get().add(new ItemComponent(this, id, whitelist, getEntity(), ComponentIOMode.ALL, filter));
-    return this;
+    return addItem(id, whitelist, ComponentIOMode.BOTH, filter);
   }
 
   public ComponentManager addItem(String id, boolean whitelist, ComponentIOMode mode, Item...filter) {
@@ -75,18 +69,15 @@ public final class ComponentManager extends Manager<IComponent> implements INBTS
   }
 
   public ComponentManager addItem(String id, Item... filter) {
-    get().add(new ItemComponent(this, id, false, getEntity(), ComponentIOMode.ALL, filter));
-    return this;
+    return addItem(id, false, ComponentIOMode.BOTH, filter);
   }
 
   public ComponentManager addItem(String id, ComponentIOMode mode, Item... filter) {
-    get().add(new ItemComponent(this, id, false, getEntity(), mode, filter));
-    return this;
+    return addItem(id, false, mode, filter);
   }
 
   public ComponentManager addExperience(float capacity, String id) {
-    get().add(new ExperienceComponent(this, capacity, getEntity(), id, ComponentIOMode.ALL));
-    return this;
+    return addExperience(capacity, id, ComponentIOMode.BOTH);
   }
 
   public ComponentManager addExperience(float capacity, String id, ComponentIOMode mode) {
@@ -100,10 +91,8 @@ public final class ComponentManager extends Manager<IComponent> implements INBTS
   }
 
   public ComponentManager addFluid(int capacity, String id, boolean whiteList, Fluid...filter) {
-    get().add(new FluidComponent(this, id, whiteList, capacity, getEntity(), ComponentIOMode.ALL, filter));
-    return this;
+    return addFluid(capacity, id, whiteList, ComponentIOMode.BOTH, filter);
   }
-
   public ComponentManager addFluid(int capacity, String id, boolean whiteList, ComponentIOMode mode, Fluid...filter) {
     get().add(new FluidComponent(this, id, whiteList, capacity, getEntity(), mode, filter));
     return this;
@@ -115,6 +104,15 @@ public final class ComponentManager extends Manager<IComponent> implements INBTS
 
   public ComponentManager addFluid(int capacity, String id, ComponentIOMode mode) {
     return addFluid(capacity, id, false, mode);
+  }
+
+  public ComponentManager addBar(double capacity, String id, ComponentIOMode mode) {
+    get().add(new BarComponent(this, capacity, id, mode, getEntity()));
+    return this;
+  }
+
+  public ComponentManager addBar(double capacity, String id) {
+    return addBar(capacity, id, ComponentIOMode.BOTH);
   }
 
   public Optional<IComponent> getComponent(String id) {

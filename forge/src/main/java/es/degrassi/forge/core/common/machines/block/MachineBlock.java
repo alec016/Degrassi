@@ -1,6 +1,8 @@
 package es.degrassi.forge.core.common.machines.block;
 
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -64,6 +66,10 @@ public abstract class MachineBlock extends Block implements EntityBlock {
     }
 
     registerDefaultState(baseState.get(state));
+  }
+
+  public Component getDisplayName(ItemStack stack) {
+    return Component.translatable(asItem().getDescriptionId(stack));
   }
 
   @Override

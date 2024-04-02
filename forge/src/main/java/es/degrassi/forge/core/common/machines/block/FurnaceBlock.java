@@ -1,17 +1,16 @@
 package es.degrassi.forge.core.common.machines.block;
 
 import dev.architectury.registry.menu.MenuRegistry;
+import es.degrassi.forge.EnvHandler;
 import es.degrassi.forge.api.utils.Utils;
+import es.degrassi.forge.core.common.cables.IBlock;
 import es.degrassi.forge.core.common.machines.container.FurnaceContainer;
 import es.degrassi.forge.core.common.machines.entity.FurnaceEntity;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
-import es.degrassi.forge.core.common.machines.item.WrenchItem;
-import es.degrassi.forge.core.common.machines.item.wrench.IWrenchable;
-import es.degrassi.forge.core.common.machines.item.wrench.WrenchMode;
+import es.degrassi.forge.core.common.machines.item.FurnaceItem;
+import es.degrassi.forge.core.init.EntityRegistration;
 import es.degrassi.forge.core.tiers.Furnace;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -20,23 +19,27 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
-public class FurnaceBlock extends MachineBlock {
-  private Furnace tier;
+public class FurnaceBlock extends MachineBlock implements IBlock<Furnace, FurnaceBlock> {
+  private final Furnace tier;
   public FurnaceBlock(Properties properties, Furnace tier) {
     super(properties);
     this.tier = tier;
+  }
+
+  public BlockItem getBlockItem(Item.Properties properties) {
+    return new FurnaceItem(this, new Item.Properties());
   }
 
   @Override
@@ -48,18 +51,10 @@ public class FurnaceBlock extends MachineBlock {
     return tier;
   }
 
-  public void setTier(Furnace tier) {
-    this.tier = tier;
-  }
-
-  public void setTier(String tier) {
-    this.tier = Furnace.value(tier);
-  }
-
   @Nullable
   @Override
   public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-    return new FurnaceEntity(pos, state, getTier());
+    return EnvHandler.INSTANCE.createFurnace(pos, state, tier);
   }
 
   @SuppressWarnings("deprecation")
@@ -100,10 +95,15 @@ public class FurnaceBlock extends MachineBlock {
   @Override
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
     return Utils.createTickerHelper(
-      type, getTier().getType().get(),
+      type, EntityRegistration.FURNACE.get(),
       level.isClientSide()
         ? MachineEntity::clientTick
         : MachineEntity::serverTick
     );
+  }
+
+  @Override
+  public Furnace getVariant() {
+    return getTier();
   }
 }

@@ -70,10 +70,10 @@ public class ItemRequirement implements IRequirement<ItemComponent> {
     if (!componentMatches(component)) return false;
     ItemComponent item = (ItemComponent) component;
     return switch (getMode()) {
-      case INPUT -> item.getStackInSlot(0).is(this.item) && item.extractItem(0, amount, true).getCount() == amount;
+      case INPUT -> item.getStackInSlot(0).is(this.item) && item.extractRecipeItem(0, amount, true).getCount() == amount;
       case OUTPUT -> {
         ItemStack toInsert = new ItemStack(this.item, this.amount);
-        ItemStack inserted = item.insertItem(0, toInsert.copy(), true);
+        ItemStack inserted = item.insertRecipeItem(0, toInsert.copy(), true);
         yield inserted.getCount() + this.amount == toInsert.getCount();
       }
       default -> false;
@@ -95,7 +95,7 @@ public class ItemRequirement implements IRequirement<ItemComponent> {
     ItemComponent item = (ItemComponent) component;
     if (getMode().isPerTick()) return CraftingResult.error(Component.literal("Item requirement can not be per tick"));
     else if (getMode().isInput()) {
-      item.extractItem(0, amount, false);
+      item.extractRecipeItem(0, amount, false);
       return CraftingResult.success();
     }
     return CraftingResult.pass();
@@ -108,7 +108,7 @@ public class ItemRequirement implements IRequirement<ItemComponent> {
     ItemComponent item = (ItemComponent) component;
     if (getMode().isPerTick()) return CraftingResult.error(Component.literal("Item requirement can not be per tick"));
     else if (getMode().isOutput()) {
-      item.insertItem(0, new ItemStack(this.item, amount), false);
+      item.insertRecipeItem(0, new ItemStack(this.item, amount), false);
       return CraftingResult.success();
     }
     return CraftingResult.pass();

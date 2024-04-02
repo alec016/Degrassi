@@ -54,15 +54,15 @@ public class ExperienceRequirement implements IRequirement<ExperienceComponent> 
     return switch (getMode()) {
       case INPUT, INPUT_PER_TICK -> {
         if (getMode().isPerTick()) {
-          yield experience.extractExperience(xp * recipeTime, true) == xp * recipeTime;
+          yield experience.extractRecipeExperience(xp * recipeTime, true) == xp * recipeTime;
         }
-        yield experience.extractExperience(xp, true) == xp;
+        yield experience.extractRecipeExperience(xp, true) == xp;
       }
       case OUTPUT, OUTPUT_PER_TICK -> {
         if (getMode().isPerTick()) {
-          yield experience.receiveExperience(xp * recipeTime, true) == xp * recipeTime;
+          yield experience.receiveRecipeExperience(xp * recipeTime, true) == xp * recipeTime;
         }
-        yield experience.receiveExperience(xp, true) == xp;
+        yield experience.receiveRecipeExperience(xp, true) == xp;
       }
     };
   }
@@ -74,7 +74,7 @@ public class ExperienceRequirement implements IRequirement<ExperienceComponent> 
     ExperienceComponent experience = (ExperienceComponent) component;
     if (getMode().isPerTick()) return CraftingResult.pass();
     else if (getMode().isInput()) {
-      experience.extractExperience(xp, false);
+      experience.extractRecipeExperience(xp, false);
       return CraftingResult.success();
     }
     return CraftingResult.pass();
@@ -87,7 +87,7 @@ public class ExperienceRequirement implements IRequirement<ExperienceComponent> 
     ExperienceComponent experience = (ExperienceComponent) component;
     if (getMode().isPerTick()) return CraftingResult.pass();
     else if (getMode().isOutput()) {
-      experience.receiveExperience(xp, false);
+      experience.receiveRecipeExperience(xp, false);
       return CraftingResult.success();
     }
     return CraftingResult.pass();
@@ -100,9 +100,9 @@ public class ExperienceRequirement implements IRequirement<ExperienceComponent> 
     ExperienceComponent experience = (ExperienceComponent) component;
     if (getMode().isPerTick()) {
       if (getMode().isInput()) {
-        experience.extractExperience(xp, false);
+        experience.extractRecipeExperience(xp, false);
       } else {
-        experience.receiveExperience(xp, false);
+        experience.receiveRecipeExperience(xp, false);
       }
       return CraftingResult.success();
     }
@@ -129,7 +129,7 @@ public class ExperienceRequirement implements IRequirement<ExperienceComponent> 
   }
 
   @Override
-  public IRequirement<?> copy() {
+  public ExperienceRequirement copy() {
     return new ExperienceRequirement(xp, mode, id);
   }
 

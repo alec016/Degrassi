@@ -11,12 +11,12 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "has_photovoltaic_cell_1": {
+    "has_photovoltaic_cell_i": {
       "conditions": {
         "items": [
           {
             "items": [
-              "degrassi:photovoltaic_cell_1"
+              "degrassi:photovoltaic_cell_i"
             ]
           }
         ]
@@ -42,7 +42,7 @@
   },
   "requirements": [
     [
-      "has_photovoltaic_cell_1",
+      "has_photovoltaic_cell_i",
       "glass",
       "lapis",
       "has_the_recipe"

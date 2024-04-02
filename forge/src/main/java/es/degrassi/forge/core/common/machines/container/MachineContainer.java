@@ -116,4 +116,9 @@ public abstract class MachineContainer<T extends MachineEntity<?>> extends Abstr
     sourceSlot.onTake(player, sourceStack);
     return copyOfSourceStack;
   }
+
+  @Override
+  public boolean stillValid(@NotNull Player player) {
+    return true;
+  }
 }

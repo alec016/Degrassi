@@ -3,6 +3,7 @@ package es.degrassi.forge.core.client.book;
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.ItemRegistration;
 import es.degrassi.forge.core.tiers.CableTier;
+import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import es.degrassi.forge.lib.client.wiki.Icon;
 import es.degrassi.forge.lib.client.wiki.Wiki;
@@ -63,7 +64,7 @@ public class DegrassiBook {
         )
       ).e(
         "machines",
-        new Icon(BlockRegistration.IRON_FURNACE.get()),
+        new Icon(BlockRegistration.FURNACE.get(Furnace.IRON)),
         ae -> ae.s(
           as -> as.p(
             new GridPage(as).e(

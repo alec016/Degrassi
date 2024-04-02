@@ -22,7 +22,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -41,7 +40,7 @@ import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
 public class SolarPanelBlock extends MachineBlock implements IBlock<SolarPanel, SolarPanelBlock> {
-  private SolarPanel tier;
+  private final SolarPanel tier;
   public SolarPanelBlock(Properties properties, SolarPanel tier) {
     super(properties);
     this.tier = tier;
@@ -107,13 +106,6 @@ public class SolarPanelBlock extends MachineBlock implements IBlock<SolarPanel, 
     return tier;
   }
 
-  public void setTier(SolarPanel tier) {
-    this.tier = tier;
-  }
-  public void setTier(String tier) {
-    this.tier = SolarPanel.value(tier);
-  }
-
   @Nullable
   @Override
   public BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
@@ -172,15 +164,10 @@ public class SolarPanelBlock extends MachineBlock implements IBlock<SolarPanel, 
         ? MachineEntity::clientTick
         : SolarPanelEntity::serverTick
     );
-//    return (l, p, s, be) -> level.isClientSide ? MachineEntity.clientTick(l, p, s, be);
   }
 
   @Override
   public SolarPanel getVariant() {
     return getTier();
-  }
-
-  public Component getDisplayName(ItemStack stack) {
-    return Component.translatable(asItem().getDescriptionId(stack));
   }
 }

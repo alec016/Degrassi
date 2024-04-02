@@ -34,6 +34,7 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
     return RequirementRegistration.ENERGY.get();
   }
 
+  @Override
   public RequirementMode getMode() {
     return mode;
   }
@@ -43,6 +44,7 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
     return id;
   }
 
+  @Override
   public JsonObject toJson(JsonObject json) {
     json.addProperty("energy", amount);
     return json;
@@ -53,8 +55,8 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
     if (component == null || this.mode == null) return CraftingResult.error(Component.literal("Energy Component not found or invalid requirement mode"));
     EnergyComponent comp = (EnergyComponent) component;
     if (this.mode.isInput() && !this.mode.isPerTick()) {
-      if(this.amount == comp.extractEnergy(this.amount, true)) {
-        comp.extractEnergy(this.amount, false);
+      if(this.amount == comp.extractRecipeEnergy(this.amount, true)) {
+        comp.extractRecipeEnergy(this.amount, false);
         return CraftingResult.success();
       }
       return CraftingResult.error(Component.literal("Can not extract energy, expected " + this.amount + " FE, but only found " + comp.getEnergyStored() + " FE"));
@@ -67,8 +69,8 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
     if (component == null || this.mode == null) return CraftingResult.error(Component.literal("Energy Component not found or invalid requirement mode"));
     EnergyComponent comp = (EnergyComponent) component;
     if(this.mode.isOutput() && !this.mode.isPerTick()) {
-      if (this.amount == comp.receiveEnergy(this.amount, true)) {
-        comp.receiveEnergy(this.amount, false);
+      if (this.amount == comp.receiveRecipeEnergy(this.amount, true)) {
+        comp.receiveRecipeEnergy(this.amount, false);
         return CraftingResult.success();
       }
       return CraftingResult.error(Component.literal("Can not receive energy, not enough space to store " + this.amount + " FE"));
@@ -82,14 +84,14 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
     EnergyComponent comp = (EnergyComponent) component;
     if (this.mode.isPerTick()) {
       if (this.mode.isInput()) {
-        if (this.amount == comp.extractEnergy(this.amount, true)) {
-          comp.extractEnergy(this.amount, false);
+        if (this.amount == comp.extractRecipeEnergy(this.amount, true)) {
+          comp.extractRecipeEnergy(this.amount, false);
           return CraftingResult.success();
         }
         return CraftingResult.error(Component.literal("Can not extract energy, expected " + this.amount + " FE, but only found " + comp.getEnergyStored() + " FE"));
       } else if(this.mode.isOutput()) {
-        if (this.amount == comp.receiveEnergy(this.amount, true)) {
-          comp.receiveEnergy(this.amount, false);
+        if (this.amount == comp.receiveRecipeEnergy(this.amount, true)) {
+          comp.receiveRecipeEnergy(this.amount, false);
           return CraftingResult.success();
         }
         return CraftingResult.error(Component.literal("Can not receive energy, not enough space to store " + this.amount + " FE"));
@@ -111,19 +113,27 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
     return switch(getMode()) {
       case INPUT, INPUT_PER_TICK -> {
         if (getMode().isPerTick()) {
-          yield comp.extractEnergy(amount * recipeTime, true) == amount * recipeTime;
+          yield comp.extractRecipeEnergy(amount * recipeTime, true) == amount * recipeTime;
         } else {
-          yield comp.extractEnergy(amount, true) == amount;
+          yield comp.extractRecipeEnergy(amount, true) == amount;
         }
       }
       case OUTPUT, OUTPUT_PER_TICK -> {
         if (getMode().isPerTick()) {
-          yield comp.receiveEnergy(amount * recipeTime, true) == amount * recipeTime;
+          yield comp.receiveRecipeEnergy(amount * recipeTime, true) == amount * recipeTime;
         } else {
-          yield comp.receiveEnergy(amount, true) == amount;
+          yield comp.receiveRecipeEnergy(amount, true) == amount;
         }
       }
     };
+  }
+
+  public int getAmount() {
+    return amount;
+  }
+
+  public void setAmount(int amount) {
+    this.amount = amount;
   }
 
   @Override
@@ -132,7 +142,7 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
   }
 
   @Override
-  public IRequirement<?> copy() {
+  public EnergyRequirement copy() {
     return new EnergyRequirement(amount, mode, id);
   }
 
@@ -143,13 +153,5 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
       ", mode=" + mode +
       ", id='" + id + '\'' +
       "}";
-  }
-
-  public int getAmount() {
-    return amount;
-  }
-
-  public void setAmount(int amount) {
-    this.amount = amount;
   }
 }

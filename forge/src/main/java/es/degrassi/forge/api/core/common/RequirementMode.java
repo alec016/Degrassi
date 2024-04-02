@@ -1,6 +1,7 @@
 package es.degrassi.forge.api.core.common;
 
 import es.degrassi.forge.api.codec.NamedCodec;
+import java.util.Locale;
 
 public enum RequirementMode {
   INPUT("input"),
@@ -33,11 +34,13 @@ public enum RequirementMode {
   }
 
   public static RequirementMode value(String value) {
-    if (value.equalsIgnoreCase("input")) return INPUT;
-    if (value.equalsIgnoreCase("input_per_tick")) return INPUT_PER_TICK;
-    if (value.equalsIgnoreCase("output")) return OUTPUT;
-    if (value.equalsIgnoreCase("output_per_tick")) return OUTPUT_PER_TICK;
-    return null;
+    return switch (value.toLowerCase(Locale.ROOT)) {
+      case "input" -> INPUT;
+      case "input_per_tick" -> INPUT_PER_TICK;
+      case "output" -> OUTPUT;
+      case "output_per_tick" -> OUTPUT_PER_TICK;
+      default -> null;
+    };
   }
 
   @Override

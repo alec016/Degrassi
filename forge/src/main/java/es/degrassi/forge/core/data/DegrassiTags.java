@@ -43,8 +43,10 @@ public class DegrassiTags {
 
   public static class Items extends Tag<Item> {
     public static final Items FURNACE = new Items(false, "furnace");
-    public static final Items SP = new Items(false, "solar_panel");
+    public static final Items SP = new Items(false, "panel/solar_panel");
     public static final Items MACHINE = new Items(false, "machine");
+    public static final Items PHOTOVOLTAIC_CELL = new Items(false, "panel/photovoltaic_cell");
+    public static final Items PANEL = new Items(false, "panel");
     public static final Items CABLE = new Items(false, "cable");
     public static final Items ENERGY_CABLE = new Items(false, "cable/energy");
     public static final Items FLUID_CABLE = new Items(false, "cable/fluid");

@@ -208,7 +208,6 @@ public class FluidCableEntity extends CableEntity<FluidCableNet, FluidSideConfig
       return FluidStack.EMPTY;
     final FluidComponent fluid = (FluidComponent) getComponentManager().getComponent("fluid").orElse(null);
     if (fluid == null || !fluid.isFluidValid(fluidStack)) return FluidStack.EMPTY;
-    if (fluid.getMode().receive()) return FluidStack.EMPTY;
     long extracted = Math.min(fluid.getFluidAmount(), Math.min(tier.getFluidTransfer(), fluidStack.getAmount()));
     FluidStack extract = FluidStack.EMPTY;
     if (simulate.execute() && extracted > 0) {

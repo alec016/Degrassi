@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_photovoltaic_cell_8": {
+    "has_photovoltaic_cell_viii": {
       "conditions": {
         "items": [
           {
             "items": [
-              "degrassi:photovoltaic_cell_8"
+              "degrassi:photovoltaic_cell_viii"
             ]
           }
         ]
@@ -46,7 +46,7 @@
   },
   "requirements": [
     [
-      "has_photovoltaic_cell_8",
+      "has_photovoltaic_cell_viii",
       "has_sp_t7",
       "has_red_matter",
       "has_the_recipe"

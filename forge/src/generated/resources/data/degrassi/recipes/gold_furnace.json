@@ -6,7 +6,7 @@
       "tag": "forge:ingots/gold"
     },
     "f": {
-      "item": "degrassi:iron_furnace"
+      "item": "degrassi:furnace_iron"
     }
   },
   "pattern": [
@@ -15,7 +15,7 @@
     "ddd"
   ],
   "result": {
-    "item": "degrassi:gold_furnace"
+    "item": "degrassi:furnace_gold"
   },
   "show_notification": true
 }

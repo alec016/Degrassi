@@ -85,8 +85,9 @@ public class EnergyCableEntity extends CableEntity<EnergyCableNet, EnergySideCon
       if (te == null || te instanceof CableEntity<?,?>) continue;
       te.getCapability(ForgeCapabilities.ENERGY, direction.getOpposite()).ifPresent(energyHandler -> {
         if (getSideConfig().getType(direction).canExtract()) {
-          energyHandler.extractEnergy(tier.getEnergyTransfer(), false);
-          receiveEnergy(tier.getEnergyTransfer(), false, direction);
+          long received = receiveEnergy(tier.getEnergyTransfer(), true, direction);
+          energyHandler.extractEnergy((int) received, false);
+          receiveEnergy(received, false, direction);
         }
       });
     }

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "degrassi:block/furnace_emerald",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "degrassi:block/furnace_emerald"
+    },
+    "facing=south": {
+      "model": "degrassi:block/furnace_emerald",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "degrassi:block/furnace_emerald",
+      "y": 270
+    }
+  }
+}

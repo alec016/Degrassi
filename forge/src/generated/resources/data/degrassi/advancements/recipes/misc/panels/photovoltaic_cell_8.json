@@ -31,12 +31,12 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "has_photovoltaic_cell_7": {
+    "has_photovoltaic_cell_vii": {
       "conditions": {
         "items": [
           {
             "items": [
-              "degrassi:photovoltaic_cell_7"
+              "degrassi:photovoltaic_cell_vii"
             ]
           }
         ]
@@ -62,7 +62,7 @@
   },
   "requirements": [
     [
-      "has_photovoltaic_cell_7",
+      "has_photovoltaic_cell_vii",
       "obsidian",
       "glowstone",
       "glass",

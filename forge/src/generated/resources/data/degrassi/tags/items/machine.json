@@ -1,7 +1,6 @@
 {
   "values": [
     "#degrassi:furnace",
-    "#degrassi:solar_panel",
-    "#degrassi:cable"
+    "#degrassi:panel/solar_panel"
   ]
 }

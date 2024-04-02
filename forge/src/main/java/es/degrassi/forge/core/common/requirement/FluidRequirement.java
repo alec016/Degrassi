@@ -61,15 +61,15 @@ public class FluidRequirement implements IRequirement<FluidComponent> {
     return switch (getMode()) {
       case INPUT, INPUT_PER_TICK -> {
         if (getMode().isPerTick()) {
-          yield fluid.getFluid().getFluid().isSame(this.fluid) && fluid.drain(new FluidStack(this.fluid, this.amount * recipeTime), IFluidHandler.FluidAction.SIMULATE).getAmount() == amount * recipeTime;
+          yield fluid.getFluid().getFluid().isSame(this.fluid) && fluid.drainRecipe(new FluidStack(this.fluid, this.amount * recipeTime), IFluidHandler.FluidAction.SIMULATE).getAmount() == amount * recipeTime;
         }
-        yield fluid.getFluid().getFluid().isSame(this.fluid) && fluid.drain(new FluidStack(this.fluid, this.amount), IFluidHandler.FluidAction.SIMULATE).getAmount() == amount;
+        yield fluid.getFluid().getFluid().isSame(this.fluid) && fluid.drainRecipe(new FluidStack(this.fluid, this.amount), IFluidHandler.FluidAction.SIMULATE).getAmount() == amount;
       }
       case OUTPUT, OUTPUT_PER_TICK -> {
         if (getMode().isPerTick()) {
-          yield fluid.fill(new FluidStack(this.fluid, this.amount * recipeTime).copy(), IFluidHandler.FluidAction.SIMULATE) == this.amount * recipeTime;
+          yield fluid.fillRecipe(new FluidStack(this.fluid, this.amount * recipeTime).copy(), IFluidHandler.FluidAction.SIMULATE) == this.amount * recipeTime;
         }
-        yield fluid.fill(new FluidStack(this.fluid, this.amount).copy(), IFluidHandler.FluidAction.SIMULATE) == this.amount;
+        yield fluid.fillRecipe(new FluidStack(this.fluid, this.amount).copy(), IFluidHandler.FluidAction.SIMULATE) == this.amount;
       }
     };
   }
@@ -81,9 +81,9 @@ public class FluidRequirement implements IRequirement<FluidComponent> {
     FluidComponent fluid = (FluidComponent) component;
     if (getMode().isPerTick()) {
       if (getMode().isInput()) {
-        fluid.drain(new FluidStack(this.fluid, this.amount).copy(), IFluidHandler.FluidAction.EXECUTE);
+        fluid.drainRecipe(new FluidStack(this.fluid, this.amount).copy(), IFluidHandler.FluidAction.EXECUTE);
       } else if (getMode().isOutput()) {
-        fluid.fill(new FluidStack(this.fluid, this.amount).copy(), IFluidHandler.FluidAction.EXECUTE);
+        fluid.fillRecipe(new FluidStack(this.fluid, this.amount).copy(), IFluidHandler.FluidAction.EXECUTE);
       }
       return CraftingResult.success();
     }
@@ -97,7 +97,7 @@ public class FluidRequirement implements IRequirement<FluidComponent> {
     FluidComponent fluid = (FluidComponent) component;
     if (getMode().isPerTick()) return CraftingResult.pass();
     else if (getMode().isInput()) {
-      fluid.drain(new FluidStack(this.fluid, this.amount), IFluidHandler.FluidAction.EXECUTE);
+      fluid.drainRecipe(new FluidStack(this.fluid, this.amount), IFluidHandler.FluidAction.EXECUTE);
       return CraftingResult.success();
     }
     return CraftingResult.pass();
@@ -110,7 +110,7 @@ public class FluidRequirement implements IRequirement<FluidComponent> {
     FluidComponent fluid = (FluidComponent) component;
     if (getMode().isPerTick()) return CraftingResult.success();
     else if (getMode().isOutput()) {
-      fluid.fill(new FluidStack(this.fluid, this.amount), IFluidHandler.FluidAction.EXECUTE);
+      fluid.fillRecipe(new FluidStack(this.fluid, this.amount), IFluidHandler.FluidAction.EXECUTE);
       return CraftingResult.success();
     }
     return CraftingResult.pass();

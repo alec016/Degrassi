@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "degrassi:netherite_furnace"
+          "name": "degrassi:furnace_gold"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "degrassi:blocks/netherite_furnace"
+  "random_sequence": "degrassi:blocks/furnace_gold"
 }

@@ -69,7 +69,6 @@ public class ExperienceComponent implements IComponent {
   }
 
   public float receiveExperience(float experience, boolean simulate) {
-    if(mode.extract()) return 0;
     float toReceive = Math.min(this.capacity - this.experience, experience);
     if (!simulate) {
       this.experience += toReceive;
@@ -79,7 +78,6 @@ public class ExperienceComponent implements IComponent {
   }
 
   public float extractExperience(float experience, boolean simulate) {
-    if (mode.receive()) return 0;
     float toExtract = Math.min(this.experience, experience);
     if (!simulate) {
       this.experience -= toExtract;
@@ -97,11 +95,32 @@ public class ExperienceComponent implements IComponent {
   }
 
   public boolean canExtract() {
-    return mode.extractWithAll();
+    return this.experience > 0;
   }
 
   public boolean canReceive() {
-    return mode.receiveWillAll();
+    return this.experience < this.capacity;
+  }
+
+  // recipe stuff
+  public float receiveRecipeExperience(float experience, boolean simulate) {
+    if (mode.input()) return 0;
+    float toReceive = Math.min(this.capacity - this.experience, experience);
+    if (!simulate) {
+      this.experience += toReceive;
+    }
+    markDirty();
+    return toReceive;
+  }
+
+  public float extractRecipeExperience(float experience, boolean simulate) {
+    if(mode.output()) return 0;
+    float toExtract = Math.min(this.experience, experience);
+    if (!simulate) {
+      this.experience -= toExtract;
+    }
+    markDirty();
+    return toExtract;
   }
 
   @Override

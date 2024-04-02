@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "degrassi:emerald_furnace"
+          "name": "degrassi:furnace_emerald"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "degrassi:blocks/emerald_furnace"
+  "random_sequence": "degrassi:blocks/furnace_emerald"
 }

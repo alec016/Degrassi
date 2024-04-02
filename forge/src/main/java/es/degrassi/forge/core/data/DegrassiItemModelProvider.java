@@ -5,6 +5,8 @@ import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.ItemRegistration;
+import es.degrassi.forge.core.tiers.Furnace;
+import es.degrassi.forge.core.tiers.PhotovoltaicCell;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -14,6 +16,7 @@ import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("deprecation")
 public class DegrassiItemModelProvider extends ItemModelProvider {
   public DegrassiItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
     super(output, Degrassi.MODID, existingFileHelper);
@@ -21,11 +24,9 @@ public class DegrassiItemModelProvider extends ItemModelProvider {
 
   @Override
   public void registerModels() {
-    simpleBlockItem(BlockRegistration.IRON_FURNACE);
-    simpleBlockItem(BlockRegistration.GOLD_FURNACE);
-    simpleBlockItem(BlockRegistration.DIAMOND_FURNACE);
-    simpleBlockItem(BlockRegistration.EMERALD_FURNACE);
-    simpleBlockItem(BlockRegistration.NETHERITE_FURNACE);
+    for (Furnace furnace : Furnace.values()) {
+      simpleBlockItem(BlockRegistration.FURNACE.get(furnace));
+    }
     simpleBlockItem(BlockRegistration.MACHINE_CASING);
 
     simpleItem(ItemRegistration.WRENCH);
@@ -35,20 +36,27 @@ public class DegrassiItemModelProvider extends ItemModelProvider {
   }
 
   private void itemsWithPathAndTexture() {
-    simpleItem(ItemRegistration.PHOTOVOLTAIC_CELL_I, "panel", "pc1");
-    simpleItem(ItemRegistration.PHOTOVOLTAIC_CELL_II, "panel", "pc2");
-    simpleItem(ItemRegistration.PHOTOVOLTAIC_CELL_III, "panel", "pc3");
-    simpleItem(ItemRegistration.PHOTOVOLTAIC_CELL_IV, "panel", "pc4");
-    simpleItem(ItemRegistration.PHOTOVOLTAIC_CELL_V, "panel", "pc5");
-    simpleItem(ItemRegistration.PHOTOVOLTAIC_CELL_VI, "panel", "pc6");
-    simpleItem(ItemRegistration.PHOTOVOLTAIC_CELL_VII, "panel", "pc7");
-    simpleItem(ItemRegistration.PHOTOVOLTAIC_CELL_VIII, "panel", "pc8");
+    simpleItem(ItemRegistration.PHOTOVOLTAIC_CELL.get(PhotovoltaicCell.I), "panel", "pc1");
+    simpleItem(ItemRegistration.PHOTOVOLTAIC_CELL.get(PhotovoltaicCell.II), "panel", "pc2");
+    simpleItem(ItemRegistration.PHOTOVOLTAIC_CELL.get(PhotovoltaicCell.III), "panel", "pc3");
+    simpleItem(ItemRegistration.PHOTOVOLTAIC_CELL.get(PhotovoltaicCell.IV), "panel", "pc4");
+    simpleItem(ItemRegistration.PHOTOVOLTAIC_CELL.get(PhotovoltaicCell.V), "panel", "pc5");
+    simpleItem(ItemRegistration.PHOTOVOLTAIC_CELL.get(PhotovoltaicCell.VI), "panel", "pc6");
+    simpleItem(ItemRegistration.PHOTOVOLTAIC_CELL.get(PhotovoltaicCell.VII), "panel", "pc7");
+    simpleItem(ItemRegistration.PHOTOVOLTAIC_CELL.get(PhotovoltaicCell.VIII), "panel", "pc8");
   }
 
   private ItemModelBuilder simpleBlockItem(@NotNull RegistrySupplier<? extends Block> supplier) {
     return withExistingParent(
       supplier.getId().getPath(),
       new DegrassiLocation("block/" + supplier.getId().getPath())
+    );
+  }
+
+  private ItemModelBuilder simpleBlockItem(@NotNull Block supplier) {
+    return withExistingParent(
+      supplier.builtInRegistryHolder().key().location().getPath(),
+      new DegrassiLocation("block/" + supplier.builtInRegistryHolder().key().location().getPath())
     );
   }
 
@@ -59,6 +67,17 @@ public class DegrassiItemModelProvider extends ItemModelProvider {
     ).texture(
       "layer0",
       new DegrassiLocation("item/" + item.getId().getPath())
+    );
+  }
+
+  private ItemModelBuilder simpleItem(@NotNull Item item, String path, String texture) {
+    return withExistingParent(item.builtInRegistryHolder().key().location().getPath(),
+      new ResourceLocation("item/generated")).texture("layer0",
+      new DegrassiLocation(
+        "item/" +
+          (path != null && !path.trim().isEmpty() ? path + "/" : "") +
+          (texture != null && !texture.trim().isEmpty() ? texture : item.builtInRegistryHolder().key().location().getPath())
+      )
     );
   }
 

@@ -27,88 +27,20 @@ public class BlockRegistration {
 
   public static final RegistrySupplier<Block> MACHINE_CASING = BLOCKS.register("machine_casing", MachineCasing::new);
 
-  public static final RegistrySupplier<FurnaceBlock> IRON_FURNACE;
-  public static final RegistrySupplier<FurnaceBlock> GOLD_FURNACE;
-  public static final RegistrySupplier<FurnaceBlock> DIAMOND_FURNACE;
-  public static final RegistrySupplier<FurnaceBlock> EMERALD_FURNACE;
-  public static final RegistrySupplier<FurnaceBlock> NETHERITE_FURNACE;
+  public static final VarReg<Furnace, Block> FURNACE;
 
-//  public static final RegistrySupplier<SolarPanelBlock> SP1;
-//  public static final RegistrySupplier<SolarPanelBlock> SP2;
-//  public static final RegistrySupplier<SolarPanelBlock> SP3;
-//  public static final RegistrySupplier<SolarPanelBlock> SP4;
-//  public static final RegistrySupplier<SolarPanelBlock> SP5;
-//  public static final RegistrySupplier<SolarPanelBlock> SP6;
-//  public static final RegistrySupplier<SolarPanelBlock> SP7;
-//  public static final RegistrySupplier<SolarPanelBlock> SP8;
-//
   public static final VarReg<SolarPanel, Block> SP;
 
   public static final VarReg<CableTier, Block> ENERGY_CABLE;
   public static final VarReg<CableTier, Block> FLUID_CABLE;
 
-  // Furnaces
-  static {
-    IRON_FURNACE = BLOCKS.register("iron_furnace", () -> new FurnaceBlock(
-      BlockBehaviour.Properties.of().destroyTime(500).requiresCorrectToolForDrops().dynamicShape().noOcclusion(),
-      Furnace.IRON
-    ));
-    GOLD_FURNACE = BLOCKS.register("gold_furnace", () -> new FurnaceBlock(
-      BlockBehaviour.Properties.of().destroyTime(500).requiresCorrectToolForDrops().dynamicShape().noOcclusion(),
-      Furnace.GOLD
-    ));
-    DIAMOND_FURNACE = BLOCKS.register("diamond_furnace", () -> new FurnaceBlock(
-      BlockBehaviour.Properties.of().destroyTime(500).requiresCorrectToolForDrops().dynamicShape().noOcclusion(),
-      Furnace.DIAMOND
-    ));
-    EMERALD_FURNACE = BLOCKS.register("emerald_furnace", () -> new FurnaceBlock(
-      BlockBehaviour.Properties.of().destroyTime(500).requiresCorrectToolForDrops().dynamicShape().noOcclusion(),
-      Furnace.EMERALD
-    ));
-    NETHERITE_FURNACE = BLOCKS.register("netherite_furnace", () -> new FurnaceBlock(
-      BlockBehaviour.Properties.of().destroyTime(500).requiresCorrectToolForDrops().dynamicShape().noOcclusion(),
-      Furnace.NETHERITE
-    ));
-  }
-
-  // Solar Panels
-//  static {
-//    SP1 = BLOCKS.register("sp1", () -> new SolarPanelBlock(
-//      BlockBehaviour.Properties.of().destroyTime(500).requiresCorrectToolForDrops().dynamicShape().noOcclusion(),
-//      SolarPanel.T1
-//    ));
-//    SP2 = BLOCKS.register("sp2", () -> new SolarPanelBlock(
-//      BlockBehaviour.Properties.of().destroyTime(500).requiresCorrectToolForDrops().dynamicShape().noOcclusion(),
-//      SolarPanel.T2
-//    ));
-//    SP3 = BLOCKS.register("sp3", () -> new SolarPanelBlock(
-//      BlockBehaviour.Properties.of().destroyTime(500).requiresCorrectToolForDrops().dynamicShape().noOcclusion(),
-//      SolarPanel.T3
-//    ));
-//    SP4 = BLOCKS.register("sp4", () -> new SolarPanelBlock(
-//      BlockBehaviour.Properties.of().destroyTime(500).requiresCorrectToolForDrops().dynamicShape().noOcclusion(),
-//      SolarPanel.T4
-//    ));
-//    SP5 = BLOCKS.register("sp5", () -> new SolarPanelBlock(
-//      BlockBehaviour.Properties.of().destroyTime(500).requiresCorrectToolForDrops().dynamicShape().noOcclusion(),
-//      SolarPanel.T5
-//    ));
-//    SP6 = BLOCKS.register("sp6", () -> new SolarPanelBlock(
-//      BlockBehaviour.Properties.of().destroyTime(500).requiresCorrectToolForDrops().dynamicShape().noOcclusion(),
-//      SolarPanel.T6
-//    ));
-//    SP7 = BLOCKS.register("sp7", () -> new SolarPanelBlock(
-//      BlockBehaviour.Properties.of().destroyTime(500).requiresCorrectToolForDrops().dynamicShape().noOcclusion(),
-//      SolarPanel.T7
-//    ));
-//    SP8 = BLOCKS.register("sp8", () -> new SolarPanelBlock(
-//      BlockBehaviour.Properties.of().destroyTime(500).requiresCorrectToolForDrops().dynamicShape().noOcclusion(),
-//      SolarPanel.T8
-//    ));
-//  }
-
   // VarReg
   static {
+    // Furnace
+    FURNACE = new VarReg<>(BLOCKS, "furnace", variant -> new FurnaceBlock(
+      commonBlock(550),
+      variant
+    ), Furnace.getNormalVariants());
     // SP
     SP = new VarReg<>(BLOCKS, "sp", variant -> new SolarPanelBlock(
       commonBlock(500),
@@ -134,19 +66,6 @@ public class BlockRegistration {
   }
 
   @Contract(value = " -> new", pure = true)
-//  public static @Unmodifiable List<RegistrySupplier<SolarPanelBlock>> listPanels() {
-//    return List.of(
-//      SP1,
-//      SP2,
-//      SP3,
-//      SP4,
-//      SP5,
-//      SP6,
-//      SP7,
-//      SP8
-//    );
-//  }
-
   public static @Unmodifiable List<SolarPanelBlock> listPanels() {
     return SP.getAll().stream().map(b -> (SolarPanelBlock) b).toList();
   }

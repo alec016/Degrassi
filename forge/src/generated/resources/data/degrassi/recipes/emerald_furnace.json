@@ -6,7 +6,7 @@
       "tag": "forge:gems/emerald"
     },
     "f": {
-      "item": "degrassi:diamond_furnace"
+      "item": "degrassi:furnace_diamond"
     }
   },
   "pattern": [
@@ -15,7 +15,7 @@
     "ddd"
   ],
   "result": {
-    "item": "degrassi:emerald_furnace"
+    "item": "degrassi:furnace_emerald"
   },
   "show_notification": true
 }

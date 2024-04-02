@@ -2,6 +2,7 @@ package es.degrassi.forge.core.data.loot;
 
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.tiers.CableTier;
+import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,25 +20,16 @@ public class BlockLootTables extends BlockLootSubProvider {
   @Override
   public void generate() {
     dropSelf(BlockRegistration.MACHINE_CASING.get());
-    dropSelf(BlockRegistration.IRON_FURNACE.get());
-    dropSelf(BlockRegistration.GOLD_FURNACE.get());
-    dropSelf(BlockRegistration.DIAMOND_FURNACE.get());
-    dropSelf(BlockRegistration.EMERALD_FURNACE.get());
-    dropSelf(BlockRegistration.NETHERITE_FURNACE.get());
-    dropSelf(BlockRegistration.SP.get(SolarPanel.T1));
-    dropSelf(BlockRegistration.SP.get(SolarPanel.T2));
-    dropSelf(BlockRegistration.SP.get(SolarPanel.T3));
-    dropSelf(BlockRegistration.SP.get(SolarPanel.T4));
-    dropSelf(BlockRegistration.SP.get(SolarPanel.T5));
-    dropSelf(BlockRegistration.SP.get(SolarPanel.T6));
-    dropSelf(BlockRegistration.SP.get(SolarPanel.T7));
-    dropSelf(BlockRegistration.SP.get(SolarPanel.T8));
-    dropSelf(BlockRegistration.ENERGY_CABLE.get(CableTier.BASIC));
-    dropSelf(BlockRegistration.ENERGY_CABLE.get(CableTier.ADVANCE));
-    dropSelf(BlockRegistration.ENERGY_CABLE.get(CableTier.EXTREME));
-    dropSelf(BlockRegistration.FLUID_CABLE.get(CableTier.BASIC));
-    dropSelf(BlockRegistration.FLUID_CABLE.get(CableTier.ADVANCE));
-    dropSelf(BlockRegistration.FLUID_CABLE.get(CableTier.EXTREME));
+    for(Furnace tier : Furnace.values()) {
+      dropSelf(BlockRegistration.FURNACE.get(tier));
+    }
+    for (SolarPanel tier : SolarPanel.values()) {
+      dropSelf(BlockRegistration.SP.get(tier));
+    }
+    for (CableTier tier : CableTier.values()) {
+      dropSelf(BlockRegistration.ENERGY_CABLE.get(tier));
+      dropSelf(BlockRegistration.FLUID_CABLE.get(tier));
+    }
   }
 
   @Override

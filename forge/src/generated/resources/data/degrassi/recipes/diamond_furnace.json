@@ -6,7 +6,7 @@
       "tag": "forge:gems/diamond"
     },
     "f": {
-      "item": "degrassi:gold_furnace"
+      "item": "degrassi:furnace_gold"
     }
   },
   "pattern": [
@@ -15,7 +15,7 @@
     "ddd"
   ],
   "result": {
-    "item": "degrassi:diamond_furnace"
+    "item": "degrassi:furnace_diamond"
   },
   "show_notification": true
 }

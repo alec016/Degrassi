@@ -9,10 +9,10 @@
       "tag": "forge:gems/lapis"
     },
     "m": {
-      "item": "degrassi:photovoltaic_cell_1"
+      "item": "degrassi:photovoltaic_cell_i"
     },
     "p": {
-      "item": "degrassi:photovoltaic_cell_2"
+      "item": "degrassi:photovoltaic_cell_ii"
     }
   },
   "pattern": [
@@ -21,7 +21,7 @@
     "mpm"
   ],
   "result": {
-    "item": "degrassi:photovoltaic_cell_3"
+    "item": "degrassi:photovoltaic_cell_iii"
   },
   "show_notification": true
 }

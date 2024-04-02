@@ -1,29 +1,29 @@
 package es.degrassi.forge.core.common.component;
 
 public enum ComponentIOMode {
-  EXTRACT,
-  RECEIVE,
-  ALL,
+  OUTPUT,
+  INPUT,
+  BOTH,
   NONE;
 
-  public boolean extract() {
-    return this == EXTRACT;
+  public boolean output() {
+    return this == OUTPUT;
   }
 
-  public boolean receive() {
-    return this == RECEIVE;
+  public boolean input() {
+    return this == INPUT;
   }
 
-  public boolean receiveWillAll() {
-    return receive() || all();
+  public boolean inputWillAll() {
+    return input() || all();
   }
 
-  public boolean extractWithAll() {
-    return extract() || all();
+  public boolean outputWithAll() {
+    return output() || all();
   }
 
   public boolean all() {
-    return this == ALL;
+    return this == BOTH;
   }
 
   public boolean none() {
@@ -36,10 +36,10 @@ public enum ComponentIOMode {
 
   public static ComponentIOMode deserialize(String value) {
     return switch (value.toLowerCase()) {
-      case "receive" -> RECEIVE;
-      case "extract" -> EXTRACT;
+      case "input" -> INPUT;
+      case "output" -> OUTPUT;
       case "none" -> NONE;
-      default -> ALL;
+      default -> BOTH;
     };
   }
 }

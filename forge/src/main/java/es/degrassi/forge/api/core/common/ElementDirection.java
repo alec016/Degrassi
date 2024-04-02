@@ -1,14 +1,24 @@
 package es.degrassi.forge.api.core.common;
 
 public enum ElementDirection {
-  HORIZONTAL,
-  VERTICAL;
+  LEFT,
+  RIGHT,
+  TOP,
+  BOTTOM;
 
-  public boolean isHorizontal() {
-    return this == HORIZONTAL;
+  public boolean left() {
+    return this == LEFT;
   }
 
-  public boolean isVertical() {
-    return this == VERTICAL;
+  public boolean right() {
+    return this == RIGHT;
+  }
+
+  public boolean top() {
+    return this == TOP;
+  }
+
+  public boolean bottom() {
+    return this == BOTTOM;
   }
 }

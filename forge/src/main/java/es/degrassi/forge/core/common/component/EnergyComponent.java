@@ -14,28 +14,12 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
   private final MachineEntity<?> entity;
   private final String id;
   private ComponentIOMode mode;
-  public EnergyComponent(ComponentManager manager, int capacity, MachineEntity<?> entity, String id) {
-    this(manager, capacity, capacity, entity, id);
-  }
-  public EnergyComponent(ComponentManager manager, int capacity, MachineEntity<?> entity, String id, ComponentIOMode mode) {
-    this(manager, capacity, capacity, entity, id, mode);
-  }
-  public EnergyComponent(ComponentManager manager, int capacity, int transfer, MachineEntity<?> entity, String id) {
-    this(manager, capacity, transfer, transfer, entity, id, ComponentIOMode.ALL);
-  }
-  public EnergyComponent(ComponentManager manager, int capacity, int transfer, MachineEntity<?> entity, String id, ComponentIOMode mode) {
-    this(manager, capacity, transfer, transfer, entity, id, mode);
-  }
-
-  public EnergyComponent(ComponentManager manager, int capacity, int maxInput, int maxOutput, MachineEntity<?> entity, String id) {
-    this(manager, capacity, maxInput, maxOutput, entity, id, ComponentIOMode.ALL);
-  }
 
   public EnergyComponent(ComponentManager manager, int capacity, int maxInput, int maxOutput, MachineEntity<?> entity, String id, ComponentIOMode mode) {
     this.manager = manager;
     this.capacity = capacity;
-    this.maxInput = mode.receiveWillAll() ? Math.min(capacity, maxInput) : 0;
-    this.maxOutput = mode.extractWithAll() ? Math.min(capacity, maxOutput) : 0;
+    this.maxInput = Math.min(capacity, maxInput);
+    this.maxOutput = Math.min(capacity, maxOutput);
     this.entity = entity;
     this.id = id;
     this.mode = mode;
@@ -93,7 +77,6 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
 
   @Override
   public int receiveEnergy(int energy, boolean simulate) {
-    if (mode.extract()) return 0;
     int toReceive = Math.min(this.capacity - this.energy, Math.min(energy, maxInput));
     if (!simulate) {
       this.energy += toReceive;
@@ -104,7 +87,6 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
 
   @Override
   public int extractEnergy(int energy, boolean simulate) {
-    if (mode.receive()) return 0;
     int toExtract = Math.min(this.energy, Math.min(energy, this.maxOutput));
     if (!simulate) {
       this.energy -= toExtract;
@@ -125,12 +107,12 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
 
   @Override
   public boolean canExtract() {
-    return maxOutput > 0 && mode.extractWithAll();
+    return maxOutput > 0;
   }
 
   @Override
   public boolean canReceive() {
-    return maxInput > 0 && mode.receiveWillAll();
+    return maxInput > 0;
   }
 
   public String getId() {
@@ -146,11 +128,11 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
   }
 
   public int getMaxInput() {
-    return mode.receiveWillAll() ? maxInput : 0;
+    return maxInput;
   }
 
   public int getMaxOutput() {
-    return mode.extractWithAll() ? maxOutput : 0;
+    return maxOutput;
   }
 
   public void setMaxInput(int maxInput) {
@@ -159,6 +141,39 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
 
   public void setMaxOutput(int maxOutput) {
     this.maxOutput = maxOutput;
+  }
+
+  public EnergyComponent setCapacity(int capacity) {
+    if (this.capacity != capacity)
+      this.capacity = capacity;
+    return this;
+  }
+
+  public EnergyComponent setTransfer(int energyTransfer) {
+    setMaxInput(energyTransfer);
+    setMaxOutput(energyTransfer);
+    return this;
+  }
+
+  // recipe stuff
+  public int receiveRecipeEnergy(int energy, boolean simulate) {
+    if (mode.input()) return 0;
+    int toReceive = Math.min(this.capacity - this.energy, Math.min(energy, maxInput));
+    if (!simulate) {
+      this.energy += toReceive;
+    }
+    markDirty();
+    return toReceive;
+  }
+
+  public int extractRecipeEnergy(int energy, boolean simulate) {
+    if (mode.output()) return 0;
+    int toExtract = Math.min(this.energy, Math.min(energy, this.maxOutput));
+    if (!simulate) {
+      this.energy -= toExtract;
+    }
+    markDirty();
+    return toExtract;
   }
 
   @Override
@@ -170,17 +185,5 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
       ", maxOutput=" + maxOutput +
       ", id='" + id + '\'' +
       '}';
-  }
-
-  public EnergyComponent setCapacity(int capacity) {
-    if (this.capacity != capacity)
-      this.capacity = capacity;
-    return this;
-  }
-
-  public EnergyComponent setTransfer(int energyTransfer) {
-    if (mode.receiveWillAll()) setMaxInput(energyTransfer);
-    if (mode.extractWithAll()) setMaxOutput(energyTransfer);
-    return this;
   }
 }

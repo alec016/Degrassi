@@ -4,6 +4,8 @@ import es.degrassi.forge.core.data.DegrassiLangProvider;
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.ItemRegistration;
 import es.degrassi.forge.core.tiers.CableTier;
+import es.degrassi.forge.core.tiers.Furnace;
+import es.degrassi.forge.core.tiers.PhotovoltaicCell;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import net.minecraft.data.PackOutput;
 
@@ -19,24 +21,27 @@ public class EN extends DegrassiLangProvider {
     addItem(ItemRegistration.BOOK, "Degrassi Manual");
     addItem(ItemRegistration.RED_MATTER, "Red Matter");
     addItem(ItemRegistration.BLACK_PEARL, "Black Pearl");
-    addItem(ItemRegistration.PHOTOVOLTAIC_CELL_I, "Photovoltaic Cell I");
-    addItem(ItemRegistration.PHOTOVOLTAIC_CELL_II, "Photovoltaic Cell II");
-    addItem(ItemRegistration.PHOTOVOLTAIC_CELL_III, "Photovoltaic Cell III");
-    addItem(ItemRegistration.PHOTOVOLTAIC_CELL_IV, "Photovoltaic Cell IV");
-    addItem(ItemRegistration.PHOTOVOLTAIC_CELL_V, "Photovoltaic Cell V");
-    addItem(ItemRegistration.PHOTOVOLTAIC_CELL_VI, "Photovoltaic Cell VI");
-    addItem(ItemRegistration.PHOTOVOLTAIC_CELL_VII, "Photovoltaic Cell VII");
-    addItem(ItemRegistration.PHOTOVOLTAIC_CELL_VIII, "Photovoltaic Cell VIII");
+
+    addItem(() -> ItemRegistration.PHOTOVOLTAIC_CELL.get(PhotovoltaicCell.I), "Photovoltaic Cell I");
+    addItem(() -> ItemRegistration.PHOTOVOLTAIC_CELL.get(PhotovoltaicCell.II), "Photovoltaic Cell II");
+    addItem(() -> ItemRegistration.PHOTOVOLTAIC_CELL.get(PhotovoltaicCell.III), "Photovoltaic Cell III");
+    addItem(() -> ItemRegistration.PHOTOVOLTAIC_CELL.get(PhotovoltaicCell.IV), "Photovoltaic Cell IV");
+    addItem(() -> ItemRegistration.PHOTOVOLTAIC_CELL.get(PhotovoltaicCell.V), "Photovoltaic Cell V");
+    addItem(() -> ItemRegistration.PHOTOVOLTAIC_CELL.get(PhotovoltaicCell.VI), "Photovoltaic Cell VI");
+    addItem(() -> ItemRegistration.PHOTOVOLTAIC_CELL.get(PhotovoltaicCell.VII), "Photovoltaic Cell VII");
+    addItem(() -> ItemRegistration.PHOTOVOLTAIC_CELL.get(PhotovoltaicCell.VIII), "Photovoltaic Cell VIII");
   }
 
   @Override
   protected void addBlocks() {
     addBlock(BlockRegistration.MACHINE_CASING, "Machine Casing");
-    addBlock(BlockRegistration.IRON_FURNACE, "Iron Furnace");
-    addBlock(BlockRegistration.GOLD_FURNACE, "Gold Furnace");
-    addBlock(BlockRegistration.DIAMOND_FURNACE, "Diamond Furnace");
-    addBlock(BlockRegistration.EMERALD_FURNACE, "Emerald Furnace");
-    addBlock(BlockRegistration.NETHERITE_FURNACE, "Netherite Furnace");
+
+    addBlock(() -> BlockRegistration.FURNACE.get(Furnace.IRON), "Iron Furnace");
+    addBlock(() -> BlockRegistration.FURNACE.get(Furnace.GOLD), "Gold Furnace");
+    addBlock(() -> BlockRegistration.FURNACE.get(Furnace.DIAMOND), "Diamond Furnace");
+    addBlock(() -> BlockRegistration.FURNACE.get(Furnace.EMERALD), "Emerald Furnace");
+    addBlock(() -> BlockRegistration.FURNACE.get(Furnace.NETHERITE), "Netherite Furnace");
+
     addBlock(() -> BlockRegistration.SP.get(SolarPanel.T1), "Solar Panel I");
     addBlock(() -> BlockRegistration.SP.get(SolarPanel.T2), "Solar Panel II");
     addBlock(() -> BlockRegistration.SP.get(SolarPanel.T3), "Solar Panel III");
@@ -92,8 +97,10 @@ public class EN extends DegrassiLangProvider {
     addInfo("on", "On");
     addInfo("off", "Off");
     addInfo("ignore", "Ignore");
-    addInfo("capacity", "Capacity");
+    addInfo("capacity.energy", "Energy Capacity");
+    addInfo("capacity.xp", "Experience Capacity");
     addInfo("fe", "%s FE");
+    addInfo("xp", "%s XP");
     addInfo("mb", "%s mB");
     addInfo("max.io", "Max I/O");
     addInfo("fe.per.tick", "%s FE/t");

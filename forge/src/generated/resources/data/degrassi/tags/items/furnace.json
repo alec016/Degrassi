@@ -1,9 +1,9 @@
 {
   "values": [
-    "degrassi:iron_furnace",
-    "degrassi:gold_furnace",
-    "degrassi:diamond_furnace",
-    "degrassi:emerald_furnace",
-    "degrassi:netherite_furnace"
+    "degrassi:furnace_iron",
+    "degrassi:furnace_gold",
+    "degrassi:furnace_diamond",
+    "degrassi:furnace_emerald",
+    "degrassi:furnace_netherite"
   ]
 }

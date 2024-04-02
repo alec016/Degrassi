@@ -11,12 +11,12 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "has_gold_furnace": {
+    "has_furnace_gold": {
       "conditions": {
         "items": [
           {
             "items": [
-              "degrassi:gold_furnace"
+              "degrassi:furnace_gold"
             ]
           }
         ]
@@ -32,7 +32,7 @@
   },
   "requirements": [
     [
-      "has_gold_furnace",
+      "has_furnace_gold",
       "diamond",
       "has_the_recipe"
     ]

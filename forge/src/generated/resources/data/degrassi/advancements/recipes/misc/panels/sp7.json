@@ -13,12 +13,12 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "has_photovoltaic_cell_7": {
+    "has_photovoltaic_cell_vii": {
       "conditions": {
         "items": [
           {
             "items": [
-              "degrassi:photovoltaic_cell_7"
+              "degrassi:photovoltaic_cell_vii"
             ]
           }
         ]
@@ -46,7 +46,7 @@
   },
   "requirements": [
     [
-      "has_photovoltaic_cell_7",
+      "has_photovoltaic_cell_vii",
       "has_sp_t6",
       "has_black_pearl",
       "has_the_recipe"

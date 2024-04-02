@@ -4,7 +4,6 @@ import es.degrassi.common.registry.IVariant;
 import java.util.Locale;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public enum SolarPanel implements IVariant<SolarPanel> {
   T1(
@@ -85,15 +84,16 @@ public enum SolarPanel implements IVariant<SolarPanel> {
     return name().toLowerCase(Locale.ROOT);
   }
 
-  public static @Nullable SolarPanel value (@NotNull String tier) {
-    if (tier.equalsIgnoreCase("t1")) return T1;
-    if (tier.equalsIgnoreCase("t2")) return T2;
-    if (tier.equalsIgnoreCase("t3")) return T3;
-    if (tier.equalsIgnoreCase("t4")) return T4;
-    if (tier.equalsIgnoreCase("t5")) return T5;
-    if (tier.equalsIgnoreCase("t6")) return T6;
-    if (tier.equalsIgnoreCase("t7")) return T7;
-    if (tier.equalsIgnoreCase("t8")) return T8;
-    return null;
+  public static SolarPanel value (@NotNull String tier) {
+    return switch (tier.toLowerCase()) {
+      case "t8" -> T8;
+      case "t7" -> T7;
+      case "t6" -> T6;
+      case "t5" -> T5;
+      case "t4" -> T4;
+      case "t3" -> T3;
+      case "t2" -> T2;
+      default -> T1;
+    };
   }
 }

@@ -1,6 +1,5 @@
 package es.degrassi.forge;
 
-import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.platform.forge.EventBuses;
 import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
 import dev.architectury.utils.Env;
@@ -17,6 +16,8 @@ import es.degrassi.forge.core.init.EntityRegistration;
 import es.degrassi.forge.core.init.ItemRegistration;
 import es.degrassi.forge.core.init.Registration;
 import es.degrassi.forge.core.tiers.CableTier;
+import es.degrassi.forge.core.tiers.Furnace;
+import es.degrassi.forge.core.tiers.PhotovoltaicCell;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.registries.Registries;
@@ -45,26 +46,26 @@ public class DegrassiForge {
   public static final ResourceKey<CreativeModeTab> ITEMS = ResourceKey.create(Registries.CREATIVE_MODE_TAB, new DegrassiLocation("items"));
 
   public DegrassiForge() {
-    EventBuses.registerModEventBus(Degrassi.MODID, FMLJavaModLoadingContext.get().getModEventBus());
+    IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+    EventBuses.registerModEventBus(Degrassi.MODID, bus);
 
     Degrassi.init();
-    IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
     Registration.register(bus);
 
-    EnvExecutor.runInEnv(Env.CLIENT, () -> DegrassiForge::clientInit);
+    EnvExecutor.runInEnv(Env.CLIENT, () -> () -> clientInit(bus));
 
     MinecraftForge.EVENT_BUS.register(DegrassiForge.class);
     ResourcePackAdapter.registerResourcePack(DegrassiResourcePack.getPackInstance());
   }
 
-  public static void clientInit() {
-    LifecycleEvent.SETUP.register(ContainerRegistration::registerScreens);
+  public static void clientInit(IEventBus bus) {
     DegrassiLayerDefinition.register();
+    bus.addListener(DegrassiForge::clientSetup);
   }
 
-  @SubscribeEvent
   public static void clientSetup (FMLClientSetupEvent event) {
+    event.enqueueWork(ContainerRegistration::registerScreens);
     event.enqueueWork(DegrassiForge::registerRenderers);
   }
 
@@ -97,11 +98,9 @@ public class DegrassiForge {
       helper.register(MACHINES, CreativeModeTab.builder().title(Component.translatable("degrassi.tabs.machines")).displayItems(
         (params, output) -> {
           output.accept(new ItemStack(BlockRegistration.MACHINE_CASING.get()));
-          output.accept(new ItemStack(BlockRegistration.IRON_FURNACE.get()));
-          output.accept(new ItemStack(BlockRegistration.GOLD_FURNACE.get()));
-          output.accept(new ItemStack(BlockRegistration.DIAMOND_FURNACE.get()));
-          output.accept(new ItemStack(BlockRegistration.EMERALD_FURNACE.get()));
-          output.accept(new ItemStack(BlockRegistration.NETHERITE_FURNACE.get()));
+          for (Furnace tier : Furnace.values()) {
+            output.accept(new ItemStack(BlockRegistration.FURNACE.get(tier)));
+          }
           for (SolarPanel tier : SolarPanel.values()) {
             output.accept(new ItemStack(BlockRegistration.SP.get(tier)));
           }
@@ -112,14 +111,9 @@ public class DegrassiForge {
           output.accept(new ItemStack(ItemRegistration.BOOK.get()));
           output.accept(new ItemStack(ItemRegistration.RED_MATTER.get()));
           output.accept(new ItemStack(ItemRegistration.BLACK_PEARL.get()));
-          output.accept(new ItemStack(ItemRegistration.PHOTOVOLTAIC_CELL_I.get()));
-          output.accept(new ItemStack(ItemRegistration.PHOTOVOLTAIC_CELL_II.get()));
-          output.accept(new ItemStack(ItemRegistration.PHOTOVOLTAIC_CELL_III.get()));
-          output.accept(new ItemStack(ItemRegistration.PHOTOVOLTAIC_CELL_IV.get()));
-          output.accept(new ItemStack(ItemRegistration.PHOTOVOLTAIC_CELL_V.get()));
-          output.accept(new ItemStack(ItemRegistration.PHOTOVOLTAIC_CELL_VI.get()));
-          output.accept(new ItemStack(ItemRegistration.PHOTOVOLTAIC_CELL_VII.get()));
-          output.accept(new ItemStack(ItemRegistration.PHOTOVOLTAIC_CELL_VIII.get()));
+          for (PhotovoltaicCell cell : PhotovoltaicCell.values()) {
+            output.accept(new ItemStack(ItemRegistration.PHOTOVOLTAIC_CELL.get(cell)));
+          }
           for (CableTier tier : CableTier.values()) {
             output.accept(new ItemStack(BlockRegistration.ENERGY_CABLE.get(tier)));
             output.accept(new ItemStack(BlockRegistration.FLUID_CABLE.get(tier)));
@@ -135,11 +129,9 @@ public class DegrassiForge {
     var vis = CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS;
     if (event.getTabKey() == MACHINES) {
       entries.put(new ItemStack(ItemRegistration.MACHINE_CASING.get()), vis);
-      entries.put(new ItemStack(ItemRegistration.IRON_FURNACE.get()), vis);
-      entries.put(new ItemStack(ItemRegistration.GOLD_FURNACE.get()), vis);
-      entries.put(new ItemStack(ItemRegistration.DIAMOND_FURNACE.get()), vis);
-      entries.put(new ItemStack(ItemRegistration.EMERALD_FURNACE.get()), vis);
-      entries.put(new ItemStack(ItemRegistration.NETHERITE_FURNACE.get()), vis);
+      for (Furnace tier : Furnace.values()) {
+        entries.put(new ItemStack(BlockRegistration.FURNACE.get(tier)), vis);
+      }
       for (SolarPanel tier : SolarPanel.values()) {
         entries.put(new ItemStack(BlockRegistration.SP.get(tier)), vis);
       }
@@ -148,14 +140,9 @@ public class DegrassiForge {
       entries.put(new ItemStack(ItemRegistration.BOOK.get()), vis);
       entries.put(new ItemStack(ItemRegistration.RED_MATTER.get()), vis);
       entries.put(new ItemStack(ItemRegistration.BLACK_PEARL.get()), vis);
-      entries.put(new ItemStack(ItemRegistration.PHOTOVOLTAIC_CELL_I.get()), vis);
-      entries.put(new ItemStack(ItemRegistration.PHOTOVOLTAIC_CELL_II.get()), vis);
-      entries.put(new ItemStack(ItemRegistration.PHOTOVOLTAIC_CELL_III.get()), vis);
-      entries.put(new ItemStack(ItemRegistration.PHOTOVOLTAIC_CELL_IV.get()), vis);
-      entries.put(new ItemStack(ItemRegistration.PHOTOVOLTAIC_CELL_V.get()), vis);
-      entries.put(new ItemStack(ItemRegistration.PHOTOVOLTAIC_CELL_VI.get()), vis);
-      entries.put(new ItemStack(ItemRegistration.PHOTOVOLTAIC_CELL_VII.get()), vis);
-      entries.put(new ItemStack(ItemRegistration.PHOTOVOLTAIC_CELL_VIII.get()), vis);
+      for (PhotovoltaicCell cell : PhotovoltaicCell.values()) {
+        entries.put(new ItemStack(ItemRegistration.PHOTOVOLTAIC_CELL.get(cell)), vis);
+      }
       for (CableTier tier : CableTier.values()) {
         entries.put(new ItemStack(BlockRegistration.ENERGY_CABLE.get(tier)), vis);
         entries.put(new ItemStack(BlockRegistration.FLUID_CABLE.get(tier)), vis);

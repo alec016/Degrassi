@@ -5,22 +5,25 @@ import es.degrassi.forge.api.core.common.ElementDirection;
 import es.degrassi.forge.core.common.component.ComponentIOMode;
 import es.degrassi.forge.core.common.processor.FurnaceProcessor;
 import es.degrassi.forge.core.common.recipe.FurnaceRecipe;
+import es.degrassi.forge.core.init.EntityRegistration;
 import es.degrassi.forge.core.tiers.Furnace;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 public class FurnaceEntity extends MachineEntity<FurnaceRecipe> {
-  private final Furnace tier;
+  private Furnace tier;
   public FurnaceEntity(BlockPos pos, BlockState blockState, Furnace tier) {
-    super(tier.getType().get(), pos, blockState);
+    super(EntityRegistration.FURNACE.get(), pos, blockState);
 
     this.getComponentManager()
-      .addEnergy(tier.getEnergyCapacity(), "energy")
-      .addItem("upgrade1", true)
-      .addItem("upgrade2", true)
-      .addItem("input")
-      .addItem("output")
+      .addEnergy(tier.getEnergyCapacity(), "energy", ComponentIOMode.INPUT)
+      .addItem("upgrade1", true, ComponentIOMode.INPUT)
+      .addItem("upgrade2", true, ComponentIOMode.INPUT)
+      .addItem("input", ComponentIOMode.INPUT)
+      .addItem("output", ComponentIOMode.OUTPUT)
       .addExperience(tier.getExperienceCapacity(), "experience")
       .addProgress();
 
@@ -32,7 +35,7 @@ public class FurnaceEntity extends MachineEntity<FurnaceRecipe> {
         new DegrassiLocation("textures/gui/furnace_energy_empty.png"),
         new DegrassiLocation("textures/gui/furnace_energy_storage_filled.png"),
         "energy",
-        ElementDirection.HORIZONTAL
+        ElementDirection.RIGHT
       ).addItem(
         7,
         24,
@@ -81,12 +84,24 @@ public class FurnaceEntity extends MachineEntity<FurnaceRecipe> {
     this.processor = new FurnaceProcessor(this);
   }
 
+  @Override
+  protected void saveAdditional(@NotNull CompoundTag tag) {
+    super.saveAdditional(tag);
+    tag.putString("tier", tier.name().toLowerCase());
+  }
+
+  @Override
+  public void load(@NotNull CompoundTag tag) {
+    super.load(tag);
+    this.tier = Furnace.value(tag.getString("tier"));
+  }
+
   public Furnace getTier() {
     return tier;
   }
 
   @Override
   public Component getName() {
-    return getTier().getName();
+    return getTier().getTranslation();
   }
 }

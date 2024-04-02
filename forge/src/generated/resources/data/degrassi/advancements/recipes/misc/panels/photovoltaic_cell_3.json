@@ -13,24 +13,24 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "has_photovoltaic_cell_1": {
+    "has_photovoltaic_cell_i": {
       "conditions": {
         "items": [
           {
             "items": [
-              "degrassi:photovoltaic_cell_1"
+              "degrassi:photovoltaic_cell_i"
             ]
           }
         ]
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "has_photovoltaic_cell_2": {
+    "has_photovoltaic_cell_ii": {
       "conditions": {
         "items": [
           {
             "items": [
-              "degrassi:photovoltaic_cell_2"
+              "degrassi:photovoltaic_cell_ii"
             ]
           }
         ]
@@ -56,10 +56,10 @@
   },
   "requirements": [
     [
-      "has_photovoltaic_cell_2",
+      "has_photovoltaic_cell_ii",
       "lapis",
       "has_clay_ball",
-      "has_photovoltaic_cell_1",
+      "has_photovoltaic_cell_i",
       "has_the_recipe"
     ]
   ],

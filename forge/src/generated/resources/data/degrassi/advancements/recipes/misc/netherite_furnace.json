@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_emerald_furnace": {
+    "has_furnace_emerald": {
       "conditions": {
         "items": [
           {
             "items": [
-              "degrassi:emerald_furnace"
+              "degrassi:furnace_emerald"
             ]
           }
         ]
@@ -32,7 +32,7 @@
   },
   "requirements": [
     [
-      "has_emerald_furnace",
+      "has_furnace_emerald",
       "netherite",
       "has_the_recipe"
     ]

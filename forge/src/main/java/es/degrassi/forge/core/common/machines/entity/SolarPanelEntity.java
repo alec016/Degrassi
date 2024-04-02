@@ -2,13 +2,13 @@ package es.degrassi.forge.core.common.machines.entity;
 
 import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.api.core.common.ElementDirection;
-import es.degrassi.forge.core.common.component.ComponentIOMode;
 import es.degrassi.forge.core.common.machines.block.SolarPanelBlock;
 import es.degrassi.forge.core.common.recipe.SolarPanelRecipe;
 import es.degrassi.forge.core.init.EntityRegistration;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import java.util.Objects;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -28,22 +28,30 @@ public class SolarPanelEntity extends MachineEntity<SolarPanelRecipe> {
     super(EntityRegistration.SP.get(), pos, blockState);
 
     this.getComponentManager()
-      .addEnergy(tier.getEnergyCapacity(), "energy", ComponentIOMode.EXTRACT);
+      .addEnergy(tier.getEnergyCapacity(), "energy")
+      .addBar(100.0, "efficiency");
 
     this.getElementManager()
-      .addEnergy(
-        7,
-        72,
-        Component.literal("energy"),
-        new DegrassiLocation("textures/gui/furnace_energy_empty.png"),
-        new DegrassiLocation("textures/gui/panel_energy_storage_filled.png"),
-        "energy",
-        ElementDirection.VERTICAL
-      ).addPlayerInventory(
+      .addPlayerInventory(
         7,
         97,
         Component.literal("player_inventory"),
         new DegrassiLocation("textures/gui/base_inventory.png")
+      ).addEnergy(
+        25,
+        20,
+        Component.literal("energy"),
+        new DegrassiLocation("textures/gui/panel_energy_empty.png"),
+        new DegrassiLocation("textures/gui/panel_energy_filled.png"),
+        "energy"
+      ).addBar(
+        43,
+        20,
+        Component.literal("efficiency"),
+        new DegrassiLocation("textures/gui/panel_efficiency_empty.png"),
+        new DegrassiLocation("textures/gui/panel_efficiency_filled.png"),
+        "efficiency",
+        ElementDirection.TOP
       );
 
     this.tier = tier;
@@ -98,5 +106,19 @@ public class SolarPanelEntity extends MachineEntity<SolarPanelRecipe> {
 
   public void resetVoxelShape() {
     shape = null;
+  }
+
+
+
+  @Override
+  protected void saveAdditional(@NotNull CompoundTag tag) {
+    super.saveAdditional(tag);
+    tag.putString("tier", tier.name().toLowerCase());
+  }
+
+  @Override
+  public void load(@NotNull CompoundTag tag) {
+    super.load(tag);
+    tier = SolarPanel.value(tag.getString("tier"));
   }
 }

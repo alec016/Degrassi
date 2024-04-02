@@ -44,11 +44,11 @@ public class FluidComponent extends FluidTank implements IComponent {
 
   @Override
   public boolean isFluidValid(FluidStack stack) {
-    return filter.stream().filter(fluid -> mode.receive() && fluid.isSame(stack.getFluid())).findFirst().map(i -> mode.receive() && whitelist).orElse(mode.receive() && (stack.isFluidEqual(getFluid()) || fluid.isEmpty()));
+    return filter.stream().filter(fluid -> fluid.isSame(stack.getFluid())).findFirst().map(i -> whitelist).orElse(stack.isFluidEqual(getFluid()) || fluid.isEmpty());
   }
 
   @Override
-  public IManager<IComponent> getManager() {
+  public ComponentManager getManager() {
     return manager;
   }
 
@@ -95,19 +95,32 @@ public class FluidComponent extends FluidTank implements IComponent {
 
   @Override
   public int fill(FluidStack resource, FluidAction action) {
-    if (mode.extract()) return 0;
     return super.fill(resource, action);
   }
 
   @Override
   public @NotNull FluidStack drain(int maxDrain, FluidAction action) {
-    if (mode.receive()) return FluidStack.EMPTY;
     return super.drain(maxDrain, action);
   }
 
   @Override
   public @NotNull FluidStack drain(FluidStack resource, FluidAction action) {
-    if (mode.receive()) return FluidStack.EMPTY;
+    return super.drain(resource, action);
+  }
+
+  // recipe stuff
+  public int fillRecipe(FluidStack resource, FluidAction action) {
+    if (mode.input()) return 0;
+    return super.fill(resource, action);
+  }
+
+  public @NotNull FluidStack drainRecipe(int maxDrain, FluidAction action) {
+    if (mode.output()) return FluidStack.EMPTY;
+    return super.drain(maxDrain, action);
+  }
+
+  public @NotNull FluidStack drainRecipe(FluidStack resource, FluidAction action) {
+    if (mode.output()) return FluidStack.EMPTY;
     return super.drain(resource, action);
   }
 }

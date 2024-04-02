@@ -3,9 +3,7 @@ package es.degrassi.forge.core.common.machines.item;
 import es.degrassi.common.registry.IVariantEntry;
 import static es.degrassi.forge.api.utils.Utils.addCommas;
 import es.degrassi.forge.core.common.cables.ItemModelType;
-import es.degrassi.forge.core.common.cables.fluid.FluidCableBlock;
 import es.degrassi.forge.core.common.machines.block.SolarPanelBlock;
-import es.degrassi.forge.core.tiers.CableTier;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import es.degrassi.forge.lib.client.wiki.page.panel.InfoBox;
 import net.minecraft.network.chat.Component;
@@ -39,7 +37,7 @@ public class SolarPanelItem extends BlockItem implements IVariantEntry<SolarPane
   }
   @Override
   public InfoBox getInfoBox(ItemStack stack, InfoBox box) {
-    box.set(Component.translatable("info.degrassi.capacity"),
+    box.set(Component.translatable("info.degrassi.capacity.energy"),
       Component.translatable("info.degrassi.fe", addCommas(getBlock().getTier().getEnergyCapacity())));
     box.set(Component.translatable("info.degrassi.max.io"),
       Component.translatable("info.degrassi.fe.per.tick", addCommas(getBlock().getTier().getEnergyCapacity())));

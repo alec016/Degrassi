@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_photovoltaic_cell_2": {
+    "has_photovoltaic_cell_ii": {
       "conditions": {
         "items": [
           {
             "items": [
-              "degrassi:photovoltaic_cell_2"
+              "degrassi:photovoltaic_cell_ii"
             ]
           }
         ]
@@ -45,7 +45,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:pistsons"
+            "tag": "forge:pistons"
           }
         ]
       },
@@ -54,7 +54,7 @@
   },
   "requirements": [
     [
-      "has_photovoltaic_cell_2",
+      "has_photovoltaic_cell_ii",
       "has_sp_t1",
       "iron_block",
       "pistons",

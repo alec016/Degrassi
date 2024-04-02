@@ -45,7 +45,7 @@ public class FluidElement extends AbstractWidget implements IElement<FluidCompon
   }
 
   @Override
-  public IManager<IElement<?>> getManager() {
+  public ElementManager getManager() {
     return manager;
   }
 

@@ -2,6 +2,7 @@ package es.degrassi.forge.core.common;
 
 import es.degrassi.forge.api.core.common.ElementDirection;
 import es.degrassi.forge.api.core.common.IElement;
+import es.degrassi.forge.core.common.element.BarElement;
 import es.degrassi.forge.core.common.element.EnergyElement;
 import es.degrassi.forge.core.common.element.ExperienceElement;
 import es.degrassi.forge.core.common.element.FluidElement;
@@ -32,7 +33,7 @@ public final class ElementManager extends Manager<IElement<?>> implements INBTSe
   }
 
   public ElementManager addEnergy(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id) {
-    get().add(new EnergyElement(this, x, y, message, emptyTexture, filledTexture, id, ElementDirection.VERTICAL));
+    get().add(new EnergyElement(this, x, y, message, emptyTexture, filledTexture, id, ElementDirection.TOP));
     return this;
   }
 
@@ -52,11 +53,11 @@ public final class ElementManager extends Manager<IElement<?>> implements INBTSe
   }
 
   public ElementManager addExperience(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id) {
-    return addExperience(x, y, message, emptyTexture, filledTexture, id, ElementDirection.HORIZONTAL);
+    return addExperience(x, y, message, emptyTexture, filledTexture, id, ElementDirection.RIGHT);
   }
 
   public ElementManager addProgress(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture) {
-    return addProgress(x, y, message, emptyTexture, filledTexture, ElementDirection.HORIZONTAL);
+    return addProgress(x, y, message, emptyTexture, filledTexture, ElementDirection.RIGHT);
   }
 
   public ElementManager addProgress(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, ElementDirection direction) {
@@ -67,6 +68,15 @@ public final class ElementManager extends Manager<IElement<?>> implements INBTSe
   public ElementManager addFluid(int x, int y, Component message, ResourceLocation texture, String id) {
     get().add(new FluidElement(this, x, y, texture, message, id));
     return this;
+  }
+
+  public ElementManager addBar(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id, ElementDirection direction) {
+    get().add(new BarElement(this, x, y, emptyTexture, filledTexture, message, id, direction));
+    return this;
+  }
+
+  public ElementManager addBar(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id) {
+    return addBar(x, y, message, emptyTexture, filledTexture, id, ElementDirection.RIGHT);
   }
 
   public Optional<IElement<?>> getElement(String id) {

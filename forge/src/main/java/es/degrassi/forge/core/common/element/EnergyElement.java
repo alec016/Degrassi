@@ -16,6 +16,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import oshi.util.tuples.Pair;
 
 public class EnergyElement extends AbstractWidget implements IElement<EnergyComponent> {
   private ResourceLocation emptyTexture, filledTexture;
@@ -47,9 +48,11 @@ public class EnergyElement extends AbstractWidget implements IElement<EnergyComp
     renderTexture(guiGraphics, emptyTexture, getX(), getY(), 0, 0, 0, getWidth(), getHeight(), getWidth(), getHeight());
     float filledPercentage = (component.getEnergyStored()) * 1F / (component.getMaxEnergyStored() * 1F);
     int textureWidth = TextureSizeHelper.getTextureWidth(filledTexture), textureHeight = TextureSizeHelper.getTextureHeight(filledTexture);
-    int width = direction.isHorizontal() ? (int) (textureWidth * filledPercentage) : textureWidth;
-    int height = direction.isVertical() ? (int) (textureHeight * filledPercentage) : textureHeight;
-    renderTexture(guiGraphics, filledTexture, getX(), getY(), 0, 0, 0, width, height, textureWidth, textureHeight);
+    Pair<Integer, Integer> widthHeight = getWidthHeight(textureWidth, textureHeight, filledPercentage);
+    Pair<Integer, Integer> xyOffset = getXYOffset(textureWidth, textureHeight, filledPercentage);
+    int width = widthHeight.getA(), height = widthHeight.getB();
+    int xOffset = xyOffset.getA(), yOffset = xyOffset.getB();
+    renderTexture(guiGraphics, filledTexture, getX() + xOffset, getY() + yOffset, xOffset, yOffset, 0, width, height, textureWidth, textureHeight);
   }
 
   @Override
@@ -110,6 +113,10 @@ public class EnergyElement extends AbstractWidget implements IElement<EnergyComp
 
   public String getId() {
     return id;
+  }
+
+  public ElementDirection getDirection() {
+    return direction;
   }
 
   @Override

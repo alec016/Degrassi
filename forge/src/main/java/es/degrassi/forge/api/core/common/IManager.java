@@ -9,5 +9,5 @@ public interface IManager<T extends IType> {
   List<T> get();
   void add(T value);
 
-  MachineEntity getEntity();
+  MachineEntity<?> getEntity();
 }

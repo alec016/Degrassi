@@ -16,6 +16,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import oshi.util.tuples.Pair;
 
 public class ExperienceElement extends AbstractWidget implements IElement<ExperienceComponent> {
   private final ElementManager manager;
@@ -52,10 +53,11 @@ public class ExperienceElement extends AbstractWidget implements IElement<Experi
     renderTexture(guiGraphics, emptyTexture, getX(), getY(), 0, 0, 0, getWidth(), getHeight(), getWidth(), getHeight());
     float filledPercentage = component.getExperienceStored() / component.getCapacity();
     int textureWidth = TextureSizeHelper.getTextureWidth(filledTexture), textureHeight = TextureSizeHelper.getTextureHeight(filledTexture);
-    int width = direction.isHorizontal() ? (int) (textureWidth * filledPercentage) : textureWidth;
-    int height = direction.isVertical() ? (int) (textureHeight * filledPercentage) : textureHeight;
-    renderTexture(guiGraphics, filledTexture, getX(), getY(), 0, 0, 0, width, height, textureWidth, textureHeight);
-
+    Pair<Integer, Integer> widthHeight = getWidthHeight(textureWidth, textureHeight, filledPercentage);
+    Pair<Integer, Integer> xyOffset = getXYOffset(textureWidth, textureHeight, filledPercentage);
+    int width = widthHeight.getA(), height = widthHeight.getB();
+    int xOffset = xyOffset.getA(), yOffset = xyOffset.getB();
+    renderTexture(guiGraphics, filledTexture, getX() + xOffset, getY() + yOffset, xOffset, yOffset, 0, width, height, textureWidth, textureHeight);
   }
 
   @Override
@@ -97,6 +99,11 @@ public class ExperienceElement extends AbstractWidget implements IElement<Experi
   @Override
   public String getId() {
     return id;
+  }
+
+  @Override
+  public ElementDirection getDirection() {
+    return direction;
   }
 
   @Override

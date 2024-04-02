@@ -15,7 +15,7 @@
       "tag": "forge:obsidian"
     },
     "p": {
-      "item": "degrassi:photovoltaic_cell_4"
+      "item": "degrassi:photovoltaic_cell_iv"
     }
   },
   "pattern": [
@@ -24,7 +24,7 @@
     "mpm"
   ],
   "result": {
-    "item": "degrassi:photovoltaic_cell_5"
+    "item": "degrassi:photovoltaic_cell_v"
   },
   "show_notification": true
 }

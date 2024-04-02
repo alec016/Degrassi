@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_photovoltaic_cell_3": {
+    "has_photovoltaic_cell_iii": {
       "conditions": {
         "items": [
           {
             "items": [
-              "degrassi:photovoltaic_cell_3"
+              "degrassi:photovoltaic_cell_iii"
             ]
           }
         ]
@@ -56,7 +56,7 @@
   },
   "requirements": [
     [
-      "has_photovoltaic_cell_3",
+      "has_photovoltaic_cell_iii",
       "has_sp_t2",
       "has_repeater",
       "iron_block",
