@@ -25,4 +25,8 @@ public abstract class MachineRenderer<T extends MachineEntity<?>> implements Blo
   }
 
   public abstract void render(T te, float pt, PoseStack matrix, MultiBufferSource rtb, Minecraft mc, ClientLevel world, LocalPlayer player, int light, int ov);
+
+  public BlockEntityRendererProvider.Context getContext() {
+    return context;
+  }
 }

@@ -23,6 +23,10 @@ public interface IVariant<V extends Enum<V> & IVariant<V>> {
     return this instanceof IVariant.Single || getVariants().length == 0;
   }
 
+  default String nameL() {
+    return ((Enum<?>) this).name().toLowerCase(Locale.ROOT);
+  }
+
   @SuppressWarnings("unchecked")
   static <T extends IVariant> T getEmpty() {
     return (T) Single.SINGLE;

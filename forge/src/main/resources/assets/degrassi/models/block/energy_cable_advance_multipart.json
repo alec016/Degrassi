@@ -1,6 +1,6 @@
 {
   "parent": "degrassi:block/cable_multipart",
   "textures": {
-	"mp": "degrassi:block/energy_cable_advance"
+    "mp": "degrassi:block/energy_cable_advance"
   }
 }

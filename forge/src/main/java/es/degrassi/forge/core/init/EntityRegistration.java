@@ -1,14 +1,15 @@
 package es.degrassi.forge.core.init;
 
 import dev.architectury.registry.registries.DeferredRegister;
-import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.EnvHandler;
 import es.degrassi.forge.core.common.cables.energy.EnergyCableEntity;
 import es.degrassi.forge.core.common.cables.fluid.FluidCableEntity;
+import es.degrassi.forge.core.common.machines.entity.ChestEntity;
 import es.degrassi.forge.core.common.machines.entity.FurnaceEntity;
 import es.degrassi.forge.core.common.machines.entity.SolarPanelEntity;
 import es.degrassi.forge.core.tiers.CableTier;
+import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import java.util.List;
@@ -24,6 +25,7 @@ public class EntityRegistration {
   public static final Supplier<BlockEntityType<FurnaceEntity>> FURNACE;
 
   public static final Supplier<BlockEntityType<SolarPanelEntity>> SP;
+  public static final Supplier<BlockEntityType<ChestEntity>> CHEST;
 
   public static final Supplier<BlockEntityType<EnergyCableEntity>> ENERGY_CABLE;
   public static final Supplier<BlockEntityType<FluidCableEntity>> FLUID_CABLE;
@@ -31,6 +33,7 @@ public class EntityRegistration {
   static {
     FURNACE = register("furnace", (pos, state) -> EnvHandler.INSTANCE.createFurnace(pos, state, Furnace.IRON), BlockRegistration.FURNACE::getAll);
     SP = register("sp", (pos, state) -> EnvHandler.INSTANCE.createSP(pos, state, SolarPanel.T1), BlockRegistration.SP::getAll);
+    CHEST = register("chest", (pos, state) -> EnvHandler.INSTANCE.createChest(pos, state, Chest.IRON), BlockRegistration.CHEST::getAll);
     ENERGY_CABLE = register("energy_cable", (pos, state) -> EnvHandler.INSTANCE.createEnergyCable(pos, state, CableTier.BASIC), BlockRegistration.ENERGY_CABLE::getAll);
     FLUID_CABLE = register("fluid_cable", (pos, state) -> EnvHandler.INSTANCE.createFluidCable(pos, state, CableTier.BASIC), BlockRegistration.FLUID_CABLE::getAll);
   }

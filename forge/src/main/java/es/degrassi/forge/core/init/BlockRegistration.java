@@ -5,10 +5,12 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.core.common.cables.energy.EnergyCableBlock;
 import es.degrassi.forge.core.common.cables.fluid.FluidCableBlock;
+import es.degrassi.forge.core.common.machines.block.ChestBlock;
 import es.degrassi.forge.core.common.machines.block.FurnaceBlock;
 import es.degrassi.forge.core.common.machines.block.MachineCasing;
 import es.degrassi.forge.core.common.machines.block.SolarPanelBlock;
 import es.degrassi.forge.core.tiers.CableTier;
+import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import es.degrassi.common.registry.VarReg;
@@ -30,6 +32,7 @@ public class BlockRegistration {
   public static final VarReg<Furnace, Block> FURNACE;
 
   public static final VarReg<SolarPanel, Block> SP;
+  public static final VarReg<Chest, Block> CHEST;
 
   public static final VarReg<CableTier, Block> ENERGY_CABLE;
   public static final VarReg<CableTier, Block> FLUID_CABLE;
@@ -46,9 +49,20 @@ public class BlockRegistration {
       commonBlock(500),
       variant
     ), SolarPanel.getNormalVariants());
+    // Chest
+    CHEST = new VarReg<>(BLOCKS, "chest", variant -> new ChestBlock(
+      commonBlock(600),
+      variant
+    ), Chest.getNormalVariants());
     // ENERGY
-    ENERGY_CABLE = new VarReg<>(BLOCKS, "energy_cable", variant -> new EnergyCableBlock(metalNoSolid(2.0f, 20.0f), variant), CableTier.getNormalVariants());
-    FLUID_CABLE = new VarReg<>(BLOCKS, "fluid_cable", variant -> new FluidCableBlock(metalNoSolid(2.0f, 20.0f), variant), CableTier.getNormalVariants());
+    ENERGY_CABLE = new VarReg<>(BLOCKS, "energy_cable", variant -> new EnergyCableBlock(
+      metalNoSolid(2.0f, 20.0f),
+      variant
+    ),  CableTier.getNormalVariants());
+    FLUID_CABLE = new VarReg<>(BLOCKS, "fluid_cable", variant -> new FluidCableBlock(
+      metalNoSolid(2.0f, 20.0f),
+      variant
+    ), CableTier.getNormalVariants());
   }
 
   private static BlockBehaviour.Properties metalNoSolid(float hardness, float resistance) {

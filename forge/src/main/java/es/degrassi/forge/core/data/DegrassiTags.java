@@ -31,6 +31,7 @@ public class DegrassiTags {
   public static class Blocks extends Tag<Block> {
     public static final Blocks FURNACE = new Blocks(false, "furnace");
     public static final Blocks SP = new Blocks(false, "solar_panel");
+    public static final Blocks CHEST = new Blocks(false, "chest");
     public static final Blocks MACHINE = new Blocks(false, "machine");
     public static final Blocks CABLE = new Blocks(false, "cable");
     public static final Blocks ENERGY_CABLE = new Blocks(false, "cable/energy");
@@ -44,6 +45,7 @@ public class DegrassiTags {
   public static class Items extends Tag<Item> {
     public static final Items FURNACE = new Items(false, "furnace");
     public static final Items SP = new Items(false, "panel/solar_panel");
+    public static final Items CHEST = new Items(false, "chest");
     public static final Items MACHINE = new Items(false, "machine");
     public static final Items PHOTOVOLTAIC_CELL = new Items(false, "panel/photovoltaic_cell");
     public static final Items PANEL = new Items(false, "panel");

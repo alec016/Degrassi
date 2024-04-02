@@ -4,6 +4,7 @@ import es.degrassi.forge.core.data.DegrassiLangProvider;
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.ItemRegistration;
 import es.degrassi.forge.core.tiers.CableTier;
+import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.PhotovoltaicCell;
 import es.degrassi.forge.core.tiers.SolarPanel;
@@ -40,6 +41,12 @@ public class ES extends DegrassiLangProvider {
     addBlock(() -> BlockRegistration.FURNACE.get(Furnace.DIAMOND), "Horno de Diamante");
     addBlock(() -> BlockRegistration.FURNACE.get(Furnace.EMERALD), "Horno de Esmeralda");
     addBlock(() -> BlockRegistration.FURNACE.get(Furnace.NETHERITE), "Horno de Netherite");
+
+    addBlock(() -> BlockRegistration.CHEST.get(Chest.IRON), "Cofre de Hierro");
+    addBlock(() -> BlockRegistration.CHEST.get(Chest.GOLD), "Cofre de Oro");
+    addBlock(() -> BlockRegistration.CHEST.get(Chest.DIAMOND), "Cofre de Diamante");
+    addBlock(() -> BlockRegistration.CHEST.get(Chest.EMERALD), "Cofre de Esmeralda");
+    addBlock(() -> BlockRegistration.CHEST.get(Chest.NETHERITE), "Cofre de Netherite");
 
     addBlock(() -> BlockRegistration.SP.get(SolarPanel.T1), "Panel Solar I");
     addBlock(() -> BlockRegistration.SP.get(SolarPanel.T2), "Panel Solar II");
@@ -106,6 +113,13 @@ public class ES extends DegrassiLangProvider {
     addInfo("mb.per.tick", "%s mB/t");
     addInfo("generation", "Generación");
     addInfo("sp.generation", "%s FE/t");
+    // chest info
+    addInfo("chest.rows", "Rows");
+    addInfo("chest.rows.number", "%s");
+    addInfo("chest.cols", "Columns");
+    addInfo("chest.cols.number", "%s");
+    addInfo("chest.slot", "Slots");
+    addInfo("chest.slot.number", "%s total slots");
   }
 
   @Override

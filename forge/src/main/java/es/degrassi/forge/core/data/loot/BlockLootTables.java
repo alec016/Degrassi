@@ -2,6 +2,7 @@ package es.degrassi.forge.core.data.loot;
 
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.tiers.CableTier;
+import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import java.util.ArrayList;
@@ -29,6 +30,9 @@ public class BlockLootTables extends BlockLootSubProvider {
     for (CableTier tier : CableTier.values()) {
       dropSelf(BlockRegistration.ENERGY_CABLE.get(tier));
       dropSelf(BlockRegistration.FLUID_CABLE.get(tier));
+    }
+    for (Chest tier : Chest.values()) {
+      dropSelf(BlockRegistration.CHEST.get(tier));
     }
   }
 

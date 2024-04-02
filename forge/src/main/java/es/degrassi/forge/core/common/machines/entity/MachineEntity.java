@@ -10,8 +10,10 @@ import es.degrassi.forge.core.common.component.ProgressComponent;
 import es.degrassi.forge.core.common.machines.MachineStatus;
 import es.degrassi.forge.core.common.processor.MachineProcessor;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -24,13 +26,22 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEntity {
-  protected LazyOptional<ItemComponent> lazyItemHandler = LazyOptional.empty();
+  protected LazyOptional<ItemStackHandler> lazyItemHandler = LazyOptional.empty();
   protected LazyOptional<EnergyComponent> lazyEnergyHandler = LazyOptional.empty();
   protected LazyOptional<FluidComponent> lazyFluidHandler = LazyOptional.empty();
+  private final ItemStackHandler itemHandler = new ItemStackHandler() {
+    @Override
+    protected void onContentsChanged(int slot) {
+      getComponentManager().getComponentsByType("item").stream().map(comp -> (ItemComponent) comp).toList()
+        .get(slot).setItem(itemHandler.getStackInSlot(slot));
+      super.onContentsChanged(slot);
+    }
+  };
   private final ComponentManager componentManager;
   private final ElementManager elementManager;
   protected MachineProcessor<R, ? extends MachineEntity<R>> processor;
@@ -73,11 +84,11 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
   @Override
   public void load(@NotNull CompoundTag tag) {
     super.load(tag);
-    componentManager.deserializeNBT(tag.getCompound("componentManager"));
     elementManager.deserializeNBT(tag.getCompound("elementManager"));
     if (tag.contains("processor") && processor != null) processor.deserializeNBT(tag.getCompound("processor"));
     status = MachineStatus.value(tag.getString("status"));
     errorMessage = Component.literal(tag.getString("errorMessage"));
+    componentManager.deserializeNBT(tag.getCompound("componentManager"));
   }
 
   @Override
@@ -97,7 +108,7 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
         return lazyEnergyHandler.cast();
       }
     } else if (cap == ForgeCapabilities.ITEM_HANDLER) {
-      if (!componentManager.getComponentsByType("item").isEmpty()) {
+      if (itemHandler.getSlots() > 0) {
         return lazyItemHandler.cast();
       }
     } else if (cap == ForgeCapabilities.FLUID_HANDLER) {
@@ -118,13 +129,15 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
       .map(component -> (EnergyComponent) component)
       .findFirst()
       .ifPresent(energy -> lazyEnergyHandler = LazyOptional.of(() -> energy));
-    getComponentManager()
-      .get()
-      .stream()
-      .filter(component -> component instanceof ItemComponent)
-      .map(component -> (ItemComponent) component)
-      .findFirst()
-      .ifPresent(item -> lazyItemHandler = LazyOptional.of(() -> item));
+
+    List<ItemComponent> itemComps = getComponentManager().getComponentsByType("item").stream().map(comp -> (ItemComponent) comp).toList();
+    if (!itemComps.isEmpty()) {
+      itemHandler.setSize(itemComps.size());
+      AtomicInteger index = new AtomicInteger(0);
+      itemComps.forEach(comp -> itemHandler.insertItem(index.getAndIncrement(), comp.getStackInSlot(0), false));
+      lazyItemHandler = LazyOptional.of(() -> itemHandler);
+    }
+
     getComponentManager()
       .get()
       .stream()

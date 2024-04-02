@@ -5,8 +5,10 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.core.client.book.DegrassiBook;
+import es.degrassi.forge.core.common.machines.container.ChestContainer;
 import es.degrassi.forge.core.common.machines.container.FurnaceContainer;
 import es.degrassi.forge.core.common.machines.container.SolarPanelContainer;
+import es.degrassi.forge.core.common.machines.screen.ChestScreen;
 import es.degrassi.forge.core.common.machines.screen.FurnaceScreen;
 import es.degrassi.forge.core.common.machines.screen.SolarPanelScreen;
 import es.degrassi.forge.lib.client.screen.wiki.WikiScreen;
@@ -25,6 +27,10 @@ public class ContainerRegistration {
     "solar_panel",
     () -> MenuRegistry.ofExtended(SolarPanelContainer::new)
   );
+  public static final RegistrySupplier<MenuType<ChestContainer>> CHEST = MENUS.register(
+    "chest",
+    () -> MenuRegistry.ofExtended(ChestContainer::new)
+  );
 
   public static void registerScreens() {
     MenuRegistry.registerScreenFactory(
@@ -34,6 +40,10 @@ public class ContainerRegistration {
     MenuRegistry.registerScreenFactory(
       ContainerRegistration.SOLAR_PANEL.get(),
       SolarPanelScreen::new
+    );
+    MenuRegistry.registerScreenFactory(
+      ContainerRegistration.CHEST.get(),
+      ChestScreen::new
     );
     DegrassiBook.register();
   }

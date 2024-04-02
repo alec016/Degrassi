@@ -5,6 +5,7 @@ import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.ItemRegistration;
+import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.PhotovoltaicCell;
 import net.minecraft.data.PackOutput;
@@ -27,6 +28,10 @@ public class DegrassiItemModelProvider extends ItemModelProvider {
     for (Furnace furnace : Furnace.values()) {
       simpleBlockItem(BlockRegistration.FURNACE.get(furnace));
     }
+//    for (Chest chest : Chest.values()) {
+//      simpleBlockItem(BlockRegistration.CHEST.get(chest));
+//    }
+
     simpleBlockItem(BlockRegistration.MACHINE_CASING);
 
     simpleItem(ItemRegistration.WRENCH);

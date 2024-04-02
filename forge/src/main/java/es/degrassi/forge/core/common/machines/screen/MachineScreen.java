@@ -10,13 +10,16 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class MachineScreen<T extends MachineContainer<?>> extends AbstractContainerScreen<T> {
   protected final ResourceLocation background;
   protected final ElementManager manager;
+  protected final Player player;
   public MachineScreen(T menu, Inventory playerInventory, Component title, ResourceLocation background) {
     super(menu, playerInventory, title);
+    this.player = playerInventory.player;
     this.background = background;
     this.manager = menu.getEntity().getElementManager();
     this.imageWidth = TextureSizeHelper.getTextureWidth(background);

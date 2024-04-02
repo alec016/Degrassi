@@ -8,6 +8,7 @@ import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.core.client.DegrassiResourcePack;
 import es.degrassi.forge.core.client.model.DegrassiLayerDefinition;
 import es.degrassi.forge.core.client.model.SolarPanelModel;
+import es.degrassi.forge.core.client.renderer.ChestEntityRenderer;
 import es.degrassi.forge.core.client.renderer.cable.EnergyCableRenderer;
 import es.degrassi.forge.core.client.renderer.cable.FluidCableRenderer;
 import es.degrassi.forge.core.init.BlockRegistration;
@@ -16,6 +17,7 @@ import es.degrassi.forge.core.init.EntityRegistration;
 import es.degrassi.forge.core.init.ItemRegistration;
 import es.degrassi.forge.core.init.Registration;
 import es.degrassi.forge.core.tiers.CableTier;
+import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.PhotovoltaicCell;
 import es.degrassi.forge.core.tiers.SolarPanel;
@@ -90,6 +92,7 @@ public class DegrassiForge {
   public static void registerRenderers() {
     BlockEntityRendererRegistry.register(EntityRegistration.ENERGY_CABLE.get(), EnergyCableRenderer::new);
     BlockEntityRendererRegistry.register(EntityRegistration.FLUID_CABLE.get(), FluidCableRenderer::new);
+    BlockEntityRendererRegistry.register(EntityRegistration.CHEST.get(), ChestEntityRenderer::new);
   }
 
   @SubscribeEvent
@@ -100,6 +103,9 @@ public class DegrassiForge {
           output.accept(new ItemStack(BlockRegistration.MACHINE_CASING.get()));
           for (Furnace tier : Furnace.values()) {
             output.accept(new ItemStack(BlockRegistration.FURNACE.get(tier)));
+          }
+          for (Chest tier : Chest.values()) {
+            output.accept(new ItemStack(BlockRegistration.CHEST.get(tier)));
           }
           for (SolarPanel tier : SolarPanel.values()) {
             output.accept(new ItemStack(BlockRegistration.SP.get(tier)));
@@ -134,6 +140,9 @@ public class DegrassiForge {
       }
       for (SolarPanel tier : SolarPanel.values()) {
         entries.put(new ItemStack(BlockRegistration.SP.get(tier)), vis);
+      }
+      for (Chest tier : Chest.values()) {
+        entries.put(new ItemStack(BlockRegistration.CHEST.get(tier)), vis);
       }
     } else if (event.getTabKey() == ITEMS) {
       entries.put(new ItemStack(ItemRegistration.WRENCH.get()), vis);

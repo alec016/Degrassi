@@ -75,6 +75,14 @@ public class DegrassiBook {
                   new EnergyPanel<>(s).next(new CraftingPanel<>(s))
                 )
               )
+            ).e(
+              "chest",
+              e -> e.s(
+                s -> s.p(
+                  new Info(s),
+                  new EnergyPanel<>(s).next(new CraftingPanel<>(s))
+                )
+              )
             ),
             new WelcomePanel(as)
           )

@@ -3,9 +3,11 @@ package es.degrassi.forge;
 import es.degrassi.forge.core.common.cables.energy.EnergyCableEntity;
 import es.degrassi.forge.core.common.cables.IBlock;
 import es.degrassi.forge.core.common.cables.fluid.FluidCableEntity;
+import es.degrassi.forge.core.common.machines.entity.ChestEntity;
 import es.degrassi.forge.core.common.machines.entity.FurnaceEntity;
 import es.degrassi.forge.core.common.machines.entity.SolarPanelEntity;
 import es.degrassi.forge.core.tiers.CableTier;
+import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import net.minecraft.core.BlockPos;
@@ -14,7 +16,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.FurnaceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -22,13 +23,12 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 
+@SuppressWarnings("deprecation")
 public class EnvHandler {
   public static final EnvHandler INSTANCE = new EnvHandler();
   private final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-  private EnvHandler() {
-
-  }
+  private EnvHandler() {}
 
   public boolean hasEnergy(Level level, BlockPos pos, Direction side) {
     var be = level.getBlockEntity(pos);
@@ -57,6 +57,10 @@ public class EnvHandler {
     return new FurnaceEntity(pos, state, furnace);
   }
 
+  public ChestEntity createChest(BlockPos pos, BlockState state, Chest tier) {
+    return new ChestEntity(pos, state, tier);
+  }
+
   public void setupBlockItems() {
     modEventBus.addListener((RegisterEvent event) -> {
       if (event.getRegistryKey() == Registries.ITEM) {
@@ -65,6 +69,7 @@ public class EnvHandler {
           if (block instanceof IBlock<?, ?> iBlock) {
             var blockItem = iBlock.getBlockItem(new Item.Properties());
             var name = BuiltInRegistries.BLOCK.getKey(block);
+            if (registry == null) continue;
             registry.register(name, blockItem);
           }
         }

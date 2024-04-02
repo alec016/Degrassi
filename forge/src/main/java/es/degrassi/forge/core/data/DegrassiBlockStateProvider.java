@@ -4,6 +4,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.core.init.BlockRegistration;
+import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;

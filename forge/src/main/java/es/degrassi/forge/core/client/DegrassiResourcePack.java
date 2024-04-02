@@ -1,7 +1,6 @@
 package es.degrassi.forge.core.client;
 
 import com.google.gson.JsonObject;
-import es.degrassi.forge.core.common.machines.block.SolarPanelBlock;
 import es.degrassi.forge.core.init.BlockRegistration;
 import java.io.ByteArrayInputStream;
 import java.io.File;

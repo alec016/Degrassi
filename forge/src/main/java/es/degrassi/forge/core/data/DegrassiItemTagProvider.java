@@ -5,6 +5,7 @@ import es.degrassi.forge.core.common.machines.item.PhotovoltaicCellItem;
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.ItemRegistration;
 import es.degrassi.forge.core.tiers.CableTier;
+import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.PhotovoltaicCell;
 import es.degrassi.forge.core.tiers.SolarPanel;
@@ -41,6 +42,10 @@ public class DegrassiItemTagProvider extends ItemTagsProvider {
       this.tag(DegrassiTags.Items.FURNACE.get()).add(BlockRegistration.FURNACE.get(tier).asItem());
     }
 
+    for (Chest tier : Chest.values()) {
+      this.tag(DegrassiTags.Items.CHEST.get()).add(BlockRegistration.CHEST.get(tier).asItem());
+    }
+
     for (SolarPanel tier : SolarPanel.values()) {
       this.tag(DegrassiTags.Items.SP.get()).add(BlockRegistration.SP.get(tier).asItem());
     }
@@ -55,6 +60,7 @@ public class DegrassiItemTagProvider extends ItemTagsProvider {
 
     this.tag(DegrassiTags.Items.MACHINE.get())
       .addTag(DegrassiTags.Items.FURNACE.get())
-      .addTag(DegrassiTags.Items.SP.get());
+      .addTag(DegrassiTags.Items.SP.get())
+      .addTag(DegrassiTags.Items.CHEST.get());
   }
 }
