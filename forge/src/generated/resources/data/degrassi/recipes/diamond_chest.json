@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "d": {
+      "tag": "forge:gems/diamond"
+    },
+    "f": {
+      "item": "degrassi:chest_gold"
+    }
+  },
+  "pattern": [
+    "ddd",
+    "dfd",
+    "ddd"
+  ],
+  "result": {
+    "item": "degrassi:chest_diamond"
+  },
+  "show_notification": true
+}

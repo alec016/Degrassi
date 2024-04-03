@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "d": {
+      "tag": "forge:ingots/iron"
+    },
+    "f": {
+      "item": "minecraft:chest"
+    }
+  },
+  "pattern": [
+    "ddd",
+    "dfd",
+    "ddd"
+  ],
+  "result": {
+    "item": "degrassi:chest_iron"
+  },
+  "show_notification": true
+}

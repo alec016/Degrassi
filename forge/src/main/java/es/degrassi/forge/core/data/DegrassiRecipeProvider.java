@@ -5,6 +5,7 @@ import es.degrassi.common.ForgeLocation;
 import es.degrassi.forge.core.data.recipe.MachineRecipeGeneratorBuilder;
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.ItemRegistration;
+import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.PhotovoltaicCell;
 import es.degrassi.forge.core.tiers.SolarPanel;
@@ -317,6 +318,56 @@ public class DegrassiRecipeProvider extends RecipeProvider implements ICondition
       .unlockedBy(getHasName(BlockRegistration.SP.get(SolarPanel.T7)), has(BlockRegistration.SP.get(SolarPanel.T7)))
       .unlockedBy(getHasName(ItemRegistration.RED_MATTER.get()), has(ItemRegistration.RED_MATTER.get()))
       .save(writer, new DegrassiLocation("panels/sp8"));
+
+    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BlockRegistration.CHEST.get(Chest.IRON))
+      .pattern("ddd")
+      .pattern("dfd")
+      .pattern("ddd")
+      .define('d', ItemTags.create(new ForgeLocation("ingots/iron")))
+      .define('f', Items.CHEST)
+      .unlockedBy(getHasName(Items.CHEST), has(Items.CHEST))
+      .unlockedBy("iron", has(ItemTags.create(new ForgeLocation("ingots/iron"))))
+      .save(writer, new DegrassiLocation("iron_chest"));
+
+    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BlockRegistration.CHEST.get(Chest.GOLD))
+      .pattern("ddd")
+      .pattern("dfd")
+      .pattern("ddd")
+      .define('d', ItemTags.create(new ForgeLocation("ingots/gold")))
+      .define('f', BlockRegistration.CHEST.get(Chest.IRON))
+      .unlockedBy(getHasName(BlockRegistration.CHEST.get(Chest.IRON)), has(BlockRegistration.CHEST.get(Chest.IRON)))
+      .unlockedBy("gold", has(ItemTags.create(new ForgeLocation("ingots/gold"))))
+      .save(writer, new DegrassiLocation("gold_chest"));
+
+    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BlockRegistration.CHEST.get(Chest.DIAMOND))
+      .pattern("ddd")
+      .pattern("dfd")
+      .pattern("ddd")
+      .define('d', ItemTags.create(new ForgeLocation("gems/diamond")))
+      .define('f', BlockRegistration.CHEST.get(Chest.GOLD))
+      .unlockedBy(getHasName(BlockRegistration.CHEST.get(Chest.GOLD)), has(BlockRegistration.CHEST.get(Chest.GOLD)))
+      .unlockedBy("diamond", has(ItemTags.create(new ForgeLocation("gems/diamond"))))
+      .save(writer, new DegrassiLocation("diamond_chest"));
+
+    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BlockRegistration.CHEST.get(Chest.EMERALD))
+      .pattern("ddd")
+      .pattern("dfd")
+      .pattern("ddd")
+      .define('d', ItemTags.create(new ForgeLocation("gems/emerald")))
+      .define('f', BlockRegistration.CHEST.get(Chest.DIAMOND))
+      .unlockedBy(getHasName(BlockRegistration.CHEST.get(Chest.DIAMOND)), has(BlockRegistration.CHEST.get(Chest.DIAMOND)))
+      .unlockedBy("emerald", has(ItemTags.create(new ForgeLocation("gems/emerald"))))
+      .save(writer, new DegrassiLocation("emerald_chest"));
+
+    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, BlockRegistration.CHEST.get(Chest.NETHERITE))
+      .pattern("ddd")
+      .pattern("dfd")
+      .pattern("ddd")
+      .define('d', ItemTags.create(new ForgeLocation("ingots/netherite")))
+      .define('f', BlockRegistration.CHEST.get(Chest.EMERALD))
+      .unlockedBy(getHasName(BlockRegistration.CHEST.get(Chest.EMERALD)), has(BlockRegistration.CHEST.get(Chest.EMERALD)))
+      .unlockedBy("netherite", has(ItemTags.create(new ForgeLocation("ingots/netherite"))))
+      .save(writer, new DegrassiLocation("netherite_chest"));
   }
 
   private void addMachineRecipes(@NotNull Consumer<FinishedRecipe> writer) {
