@@ -68,6 +68,7 @@ public class BarElement extends AbstractWidget implements IElement<BarComponent>
       guiGraphics.renderTooltip(
         Minecraft.getInstance().font,
         List.of(
+          getMessage().getVisualOrderText(),
           Component.literal(
             component.getAmount() +
             " / " +
