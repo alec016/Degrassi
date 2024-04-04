@@ -44,7 +44,8 @@ public class SolarPanelEntity extends MachineEntity<SolarPanelRecipe> {
 
     this.getComponentManager()
       .addEnergy(tier.getEnergyCapacity(), "energy")
-      .addBar(100.0, "efficiency");
+      .addBar(100.0, "efficiency")
+      .addBar(tier.getMaxGeneration(), "generation");
 
     this.getElementManager()
       .addPlayerInventory(
@@ -138,6 +139,11 @@ public class SolarPanelEntity extends MachineEntity<SolarPanelRecipe> {
     }
     entity.getComponentManager().getComponent("efficiency").map(comp -> (BarComponent) comp)
       .ifPresent(comp -> comp.setAmount(Double.parseDouble(Utils.format(entity.effCache * 100))));
+    entity.getComponentManager().getComponent("generation").map(comp -> (BarComponent) comp)
+        .ifPresent(comp -> {
+          comp.setAmount(Double.parseDouble(Utils.format(entity.genCache)));
+          comp.setCapacity(entity.getTier().getMaxGeneration());
+        });
     entity.getComponentManager().getComponent("energy").map(comp -> (EnergyComponent) comp).ifPresent(comp -> {
       comp.setCapacity(entity.capacityCache);
       comp.setTransfer(entity.transferCache);

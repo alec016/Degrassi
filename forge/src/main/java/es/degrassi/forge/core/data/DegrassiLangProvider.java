@@ -21,6 +21,7 @@ public abstract class DegrassiLangProvider extends LanguageProvider {
 
   @Override
   protected void addTranslations() {
+    addOthers();
     addItemGroups();
     addItems();
     addBlocks();
@@ -36,6 +37,7 @@ public abstract class DegrassiLangProvider extends LanguageProvider {
     add("unit.energy.forge", "FE");
   }
 
+  protected abstract void addOthers();
   protected abstract void addItems();
   protected abstract void addBlocks();
   protected abstract void addEntities();

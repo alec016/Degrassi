@@ -16,6 +16,12 @@ public class EN extends DegrassiLangProvider {
   }
 
   @Override
+  protected void addOthers() {
+    add("degrassi.wrench.mode", "Config mode");
+    add("degrassi.wrench.mode.change", "Changed mode in pos: %s, side: %s, from %s to %s");
+  }
+
+  @Override
   protected void addItems() {
     addItem(ItemRegistration.WRENCH, "Wrench");
 
@@ -65,10 +71,6 @@ public class EN extends DegrassiLangProvider {
     addBlock(() -> BlockRegistration.FLUID_CABLE.get(CableTier.BASIC), "Basic Fluid Cable");
     addBlock(() -> BlockRegistration.FLUID_CABLE.get(CableTier.ADVANCE), "Advance Fluid Cable");
     addBlock(() -> BlockRegistration.FLUID_CABLE.get(CableTier.EXTREME), "Extreme Fluid Cable");
-
-    add("degrassi.wrench.mode", "Config mode");
-
-    add("degrassi.wrench.mode.change", "Changed mode in pos: %s, side: %s, from %s to %s");
   }
 
   @Override
@@ -114,7 +116,6 @@ public class EN extends DegrassiLangProvider {
     addInfo("mb.per.tick", "%s mB/t");
     addInfo("generation", "Generation");
     addInfo("sp.generation", "%s FE/t");
-    // chest info
     addInfo("chest.rows", "Rows");
     addInfo("chest.rows.number", "%s");
     addInfo("chest.cols", "Columns");
@@ -136,7 +137,10 @@ public class EN extends DegrassiLangProvider {
 
   @Override
   protected void addGuiElements() {
-
+    addGuiElement("generation", "Generating: %s/%sFE/t");
+    addGuiElement("energy.stored", "Energy Stored: %sFE");
+    addGuiElement("energy.capacity", "Energy Capacity: %sFE");
+    addGuiElement("transfer", "Transfer: %sFE/t");
   }
 
   @Override
