@@ -15,9 +15,9 @@ public class ConduitItems {
     private static final Registrate REGISTRATE = Degrassi.registrate();
 
     public static final ItemEntry<Item> ENERGY = createConduitItem(EnderConduitTypes.ENERGY, "energy");
-    public static final ItemEntry<Item> FLUID = createConduitItem(EnderConduitTypes.FLUID, "basic_fluid");
-    public static final ItemEntry<Item> PRESSURIZED_FLUID = createConduitItem(EnderConduitTypes.FLUID2, "advanced_fluid");
-    public static final ItemEntry<Item> ENDER_FLUID = createConduitItem(EnderConduitTypes.FLUID3, "extreme_fluid");
+    public static final ItemEntry<Item> BASIC_FLUID = createConduitItem(EnderConduitTypes.FLUID, "basic_fluid");
+    public static final ItemEntry<Item> ADVANCED_FLUID = createConduitItem(EnderConduitTypes.FLUID2, "advanced_fluid");
+    public static final ItemEntry<Item> EXTREME_FLUID = createConduitItem(EnderConduitTypes.FLUID3, "extreme_fluid");
     public static final ItemEntry<Item> REDSTONE = createConduitItem(EnderConduitTypes.REDSTONE, "redstone");
     public static final ItemEntry<Item> ITEM = createConduitItem(EnderConduitTypes.ITEM, "item");
 

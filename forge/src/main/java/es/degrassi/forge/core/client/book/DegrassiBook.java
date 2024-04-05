@@ -3,6 +3,7 @@ package es.degrassi.forge.core.client.book;
 import es.degrassi.forge.core.common.conduit.common.init.ConduitItems;
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.ItemRegistration;
+import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import es.degrassi.forge.lib.client.wiki.Icon;
@@ -15,6 +16,7 @@ import es.degrassi.forge.lib.client.wiki.page.panel.FluidPanel;
 import es.degrassi.forge.lib.client.wiki.page.panel.ItemPanel;
 import es.degrassi.forge.lib.client.wiki.page.panel.RedstonePanel;
 import es.degrassi.forge.lib.client.wiki.page.panel.WelcomePanel;
+import java.util.List;
 
 public class DegrassiBook {
   public static final Wiki WIKI = new Wiki();
@@ -34,27 +36,16 @@ public class DegrassiBook {
                 )
               )
             ).e(
-              "basic_fluid_conduit",
+              "fluid_conduit",
+              new Icon(ConduitItems.ADVANCED_FLUID.get()),
               e -> e.s(
                 s -> s.p(
                   new Info(IMG.ENERGY_CABLE, s),
-                  new FluidPanel<>(s).next(new CraftingPanel<>(s))
-                )
-              )
-            ).e(
-              "advanced_fluid_conduit",
-              e -> e.s(
-                s -> s.p(
-                  new Info(IMG.ENERGY_CABLE, s),
-                  new FluidPanel<>(s).next(new CraftingPanel<>(s))
-                )
-              )
-            ).e(
-              "extreme_fluid_conduit",
-              e -> e.s(
-                s -> s.p(
-                  new Info(IMG.ENERGY_CABLE, s),
-                  new FluidPanel<>(s).next(new CraftingPanel<>(s))
+                  new FluidPanel<>(List.of(
+                    ConduitItems.BASIC_FLUID,
+                    ConduitItems.ADVANCED_FLUID,
+                    ConduitItems.EXTREME_FLUID
+                  ), s).next(new CraftingPanel<>(s))
                 )
               )
             ).e(
@@ -62,7 +53,7 @@ public class DegrassiBook {
               e -> e.s(
                 s -> s.p(
                   new Info(IMG.ENERGY_CABLE, s),
-                  new ItemPanel<>(s).next(new CraftingPanel<>(s))
+                  new RedstonePanel<>(s).next(new CraftingPanel<>(s))
                 )
               )
             ).e(
@@ -102,6 +93,7 @@ public class DegrassiBook {
           as -> as.p(
             new GridPage(as).e(
               "furnace",
+              new Icon(BlockRegistration.FURNACE.get(Furnace.NETHERITE)),
               e -> e.s(
                 s -> s.p(
                   new Info(s),
@@ -110,6 +102,7 @@ public class DegrassiBook {
               )
             ).e(
               "chest",
+              new Icon(BlockRegistration.CHEST.get(Chest.NETHERITE)),
               e -> e.s(
                 s -> s.p(
                   new Info(s),

@@ -66,9 +66,9 @@ public class EN extends DegrassiLangProvider {
     addItem(ConduitItems.ENERGY, "Energy Conduit");
     addItem(ConduitItems.ITEM, "Item Conduit");
     addItem(ConduitItems.REDSTONE, "Redstone Conduit");
-    addItem(ConduitItems.FLUID, "Basic Fluid Conduit");
-    addItem(ConduitItems.PRESSURIZED_FLUID, "Advanced Fluid Conduit");
-    addItem(ConduitItems.ENDER_FLUID, "Extreme Fluid Conduit");
+    addItem(ConduitItems.BASIC_FLUID, "Basic Fluid Conduit");
+    addItem(ConduitItems.ADVANCED_FLUID, "Advanced Fluid Conduit");
+    addItem(ConduitItems.EXTREME_FLUID, "Extreme Fluid Conduit");
   }
 
   @Override
