@@ -2,6 +2,7 @@ package es.degrassi.forge.core.data;
 
 import es.degrassi.common.DegrassiLocation;
 import es.degrassi.common.ForgeLocation;
+import es.degrassi.forge.core.common.conduit.data.recipe.ConduitRecipes;
 import es.degrassi.forge.core.data.recipe.MachineRecipeGeneratorBuilder;
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.ItemRegistration;
@@ -21,8 +22,11 @@ import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 import org.jetbrains.annotations.NotNull;
 
 public class DegrassiRecipeProvider extends RecipeProvider implements IConditionBuilder {
+  private final ConduitRecipes conduits;
+
   public DegrassiRecipeProvider(PackOutput output) {
     super(output);
+    conduits = new ConduitRecipes(output);
   }
 
   @Override
@@ -30,6 +34,7 @@ public class DegrassiRecipeProvider extends RecipeProvider implements ICondition
     addShapelessRecipes(writer);
     addShapedRecipes(writer);
     addMachineRecipes(writer);
+    conduits.buildRecipes(writer);
   }
 
   private void addShapelessRecipes(@NotNull Consumer<FinishedRecipe> writer) {

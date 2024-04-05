@@ -1,7 +1,7 @@
 package es.degrassi.forge.core.common.machines.screen;
 
 import es.degrassi.common.DegrassiLocation;
-import es.degrassi.forge.api.utils.Utils;
+import es.degrassi.common.utils.Utils;
 import es.degrassi.forge.core.common.component.BarComponent;
 import es.degrassi.forge.core.common.component.EnergyComponent;
 import es.degrassi.forge.core.common.machines.container.SolarPanelContainer;

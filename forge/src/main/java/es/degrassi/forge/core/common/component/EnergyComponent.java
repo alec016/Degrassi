@@ -107,12 +107,12 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
 
   @Override
   public boolean canExtract() {
-    return maxOutput > 0;
+    return getMode().outputWithAll() && maxOutput > 0;
   }
 
   @Override
   public boolean canReceive() {
-    return maxInput > 0;
+    return getMode().inputWillAll() && maxInput > 0;
   }
 
   public String getId() {

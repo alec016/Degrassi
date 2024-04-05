@@ -1,9 +1,11 @@
 package es.degrassi.forge.core.data.lang;
 
+import es.degrassi.forge.Degrassi;
+import es.degrassi.forge.core.common.conduit.common.init.ConduitBlocks;
+import es.degrassi.forge.core.common.conduit.common.init.ConduitItems;
 import es.degrassi.forge.core.data.DegrassiLangProvider;
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.ItemRegistration;
-import es.degrassi.forge.core.tiers.CableTier;
 import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.PhotovoltaicCell;
@@ -11,6 +13,7 @@ import es.degrassi.forge.core.tiers.SolarPanel;
 import net.minecraft.data.PackOutput;
 
 public class ES extends DegrassiLangProvider {
+  private static final String mod = Degrassi.MODID;
   public ES(PackOutput output) {
     super(output, "es_es");
   }
@@ -19,6 +22,28 @@ public class ES extends DegrassiLangProvider {
   protected void addOthers() {
     add("degrassi.wrench.mode", "Modo configuración");
     add("degrassi.wrench.mode.change", "Cambiado el modo en: %s, lado: %s, de %s a %s");
+    addEnderIO();
+  }
+
+  protected void addEnderIO() {
+    // DegrassiLang
+    add("gui." + mod + ".conduit_channel", "Conduit-Channel");
+    add("gui." + mod + ".redstone_channel", "Redstone-Channel");
+    add("gui." + mod + ".redstone.mode", "Redstone Mode");
+    add("gui." + mod + ".redstone.always_active", "Always active");
+    add("gui." + mod + ".redstone.active_with_signal", "Active with signal");
+    add("gui." + mod + ".redstone.active_without_signal", "Active without signal");
+    add("gui." + mod + ".redstone.never_active", "Never active");
+    add("gui." + mod + ".round_robin.enabled", "Round Robin Enabled");
+    add("gui." + mod + ".round_robin.disabled", "Round Robin Disabled");
+    add("gui." + mod + ".self_feed.enabled", "Self Feed Enabled");
+    add("gui." + mod + ".self_feed.disabled", "Self Feed Disabled");
+    add("gui." + mod + ".fluid_conduit.change_fluid1", "Locked Fluid:");
+    add("gui." + mod + ".fluid_conduit.change_fluid2", "Click to reset!");
+    add("gui." + mod + ".fluid_conduit.change_fluid3", "Fluid: %s");
+    // ConduitLang
+    add("gui." + mod + ".conduit.insert", "Insert");
+    add("gui." + mod + ".conduit.extract", "Extract");
   }
 
   @Override
@@ -37,6 +62,13 @@ public class ES extends DegrassiLangProvider {
     addItem(() -> ItemRegistration.PHOTOVOLTAIC_CELL.get(PhotovoltaicCell.VI), "Photovoltaic Cell VI");
     addItem(() -> ItemRegistration.PHOTOVOLTAIC_CELL.get(PhotovoltaicCell.VII), "Photovoltaic Cell VII");
     addItem(() -> ItemRegistration.PHOTOVOLTAIC_CELL.get(PhotovoltaicCell.VIII), "Photovoltaic Cell VIII");
+
+    addItem(ConduitItems.ENERGY, "Energy Conduit");
+    addItem(ConduitItems.ITEM, "Item Conduit");
+    addItem(ConduitItems.REDSTONE, "Redstone Conduit");
+    addItem(ConduitItems.FLUID, "Basic Fluid Conduit");
+    addItem(ConduitItems.PRESSURIZED_FLUID, "Advanced Fluid Conduit");
+    addItem(ConduitItems.ENDER_FLUID, "Extreme Fluid Conduit");
   }
 
   @Override
@@ -63,14 +95,7 @@ public class ES extends DegrassiLangProvider {
     addBlock(() -> BlockRegistration.SP.get(SolarPanel.T7), "Panel Solar VII");
     addBlock(() -> BlockRegistration.SP.get(SolarPanel.T8), "Panel Solar VIII");
 
-
-    addBlock(() -> BlockRegistration.ENERGY_CABLE.get(CableTier.BASIC), "Cable de Energía Básico");
-    addBlock(() -> BlockRegistration.ENERGY_CABLE.get(CableTier.ADVANCE), "Cable de Energía Avanzado");
-    addBlock(() -> BlockRegistration.ENERGY_CABLE.get(CableTier.EXTREME), "Cable de Energía Extremo");
-
-    addBlock(() -> BlockRegistration.FLUID_CABLE.get(CableTier.BASIC), "Basic Fluid Cable");
-    addBlock(() -> BlockRegistration.FLUID_CABLE.get(CableTier.ADVANCE), "Advance Fluid Cable");
-    addBlock(() -> BlockRegistration.FLUID_CABLE.get(CableTier.EXTREME), "Extreme Fluid Cable");
+    addBlock(ConduitBlocks.CONDUIT, "Conduit");
   }
 
   @Override
@@ -113,6 +138,7 @@ public class ES extends DegrassiLangProvider {
     addInfo("mb", "%s mB");
     addInfo("max.io", "Max I/O");
     addInfo("fe.per.tick", "%s FE/t");
+    addInfo("items.per.tick", "%s Items/t");
     addInfo("mb.per.tick", "%s mB/t");
     addInfo("generation", "Generación");
     addInfo("sp.generation", "%s FE/t");

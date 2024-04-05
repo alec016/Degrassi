@@ -1,7 +1,7 @@
 {
   "type": "degrassi:furnace",
-  "energy": 500,
-  "experience": 8,
+  "energy": 100,
+  "experience": 1,
   "input": "minecraft:coal",
   "inputAmount": 1,
   "output": "minecraft:diamond",

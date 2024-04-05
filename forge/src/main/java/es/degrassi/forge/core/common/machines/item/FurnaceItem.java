@@ -1,8 +1,8 @@
 package es.degrassi.forge.core.common.machines.item;
 
 import es.degrassi.common.registry.IVariantEntry;
-import static es.degrassi.forge.api.utils.Utils.addCommas;
-import es.degrassi.forge.core.common.cables.ItemModelType;
+import static es.degrassi.common.utils.Utils.addCommas;
+import es.degrassi.common.registry.ItemModelType;
 import es.degrassi.forge.core.common.machines.block.FurnaceBlock;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.lib.client.wiki.page.panel.InfoBox;

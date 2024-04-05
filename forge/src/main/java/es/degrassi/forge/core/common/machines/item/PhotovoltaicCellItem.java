@@ -1,7 +1,7 @@
 package es.degrassi.forge.core.common.machines.item;
 
 import es.degrassi.common.registry.IVariantEntry;
-import es.degrassi.forge.core.common.cables.ItemModelType;
+import es.degrassi.common.registry.ItemModelType;
 import es.degrassi.forge.core.tiers.PhotovoltaicCell;
 import es.degrassi.forge.lib.client.wiki.page.panel.InfoBox;
 import net.minecraft.world.item.Item;

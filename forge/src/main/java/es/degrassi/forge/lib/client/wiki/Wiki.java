@@ -3,7 +3,7 @@ package es.degrassi.forge.lib.client.wiki;
 import dev.architectury.event.events.client.ClientRecipeUpdateEvent;
 import dev.architectury.platform.Platform;
 import es.degrassi.forge.Degrassi;
-import es.degrassi.forge.api.utils.DegrassiLogger;
+import es.degrassi.common.utils.DegrassiLogger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

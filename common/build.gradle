@@ -8,8 +8,37 @@ loom {
 
 dependencies {
     //Required
-    modImplementation("net.fabricmc:fabric-loader:${project.fabric_loader_version}")
-    modApi("dev.architectury:architectury:${project.architectury_version}")
+    forge "net.minecraftforge:forge:${project.forge_version}"
+    modImplementation "dev.architectury:architectury-forge:${project.architectury_version}"
+//    modApi "dev.architectury:architectury-api:${project.architectury_version}"
+    modApi "org.joml:joml:1.10.5"
+    modApi "me.shedaniel.cloth:cloth-config:${project.cloth_config_version}"
+    modApi "me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}"
+//    modApi "curse.maven:probejs-585406:5054324"
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.5"))
+    implementation(include("io.github.llamalad7:mixinextras-forge:0.3.5"))
+
+    // tterrag registrate
+    modImplementation "com.tterrag.registrate:Registrate:${project.registrate_version}"
+    // graphlib
+    modImplementation "dev.gigaherz.graph:GraphLib3:${project.graph_version}"
+
+    // hammer lib
+    modImplementation "org.zeith.hammerlib:HammerLib-${project.minecraft_version}:${project.hammerlib_version}"
+
+    //JEI 10
+    modCompileOnly "mezz.jei:jei-${project.minecraft_version}-common-api:${project.jei_version}"
+    modCompileOnly "mezz.jei:jei-${project.minecraft_version}-forge-api:${project.jei_version}"
+    modLocalRuntime("mezz.jei:jei-${project.minecraft_version}-forge:${project.jei_version}") { transitive = false }
+
+    // Mekanism
+    modLocalRuntime "curse.maven:mekanism-268560:5125665"
+
+    // Jade
+    modImplementation "curse.maven:jade-324717:5072729"
+
+    // KubeJS
+//    modImplementation "dev.latvian.mods:kubejs-forge:${kubejs_version}"
 }
 
 remapJar {

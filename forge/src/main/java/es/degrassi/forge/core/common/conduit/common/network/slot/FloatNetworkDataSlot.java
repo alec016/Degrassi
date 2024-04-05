@@ -1,0 +1,42 @@
+package es.degrassi.forge.core.common.conduit.common.network.slot;
+
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import net.minecraft.nbt.FloatTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
+
+public class FloatNetworkDataSlot extends NetworkDataSlot<Float> {
+
+    public FloatNetworkDataSlot(Supplier<Float> getter, Consumer<Float> setter) {
+        super(getter, setter);
+    }
+
+    @Override
+    public Tag serializeValueNBT(Float value) {
+        return FloatTag.valueOf(value);
+    }
+
+    @Override
+    protected Float valueFromNBT(Tag nbt) {
+        if (nbt instanceof FloatTag floatTag) {
+            return floatTag.getAsFloat();
+        } else {
+            throw new IllegalStateException("Invalid float tag was passed over the network.");
+        }
+    }
+
+    @Override
+    public void toBuffer(FriendlyByteBuf buf, Float value) {
+        buf.writeFloat(value);
+    }
+
+    @Override
+    public Float valueFromBuffer(FriendlyByteBuf buf) {
+        try {
+            return buf.readFloat();
+        } catch (Exception e) {
+            throw new IllegalStateException("Invalid float buffer was passed over the network.");
+        }
+    }
+}

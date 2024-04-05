@@ -1,14 +1,11 @@
 package es.degrassi.forge.core.common.machines.item;
 
-import es.degrassi.forge.core.common.cables.CableBlock;
-import es.degrassi.forge.core.common.cables.CableEntity;
-import es.degrassi.forge.core.common.cables.SideConfig;
+import es.degrassi.forge.core.common.conduit.common.blockentity.ConduitBlockEntity;
 import es.degrassi.forge.core.common.machines.block.MachineBlock;
 import es.degrassi.forge.core.common.machines.item.wrench.IWrench;
 import es.degrassi.forge.core.common.machines.item.wrench.IWrenchable;
 import es.degrassi.forge.core.common.machines.item.wrench.WrenchMode;
 import java.util.List;
-import java.util.Optional;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -60,36 +57,14 @@ public class WrenchItem extends Item implements IItem, IWrench, IHudItem {
   }
 
   public InteractionResult onItemUseFirst(ItemStack stack, Level world, BlockPos pos, Player player, InteractionHand hand, Direction side, Vec3 hit) {
-    if (player.isShiftKeyDown())
-      return InteractionResult.PASS;
     BlockEntity te = world.getBlockEntity(pos);
     BlockState state = world.getBlockState(pos);
+    if (player.isShiftKeyDown() && !(te instanceof ConduitBlockEntity conduit))
+      return InteractionResult.SUCCESS;
     if (state.getBlock() instanceof IWrenchable iWrenchable
       && iWrenchable.onWrench(state, world, pos, player, hand, side, getWrenchMode(stack), hit)) {
       return InteractionResult.SUCCESS;
     } else {
-      if (!world.isClientSide && getWrenchMode(stack).config()) {
-        if (te instanceof CableEntity<?, ?> cable) {
-          if (stack.getItem() instanceof WrenchItem) {
-            Optional<Direction> sides = CableBlock.getHitSide(hit, pos);
-            boolean[] flag = { false };
-            sides.ifPresent(direction -> {
-              SideConfig<?> config = cable.getSideConfig();
-              player.displayClientMessage(Component.translatable(
-                "info.degrassi.io.mode.prev",
-                config.getType(direction).getDisplayName()
-              ), true);
-              config.nextType(direction);
-              cable.sync();
-              player.displayClientMessage(Component.translatable(
-                "info.degrassi.io.mode.next",
-                config.getType(direction).getDisplayName()
-              ), true);
-            });
-            return InteractionResult.SUCCESS;
-          }
-        }
-      }
       if (getWrenchMode(stack).rotate()
         // Only rotate Degrassi machines
         && (state.getBlock() instanceof MachineBlock)) {
@@ -101,7 +76,7 @@ public class WrenchItem extends Item implements IItem, IWrench, IHudItem {
         }
       }
     }
-    return InteractionResult.PASS;
+    return InteractionResult.SUCCESS;
   }
 
   private BlockState rotateState(Level world, BlockState state, BlockPos pos) {

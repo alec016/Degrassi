@@ -84,6 +84,14 @@ allprojects {
             url = "https://maven.zeith.org/"
         }
         maven { url = 'https://maven.maxhenkel.de/repository/public' }
+        maven {
+            name = "GraphLib"
+            url = "https://dogforce-games.com/maven"
+        }
+        maven {
+            name = "Tterrag"
+            url = "https://maven.tterrag.com/"
+        }
     }
 
     tasks.withType(JavaCompile) {

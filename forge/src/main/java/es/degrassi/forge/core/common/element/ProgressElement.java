@@ -2,7 +2,7 @@ package es.degrassi.forge.core.common.element;
 
 import es.degrassi.forge.api.core.common.ElementDirection;
 import es.degrassi.forge.api.core.common.IElement;
-import es.degrassi.forge.api.utils.TextureSizeHelper;
+import es.degrassi.common.utils.TextureSizeHelper;
 import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.component.ProgressComponent;
 import net.minecraft.client.gui.GuiGraphics;

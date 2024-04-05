@@ -65,7 +65,10 @@ dependencies {
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 
-    // corelib
+    // tterrag registrate
+    modImplementation "com.tterrag.registrate:Registrate:${project.registrate_version}"
+    // graphlib
+    modImplementation "dev.gigaherz.graph:GraphLib3:${project.graph_version}"
 
     // hammer lib
     modImplementation "org.zeith.hammerlib:HammerLib-${project.minecraft_version}:${project.hammerlib_version}"

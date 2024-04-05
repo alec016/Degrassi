@@ -1,5 +1,6 @@
 package es.degrassi.forge.core.common.machines.block;
 
+import es.degrassi.forge.core.common.machines.MachineStatus;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -16,12 +17,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
 public abstract class MachineBlock extends Block implements EntityBlock {
   public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+  public static final EnumProperty<MachineStatus> STATUS = EnumProperty.create("status", MachineStatus.class);
   public MachineBlock(Properties properties) {
     super(properties);
   }
@@ -36,7 +39,7 @@ public abstract class MachineBlock extends Block implements EntityBlock {
 
   @Override
   public BlockState getStateForPlacement(@NotNull BlockPlaceContext pContext) {
-    return getFacing() != Facing.NONE ? this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite()) : defaultBlockState();
+    return (getFacing() != Facing.NONE ? this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite()): defaultBlockState()).setValue(STATUS, MachineStatus.IDLE) ;
   }
 
   @SuppressWarnings("deprecation")
@@ -65,6 +68,8 @@ public abstract class MachineBlock extends Block implements EntityBlock {
       state = state.setValue(FACING, Direction.NORTH);
     }
 
+    state = state.setValue(STATUS, MachineStatus.IDLE);
+
     registerDefaultState(baseState.get(state));
   }
 
@@ -76,6 +81,8 @@ public abstract class MachineBlock extends Block implements EntityBlock {
   protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
     if (getFacing() != Facing.NONE)
       builder.add(FACING);
+
+    builder.add(STATUS);
   }
 
   @FunctionalInterface

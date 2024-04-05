@@ -1,6 +1,6 @@
 package es.degrassi.forge.core.common.machines.item;
 
-import es.degrassi.forge.core.common.cables.ItemModelType;
+import es.degrassi.common.registry.ItemModelType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DiggerItem;

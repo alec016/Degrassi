@@ -2,7 +2,7 @@ package es.degrassi.forge.core.common.recipe.builder;
 
 import es.degrassi.forge.api.codec.NamedCodec;
 import es.degrassi.forge.api.impl.codec.RegistrarCodec;
-import es.degrassi.forge.api.utils.DegrassiLogger;
+import es.degrassi.common.utils.DegrassiLogger;
 import es.degrassi.forge.core.common.recipe.FurnaceRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -48,7 +48,7 @@ public class FurnaceBuilder extends MachineBuilder<FurnaceRecipe> {
 
   public FurnaceBuilder energy(int energy) {
     this.energy = energy;
-    requireEnergy(energy, "energy");
+    requireEnergyPerTick(energy, "energy");
     return this;
   }
 

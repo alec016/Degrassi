@@ -9,14 +9,12 @@ import es.degrassi.forge.core.client.DegrassiResourcePack;
 import es.degrassi.forge.core.client.model.DegrassiLayerDefinition;
 import es.degrassi.forge.core.client.model.SolarPanelModel;
 import es.degrassi.forge.core.client.renderer.ChestEntityRenderer;
-import es.degrassi.forge.core.client.renderer.cable.EnergyCableRenderer;
-import es.degrassi.forge.core.client.renderer.cable.FluidCableRenderer;
+import es.degrassi.forge.core.common.conduit.DegrassiConduits;
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.ContainerRegistration;
 import es.degrassi.forge.core.init.EntityRegistration;
 import es.degrassi.forge.core.init.ItemRegistration;
 import es.degrassi.forge.core.init.Registration;
-import es.degrassi.forge.core.tiers.CableTier;
 import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.PhotovoltaicCell;
@@ -58,6 +56,7 @@ public class DegrassiForge {
     EnvExecutor.runInEnv(Env.CLIENT, () -> () -> clientInit(bus));
 
     MinecraftForge.EVENT_BUS.register(DegrassiForge.class);
+    MinecraftForge.EVENT_BUS.register(DegrassiConduits.class);
     ResourcePackAdapter.registerResourcePack(DegrassiResourcePack.getPackInstance());
   }
 
@@ -90,8 +89,6 @@ public class DegrassiForge {
   }
 
   public static void registerRenderers() {
-    BlockEntityRendererRegistry.register(EntityRegistration.ENERGY_CABLE.get(), EnergyCableRenderer::new);
-    BlockEntityRendererRegistry.register(EntityRegistration.FLUID_CABLE.get(), FluidCableRenderer::new);
     BlockEntityRendererRegistry.register(EntityRegistration.CHEST.get(), ChestEntityRenderer::new);
   }
 
@@ -120,10 +117,6 @@ public class DegrassiForge {
           for (PhotovoltaicCell cell : PhotovoltaicCell.values()) {
             output.accept(new ItemStack(ItemRegistration.PHOTOVOLTAIC_CELL.get(cell)));
           }
-          for (CableTier tier : CableTier.values()) {
-            output.accept(new ItemStack(BlockRegistration.ENERGY_CABLE.get(tier)));
-            output.accept(new ItemStack(BlockRegistration.FLUID_CABLE.get(tier)));
-          }
         }
       ).withSearchBar().icon(() -> new ItemStack(ItemRegistration.RED_MATTER.get())).build());
     });
@@ -151,10 +144,6 @@ public class DegrassiForge {
       entries.put(new ItemStack(ItemRegistration.BLACK_PEARL.get()), vis);
       for (PhotovoltaicCell cell : PhotovoltaicCell.values()) {
         entries.put(new ItemStack(ItemRegistration.PHOTOVOLTAIC_CELL.get(cell)), vis);
-      }
-      for (CableTier tier : CableTier.values()) {
-        entries.put(new ItemStack(BlockRegistration.ENERGY_CABLE.get(tier)), vis);
-        entries.put(new ItemStack(BlockRegistration.FLUID_CABLE.get(tier)), vis);
       }
     }
   }

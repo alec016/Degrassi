@@ -1,12 +1,9 @@
 package es.degrassi.forge;
 
-import es.degrassi.forge.core.common.cables.energy.EnergyCableEntity;
-import es.degrassi.forge.core.common.cables.IBlock;
-import es.degrassi.forge.core.common.cables.fluid.FluidCableEntity;
+import es.degrassi.common.registry.IBlock;
 import es.degrassi.forge.core.common.machines.entity.ChestEntity;
 import es.degrassi.forge.core.common.machines.entity.FurnaceEntity;
 import es.degrassi.forge.core.common.machines.entity.SolarPanelEntity;
-import es.degrassi.forge.core.tiers.CableTier;
 import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.SolarPanel;
@@ -38,15 +35,6 @@ public class EnvHandler {
   public boolean hasFluid(Level level, BlockPos pos, Direction side) {
     var be = level.getBlockEntity(pos);
     return be != null && be.getCapability(ForgeCapabilities.FLUID_HANDLER, side).isPresent();
-  }
-
-
-  public EnergyCableEntity createEnergyCable(BlockPos pos, BlockState state, CableTier cableTier) {
-    return new EnergyCableEntity(pos, state, cableTier);
-  }
-
-  public FluidCableEntity createFluidCable(BlockPos pos, BlockState state, CableTier cableTier) {
-    return new FluidCableEntity(pos, state, cableTier);
   }
 
   public SolarPanelEntity createSP(BlockPos pos, BlockState state, SolarPanel solarPanel) {

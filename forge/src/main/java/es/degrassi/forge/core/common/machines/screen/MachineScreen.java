@@ -1,7 +1,7 @@
 package es.degrassi.forge.core.common.machines.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import es.degrassi.forge.api.utils.TextureSizeHelper;
+import es.degrassi.common.utils.TextureSizeHelper;
 import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.machines.container.MachineContainer;
 import net.minecraft.client.gui.GuiGraphics;

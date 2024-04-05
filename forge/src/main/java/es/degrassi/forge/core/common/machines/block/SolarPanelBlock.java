@@ -2,8 +2,8 @@ package es.degrassi.forge.core.common.machines.block;
 
 import dev.architectury.registry.menu.MenuRegistry;
 import es.degrassi.forge.EnvHandler;
-import es.degrassi.forge.api.utils.Utils;
-import es.degrassi.forge.core.common.cables.IBlock;
+import es.degrassi.common.utils.Utils;
+import es.degrassi.common.registry.IBlock;
 import es.degrassi.forge.core.common.machines.container.SolarPanelContainer;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.common.machines.entity.SolarPanelEntity;

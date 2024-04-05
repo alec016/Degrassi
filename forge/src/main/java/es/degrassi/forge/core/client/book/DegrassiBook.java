@@ -1,8 +1,8 @@
 package es.degrassi.forge.core.client.book;
 
+import es.degrassi.forge.core.common.conduit.common.init.ConduitItems;
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.ItemRegistration;
-import es.degrassi.forge.core.tiers.CableTier;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import es.degrassi.forge.lib.client.wiki.Icon;
@@ -13,6 +13,7 @@ import es.degrassi.forge.lib.client.wiki.page.panel.CraftingPanel;
 import es.degrassi.forge.lib.client.wiki.page.panel.EnergyPanel;
 import es.degrassi.forge.lib.client.wiki.page.panel.FluidPanel;
 import es.degrassi.forge.lib.client.wiki.page.panel.ItemPanel;
+import es.degrassi.forge.lib.client.wiki.page.panel.RedstonePanel;
 import es.degrassi.forge.lib.client.wiki.page.panel.WelcomePanel;
 
 public class DegrassiBook {
@@ -21,11 +22,11 @@ public class DegrassiBook {
     WIKI
       .e(
         "storage_transfer",
-        new Icon(BlockRegistration.ENERGY_CABLE.get(CableTier.EXTREME)),
+        new Icon(ConduitItems.ENERGY.get()),
         ae -> ae.s(
           as -> as.p(
             new GridPage(as).e(
-              "energy_cable",
+              "energy_conduit",
               e -> e.s(
                 s -> s.p(
                   new Info(IMG.ENERGY_CABLE, s),
@@ -33,11 +34,43 @@ public class DegrassiBook {
                 )
               )
             ).e(
-              "fluid_cable",
+              "basic_fluid_conduit",
               e -> e.s(
                 s -> s.p(
                   new Info(IMG.ENERGY_CABLE, s),
                   new FluidPanel<>(s).next(new CraftingPanel<>(s))
+                )
+              )
+            ).e(
+              "advanced_fluid_conduit",
+              e -> e.s(
+                s -> s.p(
+                  new Info(IMG.ENERGY_CABLE, s),
+                  new FluidPanel<>(s).next(new CraftingPanel<>(s))
+                )
+              )
+            ).e(
+              "extreme_fluid_conduit",
+              e -> e.s(
+                s -> s.p(
+                  new Info(IMG.ENERGY_CABLE, s),
+                  new FluidPanel<>(s).next(new CraftingPanel<>(s))
+                )
+              )
+            ).e(
+              "item_conduit",
+              e -> e.s(
+                s -> s.p(
+                  new Info(IMG.ENERGY_CABLE, s),
+                  new ItemPanel<>(s).next(new CraftingPanel<>(s))
+                )
+              )
+            ).e(
+              "redstone_conduit",
+              e -> e.s(
+                s -> s.p(
+                  new Info(IMG.ENERGY_CABLE, s),
+                  new RedstonePanel<>(s).next(new CraftingPanel<>(s))
                 )
               )
             ),

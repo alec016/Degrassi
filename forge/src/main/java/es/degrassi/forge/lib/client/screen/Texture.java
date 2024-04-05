@@ -1,8 +1,8 @@
 package es.degrassi.forge.lib.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import es.degrassi.forge.core.common.cables.Redstone;
-import es.degrassi.forge.core.common.cables.Transfer;
+import es.degrassi.common.registry.Redstone;
+import es.degrassi.common.registry.Transfer;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.client.gui.GuiGraphics;

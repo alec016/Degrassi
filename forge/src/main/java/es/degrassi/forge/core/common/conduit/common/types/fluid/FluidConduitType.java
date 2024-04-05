@@ -1,0 +1,38 @@
+package es.degrassi.forge.core.common.conduit.common.types.fluid;
+
+import es.degrassi.common.conduit.IConduitMenuData;
+import es.degrassi.common.conduit.TieredConduit;
+import es.degrassi.common.conduit.ticker.IConduitTicker;
+import es.degrassi.common.misc.Vector2i;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
+
+public class FluidConduitType extends TieredConduit<FluidExtendedData> {
+
+    public static final IConduitMenuData MENU_DATA = new IConduitMenuData.Simple(false, false, false, false, false, true);
+    private final boolean isMultiFluid;
+    private final int transferRate;
+
+    public FluidConduitType(ResourceLocation texture, int tier, boolean isMultiFluid, ResourceLocation iconTexture, Vector2i iconTexturePos) {
+        super(texture, new ResourceLocation("forge:fluid"), (isMultiFluid ? 100_000 : 0) + tier, iconTexture, iconTexturePos);
+        this.isMultiFluid = isMultiFluid;
+        this.transferRate = tier;
+        this.clientConduitData = new FluidClientData(iconTexture, iconTexturePos);
+    }
+
+    @Override
+    public IConduitTicker getTicker() {
+        return new FluidConduitTicker(!isMultiFluid, transferRate);
+    }
+
+    @Override
+    public IConduitMenuData getMenuData() {
+        return MENU_DATA;
+    }
+
+    @Override
+    public FluidExtendedData createExtendedConduitData(Level level, BlockPos pos) {
+        return new FluidExtendedData(isMultiFluid);
+    }
+}

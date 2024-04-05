@@ -6,16 +6,14 @@ import com.google.gson.JsonParseException;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
-import es.degrassi.forge.api.utils.DegrassiLogger;
+import es.degrassi.common.utils.DegrassiLogger;
 import es.degrassi.forge.core.common.recipe.FurnaceRecipe;
-import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import es.degrassi.forge.core.common.recipe.builder.FurnaceBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import org.jetbrains.annotations.Nullable;
 
 public class FurnaceSerializer extends MachineSerializer<FurnaceRecipe> {

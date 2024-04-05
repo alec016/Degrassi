@@ -30,9 +30,8 @@ public class EnergyPanel<T extends ItemLike> extends ItemPanel<T> {
     @Override
     public void render(GuiGraphics gui, int x, int y, int mx, int my, float pt, Font font, WikiScreen screen) {
         super.render(gui, x, y, mx, my, pt, font, screen);
-        if (getItem() instanceof InfoBox.IInfoBoxHolder) {
+        if (getItem() instanceof InfoBox.IInfoBoxHolder holder) {
             int i = 0;
-            InfoBox.IInfoBoxHolder holder = (InfoBox.IInfoBoxHolder) getItem();
             InfoBox box = holder.getInfoBox(new ItemStack(getItem()), new InfoBox(0xff0000, 0x3d3d3d));
             for (var entry : box.getLines().entrySet()) {
                 Texture.WIKI_INF_LN_BG.draw(gui, x + 9, y + 80 + (i * 12));

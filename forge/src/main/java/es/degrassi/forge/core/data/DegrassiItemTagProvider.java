@@ -1,10 +1,8 @@
 package es.degrassi.forge.core.data;
 
 import es.degrassi.forge.Degrassi;
-import es.degrassi.forge.core.common.machines.item.PhotovoltaicCellItem;
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.ItemRegistration;
-import es.degrassi.forge.core.tiers.CableTier;
 import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.PhotovoltaicCell;
@@ -25,18 +23,6 @@ public class DegrassiItemTagProvider extends ItemTagsProvider {
 
   @Override
   public void addTags(HolderLookup.@NotNull Provider provider) {
-    for(CableTier tier : CableTier.values()) {
-      this.tag(DegrassiTags.Items.ENERGY_CABLE.get()).add(BlockRegistration.ENERGY_CABLE.get(tier).asItem());
-      this.tag(DegrassiTags.Items.FLUID_CABLE.get()).add(BlockRegistration.FLUID_CABLE.get(tier).asItem());
-      this.tag(DegrassiTags.Items.ITEM_CABLE.get())
-//      .add()
-      ;
-    }
-
-    this.tag(DegrassiTags.Items.CABLE.get())
-      .addTag(DegrassiTags.Items.ENERGY_CABLE.get())
-      .addTag(DegrassiTags.Items.FLUID_CABLE.get())
-      .addTag(DegrassiTags.Items.ITEM_CABLE.get());
 
     for (Furnace tier : Furnace.values()) {
       this.tag(DegrassiTags.Items.FURNACE.get()).add(BlockRegistration.FURNACE.get(tier).asItem());
@@ -62,5 +48,11 @@ public class DegrassiItemTagProvider extends ItemTagsProvider {
       .addTag(DegrassiTags.Items.FURNACE.get())
       .addTag(DegrassiTags.Items.SP.get())
       .addTag(DegrassiTags.Items.CHEST.get());
+
+    this.tag(DegrassiTags.Items.WRENCH.get())
+      .add(ItemRegistration.WRENCH.get());
+
+    this.tag(DegrassiTags.Items.WRENCHES.get())
+      .addTag(DegrassiTags.Items.WRENCH.get());
   }
 }

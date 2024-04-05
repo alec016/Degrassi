@@ -7,9 +7,8 @@ import es.degrassi.forge.core.network.component.ExperiencePacket;
 import net.minecraft.nbt.CompoundTag;
 
 public class ExperienceComponent implements IComponent {
-  private float experience;
+  private float experience, capacity;
   private final ComponentManager manager;
-  private final float capacity;
   private final MachineEntity<?> entity;
   private final String id;
   private ComponentIOMode mode;
@@ -49,6 +48,7 @@ public class ExperienceComponent implements IComponent {
   public void serialize(CompoundTag nbt) {
     CompoundTag tag = new CompoundTag();
     tag.putFloat("experience", experience);
+    tag.putFloat("capacity", capacity);
     tag.putString("mode", mode.serialize());
     nbt.put(id, tag);
   }
@@ -58,6 +58,7 @@ public class ExperienceComponent implements IComponent {
     if (nbt.contains(id)) {
       CompoundTag tag = nbt.getCompound(id);
       this.experience = tag.getFloat("experience");
+      this.capacity = tag.getFloat("capacity");
       this.mode = ComponentIOMode.deserialize(tag.getString("mode"));
     }
   }
