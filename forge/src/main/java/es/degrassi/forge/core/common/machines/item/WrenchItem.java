@@ -64,6 +64,9 @@ public class WrenchItem extends Item implements IItem, IWrench, IHudItem {
     if (state.getBlock() instanceof IWrenchable iWrenchable
       && iWrenchable.onWrench(state, world, pos, player, hand, side, getWrenchMode(stack), hit)) {
       return InteractionResult.SUCCESS;
+    } else if (te instanceof IWrenchable iWrenchable
+      && iWrenchable.onWrench(state, world, pos, player, hand, side, getWrenchMode(stack), hit)) {
+      return InteractionResult.SUCCESS;
     } else {
       if (getWrenchMode(stack).rotate()
         // Only rotate Degrassi machines

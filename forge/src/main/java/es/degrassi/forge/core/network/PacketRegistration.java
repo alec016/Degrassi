@@ -18,6 +18,7 @@ public class PacketRegistration {
   public static final MessageType EXPERIENCE = MANAGER.registerS2C("experience", ExperiencePacket::read);
   public static final MessageType PROGRESS = MANAGER.registerS2C("progress", ProgressPacket::read);
   public static final MessageType FLUID = MANAGER.registerS2C("fluid", FluidPacket::read);
+  public static final MessageType SIDE_CONFIG = MANAGER.registerS2C("side_config", SideConfigPacket::read);
 
   public static void init() {}
 }

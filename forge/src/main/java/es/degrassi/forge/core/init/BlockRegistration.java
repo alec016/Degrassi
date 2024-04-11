@@ -7,10 +7,13 @@ import es.degrassi.forge.core.common.machines.block.ChestBlock;
 import es.degrassi.forge.core.common.machines.block.FurnaceBlock;
 import es.degrassi.forge.core.common.machines.block.MachineCasing;
 import es.degrassi.forge.core.common.machines.block.SolarPanelBlock;
+import es.degrassi.forge.core.common.storage.energy.block.EnergyCell;
+import es.degrassi.forge.core.common.storage.fluid.block.FluidTank;
 import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import es.degrassi.common.registry.VarReg;
+import es.degrassi.forge.core.tiers.Storage;
 import java.util.List;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.Block;
@@ -31,6 +34,9 @@ public class BlockRegistration {
   public static final VarReg<SolarPanel, Block> SP;
   public static final VarReg<Chest, Block> CHEST;
 
+  public static final VarReg<Storage.Energy, Block> ENERGY_CELL;
+  public static final VarReg<Storage.Fluid, Block> FLUID_TANK;
+
   // VarReg
   static {
     // Furnace
@@ -48,6 +54,17 @@ public class BlockRegistration {
       commonBlock(600),
       variant
     ), Chest.getNormalVariants());
+
+    // Storages
+    ENERGY_CELL = new VarReg<>(BLOCKS, "energy_cell", variant -> new EnergyCell(
+      commonBlock(500),
+      variant
+    ), Storage.Energy.getNormalVariants());
+
+    FLUID_TANK = new VarReg<>(BLOCKS, "fluid_tank", variant -> new FluidTank(
+      commonBlock(500),
+      variant
+    ), Storage.Fluid.getNormalVariants());
   }
 
   private static BlockBehaviour.Properties metalNoSolid(float hardness, float resistance) {

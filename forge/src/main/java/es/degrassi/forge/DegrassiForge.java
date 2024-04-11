@@ -19,6 +19,7 @@ import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.PhotovoltaicCell;
 import es.degrassi.forge.core.tiers.SolarPanel;
+import es.degrassi.forge.core.tiers.Storage;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -107,6 +108,12 @@ public class DegrassiForge {
           for (SolarPanel tier : SolarPanel.values()) {
             output.accept(new ItemStack(BlockRegistration.SP.get(tier)));
           }
+          for (Storage.Energy tier : Storage.Energy.values()) {
+            output.accept(new ItemStack(BlockRegistration.ENERGY_CELL.get(tier)));
+          }
+          for (Storage.Fluid tier : Storage.Fluid.values()) {
+            output.accept(new ItemStack(BlockRegistration.FLUID_TANK.get(tier)));
+          }
         }).withSearchBar().icon(() -> new ItemStack(ItemRegistration.MACHINE_CASING.get())).build());
       helper.register(ITEMS, CreativeModeTab.builder().title(Component.translatable("degrassi.tabs.items")).displayItems(
         (params, output) -> {
@@ -136,6 +143,12 @@ public class DegrassiForge {
       }
       for (Chest tier : Chest.values()) {
         entries.put(new ItemStack(BlockRegistration.CHEST.get(tier)), vis);
+      }
+      for (Storage.Energy tier : Storage.Energy.values()) {
+        entries.put(new ItemStack(BlockRegistration.ENERGY_CELL.get(tier)), vis);
+      }
+      for (Storage.Fluid tier : Storage.Fluid.values()) {
+        entries.put(new ItemStack(BlockRegistration.FLUID_TANK.get(tier)), vis);
       }
     } else if (event.getTabKey() == ITEMS) {
       entries.put(new ItemStack(ItemRegistration.WRENCH.get()), vis);

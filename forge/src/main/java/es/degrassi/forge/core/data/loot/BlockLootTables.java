@@ -4,6 +4,7 @@ import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.SolarPanel;
+import es.degrassi.forge.core.tiers.Storage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -28,6 +29,12 @@ public class BlockLootTables extends BlockLootSubProvider {
     }
     for (Chest tier : Chest.values()) {
       dropSelf(BlockRegistration.CHEST.get(tier));
+    }
+    for (Storage.Energy tier : Storage.Energy.values()) {
+      dropSelf(BlockRegistration.ENERGY_CELL.get(tier));
+    }
+    for (Storage.Fluid tier : Storage.Fluid.values()) {
+      dropSelf(BlockRegistration.FLUID_TANK.get(tier));
     }
   }
 

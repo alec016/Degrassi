@@ -117,6 +117,9 @@ public class ES extends DegrassiLangProvider {
     addInfo("wrench.mode", "Mode: %s");
     addInfo("wrench.mode.config", "Config");
     addInfo("wrench.mode.rotate", "Rotate");
+    addInfo("config.mode", "Cambiado %s, %s");
+    addInfo("config.mode.from", "De: %s");
+    addInfo("config.mode.to", "A: %s");
     // wiki info
     addInfo("io.mode", "I/O Mode");
     addInfo("io.mode.prev", "From: %s");

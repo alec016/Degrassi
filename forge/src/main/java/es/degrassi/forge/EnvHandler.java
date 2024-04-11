@@ -4,9 +4,12 @@ import es.degrassi.common.registry.IBlock;
 import es.degrassi.forge.core.common.machines.entity.ChestEntity;
 import es.degrassi.forge.core.common.machines.entity.FurnaceEntity;
 import es.degrassi.forge.core.common.machines.entity.SolarPanelEntity;
+import es.degrassi.forge.core.common.storage.energy.entity.EnergyCellEntity;
+import es.degrassi.forge.core.common.storage.fluid.entity.FluidTankEntity;
 import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.SolarPanel;
+import es.degrassi.forge.core.tiers.Storage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -47,6 +50,14 @@ public class EnvHandler {
 
   public ChestEntity createChest(BlockPos pos, BlockState state, Chest tier) {
     return new ChestEntity(pos, state, tier);
+  }
+
+  public EnergyCellEntity createEnergyCell(BlockPos pos, BlockState state, Storage.Energy tier) {
+    return new EnergyCellEntity(pos, state, tier);
+  }
+
+  public FluidTankEntity createFluidTank(BlockPos pos, BlockState state, Storage.Fluid tier) {
+    return new FluidTankEntity(pos, state, tier);
   }
 
   public void setupBlockItems() {
