@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 
 public abstract class MachineRenderer<T extends MachineEntity<?>> implements BlockEntityRenderer<T> {
   protected final BlockEntityRendererProvider.Context context;
-  protected MachineRenderer(BlockEntityRendererProvider.Context context) {
+  public MachineRenderer(BlockEntityRendererProvider.Context context) {
     this.context = context;
   }
 

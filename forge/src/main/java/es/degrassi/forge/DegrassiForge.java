@@ -1,7 +1,7 @@
 package es.degrassi.forge;
 
 import dev.architectury.platform.forge.EventBuses;
-import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
+//import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
 import dev.architectury.utils.Env;
 import dev.architectury.utils.EnvExecutor;
 import es.degrassi.common.DegrassiLocation;
@@ -10,6 +10,7 @@ import es.degrassi.forge.core.client.model.DegrassiLayerDefinition;
 import es.degrassi.forge.core.client.model.SolarPanelModel;
 import es.degrassi.forge.core.client.renderer.ChestEntityRenderer;
 import es.degrassi.forge.core.common.conduit.DegrassiConduits;
+import es.degrassi.forge.core.common.storage.fluid.entity.renderer.FluidTankRenderer;
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.ContainerRegistration;
 import es.degrassi.forge.core.init.EntityRegistration;
@@ -28,6 +29,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -38,6 +40,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegisterEvent;
+import org.jetbrains.annotations.NotNull;
 import org.zeith.hammerlib.client.adapter.ResourcePackAdapter;
 
 @Mod(Degrassi.MODID)
@@ -68,7 +71,6 @@ public class DegrassiForge {
 
   public static void clientSetup (FMLClientSetupEvent event) {
     event.enqueueWork(ContainerRegistration::registerScreens);
-    event.enqueueWork(DegrassiForge::registerRenderers);
   }
 
   @SubscribeEvent
@@ -89,12 +91,14 @@ public class DegrassiForge {
     );
   }
 
-  public static void registerRenderers() {
-    BlockEntityRendererRegistry.register(EntityRegistration.CHEST.get(), ChestEntityRenderer::new);
+  @SubscribeEvent
+  public static void registerRenderers(final EntityRenderersEvent.@NotNull RegisterRenderers event) {
+    event.registerBlockEntityRenderer(EntityRegistration.CHEST.get(), ChestEntityRenderer::new);
+    event.registerBlockEntityRenderer(EntityRegistration.FLUID_TANK.get(), FluidTankRenderer::new);
   }
 
   @SubscribeEvent
-  public static void register (final RegisterEvent event) {
+  public static void register (final @NotNull RegisterEvent event) {
     event.register(Registries.CREATIVE_MODE_TAB, helper -> {
       helper.register(MACHINES, CreativeModeTab.builder().title(Component.translatable("degrassi.tabs.machines")).displayItems(
         (params, output) -> {
@@ -130,7 +134,7 @@ public class DegrassiForge {
   }
 
   @SubscribeEvent
-  public static void registerTab(final BuildCreativeModeTabContentsEvent event) {
+  public static void registerTab(final @NotNull BuildCreativeModeTabContentsEvent event) {
     var entries = event.getEntries();
     var vis = CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS;
     if (event.getTabKey() == MACHINES) {

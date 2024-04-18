@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -22,6 +23,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -64,16 +69,14 @@ public class FluidTank extends MachineBlock implements IBlock<Storage.Fluid, Flu
           Fluid fluid = bucket.getFluid();
           int slot = player.getInventory().findSlotMatchingItem(stack);
           if (fluid.isSame(Fluids.EMPTY)) {
-            if (entity.getFluid().isEmpty()) return InteractionResult.PASS;
+            if (entity.getFluidStack() == null || entity.getFluidStack().isEmpty()) return InteractionResult.SUCCESS;
             Fluid f = entity.removeFluid();
             if (!f.isSame(Fluids.EMPTY)) {
               if (!player.isCreative()) player.getInventory().removeItem(slot, 1);
               player.addItem(new ItemStack(f.getBucket()));
             }
           } else {
-            if (!entity.getFluid().isEmpty()) return InteractionResult.PASS;
-            boolean inserted = entity.addFluid(fluid);
-            if (inserted) {
+            if (entity.addFluid(fluid)) {
               if (!player.isCreative()) {
                 player.getInventory().removeItem(slot, 1);
                 player.addItem(new ItemStack(Items.BUCKET));
@@ -86,5 +89,16 @@ public class FluidTank extends MachineBlock implements IBlock<Storage.Fluid, Flu
       return InteractionResult.SUCCESS;
     }
     return super.use(state, level, pos, player, hand, hit);
+  }
+
+  @SuppressWarnings("deprecation")
+  @Override
+  public VoxelShape getShape(BlockState state , BlockGetter level , BlockPos pos , CollisionContext context) {
+    VoxelShape shape = Shapes.empty();
+    shape = Shapes.join(shape, Shapes.create(0.125, 0, 0.125, 0.875, 0.9375, 0.875), BooleanOp.OR);
+    shape = Shapes.join(shape, Shapes.create(0.875, 0.9375, 0.875, 0.125, 0, 0.125), BooleanOp.OR);
+    shape = Shapes.join(shape, Shapes.create(0.125, 0, 0.125, 0.875, 0.0625, 0.875), BooleanOp.OR);
+    shape = Shapes.join(shape, Shapes.create(0.125, 0.875, 0.125, 0.875, 0.9375, 0.875), BooleanOp.OR);
+    return shape;
   }
 }

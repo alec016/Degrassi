@@ -1,6 +1,7 @@
 package es.degrassi.forge.core.tiers;
 
 import es.degrassi.common.registry.IVariant;
+import java.util.Locale;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -47,6 +48,21 @@ public class Storage {
     public boolean isCreative() {
       return this == CREATIVE;
     }
+
+    @Override
+    public String serializeNBT() {
+      return nameL();
+    }
+
+    @Override
+    public Energy deserializeNBT(String tier) {
+      return switch(tier.toLowerCase(Locale.ROOT)) {
+        case "advanced" -> ADVANCED;
+        case "extreme" -> EXTREME;
+        case "creative" -> CREATIVE;
+        default -> BASIC;
+      };
+    }
   }
 
   public enum Fluid implements IVariant<Fluid>, S<Integer, Capability<IFluidHandler>> {
@@ -89,6 +105,21 @@ public class Storage {
     public boolean isCreative() {
       return this == CREATIVE;
     }
+
+    @Override
+    public String serializeNBT() {
+      return nameL();
+    }
+
+    @Override
+    public Fluid deserializeNBT(String tier) {
+      return switch(tier.toLowerCase(Locale.ROOT)) {
+        case "advanced" -> ADVANCED;
+        case "extreme" -> EXTREME;
+        case "creative" -> CREATIVE;
+        default -> BASIC;
+      };
+    }
   }
 
   public interface S<T, C> {
@@ -96,5 +127,7 @@ public class Storage {
     T getTransfer();
     C getCapability();
     boolean isCreative();
+    String serializeNBT();
+    S<T, C> deserializeNBT(String tier);
   }
 }

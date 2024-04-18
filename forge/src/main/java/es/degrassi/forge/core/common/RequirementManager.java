@@ -3,7 +3,6 @@ package es.degrassi.forge.core.common;
 import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.api.core.common.RequirementMode;
 import es.degrassi.forge.api.core.common.RequirementType;
-import es.degrassi.forge.api.impl.codec.RegistrarCodec;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.common.requirement.EnergyRequirement;
 import es.degrassi.forge.core.common.requirement.ExperienceRequirement;
@@ -11,7 +10,6 @@ import es.degrassi.forge.core.common.requirement.FluidRequirement;
 import es.degrassi.forge.core.common.requirement.ItemRequirement;
 import java.util.List;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 
 @SuppressWarnings("unused")

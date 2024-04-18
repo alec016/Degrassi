@@ -7,7 +7,6 @@ import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.common.storage.energy.entity.EnergyCellEntity;
 import es.degrassi.forge.core.common.storage.fluid.entity.FluidTankEntity;
 import es.degrassi.forge.core.network.SideConfigPacket;
-import es.degrassi.forge.core.network.component.EnergyPacket;
 import java.util.EnumMap;
 import java.util.Map;
 import net.minecraft.core.BlockPos;
@@ -111,68 +110,68 @@ public class SideConfig implements INBTSerializable<CompoundTag> {
   }
 
   public void serverTick(Level level, BlockPos pos) {
-    BlockEntity entity = level.getBlockEntity(pos);
-    if (entity == null) return;
-    for (Direction side : Direction.values()) {
-      BlockPos relative = pos.relative(side);
-      BlockEntity relativeEntity = level.getBlockEntity(relative);
-      if (relativeEntity == null) continue;
-      if (entity instanceof EnergyCellEntity energy )
-        relativeEntity.getCapability(energy.getTier().getCapability(), side).ifPresent(handler ->
-          energy.getComponentManager().getComponent("energy").map(comp -> (EnergyComponent) comp).ifPresent(comp -> {
-            if (config.get(side).outputWithAll() && handler.canReceive()) {
-              int toExtract = comp.extractEnergy(energy.getTier().getTransfer(), true);
-              int toReceive = handler.receiveEnergy(toExtract, true);
-              int amount = Math.min(toExtract, toReceive);
-              if (amount > 0) {
-                if (!energy.getTier().isCreative()) comp.extractEnergy(amount, false);
-                handler.receiveEnergy(amount, false);
-              }
-            }
-            if (config.get(side).inputWillAll() && handler.canExtract()) {
-              int toExtract = handler.extractEnergy(energy.getTier().getTransfer(), true);
-              int toReceive = comp.receiveEnergy(toExtract, true);
-              int amount = Math.min(toExtract, toReceive);
-              if (amount > 0) {
-                handler.extractEnergy(amount, false);
-                comp.receiveEnergy(amount, false);
-              }
-            }
-          })
-        );
-      else if (entity instanceof FluidTankEntity fluid) {
-        relativeEntity.getCapability(fluid.getTier().getCapability(), side).ifPresent(handler ->
-          fluid.getComponentManager().getComponent("fluid").map(comp -> (FluidComponent) comp).ifPresent(comp -> {
-            int i;
-            if (config.get(side).outputWithAll()) {
-              for (i = 0; i < handler.getTanks(); ++i) {
-                FluidStack stack = comp.getFluidInTank(0);
-                if (stack.isEmpty() || stack.getAmount() <= 0) break;
-                stack.setAmount(Math.min(stack.getAmount(), fluid.getTier().getTransfer()));
-                FluidStack extracted = comp.drain(stack, IFluidHandler.FluidAction.SIMULATE);
-                int inserted = handler.fill(extracted, IFluidHandler.FluidAction.SIMULATE);
-                extracted.setAmount(Math.min(extracted.getAmount(), inserted));
-                if (extracted.getAmount() == 0) continue;
-                if (!fluid.getTier().isCreative()) comp.drain(extracted, IFluidHandler.FluidAction.EXECUTE);
-                handler.fill(extracted, IFluidHandler.FluidAction.EXECUTE);
-              }
-            }
-            if (config.get(side).inputWillAll()) {
-              for (i = 0; i < handler.getTanks(); ++i) {
-                FluidStack stack = handler.getFluidInTank(i);
-                if (stack.isEmpty() || stack.getAmount() <= 0) continue;
-                stack.setAmount(Math.min(stack.getAmount(), fluid.getTier().getTransfer()));
-                FluidStack extracted = handler.drain(stack, IFluidHandler.FluidAction.SIMULATE);
-                int inserted = comp.fill(extracted, IFluidHandler.FluidAction.SIMULATE);
-                extracted.setAmount(Math.min(extracted.getAmount(), inserted));
-                if (extracted.getAmount() == 0) continue;
-                comp.fill(extracted, IFluidHandler.FluidAction.EXECUTE);
-                handler.drain(extracted, IFluidHandler.FluidAction.EXECUTE);
-              }
-            }
-          })
-        );
-      }
-    }
+//    BlockEntity entity = level.getBlockEntity(pos);
+//    if (entity == null) return;
+//    for (Direction side : Direction.values()) {
+//      BlockPos relative = pos.relative(side);
+//      BlockEntity relativeEntity = level.getBlockEntity(relative);
+//      if (relativeEntity == null) continue;
+//      if (entity instanceof EnergyCellEntity energy)
+//        relativeEntity.getCapability(energy.getTier().getCapability(), side).ifPresent(handler ->
+//          energy.getComponentManager().getComponent("energy").map(comp -> (EnergyComponent) comp).ifPresent(comp -> {
+//            if (config.get(side).outputWithAll() && handler.canReceive()) {
+//              int toExtract = comp.extractEnergy(energy.getTier().getTransfer(), true);
+//              int toReceive = handler.receiveEnergy(toExtract, true);
+//              int amount = Math.min(toExtract, toReceive);
+//              if (amount > 0) {
+//                comp.extractEnergy(amount, false);
+//                handler.receiveEnergy(amount, false);
+//              }
+//            }
+//            if (config.get(side).inputWillAll() && handler.canExtract()) {
+//              int toExtract = handler.extractEnergy(energy.getTier().getTransfer(), true);
+//              int toReceive = comp.receiveEnergy(toExtract, true);
+//              int amount = Math.min(toExtract, toReceive);
+//              if (amount > 0) {
+//                handler.extractEnergy(amount, false);
+//                comp.receiveEnergy(amount, false);
+//              }
+//            }
+//          })
+//        );
+//      else if (entity instanceof FluidTankEntity fluid) {
+//        relativeEntity.getCapability(fluid.getTier().getCapability(), side).ifPresent(handler ->
+//          fluid.getComponentManager().getComponent("fluid").map(comp -> (FluidComponent) comp).ifPresent(comp -> {
+//            int i;
+//            if (config.get(side).outputWithAll()) {
+//              for (i = 0; i < handler.getTanks(); ++i) {
+//                FluidStack stack = comp.getFluidInTank(0);
+//                if (stack.isEmpty() || stack.getAmount() <= 0) break;
+//                stack.setAmount(Math.min(stack.getAmount(), fluid.getTier().getTransfer()));
+//                FluidStack extracted = comp.drain(stack, IFluidHandler.FluidAction.SIMULATE);
+//                int inserted = handler.fill(extracted, IFluidHandler.FluidAction.SIMULATE);
+//                extracted.setAmount(Math.min(extracted.getAmount(), inserted));
+//                if (extracted.getAmount() == 0) continue;
+//                comp.drain(extracted, IFluidHandler.FluidAction.EXECUTE);
+//                handler.fill(extracted, IFluidHandler.FluidAction.EXECUTE);
+//              }
+//            }
+//            if (config.get(side).inputWillAll()) {
+//              for (i = 0; i < handler.getTanks(); ++i) {
+//                FluidStack stack = handler.getFluidInTank(i);
+//                if (stack.isEmpty() || stack.getAmount() <= 0) continue;
+//                stack.setAmount(Math.min(stack.getAmount(), fluid.getTier().getTransfer()));
+//                FluidStack extracted = handler.drain(stack, IFluidHandler.FluidAction.SIMULATE);
+//                int inserted = comp.fill(extracted, IFluidHandler.FluidAction.SIMULATE);
+//                extracted.setAmount(Math.min(extracted.getAmount(), inserted));
+//                if (extracted.getAmount() == 0) continue;
+//                comp.fill(extracted, IFluidHandler.FluidAction.EXECUTE);
+//                handler.drain(extracted, IFluidHandler.FluidAction.EXECUTE);
+//              }
+//            }
+//          })
+//        );
+//      }
+//    }
   }
 }

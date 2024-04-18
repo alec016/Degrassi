@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "degrassi:block/fluid_tank_basic"
+    }
+  }
+}

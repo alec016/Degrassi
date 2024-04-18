@@ -1,7 +1,6 @@
 package es.degrassi.forge.core.common.component;
 
 import es.degrassi.forge.api.core.common.IComponent;
-import es.degrassi.forge.api.core.common.IManager;
 import es.degrassi.forge.core.common.ComponentManager;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.network.component.FluidPacket;
@@ -74,6 +73,7 @@ public class FluidComponent extends FluidTank implements IComponent {
   public void serialize(CompoundTag nbt) {
     CompoundTag tag = new CompoundTag();
     super.writeToNBT(tag);
+    tag.putInt("capacity", capacity);
     tag.putString("mode", mode.serialize());
     nbt.put(id, tag);
   }
@@ -82,6 +82,7 @@ public class FluidComponent extends FluidTank implements IComponent {
   public void deserialize(CompoundTag nbt) {
     CompoundTag tag = nbt.getCompound(id);
     super.readFromNBT(tag);
+    capacity = tag.getInt("capacity");
     mode = ComponentIOMode.deserialize(tag.getString("mode"));
   }
 
@@ -106,6 +107,10 @@ public class FluidComponent extends FluidTank implements IComponent {
   @Override
   public @NotNull FluidStack drain(FluidStack resource, FluidAction action) {
     return super.drain(resource, action);
+  }
+
+  public float getFillState() {
+    return this.getFluidAmount() / (float) this.capacity;
   }
 
   // recipe stuff

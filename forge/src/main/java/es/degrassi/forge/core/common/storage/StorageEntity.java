@@ -1,7 +1,5 @@
 package es.degrassi.forge.core.common.storage;
 
-import es.degrassi.common.conduit.IClientConduitData;
-import es.degrassi.common.conduit.IExtendedConduitData;
 import es.degrassi.forge.core.common.component.ComponentIOMode;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.common.machines.item.wrench.IWrenchable;
@@ -23,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class StorageEntity<T extends Storage.S> extends MachineEntity<StorageRecipe> implements IWrenchable {
   protected final SideConfig config = new SideConfig(this);
-  protected final T tier;
+  protected T tier;
   public StorageEntity(BlockEntityType<?> type , BlockPos pos , BlockState blockState , T tier) {
     super(type , pos , blockState);
     this.tier = tier;
@@ -32,17 +30,20 @@ public abstract class StorageEntity<T extends Storage.S> extends MachineEntity<S
     }
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public void load(@NotNull CompoundTag tag) {
     super.load(tag);
     if (tag.contains("config"))
       config.deserializeNBT(tag.getCompound("config"));
+    tier = (T) tier.deserializeNBT(tag.getString("tier"));
   }
 
   @Override
   protected void saveAdditional(@NotNull CompoundTag tag) {
     super.saveAdditional(tag);
     tag.put("config", config.serializeNBT());
+    tag.putString("tier", tier.serializeNBT());
   }
 
   public static void serverTick(

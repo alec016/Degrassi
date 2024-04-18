@@ -3,6 +3,7 @@ package es.degrassi.forge.core.network.component;
 import dev.architectury.networking.NetworkManager;
 import dev.architectury.networking.simple.BaseS2CMessage;
 import dev.architectury.networking.simple.MessageType;
+import dev.architectury.utils.Env;
 import es.degrassi.forge.core.common.component.FluidComponent;
 import es.degrassi.forge.core.common.machines.container.MachineContainer;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
