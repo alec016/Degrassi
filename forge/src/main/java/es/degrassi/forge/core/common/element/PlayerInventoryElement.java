@@ -1,8 +1,10 @@
 package es.degrassi.forge.core.common.element;
 
+import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IElement;
 import es.degrassi.common.utils.TextureSizeHelper;
 import es.degrassi.forge.core.common.ElementManager;
+import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
@@ -12,8 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings("rawtypes")
-public class PlayerInventoryElement extends AbstractWidget implements IElement {
+public class PlayerInventoryElement extends AbstractWidget implements IElement<IComponent> {
   private static final String id = "player_inventory";
   private final ElementManager manager;
   private final ResourceLocation texture;
@@ -57,12 +58,13 @@ public class PlayerInventoryElement extends AbstractWidget implements IElement {
   }
 
   @Override
-  public void serialize(CompoundTag nbt) {
-  }
+  public void serialize(CompoundTag nbt) {}
 
   @Override
-  public void deserialize(CompoundTag nbt) {
-  }
+  public void deserialize(CompoundTag nbt) {}
+
+  @Override
+  public void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent component) {}
 
   @Override
   public String toString() {

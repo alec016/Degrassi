@@ -10,6 +10,8 @@ public interface IComponent extends IType {
   void markDirty();
   String getId();
 
+  void fill(IRequirement<?> requirement);
+
   ComponentIOMode getMode();
   void setMode(ComponentIOMode mode);
 

@@ -1,6 +1,7 @@
 package es.degrassi.forge.api.core.common;
 
 import es.degrassi.forge.core.common.ElementManager;
+import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import org.jetbrains.annotations.NotNull;
@@ -40,6 +41,11 @@ public interface IElement<E extends IComponent> extends IType {
   default void clientTick() {}
   default void serverTick() {}
 
+  int getX();
+  int getY();
+
   void serialize(CompoundTag nbt);
   void deserialize(CompoundTag nbt);
+
+  void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent component);
 }

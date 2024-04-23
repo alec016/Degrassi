@@ -185,7 +185,21 @@ public class EN extends DegrassiLangProvider {
 
   @Override
   protected void addJeiRecipes() {
-
+    addJeiRecipe("furnace", "Degrassi Furnace");
+    // progress element
+    addJeiRecipe("time", "Duration: %s ticks");
+    addJeiRecipe("instant", "Instant craft");
+    addJeiRecipe("id", "Recipe ID: %s");
+    // energy element
+    addJeiRecipe("energy.input", "Requires");
+    addJeiRecipe("energy.output", "Produces");
+    addJeiRecipe("energy", "%s %s %s/t");
+    addJeiRecipe("energy.total", "%s RF");
+    // experience element
+    addJeiRecipe("experience.input", "Requires");
+    addJeiRecipe("experience.output", "Produces");
+    addJeiRecipe("experience", "%s %s %s/t");
+    addJeiRecipe("experience.total", "%s XP");
   }
 
   @Override

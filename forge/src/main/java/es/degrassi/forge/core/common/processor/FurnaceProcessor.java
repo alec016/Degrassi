@@ -6,10 +6,12 @@ import es.degrassi.forge.core.common.machines.entity.FurnaceEntity;
 import es.degrassi.forge.core.common.recipe.FurnaceRecipe;
 import es.degrassi.forge.core.common.requirement.EnergyRequirement;
 import es.degrassi.forge.core.init.RecipeRegistration;
+import es.degrassi.forge.core.tiers.Furnace;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.BlastingRecipe;
@@ -17,8 +19,10 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.item.crafting.SmokingRecipe;
+import net.minecraft.world.level.Level;
 
 public class FurnaceProcessor extends MachineProcessor<FurnaceRecipe, FurnaceEntity> {
+
   public FurnaceProcessor(FurnaceEntity entity, boolean reset) {
     super(entity, reset);
   }
@@ -28,16 +32,18 @@ public class FurnaceProcessor extends MachineProcessor<FurnaceRecipe, FurnaceEnt
   }
 
   @Override
-  protected void init() {
+  public void init() {
     initialized = true;
-    RecipeManager recipeManager = Objects.requireNonNull(entity.getLevel()).getRecipeManager();
+    Level level = entity == null ? Objects.requireNonNull(Minecraft.getInstance().level) : entity.getLevel();
+    RecipeManager recipeManager = level == null ? Minecraft.getInstance().level.getRecipeManager() : level.getRecipeManager();
     recipes = new ArrayList<>();
+    Furnace tier = entity == null ? Furnace.IRON : entity.getTier();
     recipes.addAll(recipeManager.getAllRecipesFor(RecipeRegistration.FURNACE_TYPE.get()).stream().map(recipe -> {
       recipe = recipe.copy();
-      recipe.setTime((int) (recipe.getTime() * entity.getTier().getSpeedModifier()));
+      recipe.setTime((int) (recipe.getTime() * tier.getSpeedModifier()));
       recipe.getRequirements().forEach(req -> {
         if (req instanceof EnergyRequirement energy) {
-          energy.setAmount((int) (energy.getAmount() * entity.getTier().getEnergyModifier()));
+          energy.setAmount((int) (energy.getAmount() * tier.getEnergyModifier()));
         }
       });
       return recipe;
@@ -46,14 +52,14 @@ public class FurnaceProcessor extends MachineProcessor<FurnaceRecipe, FurnaceEnt
     List<BlastingRecipe> blastingRecipes = recipeManager.getAllRecipesFor(RecipeType.BLASTING);
     List<SmokingRecipe> smokingRecipes = recipeManager.getAllRecipesFor(RecipeType.SMOKING);
     smeltingRecipes.forEach(smeltingRecipe -> {
-      int time = (int) (smeltingRecipe.getCookingTime() * entity.getTier().getSpeedModifier());
+      int time = (int) (smeltingRecipe.getCookingTime() * tier.getSpeedModifier());
       ResourceLocation recipeId = smeltingRecipe.getId();
       ItemStack result = smeltingRecipe.getResultItem(null);
       float xp = smeltingRecipe.getExperience();
       if (smeltingRecipe.getIngredients().get(0).getItems().length > 1) {
         List.of(smeltingRecipe.getIngredients().get(0).getItems()).forEach(input -> {
           List<IRequirement<?>> requirements = new RequirementManager()
-            .requireEnergyPerTick((int) (100 * entity.getTier().getEnergyModifier()), "energy")
+            .requireEnergyPerTick((int) (100 * tier.getEnergyModifier()), "energy")
             .produceExperience(xp, "experience")
             .requireItem(input.getItem(), input.getCount(), "input")
             .produceItem(result.getItem(), result.getCount(), "output")
@@ -71,7 +77,7 @@ public class FurnaceProcessor extends MachineProcessor<FurnaceRecipe, FurnaceEnt
       } else {
         ItemStack input = smeltingRecipe.getIngredients().get(0).getItems()[0];
         List<IRequirement<?>> requirements = new RequirementManager()
-          .requireEnergyPerTick((int) (100 * entity.getTier().getEnergyModifier()), "energy")
+          .requireEnergyPerTick((int) (100 * tier.getEnergyModifier()), "energy")
           .produceExperience(xp, "experience")
           .requireItem(input.getItem(), input.getCount(), "input")
           .produceItem(result.getItem(), result.getCount(), "output")
@@ -81,14 +87,14 @@ public class FurnaceProcessor extends MachineProcessor<FurnaceRecipe, FurnaceEnt
       }
     });
     blastingRecipes.forEach(blastingRecipe -> {
-      int time = (int) (blastingRecipe.getCookingTime() * entity.getTier().getSpeedModifier());
+      int time = (int) (blastingRecipe.getCookingTime() * tier.getSpeedModifier());
       ResourceLocation recipeId = blastingRecipe.getId();
       ItemStack result = blastingRecipe.getResultItem(null);
       float xp = blastingRecipe.getExperience();
       if (blastingRecipe.getIngredients().get(0).getItems().length > 1) {
         List.of(blastingRecipe.getIngredients().get(0).getItems()).forEach(input -> {
           List<IRequirement<?>> requirements = new RequirementManager()
-            .requireEnergyPerTick((int) (100 * entity.getTier().getEnergyModifier()), "energy")
+            .requireEnergyPerTick((int) (100 * tier.getEnergyModifier()), "energy")
             .produceExperience(xp, "experience")
             .requireItem(input.getItem(), input.getCount(), "input")
             .produceItem(result.getItem(), result.getCount(), "output")
@@ -106,7 +112,7 @@ public class FurnaceProcessor extends MachineProcessor<FurnaceRecipe, FurnaceEnt
       } else {
         ItemStack input = blastingRecipe.getIngredients().get(0).getItems()[0];
         List<IRequirement<?>> requirements = new RequirementManager()
-          .requireEnergyPerTick((int) (100 * entity.getTier().getEnergyModifier()), "energy")
+          .requireEnergyPerTick((int) (100 * tier.getEnergyModifier()), "energy")
           .produceExperience(xp, "experience")
           .requireItem(input.getItem(), input.getCount(), "input")
           .produceItem(result.getItem(), result.getCount(), "output")
@@ -116,7 +122,7 @@ public class FurnaceProcessor extends MachineProcessor<FurnaceRecipe, FurnaceEnt
       }
     });
     smokingRecipes.forEach(smokingRecipe -> {
-      int time = (int) (smokingRecipe.getCookingTime() * entity.getTier().getSpeedModifier());
+      int time = (int) (smokingRecipe.getCookingTime() * tier.getSpeedModifier());
       ResourceLocation recipeId = smokingRecipe.getId();
       ItemStack result = smokingRecipe.getResultItem(null);
       float xp = smokingRecipe.getExperience();

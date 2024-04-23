@@ -147,4 +147,8 @@ public class ItemRequirement implements IRequirement<ItemComponent> {
   public Item getItem () {
     return item;
   }
+
+  public int getAmount() {
+    return amount;
+  }
 }

@@ -1,8 +1,10 @@
 package es.degrassi.forge.core.common.component;
 
 import es.degrassi.forge.api.core.common.IComponent;
+import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ComponentManager;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
+import es.degrassi.forge.core.common.requirement.ExperienceRequirement;
 import es.degrassi.forge.core.network.component.ExperiencePacket;
 import net.minecraft.nbt.CompoundTag;
 
@@ -35,13 +37,21 @@ public class ExperienceComponent implements IComponent {
   public void markDirty() {
     entity.setChanged();
     if(entity.getLevel() != null && !entity.getLevel().isClientSide())
-      new ExperiencePacket(experience, id, entity.getBlockPos())
+      new ExperiencePacket(experience, capacity, id, entity.getBlockPos())
         .sendToChunkListeners(entity.getLevel().getChunkAt(entity.getBlockPos()));
   }
 
   @Override
   public String getId() {
     return id;
+  }
+
+  @Override
+  public void fill(IRequirement<?> requirement) {
+    if (requirement instanceof ExperienceRequirement req) {
+      this.experience = this.capacity = req.getXp();
+      markDirty();
+    }
   }
 
   @Override
@@ -95,6 +105,11 @@ public class ExperienceComponent implements IComponent {
     return capacity;
   }
 
+  public void setCapacity(float capacity) {
+    this.capacity = capacity;
+    markDirty();
+  }
+
   public boolean canExtract() {
     return this.experience > 0;
   }
@@ -122,6 +137,10 @@ public class ExperienceComponent implements IComponent {
     }
     markDirty();
     return toExtract;
+  }
+
+  public MachineEntity<?> getEntity() {
+    return entity;
   }
 
   @Override

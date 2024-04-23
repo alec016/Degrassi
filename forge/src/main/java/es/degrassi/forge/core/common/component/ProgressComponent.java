@@ -1,6 +1,7 @@
 package es.degrassi.forge.core.common.component;
 
 import es.degrassi.forge.api.core.common.IComponent;
+import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ComponentManager;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.network.component.ProgressPacket;
@@ -33,6 +34,9 @@ public class ProgressComponent implements IComponent {
   public String getId() {
     return id;
   }
+
+  @Override
+  public void fill(IRequirement<?> requirement) {}
 
   @Override
   public ComponentIOMode getMode() {
@@ -95,6 +99,10 @@ public class ProgressComponent implements IComponent {
 
   public boolean hasEnded() {
     return this.getProgress() >= this.getMaxProgress();
+  }
+
+  public MachineEntity<?> getEntity() {
+    return entity;
   }
 
   @Override

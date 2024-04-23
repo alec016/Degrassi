@@ -1,9 +1,11 @@
 package es.degrassi.forge.core.common.element;
 
+import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IElement;
 import es.degrassi.common.utils.TextureSizeHelper;
 import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.component.ItemComponent;
+import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -93,6 +95,11 @@ public class ItemElement extends AbstractWidget implements IElement<ItemComponen
   @Override
   public void deserialize(CompoundTag nbt) {
 
+  }
+
+  @Override
+  public void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent component) {
+    renderTexture(guiGraphics, texture, getX(), getY(), 0, 0, 0, getWidth(), getHeight(), getWidth(), getHeight());
   }
 
   @Override

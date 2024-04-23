@@ -27,15 +27,15 @@ dependencies {
     modImplementation "org.zeith.hammerlib:HammerLib-${project.minecraft_version}:${project.hammerlib_version}"
 
     //JEI 10
-    modCompileOnly "mezz.jei:jei-${project.minecraft_version}-common-api:${project.jei_version}"
-    modCompileOnly "mezz.jei:jei-${project.minecraft_version}-forge-api:${project.jei_version}"
-    modLocalRuntime("mezz.jei:jei-${project.minecraft_version}-forge:${project.jei_version}") { transitive = false }
+//    modCompileOnly "mezz.jei:jei-${project.minecraft_version}-common-api:${project.jei_version}"
+//    modCompileOnly "mezz.jei:jei-${project.minecraft_version}-forge-api:${project.jei_version}"
+//    modLocalRuntime("mezz.jei:jei-${project.minecraft_version}-forge:${project.jei_version}") { transitive = false }
 
     // Mekanism
-    modLocalRuntime "curse.maven:mekanism-268560:5125665"
+//    modLocalRuntime "curse.maven:mekanism-268560:5125665"
 
     // Jade
-    modImplementation "curse.maven:jade-324717:5072729"
+//    modImplementation "curse.maven:jade-324717:5072729"
 
     // KubeJS
 //    modImplementation "dev.latvian.mods:kubejs-forge:${kubejs_version}"

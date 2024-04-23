@@ -76,7 +76,7 @@ dependencies {
     //JEI 10
     modCompileOnly "mezz.jei:jei-${project.minecraft_version}-common-api:${project.jei_version}"
     modCompileOnly "mezz.jei:jei-${project.minecraft_version}-forge-api:${project.jei_version}"
-    modLocalRuntime("mezz.jei:jei-${project.minecraft_version}-forge:${project.jei_version}") { transitive = false }
+    modLocalRuntime ("mezz.jei:jei-${project.minecraft_version}-forge:${project.jei_version}") { transitive = false }
 
     // Mekanism
     modLocalRuntime "curse.maven:mekanism-268560:5125665"

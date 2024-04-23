@@ -1,10 +1,12 @@
 package es.degrassi.forge.core.common.element;
 
 import es.degrassi.forge.api.core.common.ElementDirection;
+import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IElement;
 import es.degrassi.common.utils.TextureSizeHelper;
 import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.component.BarComponent;
+import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -109,6 +111,11 @@ public class BarElement extends AbstractWidget implements IElement<BarComponent>
     CompoundTag tag = nbt.getCompound(id);
     emptyTexture = new ResourceLocation(tag.getString(EMPTY_TEXTURE_KEY));
     filledTexture = new ResourceLocation(tag.getString(FILLED_TEXTURE_KEY));
+  }
+
+  @Override
+  public void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent component) {
+
   }
 
   public ElementDirection getDirection() {

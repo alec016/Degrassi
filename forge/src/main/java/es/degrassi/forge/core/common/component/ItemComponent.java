@@ -1,8 +1,10 @@
 package es.degrassi.forge.core.common.component;
 
 import es.degrassi.forge.api.core.common.IComponent;
+import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ComponentManager;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
+import es.degrassi.forge.core.common.requirement.ItemRequirement;
 import es.degrassi.forge.core.network.component.ItemPacket;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,7 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
   private final List<Item> filter;
   private final boolean whitelist;
   private ComponentIOMode mode;
+
   public ItemComponent(ComponentManager manager, String id, MachineEntity<?> entity, ComponentIOMode mode) {
     this.manager = manager;
     this.id = id;
@@ -63,6 +66,13 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
   @Override
   public String getId() {
     return id;
+  }
+
+  @Override
+  public void fill(IRequirement<?> requirement) {
+    if (requirement instanceof ItemRequirement req) {
+      setStackInSlot(0, new ItemStack(req.getItem(), req.getAmount()));
+    }
   }
 
   @Override
@@ -127,6 +137,18 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
   public @NotNull ItemStack extractRecipeItem(int slot, int amount, boolean simulate) {
     if (mode.output()) return ItemStack.EMPTY;
     return super.extractItem(0, amount, simulate);
+  }
+
+  public MachineEntity<?> getEntity() {
+    return entity;
+  }
+
+  public boolean isWhitelist() {
+    return whitelist;
+  }
+
+  public List<Item> getFilter() {
+    return filter;
   }
 
   @Override

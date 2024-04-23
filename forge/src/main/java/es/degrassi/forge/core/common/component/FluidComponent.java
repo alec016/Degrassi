@@ -1,8 +1,10 @@
 package es.degrassi.forge.core.common.component;
 
 import es.degrassi.forge.api.core.common.IComponent;
+import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ComponentManager;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
+import es.degrassi.forge.core.common.requirement.FluidRequirement;
 import es.degrassi.forge.core.network.component.FluidPacket;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,6 +69,14 @@ public class FluidComponent extends FluidTank implements IComponent {
   @Override
   public String getId() {
     return id;
+  }
+
+  @Override
+  public void fill(IRequirement<?> requirement) {
+    if (requirement instanceof FluidRequirement req) {
+      this.fluid = new FluidStack(req.getFluid(), req.getAmount());
+      markDirty();
+    }
   }
 
   @Override

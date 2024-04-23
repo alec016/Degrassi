@@ -14,11 +14,12 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class ExperiencePacket extends BaseS2CMessage {
-  private final float experience;
+  private final float experience, capacity;
   private final String id;
   private final BlockPos pos;
-  public ExperiencePacket(float experience, String id, BlockPos pos) {
+  public ExperiencePacket(float experience, float capacity, String id, BlockPos pos) {
     this.experience = experience;
+    this.capacity = capacity;
     this.id = id;
     this.pos = pos;
   }
@@ -31,13 +32,14 @@ public class ExperiencePacket extends BaseS2CMessage {
   @Override
   public void write(@NotNull FriendlyByteBuf buf) {
     buf.writeFloat(experience);
+    buf.writeFloat(capacity);
     buf.writeUtf(id);
     buf.writeBlockPos(pos);
   }
 
   @Contract("_ -> new")
   public static @NotNull ExperiencePacket read(@NotNull FriendlyByteBuf buf) {
-    return new ExperiencePacket(buf.readFloat(), buf.readUtf(), buf.readBlockPos());
+    return new ExperiencePacket(buf.readFloat(), buf.readFloat(), buf.readUtf(), buf.readBlockPos());
   }
 
   @Override
@@ -48,7 +50,10 @@ public class ExperiencePacket extends BaseS2CMessage {
           .getComponentManager()
           .getComponent(id)
           .map(component -> (ExperienceComponent) component)
-          .ifPresent(component -> component.setExperience(experience));
+          .ifPresent(component -> {
+            component.setExperience(experience);
+            component.setCapacity(capacity);
+          });
         if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.containerMenu instanceof MachineContainer<?> menu &&
           menu.getEntity().getBlockPos().equals(pos)
         ) {
@@ -56,7 +61,10 @@ public class ExperiencePacket extends BaseS2CMessage {
             .getComponentManager()
             .getComponent(id)
             .map(component -> (ExperienceComponent) component)
-            .ifPresent(component -> component.setExperience(experience));
+            .ifPresent(component -> {
+              component.setExperience(experience);
+              component.setCapacity(capacity);
+            });
         }
       }
     });

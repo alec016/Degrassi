@@ -1,10 +1,13 @@
 package es.degrassi.forge.core.common.element;
 
+import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.api.core.common.ElementDirection;
+import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IElement;
 import es.degrassi.common.utils.TextureSizeHelper;
 import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.component.ProgressComponent;
+import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
@@ -100,6 +103,27 @@ public class ProgressElement extends AbstractWidget implements IElement<Progress
     CompoundTag tag = nbt.getCompound(id);
     emptyTexture = new ResourceLocation(tag.getString(EMPTY_TEXTURE_KEY));
     filledTexture = new ResourceLocation(tag.getString(FILLED_TEXTURE_KEY));
+  }
+
+  @Override
+  public void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent iComponent) {
+    if (!(iComponent instanceof ProgressComponent component)) return;
+    renderTexture(guiGraphics, emptyTexture, getX(), getY(), 0, 0, 0, getWidth(), getHeight(), getWidth(), getHeight());
+    float filledPercentage = component.getProgressPercentage();
+    int textureWidth = TextureSizeHelper.getTextureWidth(filledTexture), textureHeight = TextureSizeHelper.getTextureHeight(filledTexture);
+    Pair<Integer, Integer> widthHeight = getWidthHeight(textureWidth, textureHeight, filledPercentage);
+    Pair<Integer, Integer> xyOffset = getXYOffset(textureWidth, textureHeight, filledPercentage);
+    int width = widthHeight.getA(), height = widthHeight.getB();
+    int xOffset = xyOffset.getA(), yOffset = xyOffset.getB();
+    renderTexture(guiGraphics, filledTexture, getX() + xOffset, getY() + yOffset, xOffset, yOffset, 0, width, height, textureWidth, textureHeight);
+  }
+
+  public ResourceLocation getEmptyTexture() {
+    return emptyTexture;
+  }
+
+  public ResourceLocation getFilledTexture() {
+    return filledTexture;
   }
 
   @Override

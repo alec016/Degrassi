@@ -1,6 +1,7 @@
 package es.degrassi.forge.core.common.component;
 
 import es.degrassi.forge.api.core.common.IComponent;
+import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ComponentManager;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.network.component.BarPacket;
@@ -39,6 +40,9 @@ public class BarComponent implements IComponent {
   public String getId() {
     return id;
   }
+
+  @Override
+  public void fill(IRequirement<?> req) {}
 
   @Override
   public ComponentIOMode getMode() {

@@ -135,4 +135,12 @@ public class FluidRequirement implements IRequirement<FluidComponent> {
   public String getId() {
     return id;
   }
+
+  public Fluid getFluid() {
+    return fluid;
+  }
+
+  public int getAmount() {
+    return amount;
+  }
 }

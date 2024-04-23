@@ -62,6 +62,30 @@ public class FurnaceRecipe extends MachineRecipe<FurnaceRecipe> {
     return false;
   }
 
+  public static void separateRequirements(FurnaceRecipe recipe, List<? extends IComponent> components) {
+    List<IComponent> componentMatches = new ArrayList<>();
+    recipe.getRequirements().forEach(requirement -> components.forEach(component -> {
+      if (component.getId().equals(requirement.getId())) {
+        component.fill(requirement);
+        if (requirement.matches(component, recipe.getTime())) {
+          componentMatches.add(component);
+        }
+      }
+    }));
+    recipe.tickRequirements.clear();
+    recipe.endRequirements.clear();
+    recipe.startRequirements.clear();
+    recipe.getRequirements().forEach(requirement -> componentMatches.forEach(component -> {
+      if (requirement.getId().equals(component.getId())) {
+        if (requirement.getMode().isPerTick()) recipe.tickRequirements.put(requirement, component);
+        else {
+          if (requirement.getMode().isInput()) recipe.startRequirements.put(requirement, component);
+          else recipe.endRequirements.put(requirement, component);
+        }
+      }
+    }));
+  }
+
   @Override
   public FurnaceRecipe copy() {
     FurnaceRecipe recipe = new FurnaceRecipe(getId(), getTime(), getRequirements().stream().map(IRequirement::copy).toList());

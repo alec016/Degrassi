@@ -1,8 +1,10 @@
 package es.degrassi.forge.core.common.component;
 
 import es.degrassi.forge.api.core.common.IComponent;
+import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ComponentManager;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
+import es.degrassi.forge.core.common.requirement.EnergyRequirement;
 import es.degrassi.forge.core.network.component.EnergyPacket;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -119,6 +121,14 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
     return id;
   }
 
+  @Override
+  public void fill(IRequirement<?> requirement) {
+    if (requirement instanceof EnergyRequirement req) {
+      this.energy = this.capacity = req.getAmount();
+      markDirty();
+    }
+  }
+
   public int toComparatorPower() {
     return (int) (subSized() * 15);
   }
@@ -174,6 +184,10 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
     }
     markDirty();
     return toExtract;
+  }
+
+  public MachineEntity<?> getEntity() {
+    return entity;
   }
 
   @Override
