@@ -5,9 +5,13 @@ import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ComponentManager;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.network.component.BarPacket;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.nbt.CompoundTag;
 import org.jetbrains.annotations.NotNull;
 
+@Getter
+@Setter
 public class BarComponent implements IComponent {
   private final ComponentManager manager;
   private ComponentIOMode mode;
@@ -24,11 +28,6 @@ public class BarComponent implements IComponent {
   }
 
   @Override
-  public ComponentManager getManager() {
-    return manager;
-  }
-
-  @Override
   public void markDirty() {
     entity.setChanged();
     if(entity.getLevel() != null && !entity.getLevel().isClientSide())
@@ -37,22 +36,7 @@ public class BarComponent implements IComponent {
   }
 
   @Override
-  public String getId() {
-    return id;
-  }
-
-  @Override
   public void fill(IRequirement<?> req) {}
-
-  @Override
-  public ComponentIOMode getMode() {
-    return mode;
-  }
-
-  @Override
-  public void setMode(ComponentIOMode mode) {
-    this.mode = mode;
-  }
 
   @Override
   public void serialize(@NotNull CompoundTag nbt) {
@@ -75,21 +59,5 @@ public class BarComponent implements IComponent {
 
   public double getFilledPercentage() {
     return this.amount / this.capacity;
-  }
-
-  public double getAmount() {
-    return this.amount;
-  }
-
-  public double getCapacity() {
-    return this.capacity;
-  }
-
-  public void setAmount(double amount) {
-    this.amount = amount;
-  }
-
-  public void setCapacity(double capacity) {
-    this.capacity = capacity;
   }
 }

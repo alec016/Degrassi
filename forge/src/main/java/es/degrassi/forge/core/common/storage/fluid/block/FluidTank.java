@@ -5,13 +5,17 @@ import es.degrassi.common.utils.Utils;
 import es.degrassi.forge.EnvHandler;
 import es.degrassi.forge.core.common.machines.block.MachineBlock;
 import es.degrassi.forge.core.common.storage.fluid.entity.FluidTankEntity;
+import es.degrassi.forge.core.common.storage.fluid.item.FluidTankItem;
 import es.degrassi.forge.core.init.EntityRegistration;
 import es.degrassi.forge.core.tiers.Storage;
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
@@ -30,17 +34,22 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@Getter
 public class FluidTank extends MachineBlock implements IBlock<Storage.Fluid, FluidTank> {
-  private final Storage.Fluid tier;
+  private final Storage.Fluid variant;
   public FluidTank(Properties properties, Storage.Fluid tier) {
     super(properties);
-    this.tier = tier;
+    this.variant = tier;
   }
 
   @Nullable
   @Override
   public BlockEntity newBlockEntity(BlockPos pos , BlockState state) {
-    return EnvHandler.INSTANCE.createFluidTank(pos, state, tier);
+    return EnvHandler.INSTANCE.createFluidTank(pos, state, variant);
+  }
+
+  public BlockItem getBlockItem(Item.Properties properties) {
+    return new FluidTankItem(this, new Item.Properties());
   }
 
   @Override
@@ -51,11 +60,6 @@ public class FluidTank extends MachineBlock implements IBlock<Storage.Fluid, Flu
         ? FluidTankEntity::clientTick
         : FluidTankEntity::serverTick
     );
-  }
-
-  @Override
-  public Storage.Fluid getVariant() {
-    return tier;
   }
 
   @SuppressWarnings("deprecation")

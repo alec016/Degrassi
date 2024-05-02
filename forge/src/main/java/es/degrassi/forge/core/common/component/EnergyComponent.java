@@ -6,9 +6,13 @@ import es.degrassi.forge.core.common.ComponentManager;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.common.requirement.EnergyRequirement;
 import es.degrassi.forge.core.network.component.EnergyPacket;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.energy.IEnergyStorage;
 
+@Getter
+@Setter
 public class EnergyComponent implements IComponent, IEnergyStorage {
   private int energy;
   private final ComponentManager manager;
@@ -24,19 +28,6 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
     this.maxOutput = Math.min(capacity, maxOutput);
     this.entity = entity;
     this.id = id;
-    this.mode = mode;
-  }
-
-  @Override
-  public ComponentManager getManager() {
-    return manager;
-  }
-
-  public ComponentIOMode getMode() {
-    return mode;
-  }
-
-  public void setMode(ComponentIOMode mode) {
     this.mode = mode;
   }
 
@@ -79,7 +70,7 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
 
   @Override
   public int receiveEnergy(int energy, boolean simulate) {
-    int toReceive = Math.min(this.capacity - this.energy, Math.min(energy, maxInput));
+    int toReceive = Math.min(this.capacity - this.getEnergyStored(), Math.min(energy, maxInput));
     if (!simulate) {
       this.energy += toReceive;
     }
@@ -89,7 +80,7 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
 
   @Override
   public int extractEnergy(int energy, boolean simulate) {
-    int toExtract = Math.min(this.energy, Math.min(energy, this.maxOutput));
+    int toExtract = Math.min(this.getEnergyStored(), Math.min(energy, this.maxOutput));
     if (!simulate) {
       this.energy -= toExtract;
     }
@@ -117,10 +108,6 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
     return getMode().inputWillAll() && maxInput > 0;
   }
 
-  public String getId() {
-    return id;
-  }
-
   @Override
   public void fill(IRequirement<?> requirement) {
     if (requirement instanceof EnergyRequirement req) {
@@ -137,31 +124,9 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
     return this.capacity > 0 ? (float) this.energy / this.capacity : 0;
   }
 
-  public int getMaxInput() {
-    return maxInput;
-  }
-
-  public int getMaxOutput() {
-    return maxOutput;
-  }
-
-  public void setMaxInput(int maxInput) {
-    this.maxInput = maxInput;
-  }
-
-  public void setMaxOutput(int maxOutput) {
-    this.maxOutput = maxOutput;
-  }
-
   public EnergyComponent setCapacity(int capacity) {
     if (this.capacity != capacity)
       this.capacity = capacity;
-    return this;
-  }
-
-  public EnergyComponent setTransfer(int energyTransfer) {
-    setMaxInput(energyTransfer);
-    setMaxOutput(energyTransfer);
     return this;
   }
 
@@ -186,10 +151,6 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
     return toExtract;
   }
 
-  public MachineEntity<?> getEntity() {
-    return entity;
-  }
-
   @Override
   public String toString() {
     return "EnergyComponent{" +
@@ -199,5 +160,10 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
       ", maxOutput=" + maxOutput +
       ", id='" + id + '\'' +
       '}';
+  }
+
+  public void setTransfer(int transferCache) {
+    if (mode.inputWillAll()) setMaxInput(transferCache);
+    if (mode.outputWithAll()) setMaxOutput(transferCache);
   }
 }

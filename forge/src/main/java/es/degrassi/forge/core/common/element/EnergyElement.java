@@ -8,6 +8,7 @@ import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.component.EnergyComponent;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import java.util.List;
+import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -20,6 +21,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
+@Getter
 public class EnergyElement extends AbstractWidget implements IElement<EnergyComponent> {
   private ResourceLocation emptyTexture, filledTexture;
   private final ElementManager manager;
@@ -124,14 +126,6 @@ public class EnergyElement extends AbstractWidget implements IElement<EnergyComp
     int width = widthHeight.getA(), height = widthHeight.getB();
     int xOffset = xyOffset.getA(), yOffset = xyOffset.getB();
     renderTexture(guiGraphics, filledTexture, getX() + xOffset, getY() + yOffset, xOffset, yOffset, 0, width, height, textureWidth, textureHeight);
-  }
-
-  public String getId() {
-    return id;
-  }
-
-  public ElementDirection getDirection() {
-    return direction;
   }
 
   @Override

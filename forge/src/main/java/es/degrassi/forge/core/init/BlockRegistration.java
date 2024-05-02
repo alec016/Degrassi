@@ -7,10 +7,16 @@ import es.degrassi.forge.core.common.machines.block.ChestBlock;
 import es.degrassi.forge.core.common.machines.block.FurnaceBlock;
 import es.degrassi.forge.core.common.machines.block.MachineCasing;
 import es.degrassi.forge.core.common.machines.block.SolarPanelBlock;
+import es.degrassi.forge.core.common.machines.multiblock.parts.block.EnergyHatch;
+import es.degrassi.forge.core.common.machines.multiblock.parts.block.FluidInputTank;
+import es.degrassi.forge.core.common.machines.multiblock.parts.block.FluidOutputTank;
+import es.degrassi.forge.core.common.machines.multiblock.parts.block.InputBus;
+import es.degrassi.forge.core.common.machines.multiblock.parts.block.OutputBus;
 import es.degrassi.forge.core.common.storage.energy.block.EnergyCell;
 import es.degrassi.forge.core.common.storage.fluid.block.FluidTank;
 import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
+import es.degrassi.forge.core.tiers.MultiblockPartStorage;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import es.degrassi.common.registry.VarReg;
 import es.degrassi.forge.core.tiers.Storage;
@@ -36,6 +42,13 @@ public class BlockRegistration {
 
   public static final VarReg<Storage.Energy, Block> ENERGY_CELL;
   public static final VarReg<Storage.Fluid, Block> FLUID_TANK;
+
+  // Multiblock parts
+  public static final VarReg<MultiblockPartStorage.Energy, Block> ENERGY_HATCH;
+  public static final VarReg<MultiblockPartStorage.Fluid.Input, Block> FLUID_INPUT_TANK;
+  public static final VarReg<MultiblockPartStorage.Fluid.Output, Block> FLUID_OUTPUT_TANK;
+  public static final VarReg<MultiblockPartStorage.Item.Input, Block> INPUT_BUS;
+  public static final VarReg<MultiblockPartStorage.Item.Output, Block> OUTPUT_BUS;
 
   // VarReg
   static {
@@ -65,6 +78,30 @@ public class BlockRegistration {
       commonBlock(500),
       variant
     ), Storage.Fluid.getNormalVariants());
+  }
+
+  // Multiblock parts
+  static {
+    ENERGY_HATCH = new VarReg<>(BLOCKS, "energy_hatch", variant -> new EnergyHatch(
+      commonBlock(550),
+      variant
+    ), MultiblockPartStorage.Energy.getNormalVariants());
+    FLUID_INPUT_TANK = new VarReg<>(BLOCKS, "fluid_input_tank", variant -> new FluidInputTank(
+      commonBlock(550),
+      variant
+    ), MultiblockPartStorage.Fluid.Input.getNormalVariants());
+    FLUID_OUTPUT_TANK = new VarReg<>(BLOCKS, "fluid_output_tank", variant -> new FluidOutputTank(
+      commonBlock(550),
+      variant
+    ), MultiblockPartStorage.Fluid.Output.getNormalVariants());
+    INPUT_BUS = new VarReg<>(BLOCKS, "input_bus", variant -> new InputBus(
+      commonBlock(550),
+      variant
+    ), MultiblockPartStorage.Item.Input.getNormalVariants());
+    OUTPUT_BUS = new VarReg<>(BLOCKS, "output_bus", variant -> new OutputBus(
+      commonBlock(550),
+      variant
+    ), MultiblockPartStorage.Item.Output.getNormalVariants());
   }
 
   private static BlockBehaviour.Properties metalNoSolid(float hardness, float resistance) {

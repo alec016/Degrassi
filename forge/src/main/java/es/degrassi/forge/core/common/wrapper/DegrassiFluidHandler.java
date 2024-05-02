@@ -59,6 +59,7 @@ public class DegrassiFluidHandler implements IFluidHandler {
       }
       if (fluid.isEmpty()) {
         fluid = new FluidStack(resource, Math.min(capacity, resource.getAmount()));
+        currentComponent.setFluid(fluid);
         onContentsChanged();
         return fluid.getAmount();
       }
@@ -84,6 +85,7 @@ public class DegrassiFluidHandler implements IFluidHandler {
     currentComponent = null;
     return 0;
   }
+
   @Override
   public @NotNull FluidStack drain(FluidStack resource, FluidAction action) {
     if (components.stream().anyMatch(comp -> comp.getMode().input())) return FluidStack.EMPTY;
@@ -102,6 +104,7 @@ public class DegrassiFluidHandler implements IFluidHandler {
     currentComponent = null;
     return FluidStack.EMPTY;
   }
+
 
   @Override
   public @NotNull FluidStack drain(int maxDrain, FluidAction action) {

@@ -52,6 +52,10 @@ configurations {
 }
 
 dependencies {
+    // lombok
+    compileOnly "org.projectlombok:lombok:${project.lombok_version}"
+    annotationProcessor "org.projectlombok:lombok:${project.lombok_version}"
+
     forge "net.minecraftforge:forge:${project.forge_version}"
     modImplementation "dev.architectury:architectury-forge:${project.architectury_version}"
 //    modApi "dev.architectury:architectury-api:${project.architectury_version}"

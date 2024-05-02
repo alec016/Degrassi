@@ -11,6 +11,7 @@ import es.degrassi.forge.core.common.machines.item.SolarPanelItem;
 import es.degrassi.forge.core.init.EntityRegistration;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import java.util.stream.Stream;
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -38,6 +39,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@Getter
 @SuppressWarnings("unused")
 public class SolarPanelBlock extends MachineBlock implements IBlock<SolarPanel, SolarPanelBlock> {
   private final SolarPanel tier;
@@ -100,10 +102,6 @@ public class SolarPanelBlock extends MachineBlock implements IBlock<SolarPanel, 
       shapes.add(Shapes.create(0, ph, 15 / 16F, 1 / 16F, h2, 1));
 
     return Shapes.or(baseShape, shapes.build().toArray(VoxelShape[]::new));
-  }
-
-  public SolarPanel getTier() {
-    return tier;
   }
 
   @Nullable

@@ -3,6 +3,7 @@ package es.degrassi.forge.core.data.loot;
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
+import es.degrassi.forge.core.tiers.MultiblockPartStorage;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import es.degrassi.forge.core.tiers.Storage;
 import java.util.ArrayList;
@@ -35,6 +36,21 @@ public class BlockLootTables extends BlockLootSubProvider {
     }
     for (Storage.Fluid tier : Storage.Fluid.values()) {
       dropSelf(BlockRegistration.FLUID_TANK.get(tier));
+    }
+    for (MultiblockPartStorage.Energy tier : MultiblockPartStorage.Energy.values()) {
+      dropSelf(BlockRegistration.ENERGY_HATCH.get(tier));
+    }
+    for (MultiblockPartStorage.Fluid.Input tier : MultiblockPartStorage.Fluid.Input.values()) {
+      dropSelf(BlockRegistration.FLUID_INPUT_TANK.get(tier));
+    }
+    for (MultiblockPartStorage.Fluid.Output tier : MultiblockPartStorage.Fluid.Output.values()) {
+      dropSelf(BlockRegistration.FLUID_OUTPUT_TANK.get(tier));
+    }
+    for (MultiblockPartStorage.Item.Input tier : MultiblockPartStorage.Item.Input.values()) {
+      dropSelf(BlockRegistration.INPUT_BUS.get(tier));
+    }
+    for (MultiblockPartStorage.Item.Output tier : MultiblockPartStorage.Item.Output.values()) {
+      dropSelf(BlockRegistration.OUTPUT_BUS.get(tier));
     }
   }
 

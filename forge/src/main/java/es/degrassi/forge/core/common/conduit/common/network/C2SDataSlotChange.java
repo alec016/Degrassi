@@ -14,7 +14,7 @@ public class C2SDataSlotChange implements Packet {
 
     private final BlockPos pos;
 
-    // You shouldn't really send null, but its "technically" valid.
+    // You shouldn't really send null, but its "technically" validate.
     @Nullable
     private final FriendlyByteBuf updateData;
 

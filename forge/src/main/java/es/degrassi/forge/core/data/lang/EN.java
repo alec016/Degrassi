@@ -136,11 +136,14 @@ public class EN extends DegrassiLangProvider {
     addInfo("off", "Off");
     addInfo("ignore", "Ignore");
     addInfo("capacity.energy", "Energy Capacity");
+    addInfo("capacity.fluid", "Fluid Capacity");
     addInfo("capacity.xp", "Experience Capacity");
     addInfo("fe", "%s FE");
     addInfo("xp", "%s XP");
     addInfo("mb", "%s mB");
     addInfo("max.io", "Max I/O");
+    addInfo("max.i", "Max Input");
+    addInfo("max.o", "Max Output");
     addInfo("fe.per.tick", "%s FE/t");
     addInfo("items.per.tick", "%s Items/t");
     addInfo("mb.per.tick", "%s mB/t");

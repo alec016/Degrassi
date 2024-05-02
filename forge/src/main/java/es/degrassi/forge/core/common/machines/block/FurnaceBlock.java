@@ -10,6 +10,7 @@ import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.common.machines.item.FurnaceItem;
 import es.degrassi.forge.core.init.EntityRegistration;
 import es.degrassi.forge.core.tiers.Furnace;
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,6 +31,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@Getter
 @SuppressWarnings("unused")
 public class FurnaceBlock extends MachineBlock implements IBlock<Furnace, FurnaceBlock> {
   private final Furnace tier;
@@ -45,10 +47,6 @@ public class FurnaceBlock extends MachineBlock implements IBlock<Furnace, Furnac
   @Override
   protected Facing getFacing() {
     return Facing.HORIZONTAL;
-  }
-
-  public Furnace getTier() {
-    return tier;
   }
 
   @Nullable

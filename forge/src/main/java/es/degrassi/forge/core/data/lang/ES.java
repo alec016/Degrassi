@@ -135,11 +135,14 @@ public class ES extends DegrassiLangProvider {
     addInfo("off", "Off");
     addInfo("ignore", "Ignore");
     addInfo("capacity.energy", "Capacidad de Energía");
+    addInfo("capacity.fluid", "Capacidad de Líquidos");
     addInfo("capacity.xp", "Capacidad de Experiencia");
     addInfo("fe", "%s FE");
     addInfo("xp", "%s XP");
     addInfo("mb", "%s mB");
     addInfo("max.io", "Max I/O");
+    addInfo("max.i", "Max Input");
+    addInfo("max.o", "Max Output");
     addInfo("fe.per.tick", "%s FE/t");
     addInfo("items.per.tick", "%s Items/t");
     addInfo("mb.per.tick", "%s mB/t");

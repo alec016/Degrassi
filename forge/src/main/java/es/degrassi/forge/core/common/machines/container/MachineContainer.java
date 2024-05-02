@@ -5,6 +5,7 @@ import es.degrassi.forge.core.common.element.ItemElement;
 import es.degrassi.forge.core.common.element.PlayerInventoryElement;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import java.util.concurrent.atomic.AtomicInteger;
+import lombok.Getter;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -28,8 +29,11 @@ public abstract class MachineContainer<T extends MachineEntity<?>> extends Abstr
   // THIS YOU HAVE TO DEFINE!
   protected int TE_INVENTORY_SLOT_COUNT;  // must be the number of slots you have!
 
+  @Getter
   private final T entity;
+  @Getter
   private final Level level;
+  @Getter
   private final Inventory playerInv;
   protected MachineContainer(@Nullable MenuType<?> menuType, int containerId, T entity, Inventory inventory) {
     super(menuType, containerId);
@@ -70,18 +74,6 @@ public abstract class MachineContainer<T extends MachineEntity<?>> extends Abstr
       );
 
     TE_INVENTORY_SLOT_COUNT = index.get() - te_inventory_first_slot_index;
-  }
-
-  public T getEntity() {
-    return entity;
-  }
-
-  public Level getLevel() {
-    return level;
-  }
-
-  public Inventory getPlayerInv() {
-    return playerInv;
   }
 
   @Override

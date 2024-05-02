@@ -6,6 +6,7 @@ import es.degrassi.forge.core.common.machines.item.wrench.IWrenchable;
 import es.degrassi.forge.core.common.machines.item.wrench.WrenchMode;
 import es.degrassi.forge.core.common.recipe.StorageRecipe;
 import es.degrassi.forge.core.tiers.Storage;
+import lombok.Getter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,7 +20,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class StorageEntity<T extends Storage.S> extends MachineEntity<StorageRecipe> implements IWrenchable {
+@Getter
+public abstract class StorageEntity<T extends Storage.S<?, ?>> extends MachineEntity<StorageRecipe> implements IWrenchable {
   protected final SideConfig config = new SideConfig(this);
   protected T tier;
   public StorageEntity(BlockEntityType<?> type , BlockPos pos , BlockState blockState , T tier) {
@@ -57,10 +59,6 @@ public abstract class StorageEntity<T extends Storage.S> extends MachineEntity<S
     setChanged(level, pos, state);
   }
 
-  public T getTier() {
-    return tier;
-  }
-
   @Override
   public boolean onWrench(BlockState state , Level world , BlockPos pos , Player player , InteractionHand hand , Direction side , WrenchMode mode , Vec3 hit) {
     ComponentIOMode oldMode = config.getMode(side);
@@ -79,9 +77,5 @@ public abstract class StorageEntity<T extends Storage.S> extends MachineEntity<S
       true);
 
     return changed;
-  }
-
-  public SideConfig getConfig() {
-    return config;
   }
 }

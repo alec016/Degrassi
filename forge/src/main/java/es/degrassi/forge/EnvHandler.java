@@ -4,10 +4,16 @@ import es.degrassi.common.registry.IBlock;
 import es.degrassi.forge.core.common.machines.entity.ChestEntity;
 import es.degrassi.forge.core.common.machines.entity.FurnaceEntity;
 import es.degrassi.forge.core.common.machines.entity.SolarPanelEntity;
+import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.EnergyHatchEntity;
+import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.FluidInputTankEntity;
+import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.FluidOutputTankEntity;
+import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.InputBusEntity;
+import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.OutputBusEntity;
 import es.degrassi.forge.core.common.storage.energy.entity.EnergyCellEntity;
 import es.degrassi.forge.core.common.storage.fluid.entity.FluidTankEntity;
 import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
+import es.degrassi.forge.core.tiers.MultiblockPartStorage;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import es.degrassi.forge.core.tiers.Storage;
 import net.minecraft.core.BlockPos;
@@ -23,7 +29,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 
-@SuppressWarnings("deprecation")
 public class EnvHandler {
   public static final EnvHandler INSTANCE = new EnvHandler();
   private final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -58,6 +63,26 @@ public class EnvHandler {
 
   public FluidTankEntity createFluidTank(BlockPos pos, BlockState state, Storage.Fluid tier) {
     return new FluidTankEntity(pos, state, tier);
+  }
+
+  public EnergyHatchEntity createEnergyHatch(BlockPos pos, BlockState state, MultiblockPartStorage.Energy variant) {
+    return new EnergyHatchEntity(pos, state, variant);
+  }
+
+  public FluidInputTankEntity createFluidInputTank(BlockPos pos, BlockState state, MultiblockPartStorage.Fluid.Input variant) {
+    return new FluidInputTankEntity(pos, state, variant);
+  }
+
+  public FluidOutputTankEntity createFluidOutputTank(BlockPos pos, BlockState state, MultiblockPartStorage.Fluid.Output variant) {
+    return new FluidOutputTankEntity(pos, state, variant);
+  }
+
+  public InputBusEntity createInputBus(BlockPos pos, BlockState state, MultiblockPartStorage.Item.Input variant) {
+    return new InputBusEntity(pos, state, variant);
+  }
+
+  public OutputBusEntity createOutputBus(BlockPos pos, BlockState state, MultiblockPartStorage.Item.Output variant) {
+    return new OutputBusEntity(pos, state, variant);
   }
 
   public void setupBlockItems() {

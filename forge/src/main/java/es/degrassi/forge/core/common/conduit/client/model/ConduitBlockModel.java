@@ -147,7 +147,7 @@ public class ConduitBlockModel implements IDynamicBakedModel {
             }
 
             Set<Vec3i> duplicateFinder = new HashSet<>();
-            //rendered have only one distinct pos, so I can safely assume get(0) is valid
+            //rendered have only one distinct pos, so I can safely assume get(0) is validate
             List<Vec3i> duplicatePositions = rendered.stream().map(offsets::get).map(l -> l.get(0)).filter(n -> !duplicateFinder.add(n)).toList();
             for (Vec3i duplicatePosition : duplicatePositions) {
                 if (box == null) {

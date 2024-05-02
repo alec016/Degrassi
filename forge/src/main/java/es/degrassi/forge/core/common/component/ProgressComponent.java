@@ -5,21 +5,23 @@ import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ComponentManager;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.network.component.ProgressPacket;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.nbt.CompoundTag;
 
+@Getter
+@Setter
 public class ProgressComponent implements IComponent {
   public static final String id = "progress";
-  private static final ComponentIOMode mode = ComponentIOMode.NONE;
+  @Getter
+  private final ComponentIOMode mode = ComponentIOMode.NONE;
   private int progress, maxProgress;
   private final ComponentManager manager;
   private final MachineEntity<?> entity;
+
   public ProgressComponent(ComponentManager manager, MachineEntity<?> entity) {
     this.manager = manager;
     this.entity = entity;
-  }
-  @Override
-  public ComponentManager getManager() {
-    return manager;
   }
 
   @Override
@@ -39,13 +41,7 @@ public class ProgressComponent implements IComponent {
   public void fill(IRequirement<?> requirement) {}
 
   @Override
-  public ComponentIOMode getMode() {
-    return mode;
-  }
-
-  @Override
-  public void setMode(ComponentIOMode mode) {
-  }
+  public void setMode(ComponentIOMode mode) {}
 
   @Override
   public void serialize(CompoundTag nbt) {
@@ -85,24 +81,12 @@ public class ProgressComponent implements IComponent {
     markDirty();
   }
 
-  public int getProgress() {
-    return progress;
-  }
-
-  public int getMaxProgress() {
-    return maxProgress;
-  }
-
   public float getProgressPercentage() {
     return getProgress() / (getMaxProgress() * 1F);
   }
 
   public boolean hasEnded() {
     return this.getProgress() >= this.getMaxProgress();
-  }
-
-  public MachineEntity<?> getEntity() {
-    return entity;
   }
 
   @Override

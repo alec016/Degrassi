@@ -9,12 +9,16 @@ import es.degrassi.forge.core.network.component.FluidPacket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
 
+@Getter
+@Setter
 public class FluidComponent extends FluidTank implements IComponent {
   private final ComponentManager manager;
   private final String id;
@@ -35,22 +39,9 @@ public class FluidComponent extends FluidTank implements IComponent {
     filter.addAll(Arrays.asList(fluids));
   }
 
-  public ComponentIOMode getMode() {
-    return mode;
-  }
-
-  public void setMode(ComponentIOMode mode) {
-    this.mode = mode;
-  }
-
   @Override
   public boolean isFluidValid(FluidStack stack) {
-    return filter.stream().filter(fluid -> fluid.isSame(stack.getFluid())).findFirst().map(i -> whitelist).orElse(stack.isFluidEqual(getFluid()) || fluid.isEmpty());
-  }
-
-  @Override
-  public ComponentManager getManager() {
-    return manager;
+    return filter.stream().filter(fluid -> fluid.isSame(stack.getFluid())).findFirst().map(i -> whitelist).orElse(stack.isFluidEqual(getFluid()) || getFluid().isEmpty());
   }
 
   @Override
@@ -64,11 +55,6 @@ public class FluidComponent extends FluidTank implements IComponent {
     if(entity.getLevel() != null && !entity.getLevel().isClientSide())
       new FluidPacket(this.fluid, this.capacity, id, entity.getBlockPos())
         .sendToChunkListeners(entity.getLevel().getChunkAt(entity.getBlockPos()));
-  }
-
-  @Override
-  public String getId() {
-    return id;
   }
 
   @Override

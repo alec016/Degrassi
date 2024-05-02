@@ -7,12 +7,14 @@ import es.degrassi.forge.core.common.processor.FurnaceProcessor;
 import es.degrassi.forge.core.common.recipe.FurnaceRecipe;
 import es.degrassi.forge.core.init.EntityRegistration;
 import es.degrassi.forge.core.tiers.Furnace;
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
+@Getter
 public class FurnaceEntity extends MachineEntity<FurnaceRecipe> {
   private Furnace tier;
   public FurnaceEntity(BlockPos pos, BlockState blockState, Furnace tier) {
@@ -94,10 +96,6 @@ public class FurnaceEntity extends MachineEntity<FurnaceRecipe> {
   public void load(@NotNull CompoundTag tag) {
     super.load(tag);
     this.tier = Furnace.value(tag.getString("tier"));
-  }
-
-  public Furnace getTier() {
-    return tier;
   }
 
   @Override

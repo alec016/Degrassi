@@ -8,6 +8,7 @@ import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.component.BarComponent;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import java.util.List;
+import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -20,6 +21,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
+@Getter
 public class BarElement extends AbstractWidget implements IElement<BarComponent> {
   private ResourceLocation emptyTexture, filledTexture;
   private final ElementManager manager;
@@ -34,11 +36,6 @@ public class BarElement extends AbstractWidget implements IElement<BarComponent>
     this.direction = direction;
     this.emptyTexture = emptyTexture;
     this.filledTexture = filledTexture;
-  }
-
-  @Override
-  public ElementManager getManager() {
-    return manager;
   }
 
   @Override
@@ -94,11 +91,6 @@ public class BarElement extends AbstractWidget implements IElement<BarComponent>
   }
 
   @Override
-  public String getId() {
-    return id;
-  }
-
-  @Override
   public void serialize(CompoundTag nbt) {
     CompoundTag tag = new CompoundTag();
     tag.putString(EMPTY_TEXTURE_KEY, emptyTexture.toString());
@@ -116,9 +108,5 @@ public class BarElement extends AbstractWidget implements IElement<BarComponent>
   @Override
   public void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent component) {
 
-  }
-
-  public ElementDirection getDirection() {
-    return direction;
   }
 }

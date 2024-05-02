@@ -118,6 +118,6 @@ public class DegrassiItemStackHandler extends ItemStackHandler {
   @Override
   protected void validateSlotIndex(int slot) {
     if (slot < 0 ||slot >= getSlots())
-      throw new RuntimeException("Slot " + slot + " not in valid range - [0, " + getSlots() + ")");
+      throw new RuntimeException("Slot " + slot + " not in validate range - [0, " + getSlots() + ")");
   }
 }

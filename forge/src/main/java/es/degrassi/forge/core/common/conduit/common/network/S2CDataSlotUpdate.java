@@ -15,7 +15,7 @@ public class S2CDataSlotUpdate implements Packet {
 
     private final BlockPos pos;
 
-    // You shouldn't really send null, but its "technically" valid.
+    // You shouldn't really send null, but its "technically" validate.
     @Nullable
     private final FriendlyByteBuf slotData;
 

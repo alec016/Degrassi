@@ -6,8 +6,12 @@ import es.degrassi.forge.core.common.ComponentManager;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.common.requirement.ExperienceRequirement;
 import es.degrassi.forge.core.network.component.ExperiencePacket;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.nbt.CompoundTag;
 
+@Getter
+@Setter
 public class ExperienceComponent implements IComponent {
   private float experience, capacity;
   private final ComponentManager manager;
@@ -21,29 +25,13 @@ public class ExperienceComponent implements IComponent {
     this.id = id;
     this.mode = mode;
   }
-  @Override
-  public ComponentManager getManager() {
-    return manager;
-  }
 
-  public ComponentIOMode getMode() {
-    return mode;
-  }
-
-  public void setMode(ComponentIOMode mode) {
-    this.mode = mode;
-  }
   @Override
   public void markDirty() {
     entity.setChanged();
     if(entity.getLevel() != null && !entity.getLevel().isClientSide())
       new ExperiencePacket(experience, capacity, id, entity.getBlockPos())
         .sendToChunkListeners(entity.getLevel().getChunkAt(entity.getBlockPos()));
-  }
-
-  @Override
-  public String getId() {
-    return id;
   }
 
   @Override
@@ -101,10 +89,6 @@ public class ExperienceComponent implements IComponent {
     return experience;
   }
 
-  public float getCapacity() {
-    return capacity;
-  }
-
   public void setCapacity(float capacity) {
     this.capacity = capacity;
     markDirty();
@@ -137,10 +121,6 @@ public class ExperienceComponent implements IComponent {
     }
     markDirty();
     return toExtract;
-  }
-
-  public MachineEntity<?> getEntity() {
-    return entity;
   }
 
   @Override

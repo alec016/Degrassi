@@ -11,6 +11,8 @@ import es.degrassi.forge.core.common.recipe.SolarPanelRecipe;
 import es.degrassi.forge.core.init.EntityRegistration;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import java.util.Objects;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -27,6 +29,8 @@ public class SolarPanelEntity extends MachineEntity<SolarPanelRecipe> {
   public static final float RAIN_MULTIPLIER = 0.6F, THUNDER_MULTIPLIER = 0.4F;
   public static final ModelProperty<Level> WORLD_PROP = new ModelProperty<>();
   public static final ModelProperty<BlockPos> POS_PROP = new ModelProperty<>();
+  @Setter
+  @Getter
   private SolarPanel tier;
   int voxelTimer = 0;
   VoxelShape shape;
@@ -80,17 +84,6 @@ public class SolarPanelEntity extends MachineEntity<SolarPanelRecipe> {
       .with(WORLD_PROP, level)
       .with(POS_PROP, worldPosition)
       .build();
-  }
-
-  public SolarPanel getTier() {
-    return tier;
-  }
-
-  public void setTier(SolarPanel tier) {
-    this.tier = tier;
-  }
-  public void setTier(String tier) {
-    this.tier = SolarPanel.value(tier);
   }
 
   public static void serverTick(

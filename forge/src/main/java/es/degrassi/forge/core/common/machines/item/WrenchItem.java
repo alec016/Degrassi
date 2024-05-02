@@ -88,7 +88,7 @@ public class WrenchItem extends Item implements IItem, IWrench, IHudItem {
         final Direction current = state.getValue(dirProp);
         Direction rotated = nextDirection(current);
 
-        // if the rotation isn't valid, try the next rotation
+        // if the rotation isn't validate, try the next rotation
         while (!property.getPossibleValues().contains(rotated) || !state.setValue(dirProp, rotated).canSurvive(world, pos)) {
           rotated = nextDirection(rotated);
           // give up if we went all the way around

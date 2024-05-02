@@ -5,8 +5,10 @@ import es.degrassi.forge.core.common.component.EnergyComponent;
 import es.degrassi.forge.core.common.storage.StorageEntity;
 import es.degrassi.forge.core.init.EntityRegistration;
 import es.degrassi.forge.core.tiers.Storage;
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -15,8 +17,9 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@Getter
 public class EnergyCellEntity extends StorageEntity<Storage.Energy> {
-  EnergyComponent energy;
+  final EnergyComponent energy;
 
   public EnergyCellEntity(BlockPos pos, BlockState blockState, Storage.Energy tier) {
     super(EntityRegistration.ENERGY_CELL.get(), pos, blockState, tier);
@@ -31,21 +34,17 @@ public class EnergyCellEntity extends StorageEntity<Storage.Energy> {
       ComponentIOMode.BOTH
     ) {
       @Override
-      public int getEnergyStored() {
-        return tier.isCreative() ? Integer.MAX_VALUE : super.getEnergyStored();
-      }
-
-      @Override
       public int extractEnergy(int energy, boolean simulate) {
-        return super.extractEnergy(energy, true);
+        return super.extractEnergy(energy, tier.isCreative() || simulate);
       }
 
       @Override
       public int receiveEnergy(int energy, boolean simulate) {
-        if (tier.isCreative()) return energy;
-        return super.receiveEnergy(energy, simulate);
+        return super.receiveEnergy(energy, tier.isCreative() || simulate);
       }
     };
+
+    if (tier.isCreative()) energy.setEnergy(Integer.MAX_VALUE);
 
     getComponentManager().add(energy);
   }
@@ -54,13 +53,35 @@ public class EnergyCellEntity extends StorageEntity<Storage.Energy> {
   @Override
   public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap , @Nullable Direction side) {
     if (cap == ForgeCapabilities.ENERGY) {
-      return LazyOptional.of(() -> energy).cast();
+      return lazyEnergyHandler.cast();
     }
     return super.getCapability(cap , side);
   }
 
   @Override
   public Component getName() {
-    return null;
+    return getBlockState().getBlock().getName();
+  }
+
+  @Override
+  public void load(@NotNull CompoundTag nbt) {
+    super.load(nbt);
+  }
+
+  @Override
+  protected void saveAdditional(@NotNull CompoundTag nbt) {
+    super.saveAdditional(nbt);
+  }
+
+  @Override
+  public void onLoad() {
+    super.onLoad();
+    lazyEnergyHandler = LazyOptional.of(() -> energy);
+  }
+
+  @Override
+  public void invalidateCaps() {
+    super.invalidateCaps();
+    lazyEnergyHandler.invalidate();
   }
 }

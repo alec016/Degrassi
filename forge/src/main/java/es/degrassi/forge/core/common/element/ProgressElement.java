@@ -1,6 +1,5 @@
 package es.degrassi.forge.core.common.element;
 
-import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.api.core.common.ElementDirection;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IElement;
@@ -8,6 +7,7 @@ import es.degrassi.common.utils.TextureSizeHelper;
 import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.component.ProgressComponent;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
+import lombok.Getter;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
@@ -18,10 +18,12 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
+@Getter
 public class ProgressElement extends AbstractWidget implements IElement<ProgressComponent> {
   private ResourceLocation emptyTexture, filledTexture;
   private final ElementManager manager;
-  public static final String id = ProgressComponent.id;
+  @Getter
+  public final String id = ProgressComponent.id;
   private final ElementDirection direction;
 
   public ProgressElement(
@@ -43,11 +45,6 @@ public class ProgressElement extends AbstractWidget implements IElement<Progress
     this.emptyTexture = emptyTexture;
     this.filledTexture = filledTexture;
     this.direction = direction;
-  }
-
-  @Override
-  public ElementManager getManager() {
-    return manager;
   }
 
   @Override
@@ -81,11 +78,6 @@ public class ProgressElement extends AbstractWidget implements IElement<Progress
   }
 
   @Override
-  public String getId() {
-    return id;
-  }
-
-  @Override
   public ElementDirection getDirection() {
     return direction;
   }
@@ -116,14 +108,6 @@ public class ProgressElement extends AbstractWidget implements IElement<Progress
     int width = widthHeight.getA(), height = widthHeight.getB();
     int xOffset = xyOffset.getA(), yOffset = xyOffset.getB();
     renderTexture(guiGraphics, filledTexture, getX() + xOffset, getY() + yOffset, xOffset, yOffset, 0, width, height, textureWidth, textureHeight);
-  }
-
-  public ResourceLocation getEmptyTexture() {
-    return emptyTexture;
-  }
-
-  public ResourceLocation getFilledTexture() {
-    return filledTexture;
   }
 
   @Override

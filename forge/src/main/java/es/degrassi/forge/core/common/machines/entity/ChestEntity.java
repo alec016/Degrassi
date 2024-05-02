@@ -5,6 +5,7 @@ import es.degrassi.forge.core.common.machines.container.ChestContainer;
 import es.degrassi.forge.core.common.recipe.ChestRecipe;
 import es.degrassi.forge.core.init.EntityRegistration;
 import es.degrassi.forge.core.tiers.Chest;
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -23,6 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 public class ChestEntity extends MachineEntity<ChestRecipe> implements LidBlockEntity {
+  @Getter
   private Chest tier;
   private final ContainerOpenersCounter openersCounter;
   private final ChestLidController chestLidController;
@@ -107,10 +109,6 @@ public class ChestEntity extends MachineEntity<ChestRecipe> implements LidBlockE
   @Override
   public Component getName() {
     return getTier().getTranslation();
-  }
-
-  public Chest getTier() {
-    return tier;
   }
 
   public static void lidAnimateTick(Level level, BlockPos pos, BlockState state, ChestEntity blockEntity) {

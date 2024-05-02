@@ -8,12 +8,16 @@ import es.degrassi.forge.core.common.requirement.ItemRequirement;
 import es.degrassi.forge.core.network.component.ItemPacket;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
+@Getter
+@Setter
 public class ItemComponent extends ItemStackHandler implements IComponent {
   private final String id;
   private final ComponentManager manager;
@@ -41,31 +45,11 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
   }
 
   @Override
-  public ComponentIOMode getMode() {
-    return mode;
-  }
-
-  @Override
-  public void setMode(ComponentIOMode mode) {
-    this.mode = mode;
-  }
-
-  @Override
-  public ComponentManager getManager() {
-    return manager;
-  }
-
-  @Override
   public void markDirty() {
     entity.setChanged();
     if(entity.getLevel() != null && !entity.getLevel().isClientSide())
       new ItemPacket(getStackInSlot(0), id, entity.getBlockPos())
         .sendToChunkListeners(entity.getLevel().getChunkAt(entity.getBlockPos()));
-  }
-
-  @Override
-  public String getId() {
-    return id;
   }
 
   @Override
@@ -137,18 +121,6 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
   public @NotNull ItemStack extractRecipeItem(int slot, int amount, boolean simulate) {
     if (mode.output()) return ItemStack.EMPTY;
     return super.extractItem(0, amount, simulate);
-  }
-
-  public MachineEntity<?> getEntity() {
-    return entity;
-  }
-
-  public boolean isWhitelist() {
-    return whitelist;
-  }
-
-  public List<Item> getFilter() {
-    return filter;
   }
 
   @Override

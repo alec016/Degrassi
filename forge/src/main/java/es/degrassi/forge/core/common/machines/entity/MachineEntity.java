@@ -13,6 +13,7 @@ import es.degrassi.forge.core.common.wrapper.DegrassiFluidHandler;
 import es.degrassi.forge.core.common.wrapper.DegrassiItemStackHandler;
 import java.util.Timer;
 import java.util.TimerTask;
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -36,9 +37,14 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
   protected LazyOptional<IFluidHandler> lazyFluidHandler = LazyOptional.empty();
   private IFluidHandler fluidHandler;
   private ItemStackHandler itemHandler;
+  @Getter
   private final ComponentManager componentManager;
+  @Getter
   private final ElementManager elementManager;
-  protected MachineProcessor<R, ? extends MachineEntity<R>> processor;
+  @Getter
+  @Nullable
+  protected MachineProcessor<R, ? extends MachineEntity<R>> processor = null;
+  @Getter
   private MachineStatus status = MachineStatus.IDLE;
   private Component errorMessage = Component.empty();
 
@@ -46,19 +52,6 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
     super(type, pos, blockState);
     this.componentManager = new ComponentManager(this);
     this.elementManager = new ElementManager(this);
-  }
-
-  public ComponentManager getComponentManager() {
-    return componentManager;
-  }
-
-  public ElementManager getElementManager() {
-    return elementManager;
-  }
-
-  @Nullable
-  public MachineProcessor<R, ? extends MachineEntity<R>> getProcessor() {
-    return processor;
   }
 
   public abstract Component getName();
@@ -190,10 +183,6 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
   @Override
   public ClientboundBlockEntityDataPacket getUpdatePacket() {
     return ClientboundBlockEntityDataPacket.create(this);
-  }
-
-  public MachineStatus getStatus() {
-    return status;
   }
 
   public void resetErrorMessage() {

@@ -18,6 +18,7 @@ import es.degrassi.forge.core.init.ItemRegistration;
 import es.degrassi.forge.core.init.Registration;
 import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
+import es.degrassi.forge.core.tiers.MultiblockPartStorage;
 import es.degrassi.forge.core.tiers.PhotovoltaicCell;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import es.degrassi.forge.core.tiers.Storage;
@@ -118,7 +119,22 @@ public class DegrassiForge {
           for (Storage.Fluid tier : Storage.Fluid.values()) {
             output.accept(new ItemStack(BlockRegistration.FLUID_TANK.get(tier)));
           }
-        }).withSearchBar().icon(() -> new ItemStack(ItemRegistration.MACHINE_CASING.get())).build());
+          for (MultiblockPartStorage.Energy variant : MultiblockPartStorage.Energy.values()) {
+            output.accept(new ItemStack(BlockRegistration.ENERGY_HATCH.get(variant)));
+          }
+          for (MultiblockPartStorage.Fluid.Input variant : MultiblockPartStorage.Fluid.Input.values()) {
+            output.accept(new ItemStack(BlockRegistration.FLUID_INPUT_TANK.get(variant)));
+          }
+          for (MultiblockPartStorage.Fluid.Output variant : MultiblockPartStorage.Fluid.Output.values()) {
+            output.accept(new ItemStack(BlockRegistration.FLUID_OUTPUT_TANK.get(variant)));
+          }
+          for (MultiblockPartStorage.Item.Input variant : MultiblockPartStorage.Item.Input.values()) {
+            output.accept(new ItemStack(BlockRegistration.INPUT_BUS.get(variant)));
+          }
+          for (MultiblockPartStorage.Item.Output variant : MultiblockPartStorage.Item.Output.values()) {
+            output.accept(new ItemStack(BlockRegistration.OUTPUT_BUS.get(variant)));
+          }
+        }).icon(() -> new ItemStack(ItemRegistration.MACHINE_CASING.get())).build());
       helper.register(ITEMS, CreativeModeTab.builder().title(Component.translatable("degrassi.tabs.items")).displayItems(
         (params, output) -> {
           output.accept(new ItemStack(ItemRegistration.WRENCH.get()));
@@ -129,16 +145,16 @@ public class DegrassiForge {
             output.accept(new ItemStack(ItemRegistration.PHOTOVOLTAIC_CELL.get(cell)));
           }
         }
-      ).withSearchBar().icon(() -> new ItemStack(ItemRegistration.RED_MATTER.get())).build());
+      ).icon(() -> new ItemStack(ItemRegistration.RED_MATTER.get())).build());
     });
   }
 
   @SubscribeEvent
   public static void registerTab(final @NotNull BuildCreativeModeTabContentsEvent event) {
     var entries = event.getEntries();
-    var vis = CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS;
+    var vis = CreativeModeTab.TabVisibility.PARENT_TAB_ONLY;
     if (event.getTabKey() == MACHINES) {
-      entries.put(new ItemStack(ItemRegistration.MACHINE_CASING.get()), vis);
+      entries.put(new ItemStack(BlockRegistration.MACHINE_CASING.get()), vis);
       for (Furnace tier : Furnace.values()) {
         entries.put(new ItemStack(BlockRegistration.FURNACE.get(tier)), vis);
       }
@@ -153,6 +169,21 @@ public class DegrassiForge {
       }
       for (Storage.Fluid tier : Storage.Fluid.values()) {
         entries.put(new ItemStack(BlockRegistration.FLUID_TANK.get(tier)), vis);
+      }
+      for (MultiblockPartStorage.Energy variant : MultiblockPartStorage.Energy.values()) {
+        entries.put(new ItemStack(BlockRegistration.ENERGY_HATCH.get(variant)), vis);
+      }
+      for (MultiblockPartStorage.Fluid.Input variant : MultiblockPartStorage.Fluid.Input.values()) {
+        entries.put(new ItemStack(BlockRegistration.FLUID_INPUT_TANK.get(variant)), vis);
+      }
+      for (MultiblockPartStorage.Fluid.Output variant : MultiblockPartStorage.Fluid.Output.values()) {
+        entries.put(new ItemStack(BlockRegistration.FLUID_OUTPUT_TANK.get(variant)), vis);
+      }
+      for (MultiblockPartStorage.Item.Input variant : MultiblockPartStorage.Item.Input.values()) {
+        entries.put(new ItemStack(BlockRegistration.INPUT_BUS.get(variant)), vis);
+      }
+      for (MultiblockPartStorage.Item.Output variant : MultiblockPartStorage.Item.Output.values()) {
+        entries.put(new ItemStack(BlockRegistration.OUTPUT_BUS.get(variant)), vis);
       }
     } else if (event.getTabKey() == ITEMS) {
       entries.put(new ItemStack(ItemRegistration.WRENCH.get()), vis);

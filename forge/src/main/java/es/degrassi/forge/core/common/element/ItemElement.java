@@ -7,6 +7,7 @@ import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.component.ItemComponent;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import java.util.List;
+import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -19,6 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 
+@Getter
 public class ItemElement extends AbstractWidget implements IElement<ItemComponent> {
   private final ElementManager manager;
   private final String id;
@@ -36,11 +38,6 @@ public class ItemElement extends AbstractWidget implements IElement<ItemComponen
     this.manager = manager;
     this.id = id;
     this.texture = texture;
-  }
-
-  @Override
-  public ElementManager getManager() {
-    return manager;
   }
 
   @Override
@@ -80,11 +77,6 @@ public class ItemElement extends AbstractWidget implements IElement<ItemComponen
   @Override
   public void markDirty() {
     manager.getEntity().setChanged();
-  }
-
-  @Override
-  public String getId() {
-    return id;
   }
 
   @Override

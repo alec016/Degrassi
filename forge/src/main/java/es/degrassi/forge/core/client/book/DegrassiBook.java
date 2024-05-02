@@ -5,6 +5,7 @@ import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.ItemRegistration;
 import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
+import es.degrassi.forge.core.tiers.MultiblockPartStorage;
 import es.degrassi.forge.core.tiers.SolarPanel;
 import es.degrassi.forge.lib.client.wiki.Icon;
 import es.degrassi.forge.lib.client.wiki.Wiki;
@@ -62,6 +63,22 @@ public class DegrassiBook {
                 s -> s.p(
                   new Info(IMG.ENERGY_CABLE, s),
                   new RedstonePanel<>(s).next(new CraftingPanel<>(s))
+                )
+              )
+            ).e(
+              "energy_cell",
+              e -> e.s(
+                s -> s.p(
+                  new Info(IMG.ENERGY_CABLE, s),
+                  new EnergyPanel<>(s).next(new CraftingPanel<>(s))
+                )
+              )
+            ).e(
+              "fluid_tank",
+              e -> e.s(
+                s -> s.p(
+                  new Info(IMG.ENERGY_CABLE, s),
+                  new EnergyPanel<>(s).next(new CraftingPanel<>(s))
                 )
               )
             ),
@@ -148,6 +165,39 @@ public class DegrassiBook {
                 s -> s.p(
                   new Info(s),
                   new ItemPanel<>(s).next(new CraftingPanel<>(s))
+                )
+              )
+            ),
+            new WelcomePanel(as)
+          )
+        )
+      ).e(
+        "multiblocks_storages",
+        new Icon(BlockRegistration.ENERGY_HATCH.get(MultiblockPartStorage.Energy.ADVANCED)),
+        ae -> ae.s(
+          as -> as.p(
+            new GridPage(as).e(
+              "energy_hatch",
+              e -> e.s(
+                s -> s.p(
+                  new Info(s),
+                  new EnergyPanel<>(s).next(new CraftingPanel<>(s))
+                )
+              )
+            ).e(
+              "fluid_input_tank",
+              e -> e.s(
+                s -> s.p(
+                  new Info(s),
+                  new FluidPanel<>(s).next(new CraftingPanel<>(s))
+                )
+              )
+            ).e(
+              "fluid_output_tank",
+              e -> e.s(
+                s -> s.p(
+                  new Info(s),
+                  new FluidPanel<>(s).next(new CraftingPanel<>(s))
                 )
               )
             ),

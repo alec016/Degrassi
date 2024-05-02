@@ -7,6 +7,7 @@ import es.degrassi.forge.core.common.storage.StorageEntity;
 import es.degrassi.forge.core.init.EntityRegistration;
 import es.degrassi.forge.core.network.component.FluidPacket;
 import es.degrassi.forge.core.tiers.Storage;
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -23,6 +24,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@Getter
 public class FluidTankEntity extends StorageEntity<Storage.Fluid> {
   final FluidComponent fluid = new FluidComponent(
     getComponentManager(),
@@ -76,7 +78,7 @@ public class FluidTankEntity extends StorageEntity<Storage.Fluid> {
 
   @Override
   public Component getName() {
-    return null;
+    return getBlockState().getBlock().getName();
   }
 
   public void updateFluidLevel() {
@@ -129,16 +131,8 @@ public class FluidTankEntity extends StorageEntity<Storage.Fluid> {
     return super.getCapability(cap, side);
   }
 
-  public FluidComponent getFluid() {
-    return fluid;
-  }
-
   public FluidStack getFluidStack() {
     return fluid.getFluid();
-  }
-
-  public LerpedFloat getFluidLevel() {
-    return fluidLevel;
   }
 
   @Override

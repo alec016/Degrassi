@@ -7,7 +7,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-public class Storage {
+public abstract class Storage {
   public enum Energy implements IVariant<Energy>, S<Integer, Capability<IEnergyStorage>> {
     BASIC(50_000, 5_000),
     ADVANCED(250_000, 25_000),

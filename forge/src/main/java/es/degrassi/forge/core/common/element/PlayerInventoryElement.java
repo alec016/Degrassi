@@ -5,6 +5,7 @@ import es.degrassi.forge.api.core.common.IElement;
 import es.degrassi.common.utils.TextureSizeHelper;
 import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
+import lombok.Getter;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
@@ -14,19 +15,16 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
+@Getter
 public class PlayerInventoryElement extends AbstractWidget implements IElement<IComponent> {
-  private static final String id = "player_inventory";
+  @Getter
+  private final String id = "player_inventory";
   private final ElementManager manager;
   private final ResourceLocation texture;
   public PlayerInventoryElement(ElementManager manager, int x, int y, ResourceLocation texture, Component message) {
     super(x, y, TextureSizeHelper.getTextureWidth(texture), TextureSizeHelper.getTextureHeight(texture), message);
     this.texture = texture;
     this.manager = manager;
-  }
-
-  @Override
-  public ElementManager getManager() {
-    return manager;
   }
 
   @Override
@@ -50,11 +48,6 @@ public class PlayerInventoryElement extends AbstractWidget implements IElement<I
   @Override
   public void markDirty() {
     manager.getEntity().setChanged();
-  }
-
-  @Override
-  public String getId() {
-    return id;
   }
 
   @Override

@@ -8,6 +8,7 @@ import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.component.ExperienceComponent;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import java.util.List;
+import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -20,6 +21,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
+@Getter
 public class ExperienceElement extends AbstractWidget implements IElement<ExperienceComponent> {
   private final ElementManager manager;
   private ResourceLocation emptyTexture, filledTexture;
@@ -44,11 +46,6 @@ public class ExperienceElement extends AbstractWidget implements IElement<Experi
   }
 
   @Override
-  public ElementManager getManager() {
-    return manager;
-  }
-
-  @Override
   public void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
     ExperienceComponent component = (ExperienceComponent) manager.getEntity().getComponentManager().getComponent(id).orElse(null);
     if (component == null) return;
@@ -69,7 +66,7 @@ public class ExperienceElement extends AbstractWidget implements IElement<Experi
 
   @Override
   public void renderTooltip(GuiGraphics guiGraphics, int x, int y) {
-    ExperienceComponent component = (ExperienceComponent) manager.getEntity().getComponentManager().getComponent(id).orElse(null);;
+    ExperienceComponent component = (ExperienceComponent) manager.getEntity().getComponentManager().getComponent(id).orElse(null);
     if (component == null) return;
 
     if (this.isMouseOver(x, y)) {
@@ -96,16 +93,6 @@ public class ExperienceElement extends AbstractWidget implements IElement<Experi
   @Override
   public void markDirty() {
     manager.getEntity().setChanged();
-  }
-
-  @Override
-  public String getId() {
-    return id;
-  }
-
-  @Override
-  public ElementDirection getDirection() {
-    return direction;
   }
 
   @Override

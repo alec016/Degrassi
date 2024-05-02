@@ -13,6 +13,7 @@ import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.component.FluidComponent;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import java.util.List;
+import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -32,6 +33,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 
+@Getter
 public class FluidElement extends AbstractWidget implements IElement<FluidComponent> {
   private static final int MIN_FLUID_HEIGHT = 1;
   private static final int TEXTURE_SIZE = 16;
@@ -43,11 +45,6 @@ public class FluidElement extends AbstractWidget implements IElement<FluidCompon
     this.manager = manager;
     this.texture = texture;
     this.id = id;
-  }
-
-  @Override
-  public ElementManager getManager() {
-    return manager;
   }
 
   @Override
@@ -98,11 +95,6 @@ public class FluidElement extends AbstractWidget implements IElement<FluidCompon
   @Override
   public void markDirty() {
     manager.getEntity().setChanged();
-  }
-
-  @Override
-  public String getId() {
-    return id;
   }
 
   @Override
