@@ -6,7 +6,6 @@ import es.degrassi.forge.EnvHandler;
 import es.degrassi.forge.core.common.machines.entity.ChestEntity;
 import es.degrassi.forge.core.common.machines.entity.FurnaceEntity;
 import es.degrassi.forge.core.common.machines.entity.SolarPanelEntity;
-import es.degrassi.forge.core.common.machines.multiblock.controller.block.entity.TestMultiblockEntity;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.EnergyHatchEntity;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.FluidInputTankEntity;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.FluidOutputTankEntity;

@@ -1,10 +1,6 @@
 package es.degrassi.forge.core.common.machines.multiblock.controller.block;
 
-import es.degrassi.common.utils.Utils;
 import es.degrassi.forge.core.common.machines.block.MachineBlock;
-import es.degrassi.forge.core.common.machines.entity.MachineEntity;
-import es.degrassi.forge.core.common.machines.multiblock.controller.block.entity.BaseMultiblockControllerEntity;
-import es.degrassi.forge.core.init.EntityRegistration;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.core.BlockPos;
@@ -53,11 +49,12 @@ public abstract class BaseMultiblockControllerBlock extends MachineBlock {
 
   @Override
   public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
-    return Utils.createTickerHelper(
-      type, EntityRegistration.TEST_MULTIBLOCK.get(),
-      level.isClientSide()
-        ? MachineEntity::clientTick
-        : BaseMultiblockControllerEntity::serverTick
-    );
+//    return Utils.createTickerHelper(
+//      type, EntityRegistration.TEST_MULTIBLOCK.get(),
+//      level.isClientSide()
+//        ? MachineEntity::clientTick
+//        : BaseMultiblockControllerEntity::serverTick
+//    );
+    return null;
   }
 }
