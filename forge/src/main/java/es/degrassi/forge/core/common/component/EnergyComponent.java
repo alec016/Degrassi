@@ -29,6 +29,7 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
     this.entity = entity;
     this.id = id;
     this.mode = mode;
+    this.energy = 0;
   }
 
   @Override

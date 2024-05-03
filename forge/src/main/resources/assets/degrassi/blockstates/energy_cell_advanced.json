@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "filled=0": {
+      "model": "degrassi:block/energy_cell_advanced"
+    },
+    "filled=25": {
+      "model": "degrassi:block/energy_cell_advanced25"
+    },
+    "filled=50": {
+      "model": "degrassi:block/energy_cell_advanced50"
+    },
+    "filled=75": {
+      "model": "degrassi:block/energy_cell_advanced75"
+    },
+    "filled=100": {
+      "model": "degrassi:block/energy_cell_advanced100"
+    }
+  }
+}

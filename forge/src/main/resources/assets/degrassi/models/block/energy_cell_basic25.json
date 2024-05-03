@@ -1,0 +1,7 @@
+{
+  "parent": "degrassi:block/energy_cell",
+  "textures": {
+    "0": "degrassi:block/energy_cell/basic25",
+    "particle": "degrassi:block/energy_cell/energy_cell_base"
+  }
+}

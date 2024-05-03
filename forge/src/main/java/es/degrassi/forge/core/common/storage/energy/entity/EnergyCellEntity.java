@@ -16,6 +16,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import es.degrassi.forge.core.common.storage.energy.block.EnergyCell;
 
 @Getter
 public class EnergyCellEntity extends StorageEntity<Storage.Energy> {
@@ -42,9 +43,28 @@ public class EnergyCellEntity extends StorageEntity<Storage.Energy> {
       public int receiveEnergy(int energy, boolean simulate) {
         return super.receiveEnergy(energy, tier.isCreative() || simulate);
       }
-    };
 
-    if (tier.isCreative()) energy.setEnergy(Integer.MAX_VALUE);
+      @Override
+      public void markDirty() {
+        super.markDirty();
+        float filledPercent = (float) getEnergyStored() / getMaxEnergyStored();
+        BlockState state = getBlockState();
+        if (filledPercent < 0.25) {
+          state = state.setValue(EnergyCell.FILLED, 0);
+        } else if (filledPercent < 0.5) {
+          state = state.setValue(EnergyCell.FILLED, 25);
+        } else if (filledPercent < 0.75) {
+          state = state.setValue(EnergyCell.FILLED, 50);
+        } else if (filledPercent < 1) {
+          state = state.setValue(EnergyCell.FILLED, 75);
+        } else {
+          state = state.setValue(EnergyCell.FILLED, 100);
+        }
+        level.setBlockAndUpdate(worldPosition, state);
+        requestModelDataUpdate();
+        setChanged();
+      }
+    };
 
     getComponentManager().add(energy);
   }
@@ -66,6 +86,7 @@ public class EnergyCellEntity extends StorageEntity<Storage.Energy> {
   @Override
   public void load(@NotNull CompoundTag nbt) {
     super.load(nbt);
+    if (tier.isCreative()) energy.setEnergy(Integer.MAX_VALUE);
   }
 
   @Override
@@ -76,6 +97,7 @@ public class EnergyCellEntity extends StorageEntity<Storage.Energy> {
   @Override
   public void onLoad() {
     super.onLoad();
+    if (tier.isCreative()) energy.setEnergy(Integer.MAX_VALUE);
     lazyEnergyHandler = LazyOptional.of(() -> energy);
   }
 
