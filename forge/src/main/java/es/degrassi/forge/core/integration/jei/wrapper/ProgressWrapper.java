@@ -7,6 +7,7 @@ import es.degrassi.forge.core.common.element.ProgressElement;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -17,6 +18,7 @@ import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.NotNull;
 
 public class ProgressWrapper extends ProgressElement implements IIngredientRenderer<ProgressComponent> {
+  @Getter
   private final MachineRecipe<?> recipe;
   private final boolean animated;
   public static final ProgressWrapper DUMMY = new ProgressWrapper(0, 0, null, null, ElementDirection.RIGHT, null, false) {
@@ -35,10 +37,6 @@ public class ProgressWrapper extends ProgressElement implements IIngredientRende
     super(null, x, y, Component.literal("progress"), emptyTexture, filledTexture, direction);
     this.recipe = recipe;
     this.animated = animated;
-  }
-
-  public MachineRecipe<?> getRecipe() {
-    return recipe;
   }
 
   @Override

@@ -3,7 +3,6 @@ package es.degrassi.forge.core.common.storage.energy.block;
 import es.degrassi.common.registry.IBlock;
 import es.degrassi.common.utils.Utils;
 import es.degrassi.forge.EnvHandler;
-import es.degrassi.forge.core.common.machines.MachineStatus;
 import es.degrassi.forge.core.common.machines.block.MachineBlock;
 import es.degrassi.forge.core.common.storage.energy.entity.EnergyCellEntity;
 import es.degrassi.forge.core.common.storage.energy.item.EnergyCellItem;

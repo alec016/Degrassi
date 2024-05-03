@@ -14,9 +14,11 @@ import net.minecraftforge.energy.IEnergyStorage;
 @Getter
 @Setter
 public class EnergyComponent implements IComponent, IEnergyStorage {
-  private int energy;
+  protected int energy;
   private final ComponentManager manager;
-  private int capacity, maxInput, maxOutput;
+  protected int capacity;
+  private int maxInput;
+  private int maxOutput;
   private final MachineEntity<?> entity;
   private final String id;
   private ComponentIOMode mode;

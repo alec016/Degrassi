@@ -1,0 +1,8 @@
+{
+  "parent": "degrassi:block/energy_hatch",
+  "texture_size": [64, 64],
+  "textures": {
+    "0": "degrassi:block/multiblock/storage/energy/advanced",
+    "particle": "degrassi:block/multiblock/storage/energy/advanced"
+  }
+}

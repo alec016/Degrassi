@@ -8,6 +8,7 @@ import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import es.degrassi.forge.core.common.requirement.EnergyRequirement;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -28,6 +29,7 @@ public class EnergyWrapper extends EnergyElement implements IIngredientRenderer<
       return 16;
     }
   };
+  @Getter
   private final MachineRecipe<?> recipe;
   private final boolean animated;
 
@@ -35,10 +37,6 @@ public class EnergyWrapper extends EnergyElement implements IIngredientRenderer<
     super(null, x, y, Component.literal("energy"), emptyTexture, filledTexture, "energy", direction);
     this.recipe = recipe;
     this.animated = animated;
-  }
-
-  public MachineRecipe<?> getRecipe() {
-    return recipe;
   }
 
   @Override

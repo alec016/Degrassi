@@ -8,6 +8,7 @@ import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import es.degrassi.forge.core.common.requirement.ExperienceRequirement;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -16,6 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.TooltipFlag;
 
 public class ExperienceWrapper extends ExperienceElement implements IIngredientRenderer<ExperienceComponent> {
+  @Getter
   private final MachineRecipe<?> recipe;
   private final boolean animated;
   public static final ExperienceWrapper DUMMY = new ExperienceWrapper(0, 0, null, null, ElementDirection.RIGHT, null, false) {
@@ -34,10 +36,6 @@ public class ExperienceWrapper extends ExperienceElement implements IIngredientR
     super(null, x, y, "experience", Component.literal("experience"), emptyTexture, filledTexture, direction);
     this.recipe = recipe;
     this.animated = animated;
-  }
-
-  public MachineRecipe<?> getRecipe() {
-    return recipe;
   }
 
   @Override

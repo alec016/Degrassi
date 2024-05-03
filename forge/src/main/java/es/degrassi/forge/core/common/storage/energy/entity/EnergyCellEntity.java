@@ -60,6 +60,10 @@ public class EnergyCellEntity extends StorageEntity<Storage.Energy> {
         } else {
           state = state.setValue(EnergyCell.FILLED, 100);
         }
+        if (tier.isCreative()) {
+          if (energy < Integer.MAX_VALUE) setEnergy(Integer.MAX_VALUE);
+        }
+
         level.setBlockAndUpdate(worldPosition, state);
         requestModelDataUpdate();
         setChanged();
