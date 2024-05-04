@@ -8,8 +8,10 @@ import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.ItemRegistration;
 import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
+import es.degrassi.forge.core.tiers.MultiblockPartStorage;
 import es.degrassi.forge.core.tiers.PhotovoltaicCell;
 import es.degrassi.forge.core.tiers.SolarPanel;
+import es.degrassi.forge.core.tiers.Storage;
 import net.minecraft.data.PackOutput;
 
 public class EN extends DegrassiLangProvider {
@@ -63,12 +65,12 @@ public class EN extends DegrassiLangProvider {
     addItem(() -> ItemRegistration.PHOTOVOLTAIC_CELL.get(PhotovoltaicCell.VII), "Photovoltaic Cell VII");
     addItem(() -> ItemRegistration.PHOTOVOLTAIC_CELL.get(PhotovoltaicCell.VIII), "Photovoltaic Cell VIII");
 
-    addItem(ConduitItems.ENERGY, "Energy Conduit");
-    addItem(ConduitItems.ITEM, "Item Conduit");
-    addItem(ConduitItems.REDSTONE, "Redstone Conduit");
-    addItem(ConduitItems.BASIC_FLUID, "Basic Fluid Conduit");
-    addItem(ConduitItems.ADVANCED_FLUID, "Advanced Fluid Conduit");
-    addItem(ConduitItems.EXTREME_FLUID, "Extreme Fluid Conduit");
+    addItem(ConduitItems.ENERGY, "Energy Cable");
+    addItem(ConduitItems.ITEM, "Item Cable");
+    addItem(ConduitItems.REDSTONE, "Redstone Cable");
+    addItem(ConduitItems.BASIC_FLUID, "Basic Fluid Cable");
+    addItem(ConduitItems.ADVANCED_FLUID, "Advanced Fluid Cable");
+    addItem(ConduitItems.EXTREME_FLUID, "Extreme Fluid Cable");
   }
 
   @Override
@@ -96,12 +98,42 @@ public class EN extends DegrassiLangProvider {
     addBlock(() -> BlockRegistration.SP.get(SolarPanel.T7), "Solar Panel VII");
     addBlock(() -> BlockRegistration.SP.get(SolarPanel.T8), "Solar Panel VIII");
 
-    addBlock(ConduitBlocks.CONDUIT, "Conduit");
+    addBlock(ConduitBlocks.CONDUIT, "Cable");
+
+    addBlock(() -> BlockRegistration.ENERGY_CELL.get(Storage.Energy.BASIC), "Basic Energy Cell");
+    addBlock(() -> BlockRegistration.ENERGY_CELL.get(Storage.Energy.ADVANCED), "Advanced Energy Cell");
+    addBlock(() -> BlockRegistration.ENERGY_CELL.get(Storage.Energy.EXTREME), "Extreme Energy Cell");
+    addBlock(() -> BlockRegistration.ENERGY_CELL.get(Storage.Energy.CREATIVE), "Creative Energy Cell");
+
+    addBlock(() -> BlockRegistration.FLUID_TANK.get(Storage.Fluid.BASIC), "Basic Fluid Tank");
+    addBlock(() -> BlockRegistration.FLUID_TANK.get(Storage.Fluid.ADVANCED), "Advanced Fluid Tank");
+    addBlock(() -> BlockRegistration.FLUID_TANK.get(Storage.Fluid.EXTREME), "Extreme Fluid Tank");
+    addBlock(() -> BlockRegistration.FLUID_TANK.get(Storage.Fluid.CREATIVE), "Creative Fluid Tank");
+
+    addBlock(() -> BlockRegistration.ENERGY_HATCH.get(MultiblockPartStorage.Energy.BASIC), "Basic Energy Hatch");
+    addBlock(() -> BlockRegistration.ENERGY_HATCH.get(MultiblockPartStorage.Energy.ADVANCED), "Advanced Energy Hatch");
+    addBlock(() -> BlockRegistration.ENERGY_HATCH.get(MultiblockPartStorage.Energy.EXTREME), "Extreme Energy Hatch");
+
+    addBlock(() -> BlockRegistration.FLUID_INPUT_TANK.get(MultiblockPartStorage.Fluid.Input.BASIC), "Basic Fluid Input Tank");
+    addBlock(() -> BlockRegistration.FLUID_INPUT_TANK.get(MultiblockPartStorage.Fluid.Input.ADVANCED), "Advanced Fluid Input Tank");
+    addBlock(() -> BlockRegistration.FLUID_INPUT_TANK.get(MultiblockPartStorage.Fluid.Input.EXTREME), "Extreme Fluid Input Tank");
+
+    addBlock(() -> BlockRegistration.FLUID_OUTPUT_TANK.get(MultiblockPartStorage.Fluid.Output.BASIC), "Basic Fluid Output Tank");
+    addBlock(() -> BlockRegistration.FLUID_OUTPUT_TANK.get(MultiblockPartStorage.Fluid.Output.ADVANCED), "Advanced Fluid Output Tank");
+    addBlock(() -> BlockRegistration.FLUID_OUTPUT_TANK.get(MultiblockPartStorage.Fluid.Output.EXTREME), "Extreme Fluid Output Tank");
+
+    addBlock(() -> BlockRegistration.INPUT_BUS.get(MultiblockPartStorage.Item.Input.BASIC), "Basic Input Bus");
+    addBlock(() -> BlockRegistration.INPUT_BUS.get(MultiblockPartStorage.Item.Input.ADVANCED), "Advanced Input Bus");
+    addBlock(() -> BlockRegistration.INPUT_BUS.get(MultiblockPartStorage.Item.Input.EXTREME), "Extreme Input Bus");
+
+    addBlock(() -> BlockRegistration.OUTPUT_BUS.get(MultiblockPartStorage.Item.Output.BASIC), "Basic Output Bus");
+    addBlock(() -> BlockRegistration.OUTPUT_BUS.get(MultiblockPartStorage.Item.Output.ADVANCED), "Advanced Output Bus");
+    addBlock(() -> BlockRegistration.OUTPUT_BUS.get(MultiblockPartStorage.Item.Output.EXTREME), "Extreme Output Bus");
   }
 
   @Override
   protected void addWiki() {
-    addWiki("storage_transfer", "Storage Transfer (Energy, Item, Fluid)");
+    addWiki("storage_transfer", "Storage & Transfer (Energy, Item, Fluid)");
     addWiki("generators", "Generators");
     addWiki("welcome_back", "Welcome back %s");
     addWiki("energy_cable", "Energy Cables");
