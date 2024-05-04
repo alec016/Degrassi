@@ -76,6 +76,8 @@ public class ES extends DegrassiLangProvider {
   @Override
   protected void addBlocks() {
     addBlock(BlockRegistration.MACHINE_CASING, "Machine Casing");
+    addBlock(BlockRegistration.MELTER_FRAME, "Melter Frame");
+
     addBlock(() -> BlockRegistration.FURNACE.get(Furnace.IRON), "Horno de Hierro");
     addBlock(() -> BlockRegistration.FURNACE.get(Furnace.GOLD), "Horno de Oro");
     addBlock(() -> BlockRegistration.FURNACE.get(Furnace.DIAMOND), "Horno de Diamante");

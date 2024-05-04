@@ -104,6 +104,7 @@ public class DegrassiForge {
       helper.register(MACHINES, CreativeModeTab.builder().title(Component.translatable("degrassi.tabs.machines")).displayItems(
         (params, output) -> {
           output.accept(new ItemStack(BlockRegistration.MACHINE_CASING.get()));
+          output.accept(new ItemStack(BlockRegistration.MELTER_FRAME.get()));
           for (Furnace tier : Furnace.values()) {
             output.accept(new ItemStack(BlockRegistration.FURNACE.get(tier)));
           }
@@ -155,6 +156,7 @@ public class DegrassiForge {
     var vis = CreativeModeTab.TabVisibility.PARENT_TAB_ONLY;
     if (event.getTabKey() == MACHINES) {
       entries.put(new ItemStack(BlockRegistration.MACHINE_CASING.get()), vis);
+      entries.put(new ItemStack(BlockRegistration.MELTER_FRAME.get()), vis);
       for (Furnace tier : Furnace.values()) {
         entries.put(new ItemStack(BlockRegistration.FURNACE.get(tier)), vis);
       }

@@ -11,6 +11,7 @@ import es.degrassi.forge.core.common.machines.multiblock.parts.block.EnergyHatch
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.FluidInputTank;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.FluidOutputTank;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.InputBus;
+import es.degrassi.forge.core.common.machines.multiblock.parts.block.MelterFrame;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.OutputBus;
 import es.degrassi.forge.core.common.storage.energy.block.EnergyCell;
 import es.degrassi.forge.core.common.storage.fluid.block.FluidTank;
@@ -34,6 +35,7 @@ public class BlockRegistration {
 
 
   public static final RegistrySupplier<Block> MACHINE_CASING = BLOCKS.register("machine_casing", MachineCasing::new);
+  public static final RegistrySupplier<MelterFrame> MELTER_FRAME = BLOCKS.register("melter_frame", () -> new MelterFrame(commonBlock(500)));
 
   public static final VarReg<Furnace, Block> FURNACE;
 

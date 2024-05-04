@@ -59,7 +59,6 @@ public class EnergyCell extends MachineBlock implements IBlock<Storage.Energy, E
     return super.getStateForPlacement(pContext).setValue(FILLED, 0);
   }
 
-
   @Override
   protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
     super.createBlockStateDefinition(builder);

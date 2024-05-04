@@ -22,6 +22,7 @@ public class BlockLootTables extends BlockLootSubProvider {
   @Override
   public void generate() {
     dropSelf(BlockRegistration.MACHINE_CASING.get());
+    dropSelf(BlockRegistration.MELTER_FRAME.get());
     for(Furnace tier : Furnace.values()) {
       dropSelf(BlockRegistration.FURNACE.get(tier));
     }

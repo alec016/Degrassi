@@ -49,6 +49,11 @@ public class FurnaceBlock extends MachineBlock implements IBlock<Furnace, Furnac
     return Facing.HORIZONTAL;
   }
 
+  @Override
+  protected Process getProcess() {
+    return Process.YES;
+  }
+
   @Nullable
   @Override
   public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {

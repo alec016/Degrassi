@@ -2,7 +2,6 @@ package es.degrassi.forge.core.common.machines.multiblock.parts.block;
 
 import es.degrassi.common.registry.IBlock;
 import es.degrassi.common.registry.IVariant;
-import es.degrassi.forge.core.common.machines.MachineStatus;
 import es.degrassi.forge.core.common.machines.block.MachineBlock;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,12 +41,12 @@ public abstract class BaseMultiblockPartBlock<
 
   @Override
   protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
-    builder.add(FACING).add(STATUS);
+    builder.add(FACING);
   }
 
   @Override
   public BlockState getStateForPlacement(@NotNull BlockPlaceContext pContext) {
-    return this.defaultBlockState().setValue(STATUS, MachineStatus.IDLE).setValue(FACING, pContext.getNearestLookingDirection().getOpposite());
+    return this.defaultBlockState().setValue(FACING, pContext.getNearestLookingDirection().getOpposite());
   }
 
   @Override

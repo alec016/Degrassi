@@ -26,6 +26,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -34,6 +35,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -141,5 +143,18 @@ public class ChestBlock extends MachineBlock implements IBlock<Chest, ChestBlock
   @Override
   public Chest getVariant() {
     return tier;
+  }
+
+
+
+  @Override
+  public BlockState getStateForPlacement(@NotNull BlockPlaceContext pContext) {
+    return (getFacing() != Facing.NONE ? this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite()) : defaultBlockState());
+  }
+
+  @Override
+  protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
+    if (getFacing() != Facing.NONE)
+      builder.add(FACING);
   }
 }

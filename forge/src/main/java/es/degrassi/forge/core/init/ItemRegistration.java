@@ -8,6 +8,7 @@ import es.degrassi.forge.Degrassi;
 import es.degrassi.forge.core.common.machines.item.PhotovoltaicCellItem;
 import es.degrassi.forge.core.common.machines.item.WrenchItem;
 import es.degrassi.forge.core.common.machines.item.BookItem;
+import es.degrassi.forge.core.common.machines.multiblock.parts.item.MelterFrameItem;
 import es.degrassi.forge.core.tiers.PhotovoltaicCell;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
@@ -25,6 +26,7 @@ public class ItemRegistration {
 
   // BLOCK ITEMS
   public static final RegistrySupplier<BlockItem> MACHINE_CASING = ITEMS.register("machine_casing", () -> new BlockItem(BlockRegistration.MACHINE_CASING.get(), new Item.Properties()));
+  public static final RegistrySupplier<BlockItem> MELTER_FRAME = ITEMS.register("melter_frame", () -> new MelterFrameItem(BlockRegistration.MELTER_FRAME.get(), new Item.Properties()));
 
   private static <V extends Enum<V> & IVariant<V>> VarReg<V, Item> register(DeferredRegister<Item> DR, String name, VarReg.VariantConstructor<V, Item> ctor, V[] variants) {
     return new VarReg<>(DR, name, ctor, variants);

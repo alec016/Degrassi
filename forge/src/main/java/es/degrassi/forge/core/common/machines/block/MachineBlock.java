@@ -39,7 +39,8 @@ public abstract class MachineBlock extends Block implements EntityBlock {
 
   @Override
   public BlockState getStateForPlacement(@NotNull BlockPlaceContext pContext) {
-    return (getFacing() != Facing.NONE ? this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite()): defaultBlockState()).setValue(STATUS, MachineStatus.IDLE) ;
+    BlockState state = getFacing() != Facing.NONE ? this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite()) : defaultBlockState();
+    return getProcess().isNone() ? state : state.setValue(STATUS, MachineStatus.IDLE);
   }
 
   @SuppressWarnings("deprecation")
@@ -61,6 +62,9 @@ public abstract class MachineBlock extends Block implements EntityBlock {
   protected Facing getFacing() {
     return Facing.NONE;
   }
+  protected Process getProcess() {
+    return Process.NOP;
+  }
 
   protected void setStateProps(BaseState baseState) {
     BlockState state = this.stateDefinition.any();
@@ -68,7 +72,8 @@ public abstract class MachineBlock extends Block implements EntityBlock {
       state = state.setValue(FACING, Direction.NORTH);
     }
 
-    state = state.setValue(STATUS, MachineStatus.IDLE);
+    if (!getProcess().isNone())
+      state = state.setValue(STATUS, MachineStatus.IDLE);
 
     registerDefaultState(baseState.get(state));
   }
@@ -82,7 +87,8 @@ public abstract class MachineBlock extends Block implements EntityBlock {
     if (getFacing() != Facing.NONE)
       builder.add(FACING);
 
-    builder.add(STATUS);
+    if (!getProcess().isNone())
+      builder.add(STATUS);
   }
 
   @FunctionalInterface
@@ -95,5 +101,14 @@ public abstract class MachineBlock extends Block implements EntityBlock {
     HORIZONTAL,
     ALL,
     NONE
+  }
+
+  protected enum Process {
+    YES,
+    NOP;
+
+    public boolean isNone() {
+      return this == NOP;
+    }
   }
 }
