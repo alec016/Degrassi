@@ -36,7 +36,7 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
   protected LazyOptional<EnergyComponent> lazyEnergyHandler = LazyOptional.empty();
   protected LazyOptional<IFluidHandler> lazyFluidHandler = LazyOptional.empty();
   private IFluidHandler fluidHandler;
-  private ItemStackHandler itemHandler;
+  protected ItemStackHandler itemHandler;
   @Getter
   private final ComponentManager componentManager;
   @Getter

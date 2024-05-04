@@ -78,7 +78,7 @@ public class DegrassiBook {
               e -> e.s(
                 s -> s.p(
                   new Info(IMG.ENERGY_CABLE, s),
-                  new EnergyPanel<>(s).next(new CraftingPanel<>(s))
+                  new FluidPanel<>(s).next(new CraftingPanel<>(s))
                 )
               )
             ),
@@ -198,6 +198,22 @@ public class DegrassiBook {
                 s -> s.p(
                   new Info(s),
                   new FluidPanel<>(s).next(new CraftingPanel<>(s))
+                )
+              )
+            ).e(
+              "input_bus",
+              e -> e.s(
+                s -> s.p(
+                  new Info(s),
+                  new RedstonePanel<>(s).next(new CraftingPanel<>(s))
+                )
+              )
+            ).e(
+              "output_bus",
+              e -> e.s(
+                s -> s.p(
+                  new Info(s),
+                  new RedstonePanel<>(s).next(new CraftingPanel<>(s))
                 )
               )
             ),

@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "degrassi:block/input_bus_basic"
+    },
+    "facing=south": {
+      "model": "degrassi:block/input_bus_basic",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "degrassi:block/input_bus_basic",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "degrassi:block/input_bus_basic",
+      "y": 90
+    },
+    "facing=up": {
+      "model": "degrassi:block/input_bus_basic",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "degrassi:block/input_bus_basic",
+      "x": 90
+    }
+  }
+}

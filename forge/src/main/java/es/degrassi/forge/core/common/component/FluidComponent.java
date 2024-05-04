@@ -45,7 +45,7 @@ public class FluidComponent extends FluidTank implements IComponent {
   }
 
   @Override
-  protected void onContentsChanged() {
+  public void onContentsChanged() {
     markDirty();
   }
 

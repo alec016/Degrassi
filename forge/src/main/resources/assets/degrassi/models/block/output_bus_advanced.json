@@ -1,0 +1,7 @@
+{
+  "parent": "degrassi:block/output_bus",
+  "textures": {
+    "0": "degrassi:block/multiblock/storage/item/output/advanced",
+    "particle": "degrassi:block/multiblock/storage/item/output/advanced"
+  }
+}

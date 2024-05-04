@@ -99,6 +99,10 @@ public abstract class MultiblockPartStorage {
       public static Input[] getNormalVariants() {
         return new Input[] { BASIC, ADVANCED, EXTREME };
       }
+
+      public int getTotalSlots() {
+        return rows * cols;
+      }
     }
 
     @Getter
@@ -121,6 +125,10 @@ public abstract class MultiblockPartStorage {
 
       public static Output[] getNormalVariants() {
         return new Output[] { BASIC, ADVANCED, EXTREME };
+      }
+
+      public int getTotalSlots() {
+        return rows * cols;
       }
     }
   }

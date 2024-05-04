@@ -42,3 +42,8 @@ accessible method net/minecraft/core/Vec3i setZ (I)Lnet/minecraft/core/Vec3i;
 
 mutable field net/minecraft/world/inventory/Slot y I
 mutable field net/minecraft/world/inventory/Slot x I
+
+#ItemStackHandler methods
+accessible method net/minecraftforge/items/ItemStackHandler getStackLimit (ILnet/minecraft/world/item/ItemStack;)I
+accessible method net/minecraftforge/items/ItemStackHandler onContentsChanged (I)V
+accessible method net/minecraftforge/items/ItemStackHandler validateSlotIndex (I)V

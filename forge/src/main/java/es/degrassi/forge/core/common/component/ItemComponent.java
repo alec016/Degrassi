@@ -103,12 +103,12 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
   }
 
   @Override
-  protected int getStackLimit(int slot, @NotNull ItemStack stack) {
+  public int getStackLimit(int slot, @NotNull ItemStack stack) {
     return super.getStackLimit(0, stack);
   }
 
   @Override
-  protected void onContentsChanged(int slot) {
+  public void onContentsChanged(int slot) {
     markDirty();
   }
 

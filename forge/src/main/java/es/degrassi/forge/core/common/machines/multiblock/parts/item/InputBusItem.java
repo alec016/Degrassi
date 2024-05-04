@@ -36,6 +36,12 @@ public class InputBusItem extends BlockItem implements IVariantEntry<MultiblockP
 
   @Override
   public InfoBox getInfoBox(ItemStack stack, InfoBox box) {
+    box.set(Component.translatable("info.degrassi.chest.rows"),
+      Component.translatable("info.degrassi.chest.rows.number", getVariant().getRows()));
+    box.set(Component.translatable("info.degrassi.chest.cols"),
+      Component.translatable("info.degrassi.chest.cols.number", getVariant().getCols()));
+    box.set(Component.translatable("info.degrassi.chest.slot"),
+      Component.translatable("info.degrassi.chest.slot.number", getVariant().getTotalSlots()));
     return box;
   }
 }

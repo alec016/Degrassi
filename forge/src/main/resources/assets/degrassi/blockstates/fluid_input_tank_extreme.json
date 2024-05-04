@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "degrassi:block/fluid_input_tank_extreme"
+    },
+    "facing=south": {
+      "model": "degrassi:block/fluid_input_tank_extreme",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "degrassi:block/fluid_input_tank_extreme",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "degrassi:block/fluid_input_tank_extreme",
+      "y": 90
+    },
+    "facing=up": {
+      "model": "degrassi:block/fluid_input_tank_extreme",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "degrassi:block/fluid_input_tank_extreme",
+      "x": 90
+    }
+  }
+}

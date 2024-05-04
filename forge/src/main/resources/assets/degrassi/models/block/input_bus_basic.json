@@ -1,0 +1,7 @@
+{
+  "parent": "degrassi:block/input_bus",
+  "textures": {
+    "0": "degrassi:block/multiblock/storage/item/input/basic",
+    "particle": "degrassi:block/multiblock/storage/item/input/basic"
+  }
+}

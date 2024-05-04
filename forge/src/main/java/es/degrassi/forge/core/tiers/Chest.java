@@ -3,9 +3,11 @@ package es.degrassi.forge.core.tiers;
 import es.degrassi.common.DegrassiLocation;
 import es.degrassi.common.registry.IVariant;
 import java.util.Locale;
+import lombok.Getter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
+@Getter
 public enum Chest implements IVariant<Chest> {
   IRON(4, 9, 7, 98),
   GOLD(6, 9, 7, 140),
@@ -36,14 +38,6 @@ public enum Chest implements IVariant<Chest> {
     };
   }
 
-  public int getCols() {
-    return cols;
-  }
-
-  public int getRows() {
-    return rows;
-  }
-
   public int getTotalSlots() {
     return rows * cols;
   }
@@ -61,10 +55,4 @@ public enum Chest implements IVariant<Chest> {
     return values();
   }
 
-  public int getInvX() {
-    return invX;
-  }
-  public int getInvY() {
-    return invY;
-  }
 }
