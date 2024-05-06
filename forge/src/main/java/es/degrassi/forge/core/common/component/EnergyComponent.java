@@ -73,6 +73,7 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
 
   @Override
   public int receiveEnergy(int energy, boolean simulate) {
+    if (mode.output()) return 0;
     int toReceive = Math.min(this.capacity - this.getEnergyStored(), Math.min(energy, maxInput));
     if (!simulate) {
       this.energy += toReceive;
@@ -83,6 +84,7 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
 
   @Override
   public int extractEnergy(int energy, boolean simulate) {
+    if (mode.input()) return 0;
     int toExtract = Math.min(this.getEnergyStored(), Math.min(energy, this.maxOutput));
     if (!simulate) {
       this.energy -= toExtract;
@@ -135,7 +137,6 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
 
   // recipe stuff
   public int receiveRecipeEnergy(int energy, boolean simulate) {
-    if (mode.input()) return 0;
     int toReceive = Math.min(this.capacity - this.energy, Math.min(energy, maxInput));
     if (!simulate) {
       this.energy += toReceive;
@@ -145,7 +146,6 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
   }
 
   public int extractRecipeEnergy(int energy, boolean simulate) {
-    if (mode.output()) return 0;
     int toExtract = Math.min(this.energy, Math.min(energy, this.maxOutput));
     if (!simulate) {
       this.energy -= toExtract;
@@ -168,5 +168,10 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
   public void setTransfer(int transferCache) {
     if (mode.inputWillAll()) setMaxInput(transferCache);
     if (mode.outputWithAll()) setMaxOutput(transferCache);
+  }
+
+  @Override
+  public String getTypeString() {
+    return "energy";
   }
 }

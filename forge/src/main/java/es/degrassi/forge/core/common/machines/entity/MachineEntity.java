@@ -38,20 +38,24 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
   private IFluidHandler fluidHandler;
   protected ItemStackHandler itemHandler;
   @Getter
-  private final ComponentManager componentManager;
+  protected final ComponentManager componentManager;
   @Getter
-  private final ElementManager elementManager;
+  protected final ElementManager elementManager;
   @Getter
   @Nullable
   protected MachineProcessor<R, ? extends MachineEntity<R>> processor = null;
   @Getter
-  private MachineStatus status = MachineStatus.IDLE;
-  private Component errorMessage = Component.empty();
+  protected MachineStatus status = MachineStatus.IDLE;
+  @Getter
+  protected Component errorMessage = Component.empty();
 
   public MachineEntity(BlockEntityType<?> type, BlockPos pos, BlockState blockState) {
     super(type, pos, blockState);
     this.componentManager = new ComponentManager(this);
     this.elementManager = new ElementManager(this);
+
+    if(!blockState.hasProperty(MachineBlock.STATUS))
+      getComponentManager().addProgress();
   }
 
   public abstract Component getName();

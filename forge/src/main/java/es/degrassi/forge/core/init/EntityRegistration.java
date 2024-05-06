@@ -6,6 +6,7 @@ import es.degrassi.forge.EnvHandler;
 import es.degrassi.forge.core.common.machines.entity.ChestEntity;
 import es.degrassi.forge.core.common.machines.entity.FurnaceEntity;
 import es.degrassi.forge.core.common.machines.entity.SolarPanelEntity;
+import es.degrassi.forge.core.common.machines.multiblock.controller.block.entity.MelterControllerEntity;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.EnergyHatchEntity;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.FluidInputTankEntity;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.FluidOutputTankEntity;
@@ -40,6 +41,9 @@ public class EntityRegistration {
   public static final Supplier<BlockEntityType<InputBusEntity>> INPUT_BUS;
   public static final Supplier<BlockEntityType<OutputBusEntity>> OUTPUT_BUS;
 
+  // multiblock controller
+  public static final Supplier<BlockEntityType<MelterControllerEntity>> MELTER;
+
   static {
     FURNACE = register("furnace", (pos, state) -> EnvHandler.INSTANCE.createFurnace(pos, state, Furnace.IRON), BlockRegistration.FURNACE::getAll);
     SP = register("sp", (pos, state) -> EnvHandler.INSTANCE.createSP(pos, state, SolarPanel.T1), BlockRegistration.SP::getAll);
@@ -52,6 +56,11 @@ public class EntityRegistration {
     FLUID_OUTPUT_TANK = register("fluid_output_tank", (pos, state) -> EnvHandler.INSTANCE.createFluidOutputTank(pos, state, MultiblockPartStorage.Fluid.Output.BASIC), BlockRegistration.FLUID_OUTPUT_TANK::getAll);
     INPUT_BUS = register("input_bus", (pos, state) -> EnvHandler.INSTANCE.createInputBus(pos, state, MultiblockPartStorage.Item.Input.BASIC), BlockRegistration.INPUT_BUS::getAll);
     OUTPUT_BUS = register("output_bus", (pos, state) -> EnvHandler.INSTANCE.createOutputBus(pos, state, MultiblockPartStorage.Item.Output.BASIC), BlockRegistration.OUTPUT_BUS::getAll);
+  }
+
+  // multiblock controllers
+  static {
+    MELTER = register("melter_controller", (pos, state) -> EnvHandler.INSTANCE.createMelterControllerEntity(pos, state, BlockRegistration.MELTER_CONTROLLER.get()), () -> List.of(BlockRegistration.MELTER_CONTROLLER.get()));
   }
 
   private static <BE extends BlockEntity> Supplier<BlockEntityType<BE>> register(String path, BlockEntityType.BlockEntitySupplier<BE> supplier, Supplier<List<Block>> blocks) {

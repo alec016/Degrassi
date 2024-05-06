@@ -20,4 +20,6 @@ public interface IComponent extends IType {
 
   void serialize(CompoundTag nbt);
   void deserialize(CompoundTag nbt);
+
+  String getTypeString();
 }

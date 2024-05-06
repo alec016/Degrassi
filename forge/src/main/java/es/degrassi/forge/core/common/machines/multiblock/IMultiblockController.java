@@ -3,8 +3,11 @@ package es.degrassi.forge.core.common.machines.multiblock;
 import es.degrassi.forge.core.common.machines.multiblock.controller.block.BaseMultiblockControllerBlock;
 import es.degrassi.forge.core.common.machines.multiblock.controller.block.entity.BaseMultiblockControllerEntity;
 import es.degrassi.forge.core.common.machines.multiblock.uils.StateMatcher;
+import java.util.Map;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 
 public interface IMultiblockController<
   B extends BaseMultiblockControllerBlock,
@@ -24,4 +27,17 @@ public interface IMultiblockController<
    * Validation method
    */
   void validate();
+
+  /**
+   * initialize the pattern in a determined direction
+   * @param direction to be initialized the multiblock pattern
+   */
+  void init(Direction direction);
+
+  /**
+   * @param blocks the pattern without rotation
+   * @param rotation the degrees rotation to do
+   * @return the pattern rotated
+   */
+  Map<BlockPos, StateMatcher> rotate(Map<BlockPos, StateMatcher> blocks, Rotation rotation);
 }

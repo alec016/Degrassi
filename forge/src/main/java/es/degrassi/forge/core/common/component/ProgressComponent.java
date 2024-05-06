@@ -90,6 +90,11 @@ public class ProgressComponent implements IComponent {
   }
 
   @Override
+  public String getTypeString() {
+    return "progress";
+  }
+
+  @Override
   public String toString() {
     return "ProgressComponent{" +
       "progress=" + getProgress() +

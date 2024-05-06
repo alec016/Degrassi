@@ -57,6 +57,11 @@ public class BarComponent implements IComponent {
     }
   }
 
+  @Override
+  public String getTypeString() {
+    return "bar";
+  }
+
   public double getFilledPercentage() {
     return this.amount / this.capacity;
   }

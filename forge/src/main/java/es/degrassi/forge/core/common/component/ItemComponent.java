@@ -94,11 +94,13 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
 
   @Override
   public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+    if (mode.output()) return ItemStack.EMPTY;
     return super.insertItem(0, stack, simulate);
   }
 
   @Override
   public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
+    if (mode.input()) return ItemStack.EMPTY;
     return super.extractItem(0, amount, simulate);
   }
 
@@ -114,13 +116,16 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
 
   // recipe stuff
   public @NotNull ItemStack insertRecipeItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-    if (mode.input()) return ItemStack.EMPTY;
     return super.insertItem(0, stack, simulate);
   }
 
   public @NotNull ItemStack extractRecipeItem(int slot, int amount, boolean simulate) {
-    if (mode.output()) return ItemStack.EMPTY;
     return super.extractItem(0, amount, simulate);
+  }
+
+  @Override
+  public String getTypeString() {
+    return "item";
   }
 
   @Override

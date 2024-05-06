@@ -23,6 +23,7 @@ public class BlockLootTables extends BlockLootSubProvider {
   public void generate() {
     dropSelf(BlockRegistration.MACHINE_CASING.get());
     dropSelf(BlockRegistration.MELTER_FRAME.get());
+    dropSelf(BlockRegistration.MELTER_CONTROLLER.get());
     for(Furnace tier : Furnace.values()) {
       dropSelf(BlockRegistration.FURNACE.get(tier));
     }

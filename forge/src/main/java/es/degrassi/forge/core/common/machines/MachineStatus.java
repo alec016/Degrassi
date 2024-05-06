@@ -17,6 +17,14 @@ public enum MachineStatus implements StringRepresentable {
     return this == ERROR;
   }
 
+  public boolean isRunning() {
+    return this == RUNNING;
+  }
+
+  public boolean isIdle() {
+    return this == IDLE;
+  }
+
   @Override
   public String getSerializedName() {
     return name().toLowerCase();

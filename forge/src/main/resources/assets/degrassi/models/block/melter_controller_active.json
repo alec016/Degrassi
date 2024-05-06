@@ -1,0 +1,8 @@
+{
+  "parent": "degrassi:block/melter_controller",
+  "texture_size": [64, 64],
+  "textures": {
+    "0": "degrassi:block/multiblock/controller/melter_controller_active",
+    "particle": "degrassi:block/multiblock/controller/melter_controller_active"
+  }
+}

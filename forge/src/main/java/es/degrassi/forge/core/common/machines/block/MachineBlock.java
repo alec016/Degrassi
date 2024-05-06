@@ -97,13 +97,13 @@ public abstract class MachineBlock extends Block implements EntityBlock {
   }
 
   @SuppressWarnings("unused")
-  protected enum Facing {
+  public enum Facing {
     HORIZONTAL,
     ALL,
     NONE
   }
 
-  protected enum Process {
+  public enum Process {
     YES,
     NOP;
 

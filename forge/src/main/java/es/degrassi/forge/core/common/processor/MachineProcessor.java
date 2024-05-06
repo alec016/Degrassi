@@ -8,10 +8,12 @@ import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import lombok.Getter;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 
+@Getter
 public abstract class MachineProcessor<T extends MachineRecipe<T>, E extends MachineEntity<T>> implements IProcessor<T> {
   protected List<T> recipes;
   protected final E entity;
@@ -21,13 +23,10 @@ public abstract class MachineProcessor<T extends MachineRecipe<T>, E extends Mac
   protected ResourceLocation futureRecipeID;
   protected Phase phase = Phase.NONE;
   private final boolean resetOnError;
+
   public MachineProcessor(E entity, boolean reset) {
     this.entity = entity;
     this.resetOnError = reset;
-  }
-
-  public E getEntity() {
-    return entity;
   }
 
   /**
@@ -59,11 +58,6 @@ public abstract class MachineProcessor<T extends MachineRecipe<T>, E extends Mac
    * </pre>
    */
   protected abstract void init();
-
-  @Override
-  public List<T> getRecipes() {
-    return recipes;
-  }
 
   public void tick () {
     if (!initialized) init();
@@ -108,6 +102,17 @@ public abstract class MachineProcessor<T extends MachineRecipe<T>, E extends Mac
         }
       }
     else entity.setIdle();
+  }
+
+  public void reset() {
+    if (entity.getStatus().isError()) return;
+    ProgressComponent component = (ProgressComponent) entity.getComponentManager().getComponent(ProgressComponent.id).orElse(null);
+    if (component == null) return;
+    component.resetProgress();
+    component.setMaxProgress(0);
+    entity.resetErrorMessage();
+    setPhase(Phase.NONE);
+    entity.setIdle();
   }
 
   @Override

@@ -35,4 +35,6 @@ public interface IRequirement<R extends IComponent> extends IType {
   String getId();
 
   JsonObject toJson(JsonObject json);
+
+  String getTypeString();
 }

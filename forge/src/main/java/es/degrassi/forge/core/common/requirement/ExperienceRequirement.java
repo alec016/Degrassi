@@ -134,6 +134,11 @@ public class ExperienceRequirement implements IRequirement<ExperienceComponent> 
   }
 
   @Override
+  public String getTypeString() {
+    return "experience";
+  }
+
+  @Override
   public String toString() {
     return "ExperienceRequirement{" +
       "xp=" + xp +

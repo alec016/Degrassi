@@ -24,6 +24,7 @@ public class DegrassiItemModelProvider extends ItemModelProvider {
   @Override
   public void registerModels() {
     simpleBlockItem(BlockRegistration.MACHINE_CASING);
+    simpleBlockItem(BlockRegistration.MELTER_FRAME);
 
     simpleItem(ItemRegistration.WRENCH);
     simpleItem(ItemRegistration.RED_MATTER);

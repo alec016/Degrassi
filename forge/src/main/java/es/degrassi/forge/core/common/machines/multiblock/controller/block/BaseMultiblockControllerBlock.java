@@ -1,6 +1,10 @@
 package es.degrassi.forge.core.common.machines.multiblock.controller.block;
 
+import es.degrassi.common.utils.Utils;
 import es.degrassi.forge.core.common.machines.block.MachineBlock;
+import es.degrassi.forge.core.common.machines.entity.MachineEntity;
+import es.degrassi.forge.core.common.machines.multiblock.controller.block.entity.BaseMultiblockControllerEntity;
+import es.degrassi.forge.core.init.EntityRegistration;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.core.BlockPos;
@@ -24,7 +28,6 @@ import org.jetbrains.annotations.Nullable;
 @Setter
 @SuppressWarnings("deprecation")
 public abstract class BaseMultiblockControllerBlock extends MachineBlock {
-
   public static final BooleanProperty VALID = BooleanProperty.create("valid");
 
   public BaseMultiblockControllerBlock(Properties props) {
@@ -49,12 +52,21 @@ public abstract class BaseMultiblockControllerBlock extends MachineBlock {
 
   @Override
   public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
-//    return Utils.createTickerHelper(
-//      type, EntityRegistration.TEST_MULTIBLOCK.get(),
-//      level.isClientSide()
-//        ? MachineEntity::clientTick
-//        : BaseMultiblockControllerEntity::serverTick
-//    );
-    return null;
+    return Utils.createTickerHelper(
+      type, EntityRegistration.MELTER.get(),
+      level.isClientSide()
+        ? MachineEntity::clientTick
+        : BaseMultiblockControllerEntity::serverTick
+    );
+  }
+
+  @Override
+  public Facing getFacing() {
+    return Facing.HORIZONTAL;
+  }
+
+  @Override
+  public Process getProcess() {
+    return Process.YES;
   }
 }

@@ -11,11 +11,14 @@ import es.degrassi.forge.api.impl.codec.RegistrarCodec;
 import es.degrassi.forge.core.common.component.ItemComponent;
 import es.degrassi.forge.core.init.RequirementRegistration;
 import java.util.Objects;
+import lombok.Getter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
+
+@Getter
 public class ItemRequirement implements IRequirement<ItemComponent> {
   public static final NamedCodec<ItemRequirement> CODEC = NamedCodec.record(
     instance -> instance.group(
@@ -120,18 +123,13 @@ public class ItemRequirement implements IRequirement<ItemComponent> {
   }
 
   @Override
-  public RequirementMode getMode() {
-    return mode;
-  }
-
-  @Override
-  public String getId() {
-    return id;
-  }
-
-  @Override
   public IRequirement<?> copy() {
     return new ItemRequirement(item, amount, id, mode);
+  }
+
+  @Override
+  public String getTypeString() {
+    return "item";
   }
 
   @Override
@@ -142,13 +140,5 @@ public class ItemRequirement implements IRequirement<ItemComponent> {
       ", id='" + id + '\'' +
       ", mode=" + mode +
       "}";
-  }
-
-  public Item getItem () {
-    return item;
-  }
-
-  public int getAmount() {
-    return amount;
   }
 }

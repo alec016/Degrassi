@@ -10,11 +10,13 @@ import es.degrassi.forge.api.core.common.RequirementType;
 import es.degrassi.forge.api.impl.codec.RegistrarCodec;
 import es.degrassi.forge.core.common.component.FluidComponent;
 import es.degrassi.forge.core.init.RequirementRegistration;
+import lombok.Getter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
+@Getter
 public class FluidRequirement implements IRequirement<FluidComponent> {
   public static final NamedCodec<FluidRequirement> CODEC = NamedCodec.record(
     requirement -> requirement.group(
@@ -122,25 +124,12 @@ public class FluidRequirement implements IRequirement<FluidComponent> {
   }
 
   @Override
-  public RequirementMode getMode() {
-    return mode;
-  }
-
-  @Override
   public IRequirement<?> copy() {
     return new FluidRequirement(fluid, amount, id, mode);
   }
 
   @Override
-  public String getId() {
-    return id;
-  }
-
-  public Fluid getFluid() {
-    return fluid;
-  }
-
-  public int getAmount() {
-    return amount;
+  public String getTypeString() {
+    return "fluid";
   }
 }

@@ -92,16 +92,19 @@ public class FluidComponent extends FluidTank implements IComponent {
 
   @Override
   public int fill(FluidStack resource, FluidAction action) {
+    if (mode.output()) return 0;
     return super.fill(resource, action);
   }
 
   @Override
   public @NotNull FluidStack drain(int maxDrain, FluidAction action) {
+    if (mode.input()) return FluidStack.EMPTY;
     return super.drain(maxDrain, action);
   }
 
   @Override
   public @NotNull FluidStack drain(FluidStack resource, FluidAction action) {
+    if (mode.input()) return FluidStack.EMPTY;
     return super.drain(resource, action);
   }
 
@@ -111,17 +114,19 @@ public class FluidComponent extends FluidTank implements IComponent {
 
   // recipe stuff
   public int fillRecipe(FluidStack resource, FluidAction action) {
-    if (mode.input()) return 0;
     return super.fill(resource, action);
   }
 
   public @NotNull FluidStack drainRecipe(int maxDrain, FluidAction action) {
-    if (mode.output()) return FluidStack.EMPTY;
     return super.drain(maxDrain, action);
   }
 
   public @NotNull FluidStack drainRecipe(FluidStack resource, FluidAction action) {
-    if (mode.output()) return FluidStack.EMPTY;
     return super.drain(resource, action);
+  }
+
+  @Override
+  public String getTypeString() {
+    return "fluid";
   }
 }

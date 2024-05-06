@@ -7,6 +7,7 @@ import es.degrassi.forge.core.common.machines.block.ChestBlock;
 import es.degrassi.forge.core.common.machines.block.FurnaceBlock;
 import es.degrassi.forge.core.common.machines.block.MachineCasing;
 import es.degrassi.forge.core.common.machines.block.SolarPanelBlock;
+import es.degrassi.forge.core.common.machines.multiblock.controller.block.MelterController;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.EnergyHatch;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.FluidInputTank;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.FluidOutputTank;
@@ -51,6 +52,9 @@ public class BlockRegistration {
   public static final VarReg<MultiblockPartStorage.Fluid.Output, Block> FLUID_OUTPUT_TANK;
   public static final VarReg<MultiblockPartStorage.Item.Input, Block> INPUT_BUS;
   public static final VarReg<MultiblockPartStorage.Item.Output, Block> OUTPUT_BUS;
+
+  // Multiblock controllers
+  public static final RegistrySupplier<MelterController> MELTER_CONTROLLER = BLOCKS.register("melter_controller", () -> new MelterController(commonBlock(700)));
 
   // VarReg
   static {

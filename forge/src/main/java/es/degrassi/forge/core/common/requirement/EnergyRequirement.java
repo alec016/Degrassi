@@ -9,8 +9,12 @@ import es.degrassi.forge.api.core.common.RequirementMode;
 import es.degrassi.forge.api.core.common.RequirementType;
 import es.degrassi.forge.core.common.component.EnergyComponent;
 import es.degrassi.forge.core.init.RequirementRegistration;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.network.chat.Component;
 
+@Getter
+@Setter
 public class EnergyRequirement implements IRequirement<EnergyComponent> {
   public static final NamedCodec<EnergyRequirement> CODEC = NamedCodec.record(
     requirement -> requirement.group(
@@ -48,6 +52,11 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
   public JsonObject toJson(JsonObject json) {
     json.addProperty("energy", amount);
     return json;
+  }
+
+  @Override
+  public String getTypeString() {
+    return "energy";
   }
 
   @Override
@@ -126,14 +135,6 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
         }
       }
     };
-  }
-
-  public int getAmount() {
-    return amount;
-  }
-
-  public void setAmount(int amount) {
-    this.amount = amount;
   }
 
   @Override

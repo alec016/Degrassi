@@ -105,6 +105,7 @@ public class DegrassiForge {
         (params, output) -> {
           output.accept(new ItemStack(BlockRegistration.MACHINE_CASING.get()));
           output.accept(new ItemStack(BlockRegistration.MELTER_FRAME.get()));
+          output.accept(new ItemStack(BlockRegistration.MELTER_CONTROLLER.get()));
           for (Furnace tier : Furnace.values()) {
             output.accept(new ItemStack(BlockRegistration.FURNACE.get(tier)));
           }
@@ -157,6 +158,7 @@ public class DegrassiForge {
     if (event.getTabKey() == MACHINES) {
       entries.put(new ItemStack(BlockRegistration.MACHINE_CASING.get()), vis);
       entries.put(new ItemStack(BlockRegistration.MELTER_FRAME.get()), vis);
+      entries.put(new ItemStack(BlockRegistration.MELTER_CONTROLLER.get()), vis);
       for (Furnace tier : Furnace.values()) {
         entries.put(new ItemStack(BlockRegistration.FURNACE.get(tier)), vis);
       }
