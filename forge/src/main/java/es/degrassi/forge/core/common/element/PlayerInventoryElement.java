@@ -17,10 +17,9 @@ import org.jetbrains.annotations.NotNull;
 
 @Getter
 public class PlayerInventoryElement extends AbstractWidget implements IElement<IComponent> {
-  @Getter
   private final String id = "player_inventory";
   private final ElementManager manager;
-  private final ResourceLocation texture;
+  private ResourceLocation texture;
   public PlayerInventoryElement(ElementManager manager, int x, int y, ResourceLocation texture, Component message) {
     super(x, y, TextureSizeHelper.getTextureWidth(texture), TextureSizeHelper.getTextureHeight(texture), message);
     this.texture = texture;
@@ -51,10 +50,21 @@ public class PlayerInventoryElement extends AbstractWidget implements IElement<I
   }
 
   @Override
-  public void serialize(CompoundTag nbt) {}
+  public void serialize(CompoundTag nbt) {
+  }
 
   @Override
-  public void deserialize(CompoundTag nbt) {}
+  public CompoundTag serialize() {
+    CompoundTag tag = new CompoundTag();
+    tag.putString("texture", texture.toString());
+    tag.putString("id", id);
+    return tag;
+  }
+
+  @Override
+  public void deserialize(CompoundTag nbt) {
+    texture = new ResourceLocation(nbt.getString("texture"));
+  }
 
   @Override
   public void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent component) {}
@@ -68,5 +78,9 @@ public class PlayerInventoryElement extends AbstractWidget implements IElement<I
       ", width=" + width +
       ", height=" + height +
       '}';
+  }
+
+  public boolean jei() {
+    return false;
   }
 }

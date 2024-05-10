@@ -20,7 +20,7 @@ public class ExperienceWrapper extends ExperienceElement implements IIngredientR
   @Getter
   private final MachineRecipe<?> recipe;
   private final boolean animated;
-  public static final ExperienceWrapper DUMMY = new ExperienceWrapper(0, 0, null, null, ElementDirection.RIGHT, null, false) {
+  public static final ExperienceWrapper DUMMY = new ExperienceWrapper(0, 0, null, null, ElementDirection.RIGHT, null, false, "experience") {
     @Override
     public int getWidth() {
       return 16;
@@ -32,8 +32,8 @@ public class ExperienceWrapper extends ExperienceElement implements IIngredientR
     }
   };
 
-  public ExperienceWrapper(int x, int y, ResourceLocation emptyTexture, ResourceLocation filledTexture, ElementDirection direction, MachineRecipe<?> recipe, boolean animated) {
-    super(null, x, y, "experience", Component.literal("experience"), emptyTexture, filledTexture, direction);
+  public ExperienceWrapper(int x, int y, ResourceLocation emptyTexture, ResourceLocation filledTexture, ElementDirection direction, MachineRecipe<?> recipe, boolean animated, String id) {
+    super(null, x, y, id, Component.literal("experience"), emptyTexture, filledTexture, direction, true);
     this.recipe = recipe;
     this.animated = animated;
   }
@@ -46,7 +46,7 @@ public class ExperienceWrapper extends ExperienceElement implements IIngredientR
     if (!(iComponent instanceof ExperienceComponent component)) return;
     ExperienceRequirement requirement = recipe.getRequirements().stream().filter(req -> req.getId().equals(component.getId())).map(req -> (ExperienceRequirement) req).findFirst().orElse(null);
     if (requirement == null) return;
-    float total = requirement.getMode().isPerTick() ? requirement.getXp() : requirement.getXp() * recipe.getTime();
+    float total = requirement.getMode().isPerTick() ? requirement.getXp() * recipe.getTime() : requirement.getXp();
     component.setCapacity(total);
     if (animated) {
       float toIncrement = requirement.getMode().isPerTick() ? requirement.getXp() : requirement.getXp() / recipe.getTime();

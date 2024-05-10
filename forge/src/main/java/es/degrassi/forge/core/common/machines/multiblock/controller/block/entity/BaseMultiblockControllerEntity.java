@@ -1,8 +1,7 @@
 package es.degrassi.forge.core.common.machines.multiblock.controller.block.entity;
 
-import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.core.common.ComponentManager;
-import es.degrassi.forge.core.common.machines.MachineStatus;
+import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.common.machines.multiblock.IMultiblockController;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.BaseMultiblockPartEntity;
@@ -12,10 +11,9 @@ import es.degrassi.forge.core.common.recipe.BaseMultiblockControllerRecipe;
 import es.degrassi.forge.core.common.machines.multiblock.uils.StateMatcher;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -38,8 +36,8 @@ public abstract class BaseMultiblockControllerEntity<
   private static final int validateTime = 5;
 
   private final BaseMultiblockControllerBlock block;
-  private final Map<BlockPos, StateMatcher> pattern = new HashMap<>();
-  private final Map<BlockPos, StateMatcher> patternWithoutRotation = new HashMap<>();
+  private final Map<BlockPos, StateMatcher> pattern;
+  private final Map<BlockPos, StateMatcher> patternWithoutRotation;
   private Map<BlockPos, StateMatcher> temp;
 
   private boolean valid = false;
@@ -49,11 +47,14 @@ public abstract class BaseMultiblockControllerEntity<
   public BaseMultiblockControllerEntity(BlockEntityType<? extends BaseMultiblockControllerEntity<R, B, E>> type, BlockPos pos, BlockState blockState, BaseMultiblockControllerBlock block) {
     super(type, pos, blockState);
     this.block = block;
+    pattern = new HashMap<>();
+    patternWithoutRotation = new HashMap<>();
     Multiblocks.addController(this, pos);
   }
 
   @Override
-  public void init(Direction direction) {
+  public void init() {
+    Direction direction = getBlockState().getValue(BaseMultiblockControllerBlock.FACING);
     if (initialDirection != null && initialDirection == direction) return;
     initialDirection = direction;
     temp = new LinkedHashMap<>();
@@ -94,11 +95,7 @@ public abstract class BaseMultiblockControllerEntity<
 
   @Override
   public boolean validate(BlockPos pos, StateMatcher matcher) {
-    BlockState state = Objects.requireNonNull(getLevel()).getBlockState(new BlockPos(
-      pos.getX() + getBlockPos().getX(),
-      pos.getY() + getBlockPos().getY(),
-      pos.getZ() + getBlockPos().getZ()
-    ));
+    BlockState state = Objects.requireNonNull(getLevel()).getBlockState(getPos(pos));
     return matcher.matches(state);
   }
 
@@ -110,19 +107,6 @@ public abstract class BaseMultiblockControllerEntity<
     setChanged();
   }
 
-  public List<IComponent> getComponents() {
-    List<IComponent> components = new LinkedList<>();
-
-    pattern.keySet().forEach(pos -> {
-      BlockEntity possiblePart = level.getBlockEntity(getPos(pos));
-      if (possiblePart instanceof BaseMultiblockPartEntity<?> entity) {
-        components.addAll(entity.getComponentManager().get());
-      }
-    });
-
-    return components;
-  }
-
   public BlockPos getPos(BlockPos patternPos) {
     return new BlockPos(
       patternPos.getX() + getBlockPos().getX(),
@@ -131,21 +115,41 @@ public abstract class BaseMultiblockControllerEntity<
     );
   }
 
-  public List<IComponent> getAllComponents() {
-    List<IComponent> components = getComponents();
-    components.addAll(super.getComponentManager().get());
-    return components;
+  public ComponentManager getUnifiedComponentManager() {
+    AtomicReference<ComponentManager> manager = new AtomicReference<>(componentManager);
+    if (pattern.isEmpty())
+      init();
+    pattern.keySet().forEach(pos -> {
+      BlockEntity possiblePart = level.getBlockEntity(getPos(pos));
+      if (possiblePart instanceof BaseMultiblockPartEntity<?> entity) {
+        manager.set(manager.get().mergeWith(entity.getComponentManager()));
+      }
+    });
+    manager.get().init();
+    return manager.get();
   }
 
-  public CompoundTag getComponentsNBT() {
-    CompoundTag nbt = new CompoundTag();
-    getComponents().forEach(type -> type.serialize(nbt));
-    return nbt;
+  public ElementManager getUnifiedElementManager() {
+    AtomicReference<ElementManager> manager = new AtomicReference<>(elementManager);
+    if (pattern.isEmpty())
+      init();
+    pattern.keySet().forEach(pos -> {
+      BlockEntity possiblePart = level.getBlockEntity(getPos(pos));
+      if (possiblePart instanceof BaseMultiblockPartEntity<?> entity) {
+        manager.set(manager.get().mergeWith(entity.getElementManager()));
+      }
+    });
+    return manager.get();
   }
 
   @Override
   public ComponentManager getComponentManager() {
-    return new ComponentManager(getAllComponents(), this);
+    return getUnifiedComponentManager();
+  }
+
+  @Override
+  public ElementManager getElementManager() {
+    return dummy() ? getUnifiedElementManager() : super.getElementManager();
   }
 
   public static <
@@ -159,7 +163,7 @@ public abstract class BaseMultiblockControllerEntity<
     @NotNull BaseMultiblockControllerEntity<R, B, E> entity
   ) {
     if (entity.getBlockState().getValue(BaseMultiblockControllerBlock.FACING) != entity.initialDirection) {
-      entity.init(entity.getBlockState().getValue(BaseMultiblockControllerBlock.FACING));
+      entity.init();
     }
 
     if (entity.cacheValidate <= 0) {
@@ -177,26 +181,16 @@ public abstract class BaseMultiblockControllerEntity<
   @Override
   public void load(@NotNull CompoundTag tag) {
     super.load(tag);
-    elementManager.deserializeNBT(tag.getCompound("elementManager"));
-    if (tag.contains("processor") && processor != null) processor.deserializeNBT(tag.getCompound("processor"));
-    status = MachineStatus.value(tag.getString("status"));
-    errorMessage = Component.literal(tag.getString("errorMessage"));
-    componentManager.deserializeNBT(tag.getCompound("componentManager"));
     valid = tag.getBoolean("valid");
     initialDirection = Direction.byName(tag.getString("initialDirection"));
 
-    init(getBlockState().getValue(BaseMultiblockControllerBlock.FACING));
+    init();
   }
 
   @Override
   protected void saveAdditional(@NotNull CompoundTag tag) {
     super.saveAdditional(tag);
-    tag.put("componentManager", getComponentManager().serializeNBT());
-    tag.put("elementManager", getElementManager().serializeNBT());
-    if (getProcessor() != null) tag.put("processor", getProcessor().serializeNBT());
-    tag.putString("status", getStatus().getSerializedName());
-    tag.putString("errorMessage", getErrorMessage().getString());
-    tag.putBoolean("valid", isValid());
-    tag.putString("initialDirection", getInitialDirection().getSerializedName());
+    tag.putBoolean("valid", valid);
+    tag.putString("initialDirection", initialDirection.getSerializedName());
   }
 }

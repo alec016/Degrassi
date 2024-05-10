@@ -13,12 +13,14 @@ import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.util.INBTSerializable;
 
 @SuppressWarnings("unused")
-public final class ElementManager extends Manager<IElement<?>> implements INBTSerializable<CompoundTag> {
+public final class ElementManager extends Manager<IElement<?>> implements INBTSerializable<ListTag> {
   public ElementManager(MachineEntity<?> entity) {
     super(entity);
   }
@@ -28,17 +30,32 @@ public final class ElementManager extends Manager<IElement<?>> implements INBTSe
   }
 
   public ElementManager addEnergy(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id, ElementDirection direction) {
-    get().add(new EnergyElement(this, x, y, message, emptyTexture, filledTexture, id, direction));
+    addEnergy(x, y, message, emptyTexture, filledTexture, id, direction, true);
+    return this;
+  }
+
+  public ElementManager addEnergy(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id, ElementDirection direction, boolean jei) {
+    get().add(new EnergyElement(this, x, y, message, emptyTexture, filledTexture, id, direction, jei));
     return this;
   }
 
   public ElementManager addEnergy(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id) {
-    get().add(new EnergyElement(this, x, y, message, emptyTexture, filledTexture, id, ElementDirection.TOP));
+    addEnergy(x, y, message, emptyTexture, filledTexture, id, ElementDirection.TOP);
+    return this;
+  }
+
+  public ElementManager addEnergy(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id, boolean jei) {
+    addEnergy(x, y, message, emptyTexture, filledTexture, id, ElementDirection.TOP, jei);
     return this;
   }
 
   public ElementManager addItem(int x, int y, Component message, ResourceLocation texture, String id) {
-    get().add(new ItemElement(this, x, y, message, id, texture));
+    addItem(x, y, message, texture, id, true);
+    return this;
+  }
+
+  public ElementManager addItem(int x, int y, Component message, ResourceLocation texture, String id, boolean jei) {
+    get().add(new ItemElement(this, x, y, message, id, texture, jei));
     return this;
   }
 
@@ -48,35 +65,67 @@ public final class ElementManager extends Manager<IElement<?>> implements INBTSe
   }
 
   public ElementManager addExperience(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id, ElementDirection direction) {
-    get().add(new ExperienceElement(this, x, y, id, message, emptyTexture, filledTexture, direction));
+    addExperience( x, y, message, emptyTexture, filledTexture, id, direction, true);
     return this;
   }
 
   public ElementManager addExperience(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id) {
-    return addExperience(x, y, message, emptyTexture, filledTexture, id, ElementDirection.RIGHT);
+    return addExperience(x, y, message, emptyTexture, filledTexture, id, ElementDirection.RIGHT, true);
+  }
+
+  public ElementManager addExperience(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id, ElementDirection direction, boolean jei) {
+    get().add(new ExperienceElement(this, x, y, id, message, emptyTexture, filledTexture, direction, jei));
+    return this;
+  }
+
+  public ElementManager addExperience(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id, boolean jei) {
+    return addExperience(x, y, message, emptyTexture, filledTexture, id, ElementDirection.RIGHT, jei);
   }
 
   public ElementManager addProgress(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture) {
-    return addProgress(x, y, message, emptyTexture, filledTexture, ElementDirection.RIGHT);
+    return addProgress(x, y, message, emptyTexture, filledTexture, ElementDirection.RIGHT, true);
   }
 
   public ElementManager addProgress(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, ElementDirection direction) {
-    get().add(new ProgressElement(this, x, y, message, emptyTexture, filledTexture, direction));
+    addProgress(x, y, message, emptyTexture, filledTexture, direction, true);
+    return this;
+  }
+
+  public ElementManager addProgress(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, boolean jei) {
+    return addProgress(x, y, message, emptyTexture, filledTexture, ElementDirection.RIGHT, jei);
+  }
+
+  public ElementManager addProgress(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, ElementDirection direction, boolean jei) {
+    get().add(new ProgressElement(this, x, y, message, emptyTexture, filledTexture, direction, jei));
     return this;
   }
 
   public ElementManager addFluid(int x, int y, Component message, ResourceLocation texture, String id) {
-    get().add(new FluidElement(this, x, y, texture, message, id));
+    addFluid(x, y, message, texture, id, true);
+    return this;
+  }
+
+  public ElementManager addFluid(int x, int y, Component message, ResourceLocation texture, String id, boolean jei) {
+    get().add(new FluidElement(this, x, y, texture, message, id, jei));
     return this;
   }
 
   public ElementManager addBar(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id, ElementDirection direction) {
-    get().add(new BarElement(this, x, y, emptyTexture, filledTexture, message, id, direction));
+    addBar(x, y, message, emptyTexture, filledTexture, id, direction, true);
     return this;
   }
 
   public ElementManager addBar(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id) {
-    return addBar(x, y, message, emptyTexture, filledTexture, id, ElementDirection.RIGHT);
+    return addBar(x, y, message, emptyTexture, filledTexture, id, ElementDirection.RIGHT, true);
+  }
+
+  public ElementManager addBar(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id, ElementDirection direction, boolean jei) {
+    get().add(new BarElement(this, x, y, emptyTexture, filledTexture, message, id, direction, jei));
+    return this;
+  }
+
+  public ElementManager addBar(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id, boolean jei) {
+    return addBar(x, y, message, emptyTexture, filledTexture, id, ElementDirection.RIGHT, jei);
   }
 
   public Optional<IElement<?>> getElement(String id) {
@@ -92,22 +141,35 @@ public final class ElementManager extends Manager<IElement<?>> implements INBTSe
   }
 
   @Override
-  public CompoundTag serializeNBT() {
-    CompoundTag nbt = new CompoundTag();
-    get().forEach(type -> type.serialize(nbt));
+  public ListTag serializeNBT() {
+    ListTag nbt = new ListTag();
+    get().forEach(element -> nbt.add(element.serialize()));
     return nbt;
   }
 
   @Override
-  public void deserializeNBT(CompoundTag nbt) {
-    get().forEach(type -> type.deserialize(nbt));
+  public void deserializeNBT(ListTag nbt) {
+    nbt.forEach(tag -> {
+      if (tag instanceof CompoundTag compound)
+        get().forEach(element -> {
+          if (compound.contains("id", Tag.TAG_STRING) && element.getId().equals(compound.getString("id")))
+            element.deserialize(compound);
+        });
+    });
   }
 
   public void markDirty() {
     get().forEach(IElement::markDirty);
   }
+
   @Override
   public String toString() {
     return "Element" + super.toString();
+  }
+
+  public ElementManager mergeWith(ElementManager other) {
+    ElementManager newManager = new ElementManager(get(), getEntity());
+    other.get().forEach(newManager::add);
+    return newManager;
   }
 }

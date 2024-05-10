@@ -1,5 +1,6 @@
 package es.degrassi.forge.core.common.element;
 
+import es.degrassi.common.utils.DegrassiLogger;
 import es.degrassi.forge.api.core.common.ElementDirection;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IElement;
@@ -27,6 +28,8 @@ public class ExperienceElement extends AbstractWidget implements IElement<Experi
   private ResourceLocation emptyTexture, filledTexture;
   private final String id;
   private final ElementDirection direction;
+  private final boolean jei;
+
   public ExperienceElement(
     ElementManager manager,
     int x,
@@ -35,7 +38,8 @@ public class ExperienceElement extends AbstractWidget implements IElement<Experi
     Component message,
     ResourceLocation emptyTexture,
     ResourceLocation filledTexture,
-    ElementDirection direction
+    ElementDirection direction,
+    boolean jei
   ) {
     super(x, y, TextureSizeHelper.getTextureWidth(emptyTexture), TextureSizeHelper.getTextureHeight(emptyTexture), message);
     this.manager = manager;
@@ -43,6 +47,7 @@ public class ExperienceElement extends AbstractWidget implements IElement<Experi
     this.filledTexture = filledTexture;
     this.id = id;
     this.direction = direction;
+    this.jei = jei;
   }
 
   @Override
@@ -87,7 +92,7 @@ public class ExperienceElement extends AbstractWidget implements IElement<Experi
 
   @Override
   public void renderHighlight(@NotNull GuiGraphics guiGraphics, int x, int y) {
-    guiGraphics.fillGradient(RenderType.guiOverlay(), getX() + 1, getY() + 1, getX() + getWidth() - 1, getY() + getHeight() - 1, -2130706433, -2130706433, 0);
+    guiGraphics.fillGradient(RenderType.gui(), getX() + 1, getY() + 1, getX() + getWidth() - 1, getY() + getHeight() - 1, -2130706433, -2130706433, 0);
   }
 
   @Override
@@ -97,21 +102,26 @@ public class ExperienceElement extends AbstractWidget implements IElement<Experi
 
   @Override
   public void serialize(CompoundTag nbt) {
+  }
+
+  @Override
+  public CompoundTag serialize() {
     CompoundTag tag = new CompoundTag();
     tag.putString(EMPTY_TEXTURE_KEY, emptyTexture.toString());
     tag.putString(FILLED_TEXTURE_KEY, filledTexture.toString());
-    nbt.put(id, tag);
+    tag.putString("id", id);
+    return tag;
   }
 
   @Override
   public void deserialize(CompoundTag nbt) {
-    CompoundTag tag = nbt.getCompound(id);
-    emptyTexture = new ResourceLocation(tag.getString(EMPTY_TEXTURE_KEY));
-    filledTexture = new ResourceLocation(tag.getString(FILLED_TEXTURE_KEY));
+    emptyTexture = new ResourceLocation(nbt.getString(EMPTY_TEXTURE_KEY));
+    filledTexture = new ResourceLocation(nbt.getString(FILLED_TEXTURE_KEY));
   }
 
   @Override
   public void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent iComponent) {
+    if (!jei) return;
     if (!(iComponent instanceof ExperienceComponent component)) return;
     renderTexture(guiGraphics, emptyTexture, getX(), getY(), 0, 0, 0, getWidth(), getHeight(), getWidth(), getHeight());
     float filledPercentage = component.getExperienceStored() / component.getCapacity();
@@ -121,5 +131,9 @@ public class ExperienceElement extends AbstractWidget implements IElement<Experi
     int width = widthHeight.getA(), height = widthHeight.getB();
     int xOffset = xyOffset.getA(), yOffset = xyOffset.getB();
     renderTexture(guiGraphics, filledTexture, getX() + xOffset, getY() + yOffset, xOffset, yOffset, 0, width, height, textureWidth, textureHeight);
+  }
+
+  public boolean jei() {
+    return jei;
   }
 }

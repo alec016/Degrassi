@@ -21,4 +21,13 @@ public enum ElementDirection {
   public boolean bottom() {
     return this == BOTTOM;
   }
+
+  public ElementDirection opposite() {
+    return switch (this) {
+      case TOP -> BOTTOM;
+      case BOTTOM -> TOP;
+      case LEFT -> RIGHT;
+      case RIGHT -> LEFT;
+    };
+  }
 }

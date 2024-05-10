@@ -34,7 +34,7 @@ public class ProgressWrapper extends ProgressElement implements IIngredientRende
   };
 
   public ProgressWrapper(int x, int y, @NotNull ResourceLocation emptyTexture, @NotNull ResourceLocation filledTexture, ElementDirection direction, MachineRecipe<?> recipe, boolean animated) {
-    super(null, x, y, Component.literal("progress"), emptyTexture, filledTexture, direction);
+    super(null, x, y, Component.literal("progress"), emptyTexture, filledTexture, direction, true);
     this.recipe = recipe;
     this.animated = animated;
   }

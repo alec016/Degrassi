@@ -10,11 +10,13 @@ import es.degrassi.forge.api.core.common.RequirementType;
 import es.degrassi.forge.api.impl.codec.RegistrarCodec;
 import es.degrassi.forge.core.common.component.FluidComponent;
 import es.degrassi.forge.core.init.RequirementRegistration;
+import java.util.Objects;
 import lombok.Getter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 
 @Getter
 public class FluidRequirement implements IRequirement<FluidComponent> {
@@ -42,6 +44,16 @@ public class FluidRequirement implements IRequirement<FluidComponent> {
 
   @Override
   public JsonObject toJson(JsonObject json) {
+    switch (getMode()) {
+      case INPUT -> {
+        json.addProperty("input", Objects.requireNonNull(ForgeRegistries.FLUIDS.getKey(fluid)).toString());
+        json.addProperty("inputAmount", amount);
+      }
+      case OUTPUT -> {
+        json.addProperty("output", Objects.requireNonNull(ForgeRegistries.FLUIDS.getKey(fluid)).toString());
+        json.addProperty("outputAmount", amount);
+      }
+    }
     return json;
   }
 

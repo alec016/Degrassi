@@ -9,6 +9,7 @@ public abstract class MultiblockProcessor<
   R extends BaseMultiblockControllerRecipe<R>,
   E extends BaseMultiblockControllerEntity<R, ? extends BaseMultiblockControllerBlock, E>
 > extends MachineProcessor<R, E> {
+
   public MultiblockProcessor(E entity, boolean reset) {
     super(entity, reset);
   }

@@ -1,9 +1,10 @@
 package es.degrassi.forge.core.common.machines.multiblock.parts.block.entity;
 
+import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.core.common.component.ComponentIOMode;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.InputBus;
 import es.degrassi.forge.core.common.machines.multiblock.uils.handler.ItemSidedHandler;
-import es.degrassi.forge.core.common.wrapper.DegrassiItemStackHandler;
+import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.EntityRegistration;
 import es.degrassi.forge.core.tiers.MultiblockPartStorage;
 import java.util.Map;
@@ -11,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -22,16 +24,44 @@ import org.jetbrains.annotations.Nullable;
 @Getter
 @Setter
 public class OutputBusEntity extends BaseMultiblockPartEntity<MultiblockPartStorage.Item.Output> {
+  public static final OutputBusEntity DUMMY = new OutputBusEntity(BlockPos.ZERO, BlockRegistration.OUTPUT_BUS.get(MultiblockPartStorage.Item.Output.BASIC).defaultBlockState(), MultiblockPartStorage.Item.Output.BASIC) {
+    @Override
+    public boolean dummy() {
+      return true;
+    }
+  };
   private final Map<Direction, LazyOptional<ItemSidedHandler>> itemWrapperHandlerMap;
 
   public OutputBusEntity(BlockPos pos, BlockState blockState, MultiblockPartStorage.Item.Output variant) {
     super(EntityRegistration.OUTPUT_BUS.get(), pos, blockState, variant);
 
-    for (int i = 0; i < variant.getRows(); i++)
-      for (int j = 0; j < variant.getCols(); j++) {
-        getComponentManager().addItem("output_bus_" + i + "_" + j, ComponentIOMode.OUTPUT);
+    String id;
+    int i, j, k = 1;
+    for (i = 0; i < variant.getRows(); i++)
+      for (j = 0; j < variant.getCols(); j++) {
+        id = "output_bus_" + k;
+        getComponentManager().addItem(id, ComponentIOMode.OUTPUT);
+
+        getElementManager()
+          .addItem(
+            7 + (j + 3) * 18,
+            20 + i * 18,
+            Component.literal(id),
+            new DegrassiLocation("textures/gui/base_slot.png"),
+            id
+          );
+        k++;
       }
-    itemHandler = new DegrassiItemStackHandler(this);
+
+
+    getElementManager().addPlayerInventory(
+      7,
+      30 + i * 18,
+      Component.literal("player_inventory"),
+      new DegrassiLocation("textures/gui/base_inventory.png")
+    );
+
+    itemHandler = getComponentManager().getItemHandler();
     lazyItemHandler = LazyOptional.of(() -> itemHandler);
     itemWrapperHandlerMap = Map.of(
       Direction.UP, LazyOptional.of(() -> new ItemSidedHandler(
@@ -96,5 +126,15 @@ public class OutputBusEntity extends BaseMultiblockPartEntity<MultiblockPartStor
   @Override
   public Component getName() {
     return Component.translatable(getBlockState().getBlock().getDescriptionId());
+  }
+
+  @Override
+  public void saveAdditional(@NotNull CompoundTag tag) {
+    super.saveAdditional(tag);
+  }
+
+  @Override
+  public void load(@NotNull CompoundTag tag) {
+    super.load(tag);
   }
 }

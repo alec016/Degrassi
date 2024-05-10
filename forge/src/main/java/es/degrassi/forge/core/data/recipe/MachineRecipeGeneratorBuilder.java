@@ -2,6 +2,7 @@ package es.degrassi.forge.core.data.recipe;
 
 import es.degrassi.forge.core.common.RequirementManager;
 import es.degrassi.forge.core.data.recipe.builder.FurnaceBuilder;
+import es.degrassi.forge.core.data.recipe.builder.MelterBuilder;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.data.recipes.RecipeBuilder;
@@ -19,6 +20,9 @@ public abstract class MachineRecipeGeneratorBuilder extends RequirementManager i
 
   public static MachineRecipeGeneratorBuilder furnace(int time) {
     return new FurnaceBuilder(time);
+  }
+  public static MachineRecipeGeneratorBuilder melter(int time) {
+    return new MelterBuilder(time);
   }
 
   @Override

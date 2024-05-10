@@ -114,7 +114,7 @@ public class RequirementManager extends Manager<IRequirement<?>> {
     return get().stream().filter(req -> req.getId().equals(id)).findFirst().orElse(null);
   }
 
-  public List<IRequirement<?>> getByType (RequirementType<? extends IRequirement<?>> type) {
+  public List<IRequirement<?>> getByType(RequirementType<? extends IRequirement<?>> type) {
     return get().stream().filter(req -> req.getType().equals(type)).toList();
   }
 

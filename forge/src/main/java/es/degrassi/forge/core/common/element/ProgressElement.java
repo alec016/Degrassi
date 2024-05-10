@@ -22,9 +22,9 @@ import oshi.util.tuples.Pair;
 public class ProgressElement extends AbstractWidget implements IElement<ProgressComponent> {
   private ResourceLocation emptyTexture, filledTexture;
   private final ElementManager manager;
-  @Getter
-  public final String id = ProgressComponent.id;
+  public final String id = "progress";
   private final ElementDirection direction;
+  private final boolean jei;
 
   public ProgressElement(
     ElementManager manager,
@@ -33,7 +33,8 @@ public class ProgressElement extends AbstractWidget implements IElement<Progress
     Component message,
     @NotNull ResourceLocation emptyTexture,
     @NotNull ResourceLocation filledTexture,
-    ElementDirection direction
+    ElementDirection direction,
+    boolean jei
   ) {
     super(
       x, y,
@@ -45,6 +46,7 @@ public class ProgressElement extends AbstractWidget implements IElement<Progress
     this.emptyTexture = emptyTexture;
     this.filledTexture = filledTexture;
     this.direction = direction;
+    this.jei = jei;
   }
 
   @Override
@@ -84,21 +86,26 @@ public class ProgressElement extends AbstractWidget implements IElement<Progress
 
   @Override
   public void serialize(CompoundTag nbt) {
+  }
+
+  @Override
+  public CompoundTag serialize() {
     CompoundTag tag = new CompoundTag();
     tag.putString(EMPTY_TEXTURE_KEY, emptyTexture.toString());
     tag.putString(FILLED_TEXTURE_KEY, filledTexture.toString());
-    nbt.put(id, tag);
+    tag.putString("id", id);
+    return tag;
   }
 
   @Override
   public void deserialize(CompoundTag nbt) {
-    CompoundTag tag = nbt.getCompound(id);
-    emptyTexture = new ResourceLocation(tag.getString(EMPTY_TEXTURE_KEY));
-    filledTexture = new ResourceLocation(tag.getString(FILLED_TEXTURE_KEY));
+    emptyTexture = new ResourceLocation(nbt.getString(EMPTY_TEXTURE_KEY));
+    filledTexture = new ResourceLocation(nbt.getString(FILLED_TEXTURE_KEY));
   }
 
   @Override
   public void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent iComponent) {
+    if (!jei) return;
     if (!(iComponent instanceof ProgressComponent component)) return;
     renderTexture(guiGraphics, emptyTexture, getX(), getY(), 0, 0, 0, getWidth(), getHeight(), getWidth(), getHeight());
     float filledPercentage = component.getProgressPercentage();
@@ -122,5 +129,9 @@ public class ProgressElement extends AbstractWidget implements IElement<Progress
       ", width=" + width +
       ", height=" + height +
       '}';
+  }
+
+  public boolean jei() {
+    return jei;
   }
 }

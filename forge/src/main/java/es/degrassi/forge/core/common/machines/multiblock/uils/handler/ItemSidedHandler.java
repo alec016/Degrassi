@@ -2,25 +2,35 @@ package es.degrassi.forge.core.common.machines.multiblock.uils.handler;
 import es.degrassi.forge.core.common.ComponentManager;
 import es.degrassi.forge.core.common.wrapper.DegrassiItemStackHandler;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemSidedHandler extends DegrassiItemStackHandler {
-  private final ItemStackHandler handler;
+  private final DegrassiItemStackHandler handler;
   private final Direction extract, insert, from;
   public ItemSidedHandler(
     ComponentManager manager,
-    ItemStackHandler handler,
+    DegrassiItemStackHandler handler,
     Direction extract,
     Direction insert,
     Direction from
   ) {
-    super(manager.getEntity());
+    super(manager);
     this.handler = handler;
     this.from = from;
     this.extract = extract;
     this.insert = insert;
+  }
+
+  @Override
+  public CompoundTag serialize() {
+    return handler.serialize();
+  }
+
+  @Override
+  public void deserialize(CompoundTag nbt) {
+    handler.deserialize(nbt);
   }
 
   @Override

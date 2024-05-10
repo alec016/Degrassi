@@ -5,6 +5,7 @@ import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IElement;
 import es.degrassi.forge.core.common.component.EnergyComponent;
 import es.degrassi.forge.core.common.component.ExperienceComponent;
+import es.degrassi.forge.core.common.component.ItemComponent;
 import es.degrassi.forge.core.common.component.ProgressComponent;
 import es.degrassi.forge.core.common.element.EnergyElement;
 import es.degrassi.forge.core.common.element.ExperienceElement;
@@ -27,6 +28,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -39,6 +41,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import oshi.util.tuples.Pair;
 
@@ -69,7 +72,7 @@ public class FurnaceCategory implements IRecipeCategory<FurnaceRecipe> {
 
   @Override
   public Component getTitle() {
-    return Component.translatable(block.getDescriptionId());
+    return Component.translatable("degrassi.jei.recipe.furnace");
   }
 
   @Override
@@ -85,28 +88,30 @@ public class FurnaceCategory implements IRecipeCategory<FurnaceRecipe> {
   @Override
   public void setRecipe(IRecipeLayoutBuilder builder, FurnaceRecipe recipe, IFocusGroup focuses) {
     List<Pair<IElement<?>, IComponent>> list = new LinkedList<>();
-    List<IComponent> components = defaultProcessor.getEntity().getComponentManager().get();
     List<IElement<?>> elements = defaultProcessor.getEntity().getElementManager().get();
-    FurnaceRecipe.separateRequirements(recipe, components);
-    recipe.getStartRequirements().forEach((requirement, component) -> {
-      // mode INPUT
-      if (requirement instanceof ItemRequirement itemRequirement) {
-        IElement<?> element = new ItemElement(null, 13, 14, Component.literal("item"), "input", new DegrassiLocation("textures/gui/base_slot.png"));
-        builder.addSlot(RecipeIngredientRole.INPUT, element.getX() + 1, element.getY() + 1).addItemStack(new ItemStack(itemRequirement.getItem(), itemRequirement.getAmount()));
-        list.add(new Pair<>(element, component));
-      }
-    });
-    recipe.getEndRequirements().forEach((requirement, component) -> {
-      // mode OUTPUT
-      if (requirement instanceof ItemRequirement itemRequirement) {
-        IElement<?> element = new ItemElement(null, 93, 14, Component.literal("item"), "output", new DegrassiLocation("textures/gui/base_slot.png"));
-        builder.addSlot(RecipeIngredientRole.OUTPUT, element.getX() + 1, element.getY() + 1).addItemStack(new ItemStack(itemRequirement.getItem(), itemRequirement.getAmount()));
-        list.add(new Pair<>(element, component));
-      }
-    });
 
     elements.forEach(element -> {
-      if (element instanceof EnergyElement energyElement) {
+      if (element instanceof ItemElement itemElement && element.jei()) {
+        AtomicReference<ItemRequirement> itemRequirement = new AtomicReference<>(null);
+        recipe.getRequirements().forEach(req -> {
+          if (req instanceof ItemRequirement iR && element.getId().equals(req.getId()))
+            itemRequirement.set(iR);
+        });
+        if (itemRequirement.get() != null)
+          defaultProcessor.getEntity().getComponentManager().getComponent(itemElement.getId()).map(component -> (ItemComponent) component).ifPresent(component -> {
+            ItemComponent copy = new ItemComponent(null, component.getId(), component.isWhitelist(), component.getEntity(), component.getMode(), component.getFilter().toArray(Item[]::new));
+            if (copy.getMode().input()) {
+              IElement<?> e = new ItemElement(null, 13, 14, Component.literal("item"), "input", new DegrassiLocation("textures/gui/base_slot.png"), true);
+              builder.addSlot(RecipeIngredientRole.INPUT, e.getX() + 1, e.getY() + 1).addItemStack(new ItemStack(itemRequirement.get().getItem(), itemRequirement.get().getAmount()));
+              list.add(new Pair<>(e, copy));
+            } else if (copy.getMode().output()) {
+              IElement<?> e = new ItemElement(null, 93, 14, Component.literal("item"), "output", new DegrassiLocation("textures/gui/base_slot.png"), true);
+              builder.addSlot(RecipeIngredientRole.OUTPUT, e.getX() + 1, e.getY() + 1).addItemStack(new ItemStack(itemRequirement.get().getItem(), itemRequirement.get().getAmount()));
+              list.add(new Pair<>(e, copy));
+            }
+          });
+      }
+      if (element instanceof EnergyElement energyElement && element.jei()) {
         EnergyWrapper energy = new EnergyWrapper(
           7,
           50,
@@ -114,7 +119,8 @@ public class FurnaceCategory implements IRecipeCategory<FurnaceRecipe> {
           new DegrassiLocation("textures/gui/jei/furnace_energy_filled.png"),
           energyElement.getDirection(),
           recipe,
-          false
+          false,
+          element.getId()
         );
         defaultProcessor.getEntity().getComponentManager().getComponent(energy.getId()).map(component -> (EnergyComponent) component).ifPresent(component -> {
           EnergyComponent copy = new EnergyComponent(null, component.getMaxEnergyStored(), component.getMaxInput(), component.getMaxOutput(), component.getEntity(), component.getId(), component.getMode());
@@ -126,7 +132,7 @@ public class FurnaceCategory implements IRecipeCategory<FurnaceRecipe> {
           list.add(new Pair<>(energy, copy));
         });
       }
-      if (element instanceof ExperienceElement experienceElement) {
+      if (element instanceof ExperienceElement experienceElement && element.jei()) {
         ExperienceWrapper experience = new ExperienceWrapper(
           31,
           37,
@@ -134,7 +140,8 @@ public class FurnaceCategory implements IRecipeCategory<FurnaceRecipe> {
           new DegrassiLocation("textures/gui/base_experience_filled.png"),
           experienceElement.getDirection(),
           recipe,
-          false
+          false,
+          element.getId()
         );
         defaultProcessor.getEntity().getComponentManager().getComponent(experience.getId()).map(component -> (ExperienceComponent) component).ifPresent(component -> {
           ExperienceComponent copy = new ExperienceComponent(null, component.getCapacity(), component.getEntity(), component.getId(), component.getMode());
@@ -146,7 +153,7 @@ public class FurnaceCategory implements IRecipeCategory<FurnaceRecipe> {
           list.add(new Pair<>(experience, copy));
         });
       }
-      if (element instanceof ProgressElement progressElement) {
+      if (element instanceof ProgressElement progressElement && element.jei()) {
         ProgressWrapper progress = new ProgressWrapper(
           41, 14,
           new DegrassiLocation("textures/gui/jei/furnace_progress_empty.png"),
@@ -172,7 +179,7 @@ public class FurnaceCategory implements IRecipeCategory<FurnaceRecipe> {
 
   @Override
   public void draw(FurnaceRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-    IRecipeCategory.super.draw(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
+//    IRecipeCategory.super.draw(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
     List<Pair<IElement<?>, IComponent>> list = mapRecipeElement.get(recipe);
     guiGraphics.pose().pushPose();
     list.forEach(pair -> pair.getA().renderInJei(guiGraphics, recipe, mouseX, mouseY, pair.getB()));

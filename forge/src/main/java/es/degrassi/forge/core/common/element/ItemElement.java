@@ -1,5 +1,6 @@
 package es.degrassi.forge.core.common.element;
 
+import es.degrassi.common.utils.DegrassiLogger;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IElement;
 import es.degrassi.common.utils.TextureSizeHelper;
@@ -24,7 +25,8 @@ import org.jetbrains.annotations.NotNull;
 public class ItemElement extends AbstractWidget implements IElement<ItemComponent> {
   private final ElementManager manager;
   private final String id;
-  private final ResourceLocation texture;
+  private ResourceLocation texture;
+  private final boolean jei;
 
   public ItemElement(
     ElementManager manager,
@@ -32,12 +34,14 @@ public class ItemElement extends AbstractWidget implements IElement<ItemComponen
     int y,
     Component message,
     String id,
-    ResourceLocation texture
+    ResourceLocation texture,
+    boolean jei
   ){
     super(x, y, TextureSizeHelper.getTextureWidth(texture), TextureSizeHelper.getTextureHeight(texture), message);
     this.manager = manager;
     this.id = id;
     this.texture = texture;
+    this.jei = jei;
   }
 
   @Override
@@ -54,7 +58,7 @@ public class ItemElement extends AbstractWidget implements IElement<ItemComponen
 
   @Override
   public void renderTooltip(GuiGraphics guiGraphics, int x, int y) {
-    ItemComponent component = (ItemComponent) manager.getEntity().getComponentManager().getComponent(id).orElse(null);;
+    ItemComponent component = (ItemComponent) manager.getEntity().getComponentManager().getComponent(id).orElse(null);
     if (component == null) return;
     if (isMouseOver(x, y)) {
       renderHighlight(guiGraphics, x, y);
@@ -71,7 +75,7 @@ public class ItemElement extends AbstractWidget implements IElement<ItemComponen
 
   @Override
   public void renderHighlight(@NotNull GuiGraphics guiGraphics, int x, int y) {
-    guiGraphics.fillGradient(RenderType.guiOverlay(), getX() + 1, getY() + 1, getX() + getWidth() - 1, getY() + getWidth() - 1, -2130706433, -2130706433, 0);
+    guiGraphics.fillGradient(RenderType.gui(), getX() + 1, getY() + 1, getX() + getWidth() - 1, getY() + getWidth() - 1, -2130706433, -2130706433, 0);
   }
 
   @Override
@@ -81,16 +85,24 @@ public class ItemElement extends AbstractWidget implements IElement<ItemComponen
 
   @Override
   public void serialize(CompoundTag nbt) {
+  }
 
+  @Override
+  public CompoundTag serialize() {
+    CompoundTag tag = new CompoundTag();
+    tag.putString("texture", texture.toString());
+    tag.putString("id", id);
+    return tag;
   }
 
   @Override
   public void deserialize(CompoundTag nbt) {
-
+    texture = new ResourceLocation(nbt.getString("texture"));
   }
 
   @Override
   public void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent component) {
+    if (!jei) return;
     renderTexture(guiGraphics, texture, getX(), getY(), 0, 0, 0, getWidth(), getHeight(), getWidth(), getHeight());
   }
 
@@ -104,5 +116,9 @@ public class ItemElement extends AbstractWidget implements IElement<ItemComponen
       ", width=" + width +
       ", height=" + height +
       '}';
+  }
+
+  public boolean jei() {
+    return jei;
   }
 }

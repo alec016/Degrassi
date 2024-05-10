@@ -40,21 +40,22 @@ public class BarComponent implements IComponent {
 
   @Override
   public void serialize(@NotNull CompoundTag nbt) {
+  }
+
+  public CompoundTag serialize() {
     CompoundTag tag = new CompoundTag();
     tag.putDouble("amount", amount);
     tag.putDouble("capacity", capacity);
     tag.putString("mode", mode.serialize());
-    nbt.put(id, tag);
+    tag.putString("id", id);
+    return tag;
   }
 
   @Override
   public void deserialize(@NotNull CompoundTag nbt) {
-    if (nbt.contains(id)) {
-      CompoundTag tag = nbt.getCompound(id);
-      this.amount = tag.getDouble("amount");
-      this.capacity = tag.getDouble("capacity");
-      this.mode = ComponentIOMode.deserialize(tag.getString("mode"));
-    }
+    this.amount = nbt.getDouble("amount");
+    this.capacity = nbt.getDouble("capacity");
+    this.mode = ComponentIOMode.deserialize(nbt.getString("mode"));
   }
 
   @Override

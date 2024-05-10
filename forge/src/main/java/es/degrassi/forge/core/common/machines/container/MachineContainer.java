@@ -1,6 +1,5 @@
 package es.degrassi.forge.core.common.machines.container;
 
-import es.degrassi.forge.core.common.component.ItemComponent;
 import es.degrassi.forge.core.common.element.ItemElement;
 import es.degrassi.forge.core.common.element.PlayerInventoryElement;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
@@ -25,7 +24,7 @@ public abstract class MachineContainer<T extends MachineEntity<?>> extends Abstr
   int PLAYER_INVENTORY_SLOT_COUNT = PLAYER_INVENTORY_COLUMN_COUNT * PLAYER_INVENTORY_ROW_COUNT;
   int VANILLA_SLOT_COUNT = HOTBAR_SLOT_COUNT + PLAYER_INVENTORY_SLOT_COUNT;
   int VANILLA_FIRST_SLOT_INDEX = 0;
-  int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
+  int TE_INVENTORY_FIRST_SLOT_INDEX;
   // THIS YOU HAVE TO DEFINE!
   protected int TE_INVENTORY_SLOT_COUNT;  // must be the number of slots you have!
 
@@ -40,6 +39,7 @@ public abstract class MachineContainer<T extends MachineEntity<?>> extends Abstr
     this.entity = entity;
     this.playerInv = inventory;
     this.level = inventory.player.level();
+    TE_INVENTORY_SLOT_COUNT = entity.getComponentManager().getItemHandler().getComponents().size();
     AtomicInteger index = new AtomicInteger(0);
     entity.getElementManager().getElement("player_inventory").map(element -> (PlayerInventoryElement) element).ifPresent(element -> {
       int x = element.getX() + 1;
@@ -55,7 +55,7 @@ public abstract class MachineContainer<T extends MachineEntity<?>> extends Abstr
       }
     });
     int te_inventory_first_slot_index = index.get();
-    entity.getComponentManager().getComponentsByType("item").stream().map(component -> (ItemComponent) component)
+    entity.getComponentManager().getItemHandler().getComponents()
       .forEach(
         component -> entity
           .getElementManager()
@@ -72,8 +72,7 @@ public abstract class MachineContainer<T extends MachineEntity<?>> extends Abstr
             )
           )
       );
-
-    TE_INVENTORY_SLOT_COUNT = index.get() - te_inventory_first_slot_index;
+    TE_INVENTORY_FIRST_SLOT_INDEX = te_inventory_first_slot_index;
   }
 
   @Override

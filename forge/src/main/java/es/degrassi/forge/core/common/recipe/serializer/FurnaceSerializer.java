@@ -25,7 +25,7 @@ public class FurnaceSerializer extends MachineSerializer<FurnaceRecipe> {
       DegrassiLogger.INSTANCE.info("Successfully read recipe json: {}", recipeId);
       return result.result().get().getFirst().build(recipeId);
     } else if(result.error().isPresent()) {
-      DegrassiLogger.INSTANCE.error("Error while parsing recipe json: {}, skipping...\n{}", recipeId, result.error().get().message());
+      logError("Error while parsing recipe json: {}, skipping...\n{}", recipeId, result.error().get().message());
       throw new JsonParseException("Error while parsing Custom Machine Recipe json: " + recipeId + " error: " + result.error().get().message());
     }
     throw new IllegalStateException("No success nor error when parsing Custom Machine Recipe json: " + recipeId + "This can't happen");
@@ -39,7 +39,7 @@ public class FurnaceSerializer extends MachineSerializer<FurnaceRecipe> {
       DegrassiLogger.INSTANCE.info("Sucessfully received recipe: {} from server.", recipeId);
       return result.result().get().build(recipeId);
     } else if(result.error().isPresent()) {
-      DegrassiLogger.INSTANCE.error("Error while parsing recipe json: {}, skipping...\n{}", recipeId, result.error().get().message());
+      logError("Error while parsing recipe json: {}, skipping...\n{}", recipeId, result.error().get().message());
       throw new IllegalArgumentException("Error while receiving Custom Machine Recipe from server: " + recipeId + " error: " + result.error().get().message());
     }
     throw new IllegalStateException("No success nor error when receiving Custom Machine Recipe: " + recipeId + "from server. This can't happen");
@@ -54,7 +54,7 @@ public class FurnaceSerializer extends MachineSerializer<FurnaceRecipe> {
       buffer.writeNbt((CompoundTag) result.result().get());
       return;
     } else if(result.error().isPresent()) {
-      DegrassiLogger.INSTANCE.error("Error while sending recipe: {} to clients.%n{}", recipe.getId(), result.error().get().message());
+      logError("Error while sending recipe: {} to clients.%n{}", recipe.getId(), result.error().get().message());
       throw new IllegalArgumentException("Error while sending Custom Machine Recipe to clients: " + recipe.getId() + " error: " + result.error().get().message());
     }
     throw new IllegalStateException("No success nor error when sending Custom Machine Recipe: " + recipe.getId() + "to clients. This can't happen");

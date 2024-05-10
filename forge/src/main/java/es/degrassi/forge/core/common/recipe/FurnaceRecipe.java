@@ -2,6 +2,8 @@ package es.degrassi.forge.core.common.recipe;
 
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IRequirement;
+import es.degrassi.forge.core.common.wrapper.DegrassiFluidHandler;
+import es.degrassi.forge.core.common.wrapper.DegrassiItemStackHandler;
 import es.degrassi.forge.core.init.RecipeRegistration;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +41,35 @@ public class FurnaceRecipe extends MachineRecipe<FurnaceRecipe> {
     List<IComponent> componentMatches = new ArrayList<>();
     AtomicInteger count = new AtomicInteger(0);
     getRequirements().forEach(requirement -> components.forEach(component -> {
-      if (component.getId().equals(requirement.getId()) && requirement.matches(component, getTime())) {
+      if (component instanceof DegrassiItemStackHandler handler) {
+        handler.getComponents().forEach(comp -> {
+          if (requirement.getId().isEmpty()) {
+            if (requirement.matches(comp, getTime())) {
+              count.getAndIncrement();
+              componentMatches.add(comp);
+            }
+          } else if (comp.getId().equals(requirement.getId())) {
+            if (requirement.matches(comp, getTime())) {
+              count.getAndIncrement();
+              componentMatches.add(comp);
+            }
+          }
+        });
+      } else if (component instanceof DegrassiFluidHandler handler) {
+        handler.getComponents().forEach(comp -> {
+          if (requirement.getId().isEmpty()) {
+            if (requirement.matches(comp, getTime())) {
+              count.getAndIncrement();
+              componentMatches.add(comp);
+            }
+          } else if (comp.getId().equals(requirement.getId())) {
+            if (requirement.matches(comp, getTime())) {
+              count.getAndIncrement();
+              componentMatches.add(comp);
+            }
+          }
+        });
+      } else if (component.getId().equals(requirement.getId()) && requirement.matches(component, getTime())) {
         count.getAndIncrement();
         componentMatches.add(component);
       }
@@ -49,7 +79,13 @@ public class FurnaceRecipe extends MachineRecipe<FurnaceRecipe> {
     startRequirements.clear();
     if (count.get() == getRequirements().size()) {
       getRequirements().forEach(requirement -> componentMatches.forEach(component -> {
-        if (requirement.getId().equals(component.getId())) {
+        if (requirement.getId().isEmpty() && requirement.matches(component, getTime())) {
+          if (requirement.getMode().isPerTick()) tickRequirements.put(requirement, component);
+          else {
+            if (requirement.getMode().isInput()) startRequirements.put(requirement, component);
+            else endRequirements.put(requirement, component);
+          }
+        } else if (requirement.getId().equals(component.getId())) {
           if (requirement.getMode().isPerTick()) tickRequirements.put(requirement, component);
           else {
             if (requirement.getMode().isInput()) startRequirements.put(requirement, component);

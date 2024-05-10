@@ -9,6 +9,7 @@ import es.degrassi.forge.core.common.component.EnergyComponent;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import java.util.List;
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -22,11 +23,14 @@ import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 @Getter
+@Setter
 public class EnergyElement extends AbstractWidget implements IElement<EnergyComponent> {
   private ResourceLocation emptyTexture, filledTexture;
   private final ElementManager manager;
   private final String id;
-  private final ElementDirection direction;
+  private ElementDirection direction;
+  private final boolean jei;
+
   public EnergyElement(
     ElementManager manager,
     int x,
@@ -35,7 +39,8 @@ public class EnergyElement extends AbstractWidget implements IElement<EnergyComp
     @NotNull ResourceLocation emptyTexture,
     @NotNull ResourceLocation filledTexture,
     String id,
-    ElementDirection direction
+    ElementDirection direction,
+    boolean jei
   ) {
     super(x, y, TextureSizeHelper.getTextureWidth(emptyTexture), TextureSizeHelper.getTextureHeight(emptyTexture), message);
     this.emptyTexture = emptyTexture;
@@ -43,6 +48,7 @@ public class EnergyElement extends AbstractWidget implements IElement<EnergyComp
     this.manager = manager;
     this.id = id;
     this.direction = direction;
+    this.jei = jei;
   }
 
   @Override
@@ -82,7 +88,7 @@ public class EnergyElement extends AbstractWidget implements IElement<EnergyComp
 
   @Override
   public void renderHighlight(@NotNull GuiGraphics guiGraphics, int x, int y) {
-    guiGraphics.fillGradient(RenderType.guiOverlay(), getX() + 1, getY() + 1, getX() + getWidth() - 1, getY() + getHeight() - 1, -2130706433, -2130706433, 0);
+    guiGraphics.fillGradient(RenderType.gui(), getX() + 1, getY() + 1, getX() + getWidth() - 1, getY() + getHeight() - 1, -2130706433, -2130706433, 0);
   }
 
   @Override
@@ -102,21 +108,26 @@ public class EnergyElement extends AbstractWidget implements IElement<EnergyComp
 
   @Override
   public void serialize(CompoundTag nbt) {
+  }
+
+  @Override
+  public CompoundTag serialize() {
     CompoundTag tag = new CompoundTag();
     tag.putString(EMPTY_TEXTURE_KEY, emptyTexture.toString());
     tag.putString(FILLED_TEXTURE_KEY, filledTexture.toString());
-    nbt.put(id, tag);
+    tag.putString("id", id);
+    return tag;
   }
 
   @Override
   public void deserialize(CompoundTag nbt) {
-    CompoundTag tag = nbt.getCompound(id);
-    emptyTexture = new ResourceLocation(tag.getString(EMPTY_TEXTURE_KEY));
-    filledTexture = new ResourceLocation(tag.getString(FILLED_TEXTURE_KEY));
+    emptyTexture = new ResourceLocation(nbt.getString(EMPTY_TEXTURE_KEY));
+    filledTexture = new ResourceLocation(nbt.getString(FILLED_TEXTURE_KEY));
   }
 
   @Override
   public void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent iComponent) {
+    if (!jei) return;
     if (!(iComponent instanceof EnergyComponent component)) return;
     renderTexture(guiGraphics, emptyTexture, getX(), getY(), 0, 0, 0, getWidth(), getHeight(), getWidth(), getHeight());
     float filledPercentage = (component.getEnergyStored()) * 1F / (component.getMaxEnergyStored() * 1F);
@@ -140,5 +151,9 @@ public class EnergyElement extends AbstractWidget implements IElement<EnergyComp
       ", width=" + width +
       ", height=" + height +
       '}';
+  }
+
+  public boolean jei() {
+    return jei;
   }
 }

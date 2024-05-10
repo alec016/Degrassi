@@ -77,6 +77,7 @@ public class EN extends DegrassiLangProvider {
   protected void addBlocks() {
     addBlock(BlockRegistration.MACHINE_CASING, "Machine Casing");
     addBlock(BlockRegistration.MELTER_FRAME, "Melter Frame");
+    addBlock(BlockRegistration.MELTER_CONTROLLER, "Melter Controller");
 
     addBlock(() -> BlockRegistration.FURNACE.get(Furnace.IRON), "Iron Furnace");
     addBlock(() -> BlockRegistration.FURNACE.get(Furnace.GOLD), "Gold Furnace");
@@ -222,6 +223,7 @@ public class EN extends DegrassiLangProvider {
   @Override
   protected void addJeiRecipes() {
     addJeiRecipe("furnace", "Degrassi Furnace");
+    addJeiRecipe("melter", "Melting Factory");
     // progress element
     addJeiRecipe("time", "Duration: %s ticks");
     addJeiRecipe("instant", "Instant craft");
@@ -231,6 +233,11 @@ public class EN extends DegrassiLangProvider {
     addJeiRecipe("energy.output", "Produces");
     addJeiRecipe("energy", "%s %s %s/t");
     addJeiRecipe("energy.total", "%s RF");
+    // fluid element
+    addJeiRecipe("fluid.input", "Requires");
+    addJeiRecipe("fluid.output", "Produces");
+    addJeiRecipe("fluid", "%s %s %s/t");
+    addJeiRecipe("fluid.total", "%s mB");
     // experience element
     addJeiRecipe("experience.input", "Requires");
     addJeiRecipe("experience.output", "Produces");

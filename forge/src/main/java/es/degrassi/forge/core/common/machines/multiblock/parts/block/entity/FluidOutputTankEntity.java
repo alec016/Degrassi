@@ -1,9 +1,10 @@
 package es.degrassi.forge.core.common.machines.multiblock.parts.block.entity;
 
 import es.degrassi.forge.core.common.component.ComponentIOMode;
-import es.degrassi.forge.core.common.component.FluidComponent;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.FluidInputTank;
 import es.degrassi.forge.core.common.machines.multiblock.uils.handler.FluidSidedHandler;
+import es.degrassi.forge.core.common.wrapper.DegrassiFluidHandler;
+import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.EntityRegistration;
 import es.degrassi.forge.core.tiers.MultiblockPartStorage;
 import java.util.Map;
@@ -22,7 +23,13 @@ import org.jetbrains.annotations.Nullable;
 @Getter
 @Setter
 public class FluidOutputTankEntity extends BaseMultiblockPartEntity<MultiblockPartStorage.Fluid.Output> {
-  private final FluidComponent fluid;
+  public static final FluidOutputTankEntity DUMMY = new FluidOutputTankEntity(BlockPos.ZERO, BlockRegistration.FLUID_OUTPUT_TANK.get(MultiblockPartStorage.Fluid.Output.BASIC).defaultBlockState(), MultiblockPartStorage.Fluid.Output.BASIC) {
+    @Override
+    public boolean dummy() {
+      return true;
+    }
+  };
+  private final DegrassiFluidHandler fluid;
   private final Map<Direction, LazyOptional<FluidSidedHandler>> fluidWrapperHandlerMap;
 
   public FluidOutputTankEntity(BlockPos pos, BlockState blockState, MultiblockPartStorage.Fluid.Output variant) {
@@ -30,7 +37,7 @@ public class FluidOutputTankEntity extends BaseMultiblockPartEntity<MultiblockPa
 
     getComponentManager().addFluid(variant.getCapacity(), "fluid_output", ComponentIOMode.OUTPUT);
 
-    fluid = (FluidComponent) getComponentManager().getComponent("fluid_output").orElse(null);
+    fluid = getComponentManager().getFluidHandler();
     fluidWrapperHandlerMap = Map.of(
       Direction.UP, LazyOptional.of(() -> new FluidSidedHandler(
         getComponentManager(),

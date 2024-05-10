@@ -23,13 +23,15 @@ import net.minecraft.world.level.block.entity.LidBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
+@Getter
 public class ChestEntity extends MachineEntity<ChestRecipe> implements LidBlockEntity {
-  @Getter
   private Chest tier;
   private final ContainerOpenersCounter openersCounter;
   private final ChestLidController chestLidController;
   public ChestEntity(BlockPos pos, BlockState blockState, Chest tier) {
     super(EntityRegistration.CHEST.get(), pos, blockState);
+
+    this.tier = tier;
 
     getElementManager().addPlayerInventory(
       tier.getInvX(),
@@ -38,11 +40,11 @@ public class ChestEntity extends MachineEntity<ChestRecipe> implements LidBlockE
       new DegrassiLocation("textures/gui/base_inventory.png")
     );
 
-    int j;
+    int j, k = 1;
     String id;
     for (int i = 0; i < tier.getRows(); i++) {
       for (j = 0; j < tier.getCols(); j++) {
-        id = "item_" + i + "_" + j;
+        id = "item_" + k;
         getComponentManager().addItem(id);
         getElementManager().addItem(
           7 + j * 18,
@@ -51,10 +53,9 @@ public class ChestEntity extends MachineEntity<ChestRecipe> implements LidBlockE
           new DegrassiLocation("textures/gui/base_slot.png"),
           id
         );
+        k++;
       }
     }
-
-    this.tier = tier;
 
     this.openersCounter = new ContainerOpenersCounter() {
       protected void onOpen(Level level, BlockPos pos, BlockState state) {
@@ -73,9 +74,8 @@ public class ChestEntity extends MachineEntity<ChestRecipe> implements LidBlockE
         if (player.containerMenu instanceof ChestContainer menu) {
           BlockEntity container = menu.getEntity();
           return container == ChestEntity.this;
-        } else {
-          return false;
         }
+        return false;
       }
     };
     this.chestLidController = new ChestLidController();
@@ -97,7 +97,7 @@ public class ChestEntity extends MachineEntity<ChestRecipe> implements LidBlockE
   @Override
   protected void saveAdditional(@NotNull CompoundTag tag) {
     super.saveAdditional(tag);
-    tag.putString("tier", tier.name().toLowerCase());
+    tag.putString("tier", tier.nameL());
   }
 
   @Override

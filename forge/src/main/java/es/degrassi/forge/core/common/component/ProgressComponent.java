@@ -12,7 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 @Getter
 @Setter
 public class ProgressComponent implements IComponent {
-  public static final String id = "progress";
+  public final String id = "progress";
   @Getter
   private final ComponentIOMode mode = ComponentIOMode.NONE;
   private int progress, maxProgress;
@@ -45,19 +45,20 @@ public class ProgressComponent implements IComponent {
 
   @Override
   public void serialize(CompoundTag nbt) {
+  }
+
+  public CompoundTag serialize() {
     CompoundTag tag = new CompoundTag();
     tag.putInt("progress", progress);
     tag.putInt("maxProgress", maxProgress);
-    nbt.put(id, tag);
+    tag.putString("id", id);
+    return tag;
   }
 
   @Override
   public void deserialize(CompoundTag nbt) {
-    if (nbt.contains(id)) {
-      CompoundTag tag = nbt.getCompound(id);
-      this.progress = tag.getInt("progress");
-      this.maxProgress = tag.getInt("maxProgress");
-    }
+    this.progress = nbt.getInt("progress");
+    this.maxProgress = nbt.getInt("maxProgress");
   }
 
   public void setMaxProgress(int maxProgress) {

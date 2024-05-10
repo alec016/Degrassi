@@ -44,25 +44,26 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
 
   @Override
   public void serialize(CompoundTag nbt) {
+  }
+
+  public CompoundTag serialize() {
     CompoundTag tag = new CompoundTag();
     tag.putInt("energy", energy);
     tag.putInt("capacity", capacity);
     tag.putInt("max_input", maxInput);
     tag.putInt("max_output", maxOutput);
     tag.putString("mode", mode.serialize());
-    nbt.put(id, tag);
+    tag.putString("id", id);
+    return tag;
   }
 
   @Override
   public void deserialize(CompoundTag nbt) {
-    if (nbt.contains(id)) {
-      CompoundTag tag = nbt.getCompound(id);
-      this.energy = tag.getInt("energy");
-      this.capacity = tag.getInt("capacity");
-      this.maxInput = tag.getInt("max_input");
-      this.maxOutput = tag.getInt("max_output");
-      this.mode = ComponentIOMode.deserialize(tag.getString("mode"));
-    }
+    this.energy = nbt.getInt("energy");
+    this.capacity = nbt.getInt("capacity");
+    this.maxInput = nbt.getInt("max_input");
+    this.maxOutput = nbt.getInt("max_output");
+    this.mode = ComponentIOMode.deserialize(nbt.getString("mode"));
   }
 
   public void setEnergy(int energy) {

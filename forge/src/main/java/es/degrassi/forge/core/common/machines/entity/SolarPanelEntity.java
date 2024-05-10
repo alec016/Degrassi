@@ -141,7 +141,7 @@ public class SolarPanelEntity extends MachineEntity<SolarPanelRecipe> {
     entity.getComponentManager().getComponent("energy").map(comp -> (EnergyComponent) comp).ifPresent(comp -> {
       comp.setCapacity(entity.capacityCache);
       comp.setTransfer(entity.transferCache);
-      comp.receiveEnergy(entity.genCache, false);
+      comp.receiveRecipeEnergy(entity.genCache, false);
     });
     if (entity.effCacheTime > 0) --entity.effCacheTime;
     if (entity.genCacheTime > 0) --entity.genCacheTime;

@@ -1,8 +1,10 @@
 package es.degrassi.forge.core.common.machines.multiblock.parts.block.entity;
 
+import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.core.common.component.EnergyComponent;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.EnergyHatch;
 import es.degrassi.forge.core.common.machines.multiblock.uils.handler.EnergySidedHandler;
+import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.EntityRegistration;
 import es.degrassi.forge.core.tiers.MultiblockPartStorage;
 import java.util.Map;
@@ -21,6 +23,12 @@ import org.jetbrains.annotations.Nullable;
 @Getter
 @Setter
 public class EnergyHatchEntity extends BaseMultiblockPartEntity<MultiblockPartStorage.Energy> {
+  public static final EnergyHatchEntity DUMMY = new EnergyHatchEntity(BlockPos.ZERO, BlockRegistration.ENERGY_HATCH.get(MultiblockPartStorage.Energy.BASIC).defaultBlockState(), MultiblockPartStorage.Energy.BASIC) {
+    @Override
+    public boolean dummy() {
+      return true;
+    }
+  };
   private final EnergyComponent energy;
   private final Map<Direction, LazyOptional<EnergySidedHandler>> energyWrapperHandlerMap;
   public EnergyHatchEntity(BlockPos pos, BlockState blockState, MultiblockPartStorage.Energy variant) {
@@ -72,6 +80,21 @@ public class EnergyHatchEntity extends BaseMultiblockPartEntity<MultiblockPartSt
         Direction.WEST
       ))
     );
+
+    getElementManager()
+      .addEnergy(
+        10,
+        10,
+        Component.literal("energy"),
+        new DegrassiLocation("textures/gui/multiblock/parts/energy_hatch_empty.png"),
+        new DegrassiLocation("textures/gui/multiblock/parts/energy_hatch_filled.png"),
+        "energy"
+      ).addPlayerInventory(
+        7,
+        97,
+        Component.literal("player_inventory"),
+        new DegrassiLocation("textures/gui/base_inventory.png")
+      );
   }
 
   @Override

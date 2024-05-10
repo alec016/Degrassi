@@ -1,10 +1,10 @@
 package es.degrassi.forge.core.common.machines.multiblock.parts.block.entity;
 
 import es.degrassi.forge.core.common.component.ComponentIOMode;
-import es.degrassi.forge.core.common.component.FluidComponent;
-import es.degrassi.forge.core.common.machines.multiblock.parts.block.EnergyHatch;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.FluidInputTank;
 import es.degrassi.forge.core.common.machines.multiblock.uils.handler.FluidSidedHandler;
+import es.degrassi.forge.core.common.wrapper.DegrassiFluidHandler;
+import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.EntityRegistration;
 import es.degrassi.forge.core.tiers.MultiblockPartStorage;
 import java.util.Map;
@@ -23,7 +23,13 @@ import org.jetbrains.annotations.Nullable;
 @Getter
 @Setter
 public class FluidInputTankEntity extends BaseMultiblockPartEntity<MultiblockPartStorage.Fluid.Input> {
-  private final FluidComponent fluid;
+  public static final FluidInputTankEntity DUMMY = new FluidInputTankEntity(BlockPos.ZERO, BlockRegistration.FLUID_INPUT_TANK.get(MultiblockPartStorage.Fluid.Input.BASIC).defaultBlockState(), MultiblockPartStorage.Fluid.Input.BASIC) {
+    @Override
+    public boolean dummy() {
+      return true;
+    }
+  };
+  private final DegrassiFluidHandler fluid;
   private final Map<Direction, LazyOptional<FluidSidedHandler>> fluidWrapperHandlerMap;
 
   public FluidInputTankEntity(BlockPos pos, BlockState blockState, MultiblockPartStorage.Fluid.Input variant) {
@@ -31,7 +37,7 @@ public class FluidInputTankEntity extends BaseMultiblockPartEntity<MultiblockPar
 
     getComponentManager().addFluid(variant.getCapacity(), "fluid_input", ComponentIOMode.INPUT);
 
-    fluid = (FluidComponent) getComponentManager().getComponent("fluid_input").orElse(null);
+    fluid = getComponentManager().getFluidHandler();
     fluidWrapperHandlerMap = Map.of(
       Direction.UP, LazyOptional.of(() -> new FluidSidedHandler(
         getComponentManager(),

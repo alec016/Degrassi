@@ -18,6 +18,7 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 import org.jetbrains.annotations.NotNull;
 
@@ -376,12 +377,19 @@ public class DegrassiRecipeProvider extends RecipeProvider implements ICondition
   }
 
   private void addMachineRecipes(@NotNull Consumer<FinishedRecipe> writer) {
-    MachineRecipeGeneratorBuilder builder = MachineRecipeGeneratorBuilder.furnace(100);
-    builder
+    MachineRecipeGeneratorBuilder furnace1 = MachineRecipeGeneratorBuilder.furnace(100);
+    furnace1
       .requireEnergy(500, "energy")
       .produceExperience(0.8f, "experience")
       .requireItem(Items.COAL, "input")
       .produceItem(Items.DIAMOND, "output");
-    builder.save(writer, new DegrassiLocation("coal_to_diamond"));
+    furnace1.save(writer, new DegrassiLocation("coal_to_diamond"));
+
+    MachineRecipeGeneratorBuilder melter1 = MachineRecipeGeneratorBuilder.melter(100);
+    melter1
+      .requireEnergyPerTick(500, "energy")
+      .requireItem(Items.DIAMOND, "")
+      .produceFluid(Fluids.LAVA, 1000, "");
+    melter1.save(writer, new DegrassiLocation("diamond_to_lava"));
   }
 }

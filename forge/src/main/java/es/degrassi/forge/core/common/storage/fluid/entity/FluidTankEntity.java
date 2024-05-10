@@ -149,7 +149,7 @@ public class FluidTankEntity extends StorageEntity<Storage.Fluid> {
   @Override
   public void onLoad() {
     super.onLoad();
-    lazyFluidHandler = LazyOptional.of(() -> fluid);
+    lazyFluidHandler = LazyOptional.of(() -> getComponentManager().getFluidHandler());
   }
 
   @Override

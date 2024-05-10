@@ -67,19 +67,22 @@ public class FluidComponent extends FluidTank implements IComponent {
 
   @Override
   public void serialize(CompoundTag nbt) {
+  }
+
+  public CompoundTag serialize() {
     CompoundTag tag = new CompoundTag();
     super.writeToNBT(tag);
     tag.putInt("capacity", capacity);
     tag.putString("mode", mode.serialize());
-    nbt.put(id, tag);
+    tag.putString("id", id);
+    return tag;
   }
 
   @Override
   public void deserialize(CompoundTag nbt) {
-    CompoundTag tag = nbt.getCompound(id);
-    super.readFromNBT(tag);
-    capacity = tag.getInt("capacity");
-    mode = ComponentIOMode.deserialize(tag.getString("mode"));
+    super.readFromNBT(nbt);
+    capacity = nbt.getInt("capacity");
+    mode = ComponentIOMode.deserialize(nbt.getString("mode"));
   }
 
   public int toComparatorPower() {

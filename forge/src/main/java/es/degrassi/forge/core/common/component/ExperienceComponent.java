@@ -44,21 +44,22 @@ public class ExperienceComponent implements IComponent {
 
   @Override
   public void serialize(CompoundTag nbt) {
+  }
+
+  public CompoundTag serialize() {
     CompoundTag tag = new CompoundTag();
     tag.putFloat("experience", experience);
     tag.putFloat("capacity", capacity);
     tag.putString("mode", mode.serialize());
-    nbt.put(id, tag);
+    tag.putString("id", id);
+    return tag;
   }
 
   @Override
   public void deserialize(CompoundTag nbt) {
-    if (nbt.contains(id)) {
-      CompoundTag tag = nbt.getCompound(id);
-      this.experience = tag.getFloat("experience");
-      this.capacity = tag.getFloat("capacity");
-      this.mode = ComponentIOMode.deserialize(tag.getString("mode"));
-    }
+    this.experience = nbt.getFloat("experience");
+    this.capacity = nbt.getFloat("capacity");
+    this.mode = ComponentIOMode.deserialize(nbt.getString("mode"));
   }
 
   public void setExperience(float experience) {

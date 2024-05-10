@@ -30,9 +30,8 @@ public interface IMultiblockController<
 
   /**
    * initialize the pattern in a determined direction
-   * @param direction to be initialized the multiblock pattern
    */
-  void init(Direction direction);
+  void init();
 
   /**
    * @param blocks the pattern without rotation

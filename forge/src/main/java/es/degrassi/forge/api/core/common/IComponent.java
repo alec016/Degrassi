@@ -21,5 +21,9 @@ public interface IComponent extends IType {
   void serialize(CompoundTag nbt);
   void deserialize(CompoundTag nbt);
 
+  default CompoundTag serialize() {
+    return new CompoundTag();
+  }
+
   String getTypeString();
 }

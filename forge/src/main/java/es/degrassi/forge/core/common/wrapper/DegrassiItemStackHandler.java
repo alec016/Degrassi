@@ -1,17 +1,117 @@
 package es.degrassi.forge.core.common.wrapper;
 
+import es.degrassi.common.utils.DegrassiLogger;
+import es.degrassi.forge.api.core.common.IComponent;
+import es.degrassi.forge.api.core.common.IRequirement;
+import es.degrassi.forge.core.common.ComponentManager;
+import es.degrassi.forge.core.common.component.ComponentIOMode;
 import es.degrassi.forge.core.common.component.ItemComponent;
-import es.degrassi.forge.core.common.machines.entity.MachineEntity;
+import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.InputBusEntity;
+import es.degrassi.forge.core.common.requirement.ItemRequirement;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import lombok.Getter;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class DegrassiItemStackHandler extends ItemStackHandler {
+@Getter
+public class DegrassiItemStackHandler implements IItemHandlerModifiable, IItemHandler, IComponent {
   private final List<ItemComponent> components;
-  public DegrassiItemStackHandler(MachineEntity<?> entity) {
-    this.components = entity.getComponentManager().getComponentsByType("item").stream().map(comp -> (ItemComponent) comp).toList();
+  private final ComponentManager manager;
+  private final AtomicInteger count = new AtomicInteger(0);
+
+  @Override
+  public void markDirty() {
+    components.forEach(IComponent::markDirty);
+  }
+
+  @Override
+  public String getId() {
+    return "itemHandler";
+  }
+
+  @Override
+  public void fill(IRequirement<?> requirement) {
+    if (!(requirement instanceof ItemRequirement itemReq)) return;
+    AtomicBoolean inserted = new AtomicBoolean(false);
+    components.forEach(component -> {
+      if (inserted.get()) return;
+      if (component.getStackInSlot(0).isEmpty()) {
+        inserted.set(true);
+        component.fill(requirement);
+      } else if (component.getStackInSlot(0).is(itemReq.getItem())) {
+        inserted.set(true);
+        component.fill(requirement);
+      }
+    });
+  }
+
+  @Override
+  public ComponentIOMode getMode() {
+    return ComponentIOMode.BOTH;
+  }
+
+  @Override
+  public void setMode(ComponentIOMode mode) {}
+
+  @Override
+  public void serialize(CompoundTag nbt) {
+  }
+
+  @Override
+  public CompoundTag serialize() {
+    if (getManager().getEntity() instanceof InputBusEntity && !getManager().getEntity().dummy())
+      DegrassiLogger.INSTANCE.info("Serializing ItemStackHandler from {}", this);
+    CompoundTag nbt = new CompoundTag();
+    ListTag listTag = new ListTag();
+    CompoundTag compound;
+    for (int i = 0; i < components.size(); i++) {
+      compound = components.get(i).serialize();
+      compound.putInt("Slot", i);
+      listTag.add(i, compound);
+    }
+    nbt.put("list", listTag);
+    nbt.putString("id", getId());
+    nbt.putInt("Size", components.size());
+    if (getManager().getEntity() instanceof InputBusEntity && !getManager().getEntity().dummy())
+      DegrassiLogger.INSTANCE.info("Serialized ItemStackHandler to {} with nbt {}", this, nbt);
+    return nbt;
+  }
+
+  @Override
+  public void deserialize(CompoundTag nbt) {
+    setSize(nbt.contains("Size") ? nbt.getInt("Size") : components.size());
+
+    ListTag listTag = nbt.getList("list", Tag.TAG_COMPOUND);
+
+    for (int i = 0; i < listTag.size(); i++) {
+      CompoundTag itemNbt = listTag.getCompound(i);
+      int slot = itemNbt.getInt("Slot");
+      ItemComponent component = components.get(slot);
+      if (component == null)
+        components.set(slot, new ItemComponent(getManager(), itemNbt.getString("id"), getManager().getEntity(), null));
+      component = components.get(slot);
+      component.deserialize(itemNbt);
+    }
+  }
+
+  @Override
+  public String getTypeString() {
+    return "itemHandler";
+  }
+
+  public DegrassiItemStackHandler(ComponentManager manager) {
+    components = new LinkedList<>();
+    this.manager = manager;
   }
 
   @Override
@@ -111,13 +211,49 @@ public class DegrassiItemStackHandler extends ItemStackHandler {
   }
 
   @Override
+  public int getSlotLimit(int slot) {
+    return 64;
+  }
+
+  protected int getStackLimit(int slot, @NotNull ItemStack stack) {
+    return Math.min(getSlotLimit(slot), stack.getMaxStackSize());
+  }
+
+  public void onContentsChanged(int slot) {
+    markDirty();
+  }
+
+  @Override
   public boolean isItemValid(int slot, @NotNull ItemStack stack) {
     return components.get(slot).isItemValid(0, stack);
   }
 
-  @Override
   public void validateSlotIndex(int slot) {
     if (slot < 0 ||slot >= getSlots())
       throw new RuntimeException("Slot " + slot + " not in validate range - [0, " + getSlots() + ")");
+  }
+
+  public void add(ItemComponent component) {
+    count.getAndIncrement();
+    this.components.add(component);
+  }
+
+  public void addAll(Collection<ItemComponent> components) {
+    count.getAndAdd(components.size());
+    this.components.addAll(components);
+  }
+
+  public void setSize(int size) {
+    while (components.size() < size) {
+      components.add(null);
+    }
+  }
+
+  @Override
+  public String toString() {
+    return "DegrassiItemStackHandler{" +
+      "components=" + components +
+      ", size=" + components.size() +
+      '}';
   }
 }

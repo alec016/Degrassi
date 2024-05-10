@@ -45,7 +45,12 @@ public interface IElement<E extends IComponent> extends IType {
   int getY();
 
   void serialize(CompoundTag nbt);
+  default CompoundTag serialize() {
+    return new CompoundTag();
+  }
   void deserialize(CompoundTag nbt);
 
   void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent component);
+
+  boolean jei();
 }

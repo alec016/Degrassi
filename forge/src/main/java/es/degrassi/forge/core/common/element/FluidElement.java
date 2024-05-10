@@ -39,12 +39,15 @@ public class FluidElement extends AbstractWidget implements IElement<FluidCompon
   private static final int TEXTURE_SIZE = 16;
   private final ElementManager manager;
   private final String id;
-  private final ResourceLocation texture;
-  public FluidElement(ElementManager manager, int x, int y, ResourceLocation texture, Component message, String id) {
+  private ResourceLocation texture;
+  private final boolean jei;
+
+  public FluidElement(ElementManager manager, int x, int y, ResourceLocation texture, Component message, String id, boolean jei) {
     super(x, y, TextureSizeHelper.getTextureWidth(texture), TextureSizeHelper.getTextureHeight(texture), message);
     this.manager = manager;
     this.texture = texture;
     this.id = id;
+    this.jei = jei;
   }
 
   @Override
@@ -99,22 +102,30 @@ public class FluidElement extends AbstractWidget implements IElement<FluidCompon
 
   @Override
   public void serialize(CompoundTag nbt) {
+  }
 
+  @Override
+  public CompoundTag serialize() {
+    CompoundTag tag = new CompoundTag();
+    tag.putString("texture", texture.toString());
+    tag.putString("id", id);
+    return tag;
   }
 
   @Override
   public void deserialize(CompoundTag nbt) {
-
+    texture = new ResourceLocation(nbt.getString("texture"));
   }
 
   @Override
-  public void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent component) {
-
+  public void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent iComponent) {
+    if (!jei) return;
+    if (!(iComponent instanceof FluidComponent component)) return;
+    renderTexture(guiGraphics, texture, getX(), getY(), 0, 0, 0, getWidth(), getHeight(), getWidth(), getHeight());
+    renderFluid(guiGraphics.pose(), getX() + 1, getY() + 1, component);
   }
 
-  public void renderFluid(PoseStack poseStack, int x, int y) {
-    FluidComponent component = (FluidComponent) manager.getEntity().getComponentManager().getComponent(id).orElse(null);
-    if (component == null) return;
+  public void renderFluid(PoseStack poseStack, int x, int y, FluidComponent component) {
     Fluid fluid = component.getFluid().getFluid();
     if (fluid == null || fluid == Fluids.EMPTY)
       return;
@@ -141,6 +152,12 @@ public class FluidElement extends AbstractWidget implements IElement<FluidCompon
     poseStack.popPose();
 
     RenderSystem.disableBlend();
+  }
+
+  public void renderFluid(PoseStack poseStack, int x, int y) {
+    FluidComponent component = (FluidComponent) manager.getEntity().getComponentManager().getComponent(id).orElse(null);
+    if (component == null) return;
+    renderFluid(poseStack, x, y, component);
   }
 
   private void drawTiledSprite(@NotNull PoseStack poseStack, final int tiledWidth, final int tiledHeight, int color, int scaledAmount, TextureAtlasSprite sprite) {
@@ -198,5 +215,9 @@ public class FluidElement extends AbstractWidget implements IElement<FluidCompon
     bufferBuilder.vertex(matrix, xCoord + 16 - maskRight, yCoord + maskTop, 100F).uv(uMax, vMin).endVertex();
     bufferBuilder.vertex(matrix, xCoord, yCoord + maskTop, 100F).uv(uMin, vMin).endVertex();
     tesselator.end();
+  }
+
+  public boolean jei() {
+    return jei;
   }
 }

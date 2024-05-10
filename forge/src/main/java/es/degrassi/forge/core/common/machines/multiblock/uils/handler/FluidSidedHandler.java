@@ -2,35 +2,29 @@ package es.degrassi.forge.core.common.machines.multiblock.uils.handler;
 
 import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ComponentManager;
-import es.degrassi.forge.core.common.component.FluidComponent;
+import es.degrassi.forge.core.common.wrapper.DegrassiFluidHandler;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-public class FluidSidedHandler extends FluidComponent {
-  private final FluidComponent handler;
+public class FluidSidedHandler extends DegrassiFluidHandler {
+  private final DegrassiFluidHandler handler;
   private final Direction extract;
   private final Direction insert;
   private final Direction from;
   public FluidSidedHandler(
     ComponentManager manager,
-    FluidComponent handler,
+    DegrassiFluidHandler handler,
     Direction extract,
     Direction insert,
     Direction from
   ) {
-    super(manager, handler.getId(), handler.isWhitelist(), handler.getCapacity(), handler.getEntity(), handler.getMode(), handler.getFilter().toArray(Fluid[]::new));
+    super(manager);
     this.handler = handler;
     this.extract = extract;
     this.insert = insert;
     this.from = from;
-  }
-
-  @Override
-  public boolean isFluidValid(FluidStack stack) {
-    return handler.isFluidValid(stack);
   }
 
   @Override
@@ -51,6 +45,11 @@ public class FluidSidedHandler extends FluidComponent {
   @Override
   public void serialize(CompoundTag nbt) {
     handler.serialize(nbt);
+  }
+
+  @Override
+  public CompoundTag serialize() {
+    return handler.serialize();
   }
 
   @Override

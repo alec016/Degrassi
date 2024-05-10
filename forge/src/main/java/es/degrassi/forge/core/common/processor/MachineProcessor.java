@@ -64,7 +64,7 @@ public abstract class MachineProcessor<T extends MachineRecipe<T>, E extends Mac
     if (currentRecipe != null)
       switch (phase) {
         case NONE -> {
-          ProgressComponent component = (ProgressComponent) entity.getComponentManager().getComponent(ProgressComponent.id).orElse(null);
+          ProgressComponent component = (ProgressComponent) entity.getComponentManager().getComponent("progress").orElse(null);
           if (component == null) return;
           component.setMaxProgress(currentRecipe.getTime());
           processStart();
@@ -72,14 +72,14 @@ public abstract class MachineProcessor<T extends MachineRecipe<T>, E extends Mac
         }
         case STARTED -> {
           if (entity.getStatus().isError()) return;
-          ProgressComponent component = (ProgressComponent) entity.getComponentManager().getComponent(ProgressComponent.id).orElse(null);
+          ProgressComponent component = (ProgressComponent) entity.getComponentManager().getComponent("progress").orElse(null);
           if (component == null) return;
           processTick();
           setPhase(Phase.TICKING);
         }
         case TICKING -> {
           if (entity.getStatus().isError()) return;
-          ProgressComponent component = (ProgressComponent) entity.getComponentManager().getComponent(ProgressComponent.id).orElse(null);
+          ProgressComponent component = (ProgressComponent) entity.getComponentManager().getComponent("progress").orElse(null);
           if (component == null) return;
           if (component.hasEnded()) {
             setPhase(Phase.END);
@@ -91,7 +91,7 @@ public abstract class MachineProcessor<T extends MachineRecipe<T>, E extends Mac
         }
         case END -> {
           if (entity.getStatus().isError()) return;
-          ProgressComponent component = (ProgressComponent) entity.getComponentManager().getComponent(ProgressComponent.id).orElse(null);
+          ProgressComponent component = (ProgressComponent) entity.getComponentManager().getComponent("progress").orElse(null);
           if (component == null) return;
           processEnd();
           component.resetProgress();
@@ -106,7 +106,7 @@ public abstract class MachineProcessor<T extends MachineRecipe<T>, E extends Mac
 
   public void reset() {
     if (entity.getStatus().isError()) return;
-    ProgressComponent component = (ProgressComponent) entity.getComponentManager().getComponent(ProgressComponent.id).orElse(null);
+    ProgressComponent component = (ProgressComponent) entity.getComponentManager().getComponent("progress").orElse(null);
     if (component == null) return;
     component.resetProgress();
     component.setMaxProgress(0);

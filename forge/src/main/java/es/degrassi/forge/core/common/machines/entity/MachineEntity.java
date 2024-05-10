@@ -26,17 +26,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEntity {
-  protected LazyOptional<ItemStackHandler> lazyItemHandler = LazyOptional.empty();
+  protected LazyOptional<DegrassiItemStackHandler> lazyItemHandler = LazyOptional.empty();
   protected LazyOptional<EnergyComponent> lazyEnergyHandler = LazyOptional.empty();
-  protected LazyOptional<IFluidHandler> lazyFluidHandler = LazyOptional.empty();
-  private IFluidHandler fluidHandler;
-  protected ItemStackHandler itemHandler;
+  protected LazyOptional<DegrassiFluidHandler> lazyFluidHandler = LazyOptional.empty();
+  protected DegrassiFluidHandler fluidHandler;
+  protected DegrassiItemStackHandler itemHandler;
   @Getter
   protected final ComponentManager componentManager;
   @Getter
@@ -45,7 +43,7 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
   @Nullable
   protected MachineProcessor<R, ? extends MachineEntity<R>> processor = null;
   @Getter
-  protected MachineStatus status = MachineStatus.IDLE;
+  protected MachineStatus status = null;
   @Getter
   protected Component errorMessage = Component.empty();
 
@@ -54,8 +52,13 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
     this.componentManager = new ComponentManager(this);
     this.elementManager = new ElementManager(this);
 
-    if(!blockState.hasProperty(MachineBlock.STATUS))
-      getComponentManager().addProgress();
+    if(blockState.hasProperty(MachineBlock.STATUS)) {
+      componentManager.addProgress();
+      status = MachineStatus.IDLE;
+    }
+
+    this.fluidHandler = componentManager.getFluidHandler();
+    this.itemHandler = componentManager.getItemHandler();
   }
 
   public abstract Component getName();
@@ -69,17 +72,18 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
 
   @Override
   public void handleUpdateTag(CompoundTag tag) {
+    super.handleUpdateTag(tag);
     load(tag);
   }
 
   @Override
   public void load(@NotNull CompoundTag tag) {
     super.load(tag);
-    elementManager.deserializeNBT(tag.getCompound("elementManager"));
+    componentManager.deserializeNBT(tag.getList("componentManager", CompoundTag.TAG_COMPOUND));
+    elementManager.deserializeNBT(tag.getList("elementManager", CompoundTag.TAG_COMPOUND));
     if (tag.contains("processor") && processor != null) processor.deserializeNBT(tag.getCompound("processor"));
-    status = MachineStatus.value(tag.getString("status"));
+    if (tag.contains("status")) status = MachineStatus.value(tag.getString("status"));
     errorMessage = Component.literal(tag.getString("errorMessage"));
-    componentManager.deserializeNBT(tag.getCompound("componentManager"));
   }
 
   @Override
@@ -88,7 +92,7 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
     tag.put("componentManager", componentManager.serializeNBT());
     tag.put("elementManager", elementManager.serializeNBT());
     if (processor != null) tag.put("processor", processor.serializeNBT());
-    tag.putString("status", status.getSerializedName());
+    if (status != null) tag.putString("status", status.getSerializedName());
     tag.putString("errorMessage", errorMessage.getString());
   }
 
@@ -121,13 +125,11 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
       .findFirst()
       .ifPresent(energy -> lazyEnergyHandler = LazyOptional.of(() -> energy));
 
-    if (!getComponentManager().getComponentsByType("item").isEmpty()) {
-      this.itemHandler = new DegrassiItemStackHandler(this);
+    if (!getComponentManager().getItemHandler().getComponents().isEmpty()) {
       lazyItemHandler = LazyOptional.of(() -> itemHandler);
     }
 
-    if(!getComponentManager().getComponentsByType("fluid").isEmpty()) {
-      this.fluidHandler = new DegrassiFluidHandler(this);
+    if(!getComponentManager().getFluidHandler().getComponents().isEmpty()) {
       lazyFluidHandler = LazyOptional.of(() -> fluidHandler);
     }
   }
@@ -160,12 +162,12 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
     entity.getComponentManager().serverTick();
     entity.getElementManager().serverTick();
     if (entity.getProcessor() == null) return;
-    switch (entity.getStatus()) {
+    if (entity.getStatus() != null) switch (entity.getStatus()) {
       case IDLE -> entity.getProcessor().searchForRecipe(entity.getComponentManager().get());
       case RUNNING -> entity.getProcessor().tick();
       case ERROR -> {
         DegrassiLogger.INSTANCE.info("error occurred: {}", entity.errorMessage.getString());
-        entity.getComponentManager().getComponent(ProgressComponent.id).map(component -> (ProgressComponent) component).ifPresent(component -> {
+        entity.getComponentManager().getComponent("progress").map(component -> (ProgressComponent) component).ifPresent(component -> {
           if (entity.getProcessor().shouldReset()) {
             component.resetProgress();
           }
@@ -211,5 +213,9 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
     this.level.setBlockAndUpdate(worldPosition, getBlockState().setValue(MachineBlock.STATUS, status));
     requestModelDataUpdate();
     setChanged();
+  }
+
+  public boolean dummy() {
+    return false;
   }
 }

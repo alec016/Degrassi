@@ -26,8 +26,7 @@ public class FurnaceEntity extends MachineEntity<FurnaceRecipe> {
       .addItem("upgrade2", true, ComponentIOMode.INPUT)
       .addItem("input", ComponentIOMode.INPUT)
       .addItem("output", ComponentIOMode.OUTPUT)
-      .addExperience(tier.getExperienceCapacity(), "experience")
-      .addProgress();
+      .addExperience(tier.getExperienceCapacity(), "experience");
 
     this.getElementManager()
       .addEnergy(
@@ -89,7 +88,7 @@ public class FurnaceEntity extends MachineEntity<FurnaceRecipe> {
   @Override
   protected void saveAdditional(@NotNull CompoundTag tag) {
     super.saveAdditional(tag);
-    tag.putString("tier", tier.name().toLowerCase());
+    tag.putString("tier", tier.nameL());
   }
 
   @Override

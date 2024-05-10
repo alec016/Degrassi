@@ -61,16 +61,19 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
 
   @Override
   public void serialize(CompoundTag nbt) {
+  }
+
+  public CompoundTag serialize() {
     CompoundTag tag = serializeNBT();
     tag.putString("mode", mode.serialize());
-    nbt.put(id, tag);
+    tag.putString("id", id);
+    return tag;
   }
 
   @Override
   public void deserialize(CompoundTag nbt) {
-    CompoundTag tag = nbt.getCompound(id);
-    deserializeNBT(tag);
-    mode = ComponentIOMode.deserialize(tag.getString("mode"));
+    deserializeNBT(nbt);
+    mode = ComponentIOMode.deserialize(nbt.getString("mode"));
   }
 
   public void setItem(ItemStack item) {
@@ -133,6 +136,7 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
     return "ItemComponent{" +
       "id='" + id + '\'' +
       ", item=" + getStackInSlot(0).getHoverName().getString() +
+      ", amount=" + getStackInSlot(0).getCount() +
       '}';
   }
 }

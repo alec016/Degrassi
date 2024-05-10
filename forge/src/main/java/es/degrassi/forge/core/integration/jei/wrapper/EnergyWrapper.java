@@ -18,7 +18,7 @@ import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.NotNull;
 
 public class EnergyWrapper extends EnergyElement implements IIngredientRenderer<EnergyComponent> {
-  public static final EnergyWrapper DUMMY = new EnergyWrapper(0, 0, null, null, ElementDirection.TOP, null, false) {
+  public static final EnergyWrapper DUMMY = new EnergyWrapper(0, 0, null, null, ElementDirection.TOP, null, false, "energy") {
     @Override
     public int getWidth() {
       return 16;
@@ -33,8 +33,8 @@ public class EnergyWrapper extends EnergyElement implements IIngredientRenderer<
   private final MachineRecipe<?> recipe;
   private final boolean animated;
 
-  public EnergyWrapper(int x, int y, @NotNull ResourceLocation emptyTexture, @NotNull ResourceLocation filledTexture, ElementDirection direction, MachineRecipe<?> recipe, boolean animated) {
-    super(null, x, y, Component.literal("energy"), emptyTexture, filledTexture, "energy", direction);
+  public EnergyWrapper(int x, int y, @NotNull ResourceLocation emptyTexture, @NotNull ResourceLocation filledTexture, ElementDirection direction, MachineRecipe<?> recipe, boolean animated, String id) {
+    super(null, x, y, Component.literal("energy"), emptyTexture, filledTexture, id, direction, true);
     this.recipe = recipe;
     this.animated = animated;
   }
@@ -47,9 +47,10 @@ public class EnergyWrapper extends EnergyElement implements IIngredientRenderer<
     if (!(iComponent instanceof EnergyComponent component)) return;
     EnergyRequirement requirement = recipe.getRequirements().stream().filter(req -> req.getId().equals(component.getId())).map(req -> (EnergyRequirement) req).findFirst().orElse(null);
     if (requirement == null) return;
-    int total = requirement.getMode().isPerTick() ? requirement.getAmount() : requirement.getAmount() * recipe.getTime();
+    int total = requirement.getMode().isPerTick() ? requirement.getAmount() * recipe.getTime() : requirement.getAmount();
     component.setCapacity(total);
     if (animated) {
+      setDirection(requirement.getMode().isOutput() ? getDirection() : getDirection().opposite());
       int toIncrement = requirement.getMode().isPerTick() ? requirement.getAmount() : requirement.getAmount() / recipe.getTime();
       component.receiveEnergy(toIncrement, false);
       super.renderInJei(guiGraphics, recipe, mouseX, mouseY, iComponent);

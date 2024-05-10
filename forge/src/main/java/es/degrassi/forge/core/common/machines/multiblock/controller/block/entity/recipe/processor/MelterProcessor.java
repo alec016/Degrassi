@@ -1,13 +1,13 @@
 package es.degrassi.forge.core.common.machines.multiblock.controller.block.entity.recipe.processor;
 
-import es.degrassi.common.DegrassiLocation;
-import es.degrassi.common.utils.DegrassiLogger;
-import es.degrassi.forge.core.common.RequirementManager;
 import es.degrassi.forge.core.common.machines.multiblock.controller.block.entity.MelterControllerEntity;
 import es.degrassi.forge.core.common.machines.multiblock.controller.block.entity.recipe.MelterRecipe;
+import es.degrassi.forge.core.init.RecipeRegistration;
 import java.util.ArrayList;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.material.Fluids;
+import java.util.Objects;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.level.Level;
 
 public class MelterProcessor extends MultiblockProcessor<MelterRecipe, MelterControllerEntity> {
   public MelterProcessor(MelterControllerEntity entity, boolean reset) {
@@ -15,17 +15,19 @@ public class MelterProcessor extends MultiblockProcessor<MelterRecipe, MelterCon
   }
 
   @Override
-  protected void init() {
+  public void init() {
+    initialized = true;
+    Level level = entity == null ? Objects.requireNonNull(Minecraft.getInstance().level) : entity.getLevel();
+    RecipeManager recipeManager = level == null ? Minecraft.getInstance().level.getRecipeManager() : level.getRecipeManager();
     recipes = new ArrayList<>();
-    RequirementManager manager = new RequirementManager();
-    manager
-      .requireEnergyPerTick(1000, "energy")
-      .requireItem(Items.DIAMOND, "input_bus_0_0")
-      .produceFluid(Fluids.WATER, 1000, "fluid_output");
-    recipes.add(new MelterRecipe(new DegrassiLocation("melter/test"), 100, manager.get()));
+    recipes.addAll(recipeManager.getAllRecipesFor(RecipeRegistration.MELTER_TYPE.get()));
 
-    DegrassiLogger.INSTANCE.info("MelterProcessor$recipes: {}", recipes);
+    if(this.futureRecipeID != null && this.entity.getLevel() != null) {
+      this.recipes.forEach(recipe -> {
+        if (recipe.getId().equals(futureRecipeID))
+          setRecipe(recipe);
+      });
+      this.futureRecipeID = null;
+    }
   }
-
-
 }
