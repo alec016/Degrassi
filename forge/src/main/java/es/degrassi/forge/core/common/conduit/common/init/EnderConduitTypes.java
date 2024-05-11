@@ -6,6 +6,7 @@ import es.degrassi.common.conduit.IConduitType;
 import es.degrassi.common.misc.Vector2i;
 import es.degrassi.forge.core.common.conduit.common.types.energy.EnergyConduitType;
 import es.degrassi.forge.core.common.conduit.common.types.fluid.FluidConduitType;
+import es.degrassi.forge.core.common.conduit.common.types.heat.HeatConduitType;
 import es.degrassi.forge.core.common.conduit.common.types.item.ItemConduitType;
 import es.degrassi.forge.core.common.conduit.common.types.redstone.RedstoneConduitType;
 import net.minecraft.resources.ResourceLocation;
@@ -20,6 +21,7 @@ public class EnderConduitTypes {
     public static final RegistryObject<FluidConduitType> FLUID3 = fluidConduit("extreme_fluid_conduit", 10_000, true, new Vector2i(0, 168));
     public static final RegistryObject<? extends IConduitType<?>> REDSTONE = ConduitTypes.CONDUIT_TYPES.register("redstone_conduit", RedstoneConduitType::new);
     public static final RegistryObject<? extends IConduitType<?>> ITEM = ConduitTypes.CONDUIT_TYPES.register("item_conduit", ItemConduitType::new);
+    public static final RegistryObject<? extends IConduitType<?>> HEAT = ConduitTypes.CONDUIT_TYPES.register("heat_conduit", HeatConduitType::new);
 
     private static RegistryObject<FluidConduitType> fluidConduit(String name, int tier, boolean isMultiFluid, Vector2i iconPos) {
         return ConduitTypes.CONDUIT_TYPES.register(name,

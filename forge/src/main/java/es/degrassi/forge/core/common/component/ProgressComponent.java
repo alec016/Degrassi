@@ -44,9 +44,6 @@ public class ProgressComponent implements IComponent {
   public void setMode(ComponentIOMode mode) {}
 
   @Override
-  public void serialize(CompoundTag nbt) {
-  }
-
   public CompoundTag serialize() {
     CompoundTag tag = new CompoundTag();
     tag.putInt("progress", progress);

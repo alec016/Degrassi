@@ -25,6 +25,16 @@ public class ConduitNBTKeys {
 
   // endregion
 
+  // region Heat Storage
+
+  public static final String HEAT_STORED = "HeatStored";
+  public static final String HEAT_MAX_STORED = "MaxHeatStored";
+  public static final String HEAT_MAX_USE = "MaxHeatUse";
+  public static final String HEAT_MAX_RECEIVE = "MaxHeatUse";
+  public static final String HEAT_MAX_EXTRACT = "MaxHeatUse";
+
+  // endregion
+
   // region Sync
 
   public static final String SYNC_DATA_SLOT_INDEX = "DataSlotIndex";

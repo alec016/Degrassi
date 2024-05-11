@@ -39,9 +39,6 @@ public class BarComponent implements IComponent {
   public void fill(IRequirement<?> req) {}
 
   @Override
-  public void serialize(@NotNull CompoundTag nbt) {
-  }
-
   public CompoundTag serialize() {
     CompoundTag tag = new CompoundTag();
     tag.putDouble("amount", amount);

@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.event.level.ChunkEvent;
 
 @Getter
 @Setter
@@ -43,9 +44,6 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
   }
 
   @Override
-  public void serialize(CompoundTag nbt) {
-  }
-
   public CompoundTag serialize() {
     CompoundTag tag = new CompoundTag();
     tag.putInt("energy", energy);

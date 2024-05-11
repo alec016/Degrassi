@@ -20,6 +20,7 @@ public class ConduitItems {
     public static final ItemEntry<Item> EXTREME_FLUID = createConduitItem(EnderConduitTypes.FLUID3, "extreme_fluid");
     public static final ItemEntry<Item> REDSTONE = createConduitItem(EnderConduitTypes.REDSTONE, "redstone");
     public static final ItemEntry<Item> ITEM = createConduitItem(EnderConduitTypes.ITEM, "item");
+    public static final ItemEntry<Item> HEAT = createConduitItem(EnderConduitTypes.HEAT, "heat");
 
     private static ItemEntry<Item> createConduitItem(Supplier<? extends IConduitType<?>> type, String itemName) {
         return REGISTRATE.item(itemName + "_conduit",

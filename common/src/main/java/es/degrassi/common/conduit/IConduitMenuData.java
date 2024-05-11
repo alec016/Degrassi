@@ -2,9 +2,10 @@ package es.degrassi.common.conduit;
 
 public interface IConduitMenuData {
 
-  IConduitMenuData REDSTONE = new Simple(true, true, false, true, true, false);
-  IConduitMenuData ITEM = new Simple(true, true, true, true, true, true);
+  IConduitMenuData REDSTONE = new Simple(false, false, false, true, true, false);
+  IConduitMenuData ITEM = new Simple(false, false, false, true, true, true);
   IConduitMenuData ENERGY = new Simple(false, false, false, false, false, true);
+  IConduitMenuData HEAT = new Simple(false, false, false, false, false, true);
 
   boolean hasFilterInsert();
 

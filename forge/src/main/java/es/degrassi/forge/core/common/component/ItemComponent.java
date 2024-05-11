@@ -60,9 +60,6 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
   }
 
   @Override
-  public void serialize(CompoundTag nbt) {
-  }
-
   public CompoundTag serialize() {
     CompoundTag tag = serializeNBT();
     tag.putString("mode", mode.serialize());

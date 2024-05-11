@@ -18,12 +18,10 @@ public interface IComponent extends IType {
   default void clientTick() {}
   default void serverTick() {}
 
-  void serialize(CompoundTag nbt);
+  default void serialize(CompoundTag nbt) {}
   void deserialize(CompoundTag nbt);
 
-  default CompoundTag serialize() {
-    return new CompoundTag();
-  }
+  CompoundTag serialize();
 
   String getTypeString();
 }

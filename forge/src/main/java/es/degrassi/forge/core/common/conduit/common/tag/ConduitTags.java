@@ -26,6 +26,7 @@ public class ConduitTags {
 
     public static final TagKey<Block> REDSTONE_CONNECTABLE = BlockTags.create(Degrassi.rl("redstone_connectable"));
     public static final TagKey<Block> ENERGY_CABLE = BlockTags.create(Degrassi.rl("energy_cable"));
+    public static final TagKey<Block> HEAT_CABLE = BlockTags.create(Degrassi.rl("heat_cable"));
     public static final TagKey<Block> RELOCATION_NOT_SUPPORTED = BlockTags.create(new ResourceLocation("forge", "relocation_not_supported"));
   }
 }

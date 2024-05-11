@@ -9,6 +9,8 @@ import es.degrassi.forge.core.common.conduit.common.blocks.ConduitBlock;
 import es.degrassi.forge.core.common.conduit.common.init.ConduitMenus;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,29 +24,26 @@ import net.minecraftforge.items.IItemHandler;
 import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.Nullable;
 
+@Getter
+@Setter
 public class ConduitMenu extends SyncedMenu<ConduitBlockEntity> {
-
-  public List<ConduitSlot> getConduitSlots() {
-    return conduitSlots;
-  }
 
   //List capped to MaxConduitTypes inner list with 3 (2 filter, 1 upgrade) slots, because that's the maximum. All non visible slots will be made noninteractable
   private final List<ConduitSlot> conduitSlots = new ArrayList<>();
-
   private Direction direction;
-  private IConduitType<?> type;
+  private IConduitType<?> conduitType;
 
 
-  public ConduitMenu(@Nullable ConduitBlockEntity blockEntity, Inventory inventory, int pContainerId, Direction direction, IConduitType type) {
+  public ConduitMenu(@Nullable ConduitBlockEntity blockEntity, Inventory inventory, int pContainerId, Direction direction, IConduitType<?> type) {
     super(blockEntity, inventory, ConduitMenus.CONDUIT_MENU.get(), pContainerId);
     this.direction = direction;
-    this.type = type;
+    this.conduitType = type;
     if (blockEntity != null) {
       IItemHandler conduitItemHandler = blockEntity.getConduitItemHandler();
       for (Direction forDirection : Direction.values()) {
         for (int i = 0; i < ConduitBundle.MAX_CONDUIT_TYPES; i++) {
           for (SlotType slotType: SlotType.values()) {
-            ConduitSlot slot = new ConduitSlot(blockEntity.getBundle(),conduitItemHandler, () -> this.direction, forDirection, () -> blockEntity.getBundle().getTypes().indexOf(this.type), i, slotType);
+            ConduitSlot slot = new ConduitSlot(blockEntity.getBundle(),conduitItemHandler, () -> this.direction, forDirection, () -> blockEntity.getBundle().getTypes().indexOf(this.conduitType), i, slotType);
             conduitSlots.add(slot);
             slot.updateVisibilityPosition();
             addSlot(slot);
@@ -90,8 +89,8 @@ public class ConduitMenu extends SyncedMenu<ConduitBlockEntity> {
   }
 
   private boolean clientValid() {
-    return getBlockEntity().getBundle().getTypes().contains(type)
-      && ConduitBlock.canBeOrIsValidConnection(getBlockEntity(), type, direction);
+    return getBlockEntity().getBundle().getTypes().contains(conduitType)
+      && ConduitBlock.canBeOrIsValidConnection(getBlockEntity(), conduitType, direction);
   }
 
   public static ConduitMenu factory(@Nullable MenuType<ConduitMenu> pMenuType, int pContainerId, Inventory inventory, FriendlyByteBuf buf) {
@@ -104,22 +103,6 @@ public class ConduitMenu extends SyncedMenu<ConduitBlockEntity> {
 
     LogManager.getLogger().warn("couldn't find BlockEntity");
     return new ConduitMenu(null, inventory, pContainerId, direction, type);
-  }
-
-  public IConduitType<?> getConduitType() {
-    return type;
-  }
-
-  public void setConduitType(IConduitType<?> type) {
-    this.type = type;
-  }
-
-  public Direction getDirection() {
-    return direction;
-  }
-
-  public void setDirection(Direction direction) {
-    this.direction = direction;
   }
 
   @Override

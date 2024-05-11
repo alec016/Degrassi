@@ -3,7 +3,9 @@ package es.degrassi.forge.core.common.machines.entity;
 import es.degrassi.common.utils.DegrassiLogger;
 import es.degrassi.forge.core.common.ComponentManager;
 import es.degrassi.forge.core.common.ElementManager;
+import es.degrassi.forge.core.common.capability.DegrassiCaps;
 import es.degrassi.forge.core.common.component.EnergyComponent;
+import es.degrassi.forge.core.common.component.HeatComponent;
 import es.degrassi.forge.core.common.component.ProgressComponent;
 import es.degrassi.forge.core.common.machines.MachineStatus;
 import es.degrassi.forge.core.common.machines.block.MachineBlock;
@@ -33,6 +35,7 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
   protected LazyOptional<DegrassiItemStackHandler> lazyItemHandler = LazyOptional.empty();
   protected LazyOptional<EnergyComponent> lazyEnergyHandler = LazyOptional.empty();
   protected LazyOptional<DegrassiFluidHandler> lazyFluidHandler = LazyOptional.empty();
+  protected LazyOptional<HeatComponent> lazyHeatHandler = LazyOptional.empty();
   protected DegrassiFluidHandler fluidHandler;
   protected DegrassiItemStackHandler itemHandler;
   @Getter
@@ -110,6 +113,10 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
       if (!componentManager.getComponentsByType("fluid").isEmpty()) {
         return lazyFluidHandler.cast();
       }
+    } else if (cap == DegrassiCaps.HEAT) {
+      if (!componentManager.getComponentsByType("heat").isEmpty()) {
+        return lazyHeatHandler.cast();
+      }
     }
     return super.getCapability(cap, side);
   }
@@ -124,6 +131,15 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
       .map(component -> (EnergyComponent) component)
       .findFirst()
       .ifPresent(energy -> lazyEnergyHandler = LazyOptional.of(() -> energy));
+
+
+    getComponentManager()
+      .get()
+      .stream()
+      .filter(component -> component instanceof HeatComponent)
+      .map(component -> (HeatComponent) component)
+      .findFirst()
+      .ifPresent(heat -> lazyHeatHandler = LazyOptional.of(() -> heat));
 
     if (!getComponentManager().getItemHandler().getComponents().isEmpty()) {
       lazyItemHandler = LazyOptional.of(() -> itemHandler);
@@ -140,6 +156,7 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
     lazyEnergyHandler.invalidate();
     lazyItemHandler.invalidate();
     lazyFluidHandler.invalidate();
+    lazyHeatHandler.invalidate();
   }
 
   public static <R extends MachineRecipe<R>> void clientTick (

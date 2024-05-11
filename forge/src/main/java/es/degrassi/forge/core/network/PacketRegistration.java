@@ -7,6 +7,7 @@ import es.degrassi.forge.core.network.component.BarPacket;
 import es.degrassi.forge.core.network.component.EnergyPacket;
 import es.degrassi.forge.core.network.component.ExperiencePacket;
 import es.degrassi.forge.core.network.component.FluidPacket;
+import es.degrassi.forge.core.network.component.HeatPacket;
 import es.degrassi.forge.core.network.component.ItemPacket;
 import es.degrassi.forge.core.network.component.ProgressPacket;
 
@@ -18,6 +19,7 @@ public class PacketRegistration {
   public static final MessageType EXPERIENCE = MANAGER.registerS2C("experience", ExperiencePacket::read);
   public static final MessageType PROGRESS = MANAGER.registerS2C("progress", ProgressPacket::read);
   public static final MessageType FLUID = MANAGER.registerS2C("fluid", FluidPacket::read);
+  public static final MessageType HEAT = MANAGER.registerS2C("heat", HeatPacket::read);
   public static final MessageType SIDE_CONFIG = MANAGER.registerS2C("side_config", SideConfigPacket::read);
 
   public static void init() {}

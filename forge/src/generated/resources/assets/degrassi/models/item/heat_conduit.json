@@ -1,0 +1,6 @@
+{
+  "parent": "degrassi:item/conduit",
+  "textures": {
+    "0": "degrassi:block/conduit/heat"
+  }
+}

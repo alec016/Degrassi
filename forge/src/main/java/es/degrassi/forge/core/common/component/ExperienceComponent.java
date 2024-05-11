@@ -43,9 +43,6 @@ public class ExperienceComponent implements IComponent {
   }
 
   @Override
-  public void serialize(CompoundTag nbt) {
-  }
-
   public CompoundTag serialize() {
     CompoundTag tag = new CompoundTag();
     tag.putFloat("experience", experience);

@@ -66,9 +66,6 @@ public class FluidComponent extends FluidTank implements IComponent {
   }
 
   @Override
-  public void serialize(CompoundTag nbt) {
-  }
-
   public CompoundTag serialize() {
     CompoundTag tag = new CompoundTag();
     super.writeToNBT(tag);

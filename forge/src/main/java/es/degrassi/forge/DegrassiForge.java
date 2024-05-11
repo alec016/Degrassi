@@ -1,7 +1,6 @@
 package es.degrassi.forge;
 
 import dev.architectury.platform.forge.EventBuses;
-//import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
 import dev.architectury.utils.Env;
 import dev.architectury.utils.EnvExecutor;
 import es.degrassi.common.DegrassiLocation;
@@ -63,14 +62,15 @@ public class DegrassiForge {
     MinecraftForge.EVENT_BUS.register(DegrassiForge.class);
     MinecraftForge.EVENT_BUS.register(DegrassiConduits.class);
     ResourcePackAdapter.registerResourcePack(DegrassiResourcePack.getPackInstance());
+//    MinecraftForge.EVENT_BUS.addGenericListener(BlockEntity.class, this::attachBeCaps);
   }
 
-  public static void clientInit(IEventBus bus) {
+  public static void clientInit(final IEventBus bus) {
     DegrassiLayerDefinition.register();
     bus.addListener(DegrassiForge::clientSetup);
   }
 
-  public static void clientSetup (FMLClientSetupEvent event) {
+  public static void clientSetup (final FMLClientSetupEvent event) {
     event.enqueueWork(ContainerRegistration::registerScreens);
   }
 

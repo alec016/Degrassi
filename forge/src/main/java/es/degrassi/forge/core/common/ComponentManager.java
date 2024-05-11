@@ -6,6 +6,7 @@ import es.degrassi.forge.core.common.component.ComponentIOMode;
 import es.degrassi.forge.core.common.component.EnergyComponent;
 import es.degrassi.forge.core.common.component.ExperienceComponent;
 import es.degrassi.forge.core.common.component.FluidComponent;
+import es.degrassi.forge.core.common.component.HeatComponent;
 import es.degrassi.forge.core.common.component.ItemComponent;
 import es.degrassi.forge.core.common.component.ProgressComponent;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
@@ -13,6 +14,7 @@ import es.degrassi.forge.core.common.wrapper.DegrassiFluidHandler;
 import es.degrassi.forge.core.common.wrapper.DegrassiItemStackHandler;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import lombok.Getter;
@@ -174,6 +176,15 @@ public final class ComponentManager extends Manager<IComponent> implements INBTS
     return addBar(capacity, id, ComponentIOMode.BOTH);
   }
 
+  public ComponentManager addHeat(double capacity, String id) {
+    return addHeat(capacity, id, ComponentIOMode.BOTH);
+  }
+
+  public ComponentManager addHeat(double capacity, String id, ComponentIOMode mode) {
+    get().add(new HeatComponent(this, capacity, id, mode, getEntity()));
+    return this;
+  }
+
   public Optional<IComponent> getComponent(String id) {
     if (!initialized) init();
     return components.containsKey(id) ? Optional.of(components.get(id)) : Optional.empty();
@@ -181,11 +192,12 @@ public final class ComponentManager extends Manager<IComponent> implements INBTS
 
   public List<? extends IComponent> getComponentsByType(String type) {
     if (!initialized) init();
-    return switch (type) {
-      case "item", "ITEM" -> getItemHandler().getComponents();
-      case "energy", "ENERGY" -> get().stream().filter(component -> component instanceof EnergyComponent).toList();
-      case "experience", "EXPERIENCE" -> get().stream().filter(component -> component instanceof ExperienceComponent).toList();
-      case "fluid", "FLUID" -> getFluidHandler().getComponents();
+    return switch (type.toLowerCase(Locale.ROOT)) {
+      case "item" -> getItemHandler().getComponents();
+      case "fluid" -> getFluidHandler().getComponents();
+      case "energy" -> get().stream().filter(component -> component instanceof EnergyComponent).toList();
+      case "experience" -> get().stream().filter(component -> component instanceof ExperienceComponent).toList();
+      case "heat" -> get().stream().filter(component -> component instanceof HeatComponent).toList();
       default -> throw new IllegalStateException("Unexpected value: " + type);
     };
   }

@@ -91,6 +91,9 @@ public class ConduitBlockItem extends BlockItem implements InfoBox.IInfoBoxHolde
     } else if (getType() == EnderConduitTypes.FLUID3.get()) {
       box.set(Component.translatable("info.degrassi.io.mode.all"),
         Component.translatable("info.degrassi.mb.per.tick", 10_000));
+    } else if (getType() == EnderConduitTypes.HEAT.get()) {
+      box.set(Component.translatable("info.degrassi.io.mode.all"),
+        Component.translatable("info.degrassi.heat.per.tick", 1_000));
     }
     return box;
   }
