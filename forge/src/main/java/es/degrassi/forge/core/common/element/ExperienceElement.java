@@ -1,15 +1,17 @@
 package es.degrassi.forge.core.common.element;
 
-import es.degrassi.common.utils.DegrassiLogger;
+import com.google.gson.JsonObject;
 import es.degrassi.forge.api.core.common.ElementDirection;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IElement;
 import es.degrassi.common.utils.TextureSizeHelper;
+import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.component.ExperienceComponent;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import java.util.List;
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -23,12 +25,15 @@ import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 @Getter
+@Setter
 public class ExperienceElement extends AbstractWidget implements IElement<ExperienceComponent> {
   private final ElementManager manager;
   private ResourceLocation emptyTexture, filledTexture;
   private final String id;
   private final ElementDirection direction;
   private final boolean jei;
+
+  private IRequirement<ExperienceComponent> requirement;
 
   public ExperienceElement(
     ElementManager manager,
@@ -120,7 +125,7 @@ public class ExperienceElement extends AbstractWidget implements IElement<Experi
   }
 
   @Override
-  public void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent iComponent) {
+  public void renderInJei(GuiGraphics guiGraphics, IRequirement<?> requirement, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent iComponent) {
     if (!jei) return;
     if (!(iComponent instanceof ExperienceComponent component)) return;
     renderTexture(guiGraphics, emptyTexture, getX(), getY(), 0, 0, 0, getWidth(), getHeight(), getWidth(), getHeight());
@@ -133,7 +138,23 @@ public class ExperienceElement extends AbstractWidget implements IElement<Experi
     renderTexture(guiGraphics, filledTexture, getX() + xOffset, getY() + yOffset, xOffset, yOffset, 0, width, height, textureWidth, textureHeight);
   }
 
-  public boolean jei() {
-    return jei;
+  @Override
+  public ExperienceElement copy(ElementManager manager) {
+    return new ExperienceElement(manager, getX(), getY(), id, getMessage(), emptyTexture, filledTexture, direction, jei);
+  }
+
+  @Override
+  public String toString() {
+    return asJson().toString();
+  }
+
+  public JsonObject asJson() {
+    JsonObject json = new JsonObject();
+    asJson(json);
+    json.addProperty("width", width);
+    json.addProperty("height", height);
+    json.addProperty("emptyTexture", emptyTexture.toString());
+    json.addProperty("filledTexture", filledTexture.toString());
+    return json;
   }
 }

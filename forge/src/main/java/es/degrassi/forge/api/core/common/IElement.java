@@ -1,5 +1,6 @@
 package es.degrassi.forge.api.core.common;
 
+import com.google.gson.JsonObject;
 import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import net.minecraft.client.gui.GuiGraphics;
@@ -50,7 +51,19 @@ public interface IElement<E extends IComponent> extends IType {
   }
   void deserialize(CompoundTag nbt);
 
-  void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent component);
+  void renderInJei(GuiGraphics guiGraphics, IRequirement<?> requirement, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent component);
 
-  boolean jei();
+  boolean isJei();
+
+  void setRequirement(IRequirement<E> requirement);
+
+  IElement<E> copy(ElementManager manager);
+
+  default void asJson(JsonObject json) {
+    json.addProperty("x", getX());
+    json.addProperty("y", getY());
+    json.addProperty("jei", isJei());
+    json.addProperty("id", getId());
+    json.addProperty("direction", getDirection().toString());
+  }
 }

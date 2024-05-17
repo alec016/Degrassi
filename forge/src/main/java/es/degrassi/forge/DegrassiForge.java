@@ -127,6 +127,9 @@ public class DegrassiForge {
           for (MultiblockPartStorage.Fluid.Input variant : MultiblockPartStorage.Fluid.Input.values()) {
             output.accept(new ItemStack(BlockRegistration.FLUID_INPUT_TANK.get(variant)));
           }
+          for (MultiblockPartStorage.Fluid.QuadrupleInput variant : MultiblockPartStorage.Fluid.QuadrupleInput.values()) {
+            output.accept(new ItemStack(BlockRegistration.QUADRUPLE_FLUID_INPUT_TANK.get(variant)));
+          }
           for (MultiblockPartStorage.Fluid.Output variant : MultiblockPartStorage.Fluid.Output.values()) {
             output.accept(new ItemStack(BlockRegistration.FLUID_OUTPUT_TANK.get(variant)));
           }
@@ -179,6 +182,9 @@ public class DegrassiForge {
       }
       for (MultiblockPartStorage.Fluid.Input variant : MultiblockPartStorage.Fluid.Input.values()) {
         entries.put(new ItemStack(BlockRegistration.FLUID_INPUT_TANK.get(variant)), vis);
+      }
+      for (MultiblockPartStorage.Fluid.QuadrupleInput variant : MultiblockPartStorage.Fluid.QuadrupleInput.values()) {
+        entries.put(new ItemStack(BlockRegistration.QUADRUPLE_FLUID_INPUT_TANK.get(variant)), vis);
       }
       for (MultiblockPartStorage.Fluid.Output variant : MultiblockPartStorage.Fluid.Output.values()) {
         entries.put(new ItemStack(BlockRegistration.FLUID_OUTPUT_TANK.get(variant)), vis);

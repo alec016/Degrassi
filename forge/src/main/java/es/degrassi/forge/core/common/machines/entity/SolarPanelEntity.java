@@ -47,12 +47,12 @@ public class SolarPanelEntity extends MachineEntity<SolarPanelRecipe> {
   public SolarPanelEntity(BlockPos pos, BlockState blockState, SolarPanel tier) {
     super(EntityRegistration.SP.get(), pos, blockState);
 
-    this.getComponentManager()
+    componentManager
       .addEnergy(tier.getEnergyCapacity(), "energy", ComponentIOMode.OUTPUT)
       .addBar(100.0, "efficiency")
       .addBar(tier.getMaxGeneration(), "generation");
 
-    this.getElementManager()
+    elementManager
       .addPlayerInventory(
         7,
         97,
@@ -205,5 +205,13 @@ public class SolarPanelEntity extends MachineEntity<SolarPanelRecipe> {
           level.canSeeSky(worldPosition.above());
     }
     return cache$seeSky;
+  }
+
+  public SolarPanelEntity copy(boolean dummy) {
+    return new SolarPanelEntity(getBlockPos(), getBlockState(), getTier()) {
+      public boolean dummy() {
+        return dummy;
+      }
+    };
   }
 }

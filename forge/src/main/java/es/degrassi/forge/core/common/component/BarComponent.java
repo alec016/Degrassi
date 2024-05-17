@@ -1,5 +1,6 @@
 package es.degrassi.forge.core.common.component;
 
+import com.google.gson.JsonObject;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ComponentManager;
@@ -62,5 +63,25 @@ public class BarComponent implements IComponent {
 
   public double getFilledPercentage() {
     return this.amount / this.capacity;
+  }
+
+  public BarComponent copy(MachineEntity<?> entity, ComponentManager manager) {
+    return new BarComponent(manager, capacity, id, mode, entity);
+  }
+
+
+  @Override
+  public String toString() {
+    return asJson().toString();
+  }
+
+  public JsonObject asJson() {
+    JsonObject json = new JsonObject();
+    json.addProperty("mode", mode.serialize());
+    json.addProperty("id", id);
+    json.addProperty("amount", amount);
+    json.addProperty("capacity", capacity);
+    json.addProperty("type", "bar");
+    return json;
   }
 }

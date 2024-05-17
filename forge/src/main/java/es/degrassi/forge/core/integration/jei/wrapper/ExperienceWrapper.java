@@ -2,6 +2,7 @@ package es.degrassi.forge.core.integration.jei.wrapper;
 
 import es.degrassi.forge.api.core.common.ElementDirection;
 import es.degrassi.forge.api.core.common.IComponent;
+import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.component.ExperienceComponent;
 import es.degrassi.forge.core.common.element.ExperienceElement;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
@@ -18,9 +19,9 @@ import net.minecraft.world.item.TooltipFlag;
 
 public class ExperienceWrapper extends ExperienceElement implements IIngredientRenderer<ExperienceComponent> {
   @Getter
-  private final MachineRecipe<?> recipe;
+  private MachineRecipe<?> recipe;
   private final boolean animated;
-  public static final ExperienceWrapper DUMMY = new ExperienceWrapper(0, 0, null, null, ElementDirection.RIGHT, null, false, "experience") {
+  public static final ExperienceWrapper DUMMY = new ExperienceWrapper(0, 0, null, null, ElementDirection.RIGHT, null, null, false, "experience") {
     @Override
     public int getWidth() {
       return 16;
@@ -32,36 +33,38 @@ public class ExperienceWrapper extends ExperienceElement implements IIngredientR
     }
   };
 
-  public ExperienceWrapper(int x, int y, ResourceLocation emptyTexture, ResourceLocation filledTexture, ElementDirection direction, MachineRecipe<?> recipe, boolean animated, String id) {
+  private final ExperienceRequirement requirement;
+
+  public ExperienceWrapper(int x, int y, ResourceLocation emptyTexture, ResourceLocation filledTexture, ElementDirection direction, ExperienceRequirement requirement, MachineRecipe<?> recipe, boolean animated, String id) {
     super(null, x, y, id, Component.literal("experience"), emptyTexture, filledTexture, direction, true);
     this.recipe = recipe;
     this.animated = animated;
+    this.requirement = requirement;
   }
 
   @Override
   public void render(GuiGraphics guiGraphics, ExperienceComponent ingredient) {}
 
   @Override
-  public void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent iComponent) {
-    if (!(iComponent instanceof ExperienceComponent component)) return;
-    ExperienceRequirement requirement = recipe.getRequirements().stream().filter(req -> req.getId().equals(component.getId())).map(req -> (ExperienceRequirement) req).findFirst().orElse(null);
-    if (requirement == null) return;
+  public void renderInJei(GuiGraphics guiGraphics, IRequirement<?> iRequirement, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent iComponent) {
+    ExperienceComponent component = requirement.getComponent();
+    if (component == null) return;
+    this.recipe = recipe;
     float total = requirement.getMode().isPerTick() ? requirement.getXp() * recipe.getTime() : requirement.getXp();
     component.setCapacity(total);
     if (animated) {
       float toIncrement = requirement.getMode().isPerTick() ? requirement.getXp() : requirement.getXp() / recipe.getTime();
       component.receiveExperience(toIncrement, false);
-      super.renderInJei(guiGraphics, recipe, mouseX, mouseY, iComponent);
+      super.renderInJei(guiGraphics, requirement, recipe, mouseX, mouseY, iComponent);
       if (component.getExperienceStored() >= component.getCapacity()) component.setExperience(0);
       return;
     }
     component.setExperience(total);
-    super.renderInJei(guiGraphics, recipe, mouseX, mouseY, iComponent);
+    super.renderInJei(guiGraphics, requirement, recipe, mouseX, mouseY, iComponent);
   }
 
   @Override
   public List<Component> getTooltip(ExperienceComponent ingredient, TooltipFlag tooltipFlag) {
-    ExperienceRequirement requirement = recipe.getRequirements().stream().filter(req -> req.getId().equals(ingredient.getId())).map(req -> (ExperienceRequirement) req).findFirst().orElse(null);
     if (requirement == null) return List.of();
     List<Component> tooltips = new ArrayList<>();
     tooltips.add(

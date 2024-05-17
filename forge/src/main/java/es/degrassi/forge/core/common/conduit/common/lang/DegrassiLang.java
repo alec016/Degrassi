@@ -23,10 +23,13 @@ public class DegrassiLang {
     public static final Component FLUID_CONDUIT_CHANGE_FLUID2 = Component.translatable("gui." + mod + ".fluid_conduit.change_fluid2");
     public static final MutableComponent FLUID_CONDUIT_CHANGE_FLUID3 = Component.translatable("gui." + mod + ".fluid_conduit.change_fluid3");
 
-    public static void register() {
+    static {
         ApiLang.REDSTONE_ACTIVE_WITH_SIGNAL = REDSTONE_ACTIVE_WITH_SIGNAL;
         ApiLang.REDSTONE_NEVER_ACTIVE = REDSTONE_NEVER_ACTIVE;
         ApiLang.REDSTONE_ALWAYS_ACTIVE = REDSTONE_ALWAYS_ACTIVE;
         ApiLang.REDSTONE_ACTIVE_WITHOUT_SIGNAL = REDSTONE_ACTIVE_WITHOUT_SIGNAL;
+    }
+
+    public static void register() {
     }
 }

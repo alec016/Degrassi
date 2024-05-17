@@ -1,8 +1,6 @@
 package es.degrassi.common.utils;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.Locale;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -28,7 +26,15 @@ public class Utils {
     return decimalFormat.format(value).replaceAll(",", ".");
   }
 
+  public static String formatWithPercent(long value) {
+    return format(value) + "%";
+  }
+
+  public static String formatWithPercent(double value) {
+    return format(value) + "%";
+  }
+
   public static String addCommas(long value) {
-    return NumberFormat.getInstance(Locale.ROOT).format(value);
+    return format(value);
   }
 }

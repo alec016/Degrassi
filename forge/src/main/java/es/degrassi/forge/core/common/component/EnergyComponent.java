@@ -1,5 +1,6 @@
 package es.degrassi.forge.core.common.component;
 
+import com.google.gson.JsonObject;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ComponentManager;
@@ -10,7 +11,6 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.event.level.ChunkEvent;
 
 @Getter
 @Setter
@@ -115,7 +115,16 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
   @Override
   public void fill(IRequirement<?> requirement) {
     if (requirement instanceof EnergyRequirement req) {
-      this.energy = this.capacity = req.getAmount();
+      this.maxInput = this.maxOutput = Integer.MAX_VALUE;
+      if (req.getMode().isInput()) this.energy = req.getAmount();
+      markDirty();
+    }
+  }
+
+  public void fill(IRequirement<?> requirement, int recipeTime) {
+    if (requirement instanceof EnergyRequirement req) {
+      this.capacity = this.maxInput = this.maxOutput = req.getMode().isPerTick() ? req.getAmount() * recipeTime : req.getAmount();
+      if (req.getMode().isInput()) this.energy = req.getMode().isPerTick() ? req.getAmount() * recipeTime : req.getAmount();
       markDirty();
     }
   }
@@ -153,15 +162,22 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
     return toExtract;
   }
 
+
   @Override
   public String toString() {
-    return "EnergyComponent{" +
-      "energy=" + energy +
-      ", capacity=" + capacity +
-      ", maxInput=" + maxInput +
-      ", maxOutput=" + maxOutput +
-      ", id='" + id + '\'' +
-      '}';
+    return asJson().toString();
+  }
+
+  public JsonObject asJson() {
+    JsonObject json = new JsonObject();
+    json.addProperty("energy", energy);
+    json.addProperty("mode", mode.serialize());
+    json.addProperty("capacity", capacity);
+    json.addProperty("maxInput", maxInput);
+    json.addProperty("maxOutput", maxOutput);
+    json.addProperty("id", id);
+    json.addProperty("type", "energy");
+    return json;
   }
 
   public void setTransfer(int transferCache) {
@@ -172,5 +188,9 @@ public class EnergyComponent implements IComponent, IEnergyStorage {
   @Override
   public String getTypeString() {
     return "energy";
+  }
+
+  public EnergyComponent copy(MachineEntity<?> entity, ComponentManager manager) {
+    return new EnergyComponent(manager, capacity, maxInput, maxOutput, entity, id, mode);
   }
 }

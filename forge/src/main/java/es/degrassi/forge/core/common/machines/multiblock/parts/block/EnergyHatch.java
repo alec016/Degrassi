@@ -3,9 +3,7 @@ package es.degrassi.forge.core.common.machines.multiblock.parts.block;
 import dev.architectury.registry.menu.MenuRegistry;
 import es.degrassi.forge.EnvHandler;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.EnergyHatchEntity;
-import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.InputBusEntity;
 import es.degrassi.forge.core.common.machines.multiblock.parts.client.container.EnergyHatchContainer;
-import es.degrassi.forge.core.common.machines.multiblock.parts.client.container.InputBusContainer;
 import es.degrassi.forge.core.common.machines.multiblock.parts.item.EnergyHatchItem;
 import es.degrassi.forge.core.tiers.MultiblockPartStorage;
 import lombok.Getter;
@@ -42,6 +40,7 @@ public class EnergyHatch extends BaseMultiblockPartBlock<MultiblockPartStorage.E
   public BlockItem getBlockItem(Item.Properties properties) {
     return new EnergyHatchItem(this, new Item.Properties());
   }
+
   @SuppressWarnings("deprecation")
   @Override
   public @NotNull InteractionResult use(

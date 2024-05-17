@@ -2,9 +2,11 @@ package es.degrassi.forge.core.tiers;
 
 import es.degrassi.common.registry.IVariant;
 import java.util.Locale;
+import lombok.Getter;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
+@Getter
 public enum Furnace implements IVariant<Furnace> {
   IRON(
     25_000,
@@ -65,14 +67,6 @@ public enum Furnace implements IVariant<Furnace> {
     return new Furnace[] { IRON, GOLD, DIAMOND, EMERALD, NETHERITE };
   }
 
-  public int getEnergyCapacity() {
-    return energyCapacity;
-  }
-
-  public float getExperienceCapacity() {
-    return experienceCapacity;
-  }
-
   @Override
   public Furnace[] getVariants() {
     return values();
@@ -84,14 +78,6 @@ public enum Furnace implements IVariant<Furnace> {
 
   public Component getTranslation() {
     return name;
-  }
-
-  public double getEnergyModifier () {
-    return energyModifier;
-  }
-
-  public double getSpeedModifier() {
-    return speedModifier;
   }
 
   public static Furnace value (@NotNull String tier) {

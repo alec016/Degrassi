@@ -1,8 +1,9 @@
 package es.degrassi.forge.core.common.machines.multiblock.parts.block.entity;
 
 import es.degrassi.common.DegrassiLocation;
-import es.degrassi.forge.core.common.component.ComponentIOMode;
+import es.degrassi.forge.core.common.machines.multiblock.parts.block.FluidInputTank;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.InputBus;
+import es.degrassi.forge.core.common.machines.multiblock.uils.handler.FluidSidedHandler;
 import es.degrassi.forge.core.common.machines.multiblock.uils.handler.ItemSidedHandler;
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.EntityRegistration;
@@ -24,12 +25,8 @@ import org.jetbrains.annotations.Nullable;
 @Getter
 @Setter
 public class InputBusEntity extends BaseMultiblockPartEntity<MultiblockPartStorage.Item.Input> {
-  public static final InputBusEntity DUMMY = new InputBusEntity(BlockPos.ZERO, BlockRegistration.INPUT_BUS.get(MultiblockPartStorage.Item.Input.BASIC).defaultBlockState(), MultiblockPartStorage.Item.Input.BASIC) {
-    @Override
-    public boolean dummy() {
-      return true;
-    }
-  };
+  public static final InputBusEntity DUMMY = dummyEntity();
+
   private final Map<Direction, LazyOptional<ItemSidedHandler>> itemWrapperHandlerMap;
 
   public InputBusEntity(BlockPos pos, BlockState blockState, MultiblockPartStorage.Item.Input variant) {
@@ -40,9 +37,17 @@ public class InputBusEntity extends BaseMultiblockPartEntity<MultiblockPartStora
     for (i = 0; i < variant.getRows(); i++)
       for (j = 0; j < variant.getCols(); j++) {
         id = "input_bus_" + k;
-        getComponentManager().addItem(id, ComponentIOMode.INPUT);
-
-        getElementManager()
+        componentManager.addItem(id);
+        jeiComponentManager.addItem(id);
+        elementManager
+          .addItem(
+            7 + (j + 3) * 18,
+            20 + i * 18,
+            Component.literal(id),
+            new DegrassiLocation("textures/gui/base_slot.png"),
+            id
+          );
+        jeiElementManager
           .addItem(
             7 + (j + 3) * 18,
             20 + i * 18,
@@ -53,59 +58,17 @@ public class InputBusEntity extends BaseMultiblockPartEntity<MultiblockPartStora
         k++;
       }
 
-    getElementManager().addPlayerInventory(
+    elementManager.addPlayerInventory(
       7,
       30 + i * 18,
       Component.literal("player_inventory"),
       new DegrassiLocation("textures/gui/base_inventory.png")
     );
 
-    itemHandler = getComponentManager().getItemHandler();
+    itemHandler = componentManager.getItemHandler();
     lazyItemHandler = LazyOptional.of(() -> itemHandler);
-    itemWrapperHandlerMap = Map.of(
-      Direction.UP, LazyOptional.of(() -> new ItemSidedHandler(
-        getComponentManager(),
-        itemHandler,
-        null,
-        getBlockState().getValue(InputBus.FACING),
-        Direction.UP
-      )),
-      Direction.DOWN, LazyOptional.of(() -> new ItemSidedHandler(
-        getComponentManager(),
-        itemHandler,
-        null,
-        getBlockState().getValue(InputBus.FACING),
-        Direction.DOWN
-      )),
-      Direction.NORTH, LazyOptional.of(() -> new ItemSidedHandler(
-        getComponentManager(),
-        itemHandler,
-        null,
-        getBlockState().getValue(InputBus.FACING),
-        Direction.NORTH
-      )),
-      Direction.SOUTH, LazyOptional.of(() -> new ItemSidedHandler(
-        getComponentManager(),
-        itemHandler,
-        null,
-        getBlockState().getValue(InputBus.FACING),
-        Direction.SOUTH
-      )),
-      Direction.EAST, LazyOptional.of(() -> new ItemSidedHandler(
-        getComponentManager(),
-        itemHandler,
-        null,
-        getBlockState().getValue(InputBus.FACING),
-        Direction.EAST
-      )),
-      Direction.WEST, LazyOptional.of(() -> new ItemSidedHandler(
-        getComponentManager(),
-        itemHandler,
-        null,
-        getBlockState().getValue(InputBus.FACING),
-        Direction.WEST
-      ))
-    );
+    itemWrapperHandlerMap = ItemSidedHandler.DEFAULT_ALL_INSERT(componentManager, itemHandler, getBlockState().getValue(FluidInputTank.FACING));
+
   }
 
   @Override
@@ -135,5 +98,18 @@ public class InputBusEntity extends BaseMultiblockPartEntity<MultiblockPartStora
   @Override
   public void load(@NotNull CompoundTag tag) {
     super.load(tag);
+  }
+
+  public InputBusEntity copy(boolean dummy) {
+    return dummy ? dummyEntity() : new InputBusEntity(getBlockPos(), getBlockState(), getVariant());
+  }
+
+  public static InputBusEntity dummyEntity() {
+    return new InputBusEntity(BlockPos.ZERO, BlockRegistration.INPUT_BUS.get(MultiblockPartStorage.Item.Input.BASIC).defaultBlockState(), MultiblockPartStorage.Item.Input.BASIC) {
+      @Override
+      public boolean dummy() {
+        return true;
+      }
+    };
   }
 }

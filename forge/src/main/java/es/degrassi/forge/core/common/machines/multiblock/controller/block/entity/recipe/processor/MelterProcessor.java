@@ -15,7 +15,7 @@ public class MelterProcessor extends MultiblockProcessor<MelterRecipe, MelterCon
   }
 
   @Override
-  public void init() {
+  public MelterProcessor init() {
     initialized = true;
     Level level = entity == null ? Objects.requireNonNull(Minecraft.getInstance().level) : entity.getLevel();
     RecipeManager recipeManager = level == null ? Minecraft.getInstance().level.getRecipeManager() : level.getRecipeManager();
@@ -29,5 +29,6 @@ public class MelterProcessor extends MultiblockProcessor<MelterRecipe, MelterCon
       });
       this.futureRecipeID = null;
     }
+    return this;
   }
 }

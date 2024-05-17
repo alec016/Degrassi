@@ -2,6 +2,7 @@ package es.degrassi.forge.core.integration.jei.wrapper;
 
 import es.degrassi.forge.api.core.common.ElementDirection;
 import es.degrassi.forge.api.core.common.IComponent;
+import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.component.ProgressComponent;
 import es.degrassi.forge.core.common.element.ProgressElement;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
@@ -19,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ProgressWrapper extends ProgressElement implements IIngredientRenderer<ProgressComponent> {
   @Getter
-  private final MachineRecipe<?> recipe;
+  private MachineRecipe<?> recipe;
   private final boolean animated;
   public static final ProgressWrapper DUMMY = new ProgressWrapper(0, 0, null, null, ElementDirection.RIGHT, null, false) {
     @Override
@@ -40,21 +41,21 @@ public class ProgressWrapper extends ProgressElement implements IIngredientRende
   }
 
   @Override
-  public void render(GuiGraphics guiGraphics, ProgressComponent ingredient) {
-  }
+  public void render(GuiGraphics guiGraphics, ProgressComponent ingredient) {}
 
   @Override
-  public void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent iComponent) {
+  public void renderInJei(GuiGraphics guiGraphics, IRequirement<?> requirement, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent iComponent) {
     if (!(iComponent instanceof ProgressComponent component)) return;
+    this.recipe = recipe;
     component.setMaxProgress(recipe.getTime());
     if (animated) {
       component.tick();
-      super.renderInJei(guiGraphics, recipe, mouseX, mouseY, component);
+      super.renderInJei(guiGraphics, requirement, recipe, mouseX, mouseY, component);
       if (component.hasEnded()) component.resetProgress();
       return;
     }
     component.setProgress(recipe.getTime());
-    super.renderInJei(guiGraphics, recipe, mouseX, mouseY, component);
+    super.renderInJei(guiGraphics, requirement, recipe, mouseX, mouseY, component);
   }
 
   @Override

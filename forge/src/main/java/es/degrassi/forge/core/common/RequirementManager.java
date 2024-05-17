@@ -117,10 +117,4 @@ public class RequirementManager extends Manager<IRequirement<?>> {
   public List<IRequirement<?>> getByType(RequirementType<? extends IRequirement<?>> type) {
     return get().stream().filter(req -> req.getType().equals(type)).toList();
   }
-
-  @Override
-  public String toString() {
-    return "Requirement" + super.toString();
-  }
-
 }

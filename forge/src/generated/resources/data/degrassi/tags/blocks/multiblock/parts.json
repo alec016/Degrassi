@@ -1,0 +1,22 @@
+{
+  "values": [
+    "degrassi:energy_hatch_basic",
+    "degrassi:energy_hatch_advanced",
+    "degrassi:energy_hatch_extreme",
+    "degrassi:fluid_input_tank_basic",
+    "degrassi:fluid_input_tank_advanced",
+    "degrassi:fluid_input_tank_extreme",
+    "degrassi:quadruple_fluid_input_tank_basic",
+    "degrassi:quadruple_fluid_input_tank_advanced",
+    "degrassi:quadruple_fluid_input_tank_extreme",
+    "degrassi:fluid_output_tank_basic",
+    "degrassi:fluid_output_tank_advanced",
+    "degrassi:fluid_output_tank_extreme",
+    "degrassi:input_bus_basic",
+    "degrassi:input_bus_advanced",
+    "degrassi:input_bus_extreme",
+    "degrassi:output_bus_basic",
+    "degrassi:output_bus_advanced",
+    "degrassi:output_bus_extreme"
+  ]
+}

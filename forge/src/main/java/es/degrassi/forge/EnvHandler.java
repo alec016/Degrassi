@@ -11,6 +11,7 @@ import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.Flui
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.FluidOutputTankEntity;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.InputBusEntity;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.OutputBusEntity;
+import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.QuadrupleFluidInputTankEntity;
 import es.degrassi.forge.core.common.storage.energy.entity.EnergyCellEntity;
 import es.degrassi.forge.core.common.storage.fluid.entity.FluidTankEntity;
 import es.degrassi.forge.core.tiers.Chest;
@@ -73,6 +74,10 @@ public class EnvHandler {
 
   public FluidInputTankEntity createFluidInputTank(BlockPos pos, BlockState state, MultiblockPartStorage.Fluid.Input variant) {
     return new FluidInputTankEntity(pos, state, variant);
+  }
+
+  public QuadrupleFluidInputTankEntity createQuadrupleFluidInputTank(BlockPos pos, BlockState state, MultiblockPartStorage.Fluid.QuadrupleInput variant) {
+    return new QuadrupleFluidInputTankEntity(pos, state, variant);
   }
 
   public FluidOutputTankEntity createFluidOutputTank(BlockPos pos, BlockState state, MultiblockPartStorage.Fluid.Output variant) {

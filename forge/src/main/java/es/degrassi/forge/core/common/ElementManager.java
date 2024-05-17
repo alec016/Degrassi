@@ -6,10 +6,13 @@ import es.degrassi.forge.core.common.element.BarElement;
 import es.degrassi.forge.core.common.element.EnergyElement;
 import es.degrassi.forge.core.common.element.ExperienceElement;
 import es.degrassi.forge.core.common.element.FluidElement;
+import es.degrassi.forge.core.common.element.HeatElement;
 import es.degrassi.forge.core.common.element.ItemElement;
 import es.degrassi.forge.core.common.element.PlayerInventoryElement;
 import es.degrassi.forge.core.common.element.ProgressElement;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
+import es.degrassi.forge.core.common.wrapper.DegrassiFluidHandler;
+import es.degrassi.forge.core.common.wrapper.DegrassiItemStackHandler;
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.nbt.CompoundTag;
@@ -26,7 +29,8 @@ public final class ElementManager extends Manager<IElement<?>> implements INBTSe
   }
 
   public ElementManager(List<IElement<?>> elements, MachineEntity<?> entity) {
-    super(elements, entity);
+    this(entity);
+    elements.forEach(this::add);
   }
 
   public ElementManager addEnergy(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id, ElementDirection direction) {
@@ -110,13 +114,17 @@ public final class ElementManager extends Manager<IElement<?>> implements INBTSe
     return this;
   }
 
+  public ElementManager addBar(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id) {
+    return addBar(x, y, message, emptyTexture, filledTexture, id, ElementDirection.RIGHT);
+  }
+
   public ElementManager addBar(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id, ElementDirection direction) {
     addBar(x, y, message, emptyTexture, filledTexture, id, direction, true);
     return this;
   }
 
-  public ElementManager addBar(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id) {
-    return addBar(x, y, message, emptyTexture, filledTexture, id, ElementDirection.RIGHT, true);
+  public ElementManager addBar(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id, boolean jei) {
+    return addBar(x, y, message, emptyTexture, filledTexture, id, ElementDirection.RIGHT, jei);
   }
 
   public ElementManager addBar(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id, ElementDirection direction, boolean jei) {
@@ -124,8 +132,21 @@ public final class ElementManager extends Manager<IElement<?>> implements INBTSe
     return this;
   }
 
-  public ElementManager addBar(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id, boolean jei) {
-    return addBar(x, y, message, emptyTexture, filledTexture, id, ElementDirection.RIGHT, jei);
+  public ElementManager addHeat(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id) {
+    return addHeat(x, y, message, emptyTexture, filledTexture, id, ElementDirection.RIGHT);
+  }
+
+  public ElementManager addHeat(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id, boolean jei) {
+    return addHeat(x, y, message, emptyTexture, filledTexture, id, ElementDirection.RIGHT, jei);
+  }
+
+  public ElementManager addHeat(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id, ElementDirection direction) {
+    return addHeat(x, y, message, emptyTexture, filledTexture, id, direction, true);
+  }
+
+  public ElementManager addHeat(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id, ElementDirection direction, boolean jei) {
+    get().add(new HeatElement(this, x, y, emptyTexture, filledTexture, message, id, direction, jei));
+    return this;
   }
 
   public Optional<IElement<?>> getElement(String id) {
@@ -162,14 +183,14 @@ public final class ElementManager extends Manager<IElement<?>> implements INBTSe
     get().forEach(IElement::markDirty);
   }
 
-  @Override
-  public String toString() {
-    return "Element" + super.toString();
+  public ElementManager mergeWith(ElementManager other, boolean copy, MachineEntity<?> entity) {
+    ElementManager newManager = this;
+    other.get().forEach(element -> newManager.add(copy ? element.copy(newManager) : element));
+    return newManager;
   }
 
-  public ElementManager mergeWith(ElementManager other) {
-    ElementManager newManager = new ElementManager(get(), getEntity());
-    other.get().forEach(newManager::add);
-    return newManager;
+  public ElementManager copy(MachineEntity<?> entity, boolean copy) {
+    List<IElement<?>> elements = this.get().stream().map(element -> copy ? element.copy(this) : element).toList();
+    return new ElementManager(elements, entity);
   }
 }

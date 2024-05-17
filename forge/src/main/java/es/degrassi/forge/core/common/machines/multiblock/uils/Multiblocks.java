@@ -10,7 +10,7 @@ import net.minecraft.core.BlockPos;
 public abstract class Multiblocks {
   private static final Map<BlockPos, IMultiblockController<?, ?>> controllers = new LinkedHashMap<>();
 
-  public static void addController(IMultiblockController<?, ?> controller, BlockPos pos) {
+  public static <T extends IMultiblockController<?, ?>> void addController(T controller, BlockPos pos) {
     if (controllers.containsKey(pos) || controllers.containsValue(controller)) return;
     controllers.put(pos, controller);
   }
@@ -19,7 +19,7 @@ public abstract class Multiblocks {
     controllers.remove(pos);
   }
 
-  public static void removeController(IMultiblockController<?, ?> controller) {
+  public static <T extends IMultiblockController<?, ?>> void removeController(T controller) {
     AtomicReference<BlockPos> toRemove = new AtomicReference<>(null);
     controllers.forEach((pos, con) -> {
       if (con.equals(controller)) toRemove.set(pos);
@@ -27,7 +27,7 @@ public abstract class Multiblocks {
     if (toRemove.get() != null) controllers.remove(toRemove.get());
   }
 
-  public static void setController(IMultiblockController<?, ?> controller, BlockPos pos) {
+  public static <T extends IMultiblockController<?, ?>> void setController(T controller, BlockPos pos) {
     controllers.put(pos, controller);
   }
 
@@ -36,14 +36,14 @@ public abstract class Multiblocks {
   }
 
   @SuppressWarnings("unchecked")
-  public static <T extends IMultiblockController<?, ?>> List<T> getControllersForType(T type) {
-    return controllers.values().stream().filter(controller -> type.getClass().isInstance(controller)).map(controller -> (T) controller).toList();
+  public static <T extends IMultiblockController<?, ?>> List<T> getControllersForType(Class<T> type) {
+    return controllers.values().stream().filter(type::isInstance).map(controller -> (T) controller).toList();
   }
 
   @SuppressWarnings("unchecked")
-  public static <T extends IMultiblockController<?, ?>> Map<BlockPos, T> getControllersMapForType(T type) {
+  public static <T extends IMultiblockController<?, ?>> Map<BlockPos, T> getControllersMapForType(Class<T> type) {
     Map<BlockPos, T> map = new LinkedHashMap<>();
-    controllers.entrySet().stream().filter(entry -> type.getClass().isInstance(entry.getValue())).forEach(entry -> map.put(entry.getKey(), (T) entry.getValue()));
+    controllers.entrySet().stream().filter(entry -> type.isInstance(entry.getValue())).forEach(entry -> map.put(entry.getKey(), (T) entry.getValue()));
     return map;
   }
 

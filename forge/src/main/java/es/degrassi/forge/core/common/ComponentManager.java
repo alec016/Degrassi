@@ -1,5 +1,7 @@
 package es.degrassi.forge.core.common;
 
+import com.google.gson.JsonObject;
+import es.degrassi.common.utils.DegrassiLogger;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.core.common.component.BarComponent;
 import es.degrassi.forge.core.common.component.ComponentIOMode;
@@ -45,10 +47,11 @@ public final class ComponentManager extends Manager<IComponent> implements INBTS
   public ComponentManager(List<IComponent> components, MachineEntity<?> entity) {
     this(entity);
     components.forEach(component -> {
+      component = component.copy(entity, this);
       if (component instanceof DegrassiItemStackHandler handler) {
-        itemHandler.addAll(handler.getComponents());
+        itemHandler.addAll(handler.copy(entity, this).getComponents());
       } else if (component instanceof DegrassiFluidHandler handler) {
-        fluidHandler.addAll(handler.getComponents());
+        fluidHandler.addAll(handler.copy(entity, this).getComponents());
       } else {
         add(component);
       }
@@ -234,14 +237,10 @@ public final class ComponentManager extends Manager<IComponent> implements INBTS
     get().forEach(IComponent::markDirty);
   }
 
-  @Override
-  public String toString() {
-    return "Component" + super.toString();
-  }
-
-  public ComponentManager mergeWith(ComponentManager other) {
-    ComponentManager newManager = new ComponentManager(get(), getEntity());
+  public ComponentManager mergeWith(ComponentManager other, boolean copy, MachineEntity<?> entity) {
+    ComponentManager newManager = this;
     other.get().forEach(component -> {
+      component = copy ? component.copy(entity, newManager) : component;
       if (component instanceof DegrassiItemStackHandler handler) {
         newManager.getItemHandler().addAll(handler.getComponents());
       } else if (component instanceof DegrassiFluidHandler handler) {
@@ -253,5 +252,10 @@ public final class ComponentManager extends Manager<IComponent> implements INBTS
     newManager.initialized = false;
     newManager.init();
     return newManager;
+  }
+
+  public ComponentManager copy(MachineEntity<?> entity, boolean copy) {
+    List<IComponent> components = get().stream().map(component ->  copy ? component.copy(entity, this) : component).toList();
+    return new ComponentManager(components, entity);
   }
 }

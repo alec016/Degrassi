@@ -9,8 +9,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.material.Fluid;
 
 public class MelterRecipeBuilder extends MultiblockRecipeBuilder<MelterRecipe> {
-
-
   public static final NamedCodec<MelterRecipeBuilder> CODEC = NamedCodec.record(
     recipeBuilder -> recipeBuilder.group(
       NamedCodec.INT.fieldOf("time").forGetter(MelterRecipeBuilder::getTime),
@@ -30,7 +28,7 @@ public class MelterRecipeBuilder extends MultiblockRecipeBuilder<MelterRecipe> {
       .energy(energy)
       .input(itemInput, inputAmount)
       .output(fluidOutput, outputAmount)),
-    "furnace recipe"
+    "melter recipe"
   );
 
   private int energy, inputAmount, outputAmount;
@@ -47,7 +45,7 @@ public class MelterRecipeBuilder extends MultiblockRecipeBuilder<MelterRecipe> {
 
   public MelterRecipeBuilder energy(int energy) {
     this.energy = energy;
-    requireEnergyPerTick(energy, "energy");
+    requireEnergyPerTick(energy, "");
     return this;
   }
 
@@ -61,14 +59,14 @@ public class MelterRecipeBuilder extends MultiblockRecipeBuilder<MelterRecipe> {
   public MelterRecipeBuilder output(Fluid fluid, int amount) {
     this.output = fluid;
     this.outputAmount = amount;
-    produceFluid(fluid, amount, "fluid_output");
+    produceFluid(fluid, amount, "");
     return this;
   }
 
   @Override
   public MelterRecipe build(ResourceLocation id) {
     MelterRecipe recipe = new MelterRecipe(id, getTime(), getRequirements());
-    DegrassiLogger.INSTANCE.info("MelterRecipeBuilder$build -> recipe: {}", recipe);
+    DegrassiLogger.INSTANCE.info("MelterRecipeBuilder$build -> recipe: {}", recipe.asJson());
     return recipe;
   }
 }

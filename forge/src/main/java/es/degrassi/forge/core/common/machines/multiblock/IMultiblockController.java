@@ -5,7 +5,6 @@ import es.degrassi.forge.core.common.machines.multiblock.controller.block.entity
 import es.degrassi.forge.core.common.machines.multiblock.uils.StateMatcher;
 import java.util.Map;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 

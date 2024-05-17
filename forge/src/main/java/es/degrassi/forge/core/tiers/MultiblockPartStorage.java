@@ -3,7 +3,6 @@ package es.degrassi.forge.core.tiers;
 import es.degrassi.common.registry.IVariant;
 import java.util.Locale;
 import lombok.Getter;
-import net.minecraft.util.StringRepresentable;
 
 public abstract class MultiblockPartStorage {
   public interface MultiblockPartTieredSerialization<V extends Enum<V> & IVariant<V>> {
@@ -117,6 +116,49 @@ public abstract class MultiblockPartStorage {
 
       @Override
       public Output deserializeNBT(String nbt) {
+        return switch (nbt.toLowerCase(Locale.ROOT)) {
+          case "advanced" -> ADVANCED;
+          case "extreme" -> EXTREME;
+          default -> BASIC;
+        };
+      }
+    }
+
+    @Getter
+    public enum QuadrupleInput implements IVariant<QuadrupleInput>, MultiblockPartTieredSerialization<QuadrupleInput> {
+      BASIC(16_000),
+      ADVANCED(64_000),
+      EXTREME(128_000);
+
+      /**
+       * Capacity in mB
+       */
+      private final int capacity;
+
+      QuadrupleInput(int capacity) {
+        this.capacity = capacity;
+      }
+
+      public int getTankNumber() {
+        return 4;
+      }
+
+      @Override
+      public QuadrupleInput[] getVariants() {
+        return values();
+      }
+
+      public static QuadrupleInput[] getNormalVariants() {
+        return new QuadrupleInput[] { BASIC, ADVANCED, EXTREME };
+      }
+
+      @Override
+      public String serializeNBT() {
+        return nameL();
+      }
+
+      @Override
+      public QuadrupleInput deserializeNBT(String nbt) {
         return switch (nbt.toLowerCase(Locale.ROOT)) {
           case "advanced" -> ADVANCED;
           case "extreme" -> EXTREME;

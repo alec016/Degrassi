@@ -1,5 +1,6 @@
 package es.degrassi.forge.core.common.machines.entity;
 
+import com.google.gson.JsonObject;
 import es.degrassi.common.utils.DegrassiLogger;
 import es.degrassi.forge.core.common.ComponentManager;
 import es.degrassi.forge.core.common.ElementManager;
@@ -13,6 +14,7 @@ import es.degrassi.forge.core.common.processor.MachineProcessor;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import es.degrassi.forge.core.common.wrapper.DegrassiFluidHandler;
 import es.degrassi.forge.core.common.wrapper.DegrassiItemStackHandler;
+import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 import lombok.Getter;
@@ -39,13 +41,14 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
   protected DegrassiFluidHandler fluidHandler;
   protected DegrassiItemStackHandler itemHandler;
   @Getter
-  protected final ComponentManager componentManager;
+  protected final ComponentManager componentManager, jeiComponentManager;
   @Getter
-  protected final ElementManager elementManager;
+  protected final ElementManager elementManager, jeiElementManager;
   @Getter
   @Nullable
   protected MachineProcessor<R, ? extends MachineEntity<R>> processor = null;
   @Getter
+  @Nullable
   protected MachineStatus status = null;
   @Getter
   protected Component errorMessage = Component.empty();
@@ -53,10 +56,13 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
   public MachineEntity(BlockEntityType<?> type, BlockPos pos, BlockState blockState) {
     super(type, pos, blockState);
     this.componentManager = new ComponentManager(this);
+    this.jeiComponentManager = new ComponentManager(this);
     this.elementManager = new ElementManager(this);
+    this.jeiElementManager = new ElementManager(this);
 
-    if(blockState.hasProperty(MachineBlock.STATUS)) {
+    if (blockState.hasProperty(MachineBlock.STATUS)) {
       componentManager.addProgress();
+      jeiComponentManager.addProgress();
       status = MachineStatus.IDLE;
     }
 
@@ -83,7 +89,9 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
   public void load(@NotNull CompoundTag tag) {
     super.load(tag);
     componentManager.deserializeNBT(tag.getList("componentManager", CompoundTag.TAG_COMPOUND));
+    jeiComponentManager.deserializeNBT(tag.getList("jeiComponentManager", CompoundTag.TAG_COMPOUND));
     elementManager.deserializeNBT(tag.getList("elementManager", CompoundTag.TAG_COMPOUND));
+    jeiElementManager.deserializeNBT(tag.getList("jeiElementManager", CompoundTag.TAG_COMPOUND));
     if (tag.contains("processor") && processor != null) processor.deserializeNBT(tag.getCompound("processor"));
     if (tag.contains("status")) status = MachineStatus.value(tag.getString("status"));
     errorMessage = Component.literal(tag.getString("errorMessage"));
@@ -93,7 +101,9 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
   protected void saveAdditional(@NotNull CompoundTag tag) {
     super.saveAdditional(tag);
     tag.put("componentManager", componentManager.serializeNBT());
+    tag.put("jeiComponentManager", jeiComponentManager.serializeNBT());
     tag.put("elementManager", elementManager.serializeNBT());
+    tag.put("jeiElementManager", jeiElementManager.serializeNBT());
     if (processor != null) tag.put("processor", processor.serializeNBT());
     if (status != null) tag.putString("status", status.getSerializedName());
     tag.putString("errorMessage", errorMessage.getString());
@@ -124,7 +134,7 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
   @Override
   public void onLoad() {
     super.onLoad();
-    getComponentManager()
+    componentManager
       .get()
       .stream()
       .filter(component -> component instanceof EnergyComponent)
@@ -133,7 +143,7 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
       .ifPresent(energy -> lazyEnergyHandler = LazyOptional.of(() -> energy));
 
 
-    getComponentManager()
+    componentManager
       .get()
       .stream()
       .filter(component -> component instanceof HeatComponent)
@@ -141,11 +151,11 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
       .findFirst()
       .ifPresent(heat -> lazyHeatHandler = LazyOptional.of(() -> heat));
 
-    if (!getComponentManager().getItemHandler().getComponents().isEmpty()) {
+    if (!componentManager.getItemHandler().getComponents().isEmpty()) {
       lazyItemHandler = LazyOptional.of(() -> itemHandler);
     }
 
-    if(!getComponentManager().getFluidHandler().getComponents().isEmpty()) {
+    if(!componentManager.getFluidHandler().getComponents().isEmpty()) {
       lazyFluidHandler = LazyOptional.of(() -> fluidHandler);
     }
   }
@@ -184,23 +194,26 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
       case RUNNING -> entity.getProcessor().tick();
       case ERROR -> {
         DegrassiLogger.INSTANCE.info("error occurred: {}", entity.errorMessage.getString());
-        entity.getComponentManager().getComponent("progress").map(component -> (ProgressComponent) component).ifPresent(component -> {
+        entity.getProgress().ifPresent(component -> {
           if (entity.getProcessor().shouldReset()) {
             component.resetProgress();
+            return;
           }
           Timer timer = new Timer();
           timer.schedule(new TimerTask() {
             @Override
             public void run() {
               entity.setRunning();
-              this.cancel();
-              timer.cancel();
             }
-          }, 1000);
+          }, 10000);
         });
       }
     }
     setChanged(level, pos, state);
+  }
+
+  public Optional<ProgressComponent> getProgress() {
+    return getComponentManager().getComponent("progress").map(component -> (ProgressComponent) component);
   }
 
   @Override
@@ -234,5 +247,24 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
 
   public boolean dummy() {
     return false;
+  }
+
+  public abstract MachineEntity<R> copy(boolean dummy);
+
+
+  @Override
+  public String toString() {
+    return asJson().toString();
+  }
+
+  public JsonObject asJson() {
+    JsonObject json = new JsonObject();
+    json.add("componentManager", componentManager.asJson());
+    json.add("elementManager", elementManager.asJson());
+    if (processor != null) json.add("processor", processor.asJson());
+    if (status != null) json.addProperty("status", status.getSerializedName());
+    json.addProperty("errorMessage", errorMessage.getString());
+    json.addProperty("dummy", dummy());
+    return json;
   }
 }

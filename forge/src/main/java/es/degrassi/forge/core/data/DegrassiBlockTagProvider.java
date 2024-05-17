@@ -10,6 +10,7 @@ import java.util.concurrent.CompletableFuture;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
@@ -40,17 +41,39 @@ public class DegrassiBlockTagProvider extends BlockTagsProvider {
     this.tag(DegrassiTags.Blocks.MACHINE.get())
       .addTag(DegrassiTags.Blocks.FURNACE.get())
       .addTag(DegrassiTags.Blocks.CHEST.get())
-      .addTag(DegrassiTags.Blocks.SP.get());
+      .addTag(DegrassiTags.Blocks.SP.get())
+      .addTag(DegrassiTags.Blocks.CONTROLLER.get());
+
+    this.tag(DegrassiTags.Blocks.FRAME.get())
+      .add(BlockRegistration.MELTER_FRAME.get());
+
+    this.tag(DegrassiTags.Blocks.MBPARTS.get())
+      .add(BlockRegistration.ENERGY_HATCH.getArr(Block[]::new))
+      .add(BlockRegistration.FLUID_INPUT_TANK.getArr(Block[]::new))
+      .add(BlockRegistration.QUADRUPLE_FLUID_INPUT_TANK.getArr(Block[]::new))
+      .add(BlockRegistration.FLUID_OUTPUT_TANK.getArr(Block[]::new))
+      .add(BlockRegistration.INPUT_BUS.getArr(Block[]::new))
+      .add(BlockRegistration.OUTPUT_BUS.getArr(Block[]::new));
+
+    this.tag(DegrassiTags.Blocks.CONTROLLER.get())
+      .add(BlockRegistration.MELTER_CONTROLLER.get());
+
+    this.tag(DegrassiTags.Blocks.MULTIBLOCK.get())
+      .addTag(DegrassiTags.Blocks.CONTROLLER.get())
+      .addTag(DegrassiTags.Blocks.MBPARTS.get())
+      .addTag(DegrassiTags.Blocks.FRAME.get());
 
     this.tag(BlockTags.NEEDS_IRON_TOOL)
       .addTag(DegrassiTags.Blocks.FURNACE.get())
       .addTag(DegrassiTags.Blocks.CHEST.get())
-      .addTag(DegrassiTags.Blocks.SP.get());
+      .addTag(DegrassiTags.Blocks.SP.get())
+      .addTag(DegrassiTags.Blocks.MULTIBLOCK.get());
 
     this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
       .addTag(DegrassiTags.Blocks.FURNACE.get())
       .addTag(DegrassiTags.Blocks.SP.get())
-      .addTag(DegrassiTags.Blocks.CHEST.get());
+      .addTag(DegrassiTags.Blocks.CHEST.get())
+      .addTag(DegrassiTags.Blocks.MULTIBLOCK.get());
 
     this.tag(BlockTags.MINEABLE_WITH_AXE)
       .addTag(DegrassiTags.Blocks.CHEST.get());

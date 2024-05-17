@@ -14,9 +14,11 @@ import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class MachineScreen<T extends MachineContainer<?>> extends AbstractContainerScreen<T> {
+  protected static final int defaultColor = 4210752;
   protected final ResourceLocation background;
   protected final ElementManager manager;
   protected final Player player;
+
   public MachineScreen(T menu, Inventory playerInventory, Component title, ResourceLocation background) {
     super(menu, playerInventory, title);
     this.player = playerInventory.player;
@@ -60,6 +62,6 @@ public abstract class MachineScreen<T extends MachineContainer<?>> extends Abstr
 
   @Override
   protected void renderLabels(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY) {
-    guiGraphics.drawString(font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false);
+    guiGraphics.drawString(font, this.title, this.titleLabelX, this.titleLabelY, defaultColor, false);
   }
 }

@@ -12,9 +12,15 @@ import es.degrassi.forge.core.common.machines.container.SolarPanelContainer;
 import es.degrassi.forge.core.common.machines.multiblock.controller.client.container.MelterContainer;
 import es.degrassi.forge.core.common.machines.multiblock.controller.client.screen.MelterScreen;
 import es.degrassi.forge.core.common.machines.multiblock.parts.client.container.EnergyHatchContainer;
+import es.degrassi.forge.core.common.machines.multiblock.parts.client.container.FluidInputTankContainer;
+import es.degrassi.forge.core.common.machines.multiblock.parts.client.container.FluidOutputTankContainer;
+import es.degrassi.forge.core.common.machines.multiblock.parts.client.container.FluidQuadrupleInputTankContainer;
 import es.degrassi.forge.core.common.machines.multiblock.parts.client.container.InputBusContainer;
 import es.degrassi.forge.core.common.machines.multiblock.parts.client.container.OutputBusContainer;
 import es.degrassi.forge.core.common.machines.multiblock.parts.client.screen.EnergyHatchScreen;
+import es.degrassi.forge.core.common.machines.multiblock.parts.client.screen.FluidInputTankScreen;
+import es.degrassi.forge.core.common.machines.multiblock.parts.client.screen.FluidOutputTankScreen;
+import es.degrassi.forge.core.common.machines.multiblock.parts.client.screen.FluidQuadrupleInputTankScreen;
 import es.degrassi.forge.core.common.machines.multiblock.parts.client.screen.InputBusScreen;
 import es.degrassi.forge.core.common.machines.multiblock.parts.client.screen.OutputBusScreen;
 import es.degrassi.forge.core.common.machines.screen.ChestScreen;
@@ -40,6 +46,10 @@ public class ContainerRegistration {
   public static final RegistrySupplier<MenuType<OutputBusContainer>> OUTPUT_BUS = registerMenuType("output_bus", OutputBusContainer::new);
 
   public static final RegistrySupplier<MenuType<EnergyHatchContainer>> ENERGY_HATCH = registerMenuType("energy_hatch", EnergyHatchContainer::new);
+
+  public static final RegistrySupplier<MenuType<FluidInputTankContainer>> FLUID_INPUT_TANK = registerMenuType("fluid_input_tank", FluidInputTankContainer::new);
+  public static final RegistrySupplier<MenuType<FluidOutputTankContainer>> FLUID_OUTPUT_TANK = registerMenuType("fluid_output_tank", FluidOutputTankContainer::new);
+  public static final RegistrySupplier<MenuType<FluidQuadrupleInputTankContainer>> FLUID_QUADRUPLE_INPUT_TANK = registerMenuType("fluid_quadruple_tank", FluidQuadrupleInputTankContainer::new);
 
   public static void registerScreens() {
     MenuRegistry.registerScreenFactory(
@@ -69,6 +79,18 @@ public class ContainerRegistration {
     MenuRegistry.registerScreenFactory(
       ContainerRegistration.ENERGY_HATCH.get(),
       EnergyHatchScreen::new
+    );
+    MenuRegistry.registerScreenFactory(
+      ContainerRegistration.FLUID_INPUT_TANK.get(),
+      FluidInputTankScreen::new
+    );
+    MenuRegistry.registerScreenFactory(
+      ContainerRegistration.FLUID_OUTPUT_TANK.get(),
+      FluidOutputTankScreen::new
+    );
+    MenuRegistry.registerScreenFactory(
+      ContainerRegistration.FLUID_QUADRUPLE_INPUT_TANK.get(),
+      FluidQuadrupleInputTankScreen::new
     );
     DegrassiBook.register();
   }

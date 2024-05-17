@@ -1,7 +1,7 @@
 package es.degrassi.forge.core.common.machines.multiblock.parts.block.entity;
 
 import es.degrassi.common.DegrassiLocation;
-import es.degrassi.forge.core.common.component.ComponentIOMode;
+import es.degrassi.forge.core.common.machines.multiblock.parts.block.FluidInputTank;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.InputBus;
 import es.degrassi.forge.core.common.machines.multiblock.uils.handler.ItemSidedHandler;
 import es.degrassi.forge.core.init.BlockRegistration;
@@ -24,12 +24,8 @@ import org.jetbrains.annotations.Nullable;
 @Getter
 @Setter
 public class OutputBusEntity extends BaseMultiblockPartEntity<MultiblockPartStorage.Item.Output> {
-  public static final OutputBusEntity DUMMY = new OutputBusEntity(BlockPos.ZERO, BlockRegistration.OUTPUT_BUS.get(MultiblockPartStorage.Item.Output.BASIC).defaultBlockState(), MultiblockPartStorage.Item.Output.BASIC) {
-    @Override
-    public boolean dummy() {
-      return true;
-    }
-  };
+  public static final OutputBusEntity DUMMY = dummyEntity();
+
   private final Map<Direction, LazyOptional<ItemSidedHandler>> itemWrapperHandlerMap;
 
   public OutputBusEntity(BlockPos pos, BlockState blockState, MultiblockPartStorage.Item.Output variant) {
@@ -40,9 +36,18 @@ public class OutputBusEntity extends BaseMultiblockPartEntity<MultiblockPartStor
     for (i = 0; i < variant.getRows(); i++)
       for (j = 0; j < variant.getCols(); j++) {
         id = "output_bus_" + k;
-        getComponentManager().addItem(id, ComponentIOMode.OUTPUT);
+        componentManager.addItem(id);
+        jeiComponentManager.addItem(id);
 
-        getElementManager()
+        elementManager
+          .addItem(
+            7 + (j + 3) * 18,
+            20 + i * 18,
+            Component.literal(id),
+            new DegrassiLocation("textures/gui/base_slot.png"),
+            id
+          );
+        jeiElementManager
           .addItem(
             7 + (j + 3) * 18,
             20 + i * 18,
@@ -54,59 +59,17 @@ public class OutputBusEntity extends BaseMultiblockPartEntity<MultiblockPartStor
       }
 
 
-    getElementManager().addPlayerInventory(
+    elementManager.addPlayerInventory(
       7,
       30 + i * 18,
       Component.literal("player_inventory"),
       new DegrassiLocation("textures/gui/base_inventory.png")
     );
 
-    itemHandler = getComponentManager().getItemHandler();
+    itemHandler = componentManager.getItemHandler();
     lazyItemHandler = LazyOptional.of(() -> itemHandler);
-    itemWrapperHandlerMap = Map.of(
-      Direction.UP, LazyOptional.of(() -> new ItemSidedHandler(
-        getComponentManager(),
-        itemHandler,
-        getBlockState().getValue(InputBus.FACING),
-        null,
-        Direction.UP
-      )),
-      Direction.DOWN, LazyOptional.of(() -> new ItemSidedHandler(
-        getComponentManager(),
-        itemHandler,
-        getBlockState().getValue(InputBus.FACING),
-        null,
-        Direction.DOWN
-      )),
-      Direction.NORTH, LazyOptional.of(() -> new ItemSidedHandler(
-        getComponentManager(),
-        itemHandler,
-        getBlockState().getValue(InputBus.FACING),
-        null,
-        Direction.NORTH
-      )),
-      Direction.SOUTH, LazyOptional.of(() -> new ItemSidedHandler(
-        getComponentManager(),
-        itemHandler,
-        getBlockState().getValue(InputBus.FACING),
-        null,
-        Direction.SOUTH
-      )),
-      Direction.EAST, LazyOptional.of(() -> new ItemSidedHandler(
-        getComponentManager(),
-        itemHandler,
-        getBlockState().getValue(InputBus.FACING),
-        null,
-        Direction.EAST
-      )),
-      Direction.WEST, LazyOptional.of(() -> new ItemSidedHandler(
-        getComponentManager(),
-        itemHandler,
-        getBlockState().getValue(InputBus.FACING),
-        null,
-        Direction.WEST
-      ))
-    );
+
+    itemWrapperHandlerMap = ItemSidedHandler.DEFAULT_ALL_EXTRACT(componentManager, itemHandler, getBlockState().getValue(FluidInputTank.FACING));
   }
 
   @Override
@@ -136,5 +99,18 @@ public class OutputBusEntity extends BaseMultiblockPartEntity<MultiblockPartStor
   @Override
   public void load(@NotNull CompoundTag tag) {
     super.load(tag);
+  }
+
+  public OutputBusEntity copy(boolean dummy) {
+    return dummy ? dummyEntity() : new OutputBusEntity(getBlockPos(), getBlockState(), getVariant());
+  }
+
+  public static OutputBusEntity dummyEntity() {
+    return new OutputBusEntity(BlockPos.ZERO, BlockRegistration.OUTPUT_BUS.get(MultiblockPartStorage.Item.Output.BASIC).defaultBlockState(), MultiblockPartStorage.Item.Output.BASIC) {
+      @Override
+      public boolean dummy() {
+        return true;
+      }
+    };
   }
 }

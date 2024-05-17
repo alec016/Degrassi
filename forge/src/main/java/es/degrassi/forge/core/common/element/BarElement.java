@@ -1,16 +1,18 @@
 package es.degrassi.forge.core.common.element;
 
-import es.degrassi.common.utils.DegrassiLogger;
+import com.google.gson.JsonObject;
 import es.degrassi.forge.api.core.common.ElementDirection;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IElement;
 import es.degrassi.common.utils.TextureSizeHelper;
+import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.component.BarComponent;
-import es.degrassi.forge.core.common.component.EnergyComponent;
+import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import java.util.List;
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -24,12 +26,15 @@ import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 @Getter
+@Setter
 public class BarElement extends AbstractWidget implements IElement<BarComponent> {
-  private ResourceLocation emptyTexture, filledTexture;
-  private final ElementManager manager;
-  private final String id;
-  private final ElementDirection direction;
-  private final boolean jei;
+  protected ResourceLocation emptyTexture, filledTexture;
+  protected final ElementManager manager;
+  protected final String id;
+  protected final ElementDirection direction;
+  protected final boolean jei;
+
+  private IRequirement<BarComponent> requirement;
 
   public BarElement(ElementManager manager, int x, int y, ResourceLocation emptyTexture, ResourceLocation filledTexture, Component message, String id,
                     ElementDirection direction, boolean jei) {
@@ -63,7 +68,7 @@ public class BarElement extends AbstractWidget implements IElement<BarComponent>
 
   @Override
   public void renderTooltip(GuiGraphics guiGraphics, int x, int y) {
-    BarComponent component = (BarComponent) manager.getEntity().getComponentManager().getComponent(id).orElse(null);;
+    BarComponent component = (BarComponent) manager.getEntity().getComponentManager().getComponent(id).orElse(null);
     if (component == null) return;
 
     if (this.isMouseOver(x, y)) {
@@ -114,7 +119,7 @@ public class BarElement extends AbstractWidget implements IElement<BarComponent>
   }
 
   @Override
-  public void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent iComponent) {
+  public void renderInJei(GuiGraphics guiGraphics, IRequirement<?> requirement, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent iComponent) {
     if (!jei) return;
     if (!(iComponent instanceof BarComponent component)) return;
     renderTexture(guiGraphics, emptyTexture, getX(), getY(), 0, 0, 0, getWidth(), getHeight(), getWidth(), getHeight());
@@ -127,7 +132,23 @@ public class BarElement extends AbstractWidget implements IElement<BarComponent>
     renderTexture(guiGraphics, filledTexture, getX() + xOffset, getY() + yOffset, xOffset, yOffset, 0, width, height, textureWidth, textureHeight);
   }
 
-  public boolean jei() {
-    return jei;
+  @Override
+  public BarElement copy(ElementManager manager) {
+    return new BarElement(manager, getX(), getY(), emptyTexture, filledTexture, getMessage(), id, direction, jei);
+  }
+
+  @Override
+  public String toString() {
+    return asJson().toString();
+  }
+
+  public JsonObject asJson() {
+    JsonObject json = new JsonObject();
+    asJson(json);
+    json.addProperty("width", width);
+    json.addProperty("height", height);
+    json.addProperty("emptyTexture", emptyTexture.toString());
+    json.addProperty("filledTexture", filledTexture.toString());
+    return json;
   }
 }

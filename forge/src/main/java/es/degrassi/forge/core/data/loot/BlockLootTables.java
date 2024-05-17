@@ -45,6 +45,9 @@ public class BlockLootTables extends BlockLootSubProvider {
     for (MultiblockPartStorage.Fluid.Input tier : MultiblockPartStorage.Fluid.Input.values()) {
       dropSelf(BlockRegistration.FLUID_INPUT_TANK.get(tier));
     }
+    for (MultiblockPartStorage.Fluid.QuadrupleInput tier : MultiblockPartStorage.Fluid.QuadrupleInput.values()) {
+      dropSelf(BlockRegistration.QUADRUPLE_FLUID_INPUT_TANK.get(tier));
+    }
     for (MultiblockPartStorage.Fluid.Output tier : MultiblockPartStorage.Fluid.Output.values()) {
       dropSelf(BlockRegistration.FLUID_OUTPUT_TANK.get(tier));
     }

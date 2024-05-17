@@ -1,10 +1,13 @@
 package es.degrassi.forge.core.common.wrapper;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ComponentManager;
 import es.degrassi.forge.core.common.component.ComponentIOMode;
 import es.degrassi.forge.core.common.component.FluidComponent;
+import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.common.requirement.FluidRequirement;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -19,20 +22,38 @@ import net.minecraft.nbt.Tag;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 @Getter
 public class DegrassiFluidHandler implements IFluidHandler, IComponent {
   private final List<FluidComponent> components;
   private final ComponentManager manager;
-  @Nullable
-  private FluidComponent currentComponent;
-  private int currentIndex = -1;
+  private final AtomicInteger count = new AtomicInteger(0);
+  private final String id = "fluidHandler";
 
   public DegrassiFluidHandler(ComponentManager manager) {
     components = new LinkedList<>();
     this.manager = manager;
   }
+
+  @Override
+  public void markDirty() {
+    components.forEach(IComponent::markDirty);
+  }
+
+  public void onContentsChanged() {
+    markDirty();
+  }
+
+  public void add(FluidComponent component) {
+    count.getAndIncrement();
+    this.components.add(component);
+  }
+
+  public void addAll(Collection<FluidComponent> components) {
+    count.getAndAdd(components.size());
+    this.components.addAll(components);
+  }
+
   @Override
   public int getTanks() {
     return components.size();
@@ -55,12 +76,15 @@ public class DegrassiFluidHandler implements IFluidHandler, IComponent {
 
   @Override
   public int fill(FluidStack resource, FluidAction action) {
-    if (components.stream().anyMatch(comp -> comp.getMode().output())) return 0;
+    AtomicBoolean hasThisFluid = new AtomicBoolean(false);
     for (int i = 0; i < components.size(); i++) {
-      currentComponent = components.get(i);
-      currentIndex = i;
-      FluidStack fluid = currentComponent.getFluid();
-      int capacity = currentComponent.getCapacity();
+      if (components.get(i).getMode().output()) continue;
+      FluidComponent component = components.get(i);
+      if (component.getFluid().isFluidEqual(resource))
+        hasThisFluid.set(true);
+      else if (hasThisFluid.get()) continue;
+      FluidStack fluid = component.getFluid();
+      int capacity = component.getCapacity();
       if (resource.isEmpty() || !isFluidValid(i, resource)) {
         continue;
       }
@@ -75,7 +99,7 @@ public class DegrassiFluidHandler implements IFluidHandler, IComponent {
       }
       if (fluid.isEmpty()) {
         fluid = new FluidStack(resource, Math.min(capacity, resource.getAmount()));
-        currentComponent.setFluid(fluid);
+        component.setFluid(fluid);
         onContentsChanged();
         return fluid.getAmount();
       }
@@ -87,81 +111,34 @@ public class DegrassiFluidHandler implements IFluidHandler, IComponent {
       if (resource.getAmount() < filled) {
         fluid.grow(resource.getAmount());
         filled = resource.getAmount();
-      }
-      else {
+      } else {
         fluid.setAmount(capacity);
       }
-      if (filled > 0)
-        onContentsChanged();
-      currentIndex = -1;
-      currentComponent = null;
+      onContentsChanged();
       return filled;
     }
-    currentIndex = -1;
-    currentComponent = null;
+    onContentsChanged();
     return 0;
   }
 
   @Override
   public @NotNull FluidStack drain(FluidStack resource, FluidAction action) {
-    if (components.stream().anyMatch(comp -> comp.getMode().input())) return FluidStack.EMPTY;
-    for (int i = 0; i < components.size(); i++) {
-      FluidComponent component = components.get(i);
-      FluidStack fluid = component.getFluid();
-      if (resource.isEmpty() || !resource.isFluidEqual(fluid)) {
-        currentIndex = -1;
-        continue;
-      }
-      currentIndex = i;
-      currentComponent = component;
-      return drain(resource.getAmount(), action);
+    FluidStack stack = FluidStack.EMPTY;
+    if (resource.isEmpty()) return stack;
+    for (FluidComponent component : components) {
+      if (!stack.isEmpty()) continue;
+      if (component.getFluid().isEmpty()) continue;
+      if (!component.getFluid().isFluidEqual(resource)) continue;
+      FluidStack drained = component.drain(resource, action);
+      if (!drained.isEmpty() && drained.getAmount() > 0)
+        stack = drained;
     }
-    currentIndex = -1;
-    currentComponent = null;
-    return FluidStack.EMPTY;
+    return stack;
   }
 
   @Override
   public @NotNull FluidStack drain(int maxDrain, FluidAction action) {
-    if (components.stream().anyMatch(comp -> comp.getMode().input())) return FluidStack.EMPTY;
-    if (currentComponent == null) return FluidStack.EMPTY;
-    int drained = maxDrain;
-    FluidStack fluid = currentComponent.getFluid();
-    if (fluid.getAmount() < drained) {
-      drained = fluid.getAmount();
-    }
-    FluidStack stack = new FluidStack(fluid, drained);
-    if (action.execute() && drained > 0) {
-      fluid.shrink(drained);
-      onContentsChanged();
-    }
-    currentIndex = -1;
-    currentComponent = null;
-    return stack;
-  }
-
-  public void onContentsChanged() {
-    markDirty();
-    currentIndex = -1;
-    currentComponent = null;
-  }
-
-  public void add(FluidComponent component) {
-    this.components.add(component);
-  }
-
-  public void addAll(Collection<FluidComponent> components) {
-    this.components.addAll(components);
-  }
-
-  @Override
-  public void markDirty() {
-    components.forEach(IComponent::markDirty);
-  }
-
-  @Override
-  public String getId() {
-    return "fluidHandler";
+    return FluidStack.EMPTY;
   }
 
   @Override
@@ -186,19 +163,18 @@ public class DegrassiFluidHandler implements IFluidHandler, IComponent {
   }
 
   @Override
-  public void setMode(ComponentIOMode mode) {
-
-  }
-
-  @Override
-  public void serialize(CompoundTag nbt) {
-  }
+  public void setMode(ComponentIOMode mode) {}
 
   @Override
   public CompoundTag serialize() {
     CompoundTag nbt = new CompoundTag();
     ListTag listTag = new ListTag();
-    components.forEach(component -> listTag.add(component.serialize()));
+    CompoundTag compound;
+    for (int i = 0; i < components.size(); i++) {
+      compound = components.get(i).serialize();
+      compound.putInt("Slot", i);
+      listTag.add(i, compound);
+    }
     nbt.put("list", listTag);
     nbt.putString("id", getId());
     nbt.putInt("Size", components.size());
@@ -207,14 +183,19 @@ public class DegrassiFluidHandler implements IFluidHandler, IComponent {
 
   @Override
   public void deserialize(CompoundTag nbt) {
+    setSize(nbt.contains("Size") ? nbt.getInt("Size") : components.size());
+
     ListTag listTag = nbt.getList("list", Tag.TAG_COMPOUND);
-    listTag.forEach(tag -> {
-      if (tag instanceof CompoundTag fluidNbt) {
-        if (fluidNbt.contains("id", Tag.TAG_STRING)) {
-          components.stream().filter(component -> component.getId().equals(fluidNbt.getString("id"))).findFirst().ifPresent(component -> component.deserialize(fluidNbt));
-        }
-      }
-    });
+
+    for (int i = 0; i < listTag.size(); i++) {
+      CompoundTag itemNbt = listTag.getCompound(i);
+      int slot = itemNbt.getInt("Slot");
+      FluidComponent component = components.get(slot);
+      if (component == null)
+        components.set(slot, new FluidComponent(getManager(), itemNbt.getString("id"), false, 0, getManager().getEntity(), null));
+      component = components.get(slot);
+      component.deserialize(itemNbt);
+    }
   }
 
   @Override
@@ -243,10 +224,9 @@ public class DegrassiFluidHandler implements IFluidHandler, IComponent {
   // recipe stuff
   public int fillRecipe(FluidStack resource, FluidAction action) {
     for (int i = 0; i < components.size(); i++) {
-      currentComponent = components.get(i);
-      currentIndex = i;
-      FluidStack fluid = currentComponent.getFluid();
-      int capacity = currentComponent.getCapacity();
+      FluidComponent component = components.get(i);
+      FluidStack fluid = component.getFluid();
+      int capacity = component.getCapacity();
       if (resource.isEmpty() || !isFluidValid(i, resource)) {
         continue;
       }
@@ -261,7 +241,7 @@ public class DegrassiFluidHandler implements IFluidHandler, IComponent {
       }
       if (fluid.isEmpty()) {
         fluid = new FluidStack(resource, Math.min(capacity, resource.getAmount()));
-        currentComponent.setFluid(fluid);
+        component.setFluid(fluid);
         onContentsChanged();
         return fluid.getAmount();
       }
@@ -279,53 +259,55 @@ public class DegrassiFluidHandler implements IFluidHandler, IComponent {
       }
       if (filled > 0)
         onContentsChanged();
-      currentIndex = -1;
-      currentComponent = null;
       return filled;
     }
-    currentIndex = -1;
-    currentComponent = null;
     return 0;
   }
 
   public @NotNull FluidStack drainRecipe(int maxDrain, FluidAction action) {
-    if (currentComponent == null) return FluidStack.EMPTY;
-    int drained = maxDrain;
-    FluidStack fluid = currentComponent.getFluid();
-    if (fluid.getAmount() < drained) {
-      drained = fluid.getAmount();
-    }
-    FluidStack stack = new FluidStack(fluid, drained);
-    if (action.execute() && drained > 0) {
-      fluid.shrink(drained);
-      onContentsChanged();
-    }
-    currentIndex = -1;
-    currentComponent = null;
-    return stack;
+    return FluidStack.EMPTY;
   }
 
   public @NotNull FluidStack drainRecipe(FluidStack resource, FluidAction action) {
-    for (int i = 0; i < components.size(); i++) {
-      FluidComponent component = components.get(i);
-      FluidStack fluid = component.getFluid();
-      if (resource.isEmpty() || !resource.isFluidEqual(fluid)) {
-        currentIndex = -1;
-        continue;
-      }
-      currentIndex = i;
-      currentComponent = component;
-      return drain(resource.getAmount(), action);
+    FluidStack stack = FluidStack.EMPTY;
+    if (resource.isEmpty()) return stack;
+    for (FluidComponent component : components) {
+      if (!stack.isEmpty()) continue;
+      if (component.getFluid().isEmpty()) continue;
+      if (!component.getFluid().isFluidEqual(resource)) continue;
+      FluidStack drained = component.drainRecipe(resource, action);
+      if (!drained.isEmpty() && drained.getAmount() > 0)
+        stack = drained;
     }
-    currentIndex = -1;
-    currentComponent = null;
-    return FluidStack.EMPTY;
+    return stack;
+  }
+
+  public void setSize(int size) {
+    while (components.size() < size) {
+      components.add(null);
+    }
+    count.set(components.size());
   }
 
   @Override
   public String toString() {
-    return "DegrassiFluidHandler{" +
-      "components=" + components +
-      '}';
+    return asJson().toString();
+  }
+
+  public JsonObject asJson() {
+    JsonObject json = new JsonObject();
+    JsonArray components = new JsonArray();
+    this.components.forEach(component -> components.add(component.asJson()));
+    json.add("components", components);
+    json.addProperty("size", components.size());
+    json.addProperty("type", "fluidHandler");
+    return json;
+  }
+
+  @Override
+  public DegrassiFluidHandler copy(MachineEntity<?> entity, ComponentManager manager) {
+    DegrassiFluidHandler handler = new DegrassiFluidHandler(manager);
+    handler.addAll(components.stream().map(component -> component.copy(entity, manager)).toList());
+    return handler;
   }
 }

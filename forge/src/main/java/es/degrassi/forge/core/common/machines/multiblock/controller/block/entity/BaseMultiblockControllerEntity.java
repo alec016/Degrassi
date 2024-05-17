@@ -1,5 +1,6 @@
 package es.degrassi.forge.core.common.machines.multiblock.controller.block.entity;
 
+import com.google.gson.JsonObject;
 import es.degrassi.forge.core.common.ComponentManager;
 import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
@@ -43,6 +44,9 @@ public abstract class BaseMultiblockControllerEntity<
   private boolean valid = false;
   private int cacheValidate = 0;
   private Direction initialDirection;
+
+  private ComponentManager unifiedComponentManager;
+  private ElementManager unifiedElementManager;
 
   public BaseMultiblockControllerEntity(BlockEntityType<? extends BaseMultiblockControllerEntity<R, B, E>> type, BlockPos pos, BlockState blockState, BaseMultiblockControllerBlock block) {
     super(type, pos, blockState);
@@ -102,6 +106,17 @@ public abstract class BaseMultiblockControllerEntity<
   @Override
   public void validate() {
     this.valid = pattern.entrySet().stream().allMatch(entry -> this.validate(entry.getKey(), entry.getValue()));
+    if (!isValid()) {
+      unifiedComponentManager = null;
+      if (!dummy()) unifiedElementManager = null;
+    } else {
+      pattern.forEach((pos, matcher) -> {
+        if (getLevel().getBlockEntity(getPos(pos)) instanceof BaseMultiblockPartEntity<?> entity) {
+          entity.setControllerEntity(this);
+          entity.setControllerBlock(this.getBlock());
+        }
+      });
+    }
     this.level.setBlockAndUpdate(worldPosition, getBlockState().setValue(BaseMultiblockControllerBlock.VALID, isValid()));
     requestModelDataUpdate();
     setChanged();
@@ -115,41 +130,39 @@ public abstract class BaseMultiblockControllerEntity<
     );
   }
 
-  public ComponentManager getUnifiedComponentManager() {
-    AtomicReference<ComponentManager> manager = new AtomicReference<>(componentManager);
+  public void unifyManagers(boolean component, boolean element) {
+    AtomicReference<ComponentManager> componentManager = new AtomicReference<>(this.componentManager.copy(this, false));
+    AtomicReference<ElementManager> elementManager = new AtomicReference<>(this.elementManager.copy(this, false));
     if (pattern.isEmpty())
       init();
     pattern.keySet().forEach(pos -> {
       BlockEntity possiblePart = level.getBlockEntity(getPos(pos));
       if (possiblePart instanceof BaseMultiblockPartEntity<?> entity) {
-        manager.set(manager.get().mergeWith(entity.getComponentManager()));
+        if (entity.getControllerEntity() == null || (!entity.getControllerEntity().equals(this) && !entity.getControllerPos().equals(getBlockPos()))) return;
+        if (component) componentManager.set(componentManager.get().mergeWith(entity.getComponentManager(), false, this));
+        if (element) elementManager.set(elementManager.get().mergeWith(entity.getElementManager(), false, this));
       }
     });
-    manager.get().init();
-    return manager.get();
-  }
-
-  public ElementManager getUnifiedElementManager() {
-    AtomicReference<ElementManager> manager = new AtomicReference<>(elementManager);
-    if (pattern.isEmpty())
-      init();
-    pattern.keySet().forEach(pos -> {
-      BlockEntity possiblePart = level.getBlockEntity(getPos(pos));
-      if (possiblePart instanceof BaseMultiblockPartEntity<?> entity) {
-        manager.set(manager.get().mergeWith(entity.getElementManager()));
-      }
-    });
-    return manager.get();
+    if (component) {
+      componentManager.get().init();
+      unifiedComponentManager = componentManager.get();
+    }
+    if (element) unifiedElementManager = elementManager.get();
+//    DegrassiLogger.INSTANCE.info("Entity: {}", this.asJson());
   }
 
   @Override
   public ComponentManager getComponentManager() {
-    return getUnifiedComponentManager();
+    if (unifiedComponentManager == null)
+      unifyManagers(true, false);
+    return unifiedComponentManager;
   }
 
   @Override
   public ElementManager getElementManager() {
-    return dummy() ? getUnifiedElementManager() : super.getElementManager();
+    if (dummy() && unifiedElementManager == null)
+      unifyManagers(false, true);
+    return dummy() ? unifiedElementManager : elementManager;
   }
 
   public static <
@@ -192,5 +205,13 @@ public abstract class BaseMultiblockControllerEntity<
     super.saveAdditional(tag);
     tag.putBoolean("valid", valid);
     tag.putString("initialDirection", initialDirection.getSerializedName());
+  }
+
+  @Override
+  public JsonObject asJson() {
+    JsonObject json = super.asJson();
+    if (unifiedComponentManager != null) json.add("unifiedComponentManager", unifiedComponentManager.asJson());
+    if (unifiedElementManager != null) json.add("unifiedElementManager", unifiedElementManager.asJson());
+    return json;
   }
 }

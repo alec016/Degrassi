@@ -1,13 +1,16 @@
 package es.degrassi.forge.core.common.element;
 
+import com.google.gson.JsonObject;
 import es.degrassi.forge.api.core.common.ElementDirection;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IElement;
 import es.degrassi.common.utils.TextureSizeHelper;
+import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.component.ProgressComponent;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
@@ -19,12 +22,15 @@ import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 @Getter
+@Setter
 public class ProgressElement extends AbstractWidget implements IElement<ProgressComponent> {
   private ResourceLocation emptyTexture, filledTexture;
   private final ElementManager manager;
   public final String id = "progress";
   private final ElementDirection direction;
   private final boolean jei;
+
+  private IRequirement<ProgressComponent> requirement;
 
   public ProgressElement(
     ElementManager manager,
@@ -104,7 +110,7 @@ public class ProgressElement extends AbstractWidget implements IElement<Progress
   }
 
   @Override
-  public void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent iComponent) {
+  public void renderInJei(GuiGraphics guiGraphics, IRequirement<?> requirement, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent iComponent) {
     if (!jei) return;
     if (!(iComponent instanceof ProgressComponent component)) return;
     renderTexture(guiGraphics, emptyTexture, getX(), getY(), 0, 0, 0, getWidth(), getHeight(), getWidth(), getHeight());
@@ -119,19 +125,21 @@ public class ProgressElement extends AbstractWidget implements IElement<Progress
 
   @Override
   public String toString() {
-    return "ProgressElement{" +
-      "x=" + getX() +
-      ", y=" + getY() +
-      ", emptyTexture=" + emptyTexture +
-      ", filledTexture=" + filledTexture +
-      ", id='" + id + '\'' +
-      ", direction=" + direction +
-      ", width=" + width +
-      ", height=" + height +
-      '}';
+    return asJson().toString();
   }
 
-  public boolean jei() {
-    return jei;
+  public JsonObject asJson() {
+    JsonObject json = new JsonObject();
+    asJson(json);
+    json.addProperty("width", width);
+    json.addProperty("height", height);
+    json.addProperty("emptyTexture", emptyTexture.toString());
+    json.addProperty("filledTexture", filledTexture.toString());
+    return json;
+  }
+
+  @Override
+  public ProgressElement copy(ElementManager manager) {
+    return new ProgressElement(manager, getX(), getY(), getMessage(), emptyTexture, filledTexture, direction, jei);
   }
 }

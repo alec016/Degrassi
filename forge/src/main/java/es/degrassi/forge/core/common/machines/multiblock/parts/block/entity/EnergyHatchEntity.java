@@ -23,68 +23,22 @@ import org.jetbrains.annotations.Nullable;
 @Getter
 @Setter
 public class EnergyHatchEntity extends BaseMultiblockPartEntity<MultiblockPartStorage.Energy> {
-  public static final EnergyHatchEntity DUMMY = new EnergyHatchEntity(BlockPos.ZERO, BlockRegistration.ENERGY_HATCH.get(MultiblockPartStorage.Energy.BASIC).defaultBlockState(), MultiblockPartStorage.Energy.BASIC) {
-    @Override
-    public boolean dummy() {
-      return true;
-    }
-  };
+  public static final EnergyHatchEntity DUMMY = dummyEntity();
+
   private final EnergyComponent energy;
   private final Map<Direction, LazyOptional<EnergySidedHandler>> energyWrapperHandlerMap;
   public EnergyHatchEntity(BlockPos pos, BlockState blockState, MultiblockPartStorage.Energy variant) {
     super(EntityRegistration.ENERGY_HATCH.get(), pos, blockState, variant);
 
-    getComponentManager().addEnergy(variant.getCapacity(), "energy");
-    energy = (EnergyComponent) getComponentManager().getComponent("energy").orElse(null);
-    energyWrapperHandlerMap = Map.of(
-      Direction.UP, LazyOptional.of(() -> new EnergySidedHandler(
-        getComponentManager(),
-        energy,
-        null,
-        getBlockState().getValue(EnergyHatch.FACING),
-        Direction.UP
-      )),
-      Direction.DOWN, LazyOptional.of(() -> new EnergySidedHandler(
-        getComponentManager(),
-        energy,
-        null,
-        getBlockState().getValue(EnergyHatch.FACING),
-        Direction.DOWN
-      )),
-      Direction.NORTH, LazyOptional.of(() -> new EnergySidedHandler(
-        getComponentManager(),
-        energy,
-        null,
-        getBlockState().getValue(EnergyHatch.FACING),
-        Direction.NORTH
-      )),
-      Direction.SOUTH, LazyOptional.of(() -> new EnergySidedHandler(
-        getComponentManager(),
-        energy,
-        null,
-        getBlockState().getValue(EnergyHatch.FACING),
-        Direction.SOUTH
-      )),
-      Direction.EAST, LazyOptional.of(() -> new EnergySidedHandler(
-        getComponentManager(),
-        energy,
-        null,
-        getBlockState().getValue(EnergyHatch.FACING),
-        Direction.EAST
-      )),
-      Direction.WEST, LazyOptional.of(() -> new EnergySidedHandler(
-        getComponentManager(),
-        energy,
-        null,
-        getBlockState().getValue(EnergyHatch.FACING),
-        Direction.WEST
-      ))
-    );
+    componentManager.addEnergy(variant.getCapacity(), "energy");
+    jeiComponentManager.addEnergy(variant.getCapacity(), "energy");
+    energy = (EnergyComponent) componentManager.getComponent("energy").orElse(null);
+    energyWrapperHandlerMap = EnergySidedHandler.DEFAULT_ALL_INSERT(componentManager, energy, getBlockState().getValue(EnergyHatch.FACING));
 
-    getElementManager()
+    elementManager
       .addEnergy(
-        10,
-        10,
+        7,
+        20,
         Component.literal("energy"),
         new DegrassiLocation("textures/gui/multiblock/parts/energy_hatch_empty.png"),
         new DegrassiLocation("textures/gui/multiblock/parts/energy_hatch_filled.png"),
@@ -114,5 +68,18 @@ public class EnergyHatchEntity extends BaseMultiblockPartEntity<MultiblockPartSt
   @Override
   public Component getName() {
     return Component.translatable(getBlockState().getBlock().getDescriptionId());
+  }
+
+  public EnergyHatchEntity copy(boolean dummy) {
+    return dummy ? dummyEntity() : new EnergyHatchEntity(getBlockPos(), getBlockState(), getVariant());
+  }
+
+  public static EnergyHatchEntity dummyEntity() {
+    return new EnergyHatchEntity(BlockPos.ZERO, BlockRegistration.ENERGY_HATCH.get(MultiblockPartStorage.Energy.BASIC).defaultBlockState(), MultiblockPartStorage.Energy.BASIC) {
+      @Override
+      public boolean dummy() {
+        return true;
+      }
+    };
   }
 }

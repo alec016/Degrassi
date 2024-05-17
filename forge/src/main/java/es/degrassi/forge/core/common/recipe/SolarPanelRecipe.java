@@ -14,29 +14,4 @@ public abstract class SolarPanelRecipe extends MachineRecipe<SolarPanelRecipe> {
   public SolarPanelRecipe(int time, List<IRequirement<?>> requirements) {
     super(time, requirements);
   }
-
-  @Override
-  public boolean matches(List<? extends IComponent> components) {
-    return false;
-  }
-
-  @Override
-  public SolarPanelRecipe copy() {
-    return null;
-  }
-
-  @Override
-  public ResourceLocation getId() {
-    return null;
-  }
-
-  @Override
-  public RecipeSerializer<?> getSerializer() {
-    return null;
-  }
-
-  @Override
-  public RecipeType<?> getType() {
-    return null;
-  }
 }

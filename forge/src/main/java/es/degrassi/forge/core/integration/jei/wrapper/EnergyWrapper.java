@@ -2,6 +2,7 @@ package es.degrassi.forge.core.integration.jei.wrapper;
 
 import es.degrassi.forge.api.core.common.ElementDirection;
 import es.degrassi.forge.api.core.common.IComponent;
+import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.component.EnergyComponent;
 import es.degrassi.forge.core.common.element.EnergyElement;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
@@ -18,7 +19,7 @@ import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.NotNull;
 
 public class EnergyWrapper extends EnergyElement implements IIngredientRenderer<EnergyComponent> {
-  public static final EnergyWrapper DUMMY = new EnergyWrapper(0, 0, null, null, ElementDirection.TOP, null, false, "energy") {
+  public static final EnergyWrapper DUMMY = new EnergyWrapper(0, 0, null, null, ElementDirection.TOP, null, null, false, "energy") {
     @Override
     public int getWidth() {
       return 16;
@@ -30,40 +31,41 @@ public class EnergyWrapper extends EnergyElement implements IIngredientRenderer<
     }
   };
   @Getter
-  private final MachineRecipe<?> recipe;
+  private MachineRecipe<?> recipe;
   private final boolean animated;
+  private final EnergyRequirement requirement;
 
-  public EnergyWrapper(int x, int y, @NotNull ResourceLocation emptyTexture, @NotNull ResourceLocation filledTexture, ElementDirection direction, MachineRecipe<?> recipe, boolean animated, String id) {
+  public EnergyWrapper(int x, int y, @NotNull ResourceLocation emptyTexture, @NotNull ResourceLocation filledTexture, ElementDirection direction, EnergyRequirement requirement, MachineRecipe<?> recipe, boolean animated, String id) {
     super(null, x, y, Component.literal("energy"), emptyTexture, filledTexture, id, direction, true);
     this.recipe = recipe;
     this.animated = animated;
+    this.requirement = requirement;
   }
 
   @Override
   public void render(GuiGraphics guiGraphics, EnergyComponent ingredient) {}
 
   @Override
-  public void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent iComponent) {
-    if (!(iComponent instanceof EnergyComponent component)) return;
-    EnergyRequirement requirement = recipe.getRequirements().stream().filter(req -> req.getId().equals(component.getId())).map(req -> (EnergyRequirement) req).findFirst().orElse(null);
-    if (requirement == null) return;
+  public void renderInJei(GuiGraphics guiGraphics, IRequirement<?> iRequirement, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent iComponent) {
+    EnergyComponent component = requirement.getComponent();
+    if (component == null) return;
+    this.recipe = recipe;
     int total = requirement.getMode().isPerTick() ? requirement.getAmount() * recipe.getTime() : requirement.getAmount();
     component.setCapacity(total);
     if (animated) {
       setDirection(requirement.getMode().isOutput() ? getDirection() : getDirection().opposite());
       int toIncrement = requirement.getMode().isPerTick() ? requirement.getAmount() : requirement.getAmount() / recipe.getTime();
       component.receiveEnergy(toIncrement, false);
-      super.renderInJei(guiGraphics, recipe, mouseX, mouseY, iComponent);
+      super.renderInJei(guiGraphics, requirement, recipe, mouseX, mouseY, iComponent);
       if (component.getEnergyStored() >= component.getMaxEnergyStored()) component.setEnergy(0);
       return;
     }
     component.setEnergy(total);
-    super.renderInJei(guiGraphics, recipe, mouseX, mouseY, iComponent);
+    super.renderInJei(guiGraphics, requirement, recipe, mouseX, mouseY, iComponent);
   }
 
   @Override
   public List<Component> getTooltip(EnergyComponent ingredient, TooltipFlag tooltipFlag) {
-    EnergyRequirement requirement = recipe.getRequirements().stream().filter(req -> req.getId().equals(ingredient.getId())).map(req -> (EnergyRequirement) req).findFirst().orElse(null);
     if (requirement == null) return List.of();
     List<Component> tooltips = new ArrayList<>();
     tooltips.add(

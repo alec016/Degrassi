@@ -1,11 +1,14 @@
 package es.degrassi.forge.core.common.element;
 
+import com.google.gson.JsonObject;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IElement;
 import es.degrassi.common.utils.TextureSizeHelper;
+import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
@@ -16,10 +19,15 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
+@Setter
 public class PlayerInventoryElement extends AbstractWidget implements IElement<IComponent> {
   private final String id = "player_inventory";
   private final ElementManager manager;
   private ResourceLocation texture;
+  private final boolean jei = false;
+
+  private IRequirement<IComponent> requirement;
+
   public PlayerInventoryElement(ElementManager manager, int x, int y, ResourceLocation texture, Component message) {
     super(x, y, TextureSizeHelper.getTextureWidth(texture), TextureSizeHelper.getTextureHeight(texture), message);
     this.texture = texture;
@@ -67,20 +75,24 @@ public class PlayerInventoryElement extends AbstractWidget implements IElement<I
   }
 
   @Override
-  public void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent component) {}
+  public void renderInJei(GuiGraphics guiGraphics, IRequirement<?> requirement, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent component) {}
 
   @Override
   public String toString() {
-    return "PlayerInventoryElement{" +
-      "x=" + getX() +
-      ", y=" + getY() +
-      ", texture=" + texture +
-      ", width=" + width +
-      ", height=" + height +
-      '}';
+    return asJson().toString();
   }
 
-  public boolean jei() {
-    return false;
+  public JsonObject asJson() {
+    JsonObject json = new JsonObject();
+    asJson(json);
+    json.addProperty("width", width);
+    json.addProperty("height", height);
+    json.addProperty("texture", texture.toString());
+    return json;
+  }
+
+  @Override
+  public PlayerInventoryElement copy(ElementManager manager) {
+    return new PlayerInventoryElement(manager, getX(), getY(), texture, getMessage());
   }
 }

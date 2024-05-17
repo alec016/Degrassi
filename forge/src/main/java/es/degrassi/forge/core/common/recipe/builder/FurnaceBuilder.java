@@ -48,34 +48,34 @@ public class FurnaceBuilder extends MachineBuilder<FurnaceRecipe> {
 
   public FurnaceBuilder energy(int energy) {
     this.energy = energy;
-    requireEnergyPerTick(energy, "energy");
+    requireEnergyPerTick(energy, "");
     return this;
   }
 
   public FurnaceBuilder experience(float experience) {
     this.experience = experience;
-    produceExperience(experience, "experience");
+    produceExperience(experience, "");
     return this;
   }
 
   public FurnaceBuilder input(Item input, int amount) {
     this.input = input;
     this.inputAmount = amount;
-    requireItem(input, amount, "input");
+    requireItem(input, amount, "");
     return this;
   }
 
   public FurnaceBuilder output(Item item, int amount) {
     this.output = item;
     this.outputAmount = amount;
-    produceItem(item, amount, "output");
+    produceItem(item, amount, "");
     return this;
   }
 
   @Override
   public FurnaceRecipe build(ResourceLocation id) {
     FurnaceRecipe recipe = new FurnaceRecipe(id, getTime(), getRequirements());
-    DegrassiLogger.INSTANCE.info("FurnaceRecipeBuilder$build -> recipe: {}", recipe);
+    DegrassiLogger.INSTANCE.info("FurnaceRecipeBuilder$build -> recipe: {}", recipe.asJson());
     return recipe;
   }
 }

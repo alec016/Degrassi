@@ -1,18 +1,15 @@
 package es.degrassi.forge.core.common.recipe;
 
-import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IRequirement;
-import es.degrassi.forge.core.common.wrapper.DegrassiFluidHandler;
-import es.degrassi.forge.core.common.wrapper.DegrassiItemStackHandler;
 import es.degrassi.forge.core.init.RecipeRegistration;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import lombok.Getter;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import org.jetbrains.annotations.NotNull;
 
+@Getter
 public class FurnaceRecipe extends MachineRecipe<FurnaceRecipe> {
   private final ResourceLocation id;
 
@@ -23,8 +20,12 @@ public class FurnaceRecipe extends MachineRecipe<FurnaceRecipe> {
   }
 
   @Override
-  public @NotNull ResourceLocation getId() {
-    return id;
+  public FurnaceRecipe copy() {
+    FurnaceRecipe recipe = new FurnaceRecipe(getId(), getTime(), getRequirements().stream().map(IRequirement::copy).toList());
+    recipe.startRequirements.addAll(startRequirements);
+    recipe.endRequirements.addAll(endRequirements);
+    recipe.tickRequirements.addAll(tickRequirements);
+    return recipe;
   }
 
   @Override
@@ -35,104 +36,5 @@ public class FurnaceRecipe extends MachineRecipe<FurnaceRecipe> {
   @Override
   public @NotNull RecipeType<FurnaceRecipe> getType() {
     return RecipeRegistration.FURNACE_TYPE.get();
-  }
-
-  public boolean matches(List<? extends IComponent> components) {
-    List<IComponent> componentMatches = new ArrayList<>();
-    AtomicInteger count = new AtomicInteger(0);
-    getRequirements().forEach(requirement -> components.forEach(component -> {
-      if (component instanceof DegrassiItemStackHandler handler) {
-        handler.getComponents().forEach(comp -> {
-          if (requirement.getId().isEmpty()) {
-            if (requirement.matches(comp, getTime())) {
-              count.getAndIncrement();
-              componentMatches.add(comp);
-            }
-          } else if (comp.getId().equals(requirement.getId())) {
-            if (requirement.matches(comp, getTime())) {
-              count.getAndIncrement();
-              componentMatches.add(comp);
-            }
-          }
-        });
-      } else if (component instanceof DegrassiFluidHandler handler) {
-        handler.getComponents().forEach(comp -> {
-          if (requirement.getId().isEmpty()) {
-            if (requirement.matches(comp, getTime())) {
-              count.getAndIncrement();
-              componentMatches.add(comp);
-            }
-          } else if (comp.getId().equals(requirement.getId())) {
-            if (requirement.matches(comp, getTime())) {
-              count.getAndIncrement();
-              componentMatches.add(comp);
-            }
-          }
-        });
-      } else if (component.getId().equals(requirement.getId()) && requirement.matches(component, getTime())) {
-        count.getAndIncrement();
-        componentMatches.add(component);
-      }
-    }));
-    tickRequirements.clear();
-    endRequirements.clear();
-    startRequirements.clear();
-    if (count.get() == getRequirements().size()) {
-      getRequirements().forEach(requirement -> componentMatches.forEach(component -> {
-        if (requirement.getId().isEmpty() && requirement.matches(component, getTime())) {
-          if (requirement.getMode().isPerTick()) tickRequirements.put(requirement, component);
-          else {
-            if (requirement.getMode().isInput()) startRequirements.put(requirement, component);
-            else endRequirements.put(requirement, component);
-          }
-        } else if (requirement.getId().equals(component.getId())) {
-          if (requirement.getMode().isPerTick()) tickRequirements.put(requirement, component);
-          else {
-            if (requirement.getMode().isInput()) startRequirements.put(requirement, component);
-            else endRequirements.put(requirement, component);
-          }
-        }
-      }));
-      return true;
-    }
-    return false;
-  }
-
-  public static void separateRequirements(FurnaceRecipe recipe, List<? extends IComponent> components) {
-    List<IComponent> componentMatches = new ArrayList<>();
-    recipe.getRequirements().forEach(requirement -> components.forEach(component -> {
-      if (component.getId().equals(requirement.getId())) {
-        component.fill(requirement);
-        if (requirement.matches(component, recipe.getTime())) {
-          componentMatches.add(component);
-        }
-      }
-    }));
-    recipe.tickRequirements.clear();
-    recipe.endRequirements.clear();
-    recipe.startRequirements.clear();
-    recipe.getRequirements().forEach(requirement -> componentMatches.forEach(component -> {
-      if (requirement.getId().equals(component.getId())) {
-        if (requirement.getMode().isPerTick()) recipe.tickRequirements.put(requirement, component);
-        else {
-          if (requirement.getMode().isInput()) recipe.startRequirements.put(requirement, component);
-          else recipe.endRequirements.put(requirement, component);
-        }
-      }
-    }));
-  }
-
-  @Override
-  public FurnaceRecipe copy() {
-    FurnaceRecipe recipe = new FurnaceRecipe(getId(), getTime(), getRequirements().stream().map(IRequirement::copy).toList());
-    recipe.startRequirements.putAll(startRequirements);
-    recipe.endRequirements.putAll(endRequirements);
-    recipe.tickRequirements.putAll(tickRequirements);
-    return recipe;
-  }
-
-  @Override
-  public String toString() {
-    return "Furnace" + super.toString();
   }
 }

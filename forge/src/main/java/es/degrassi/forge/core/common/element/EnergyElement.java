@@ -1,9 +1,11 @@
 package es.degrassi.forge.core.common.element;
 
+import com.google.gson.JsonObject;
 import es.degrassi.forge.api.core.common.ElementDirection;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IElement;
 import es.degrassi.common.utils.TextureSizeHelper;
+import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.component.EnergyComponent;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
@@ -30,6 +32,8 @@ public class EnergyElement extends AbstractWidget implements IElement<EnergyComp
   private final String id;
   private ElementDirection direction;
   private final boolean jei;
+
+  private IRequirement<EnergyComponent> requirement;
 
   public EnergyElement(
     ElementManager manager,
@@ -126,7 +130,7 @@ public class EnergyElement extends AbstractWidget implements IElement<EnergyComp
   }
 
   @Override
-  public void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent iComponent) {
+  public void renderInJei(GuiGraphics guiGraphics, IRequirement<?> requirement, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent iComponent) {
     if (!jei) return;
     if (!(iComponent instanceof EnergyComponent component)) return;
     renderTexture(guiGraphics, emptyTexture, getX(), getY(), 0, 0, 0, getWidth(), getHeight(), getWidth(), getHeight());
@@ -141,19 +145,21 @@ public class EnergyElement extends AbstractWidget implements IElement<EnergyComp
 
   @Override
   public String toString() {
-    return "EnergyElement{" +
-      "x=" + getX() +
-      ", y=" + getY() +
-      ", emptyTexture=" + emptyTexture +
-      ", filledTexture=" + filledTexture +
-      ", id='" + id + '\'' +
-      ", direction=" + direction +
-      ", width=" + width +
-      ", height=" + height +
-      '}';
+    return asJson().toString();
   }
 
-  public boolean jei() {
-    return jei;
+  public JsonObject asJson() {
+    JsonObject json = new JsonObject();
+    asJson(json);
+    json.addProperty("width", width);
+    json.addProperty("height", height);
+    json.addProperty("emptyTexture", emptyTexture.toString());
+    json.addProperty("filledTexture", filledTexture.toString());
+    return json;
+  }
+
+  @Override
+  public EnergyElement copy(ElementManager manager) {
+    return new EnergyElement(manager, getX(), getY(), getMessage(), emptyTexture, filledTexture, id, direction, jei);
   }
 }

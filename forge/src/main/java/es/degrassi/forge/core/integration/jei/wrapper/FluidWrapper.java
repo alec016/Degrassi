@@ -1,6 +1,7 @@
 package es.degrassi.forge.core.integration.jei.wrapper;
 
 import es.degrassi.forge.api.core.common.IComponent;
+import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.component.FluidComponent;
 import es.degrassi.forge.core.common.element.FluidElement;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
@@ -20,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 @Getter
 public class FluidWrapper extends FluidElement implements IIngredientRenderer<FluidComponent> {
-  public static final FluidWrapper DUMMY = new FluidWrapper(0, 0, null, null, "energy", false) {
+  public static final FluidWrapper DUMMY = new FluidWrapper(0, 0, null, null, null, "fluid", false) {
     @Override
     public int getWidth() {
       return 16;
@@ -31,40 +32,40 @@ public class FluidWrapper extends FluidElement implements IIngredientRenderer<Fl
       return 16;
     }
   };
-  private final MachineRecipe<?> recipe;
+  private MachineRecipe<?> recipe;
+  private final FluidRequirement requirement;
   private final boolean animated;
 
-  public FluidWrapper(int x, int y, @NotNull ResourceLocation emptyTexture, MachineRecipe<?> recipe, String id, boolean animated) {
-    super(null, x, y, emptyTexture, Component.literal("energy"), id, true);
+  public FluidWrapper(int x, int y, @NotNull ResourceLocation emptyTexture, FluidRequirement requirement, MachineRecipe<?> recipe, String id, boolean animated) {
+    super(null, x, y, emptyTexture, Component.literal("fluid"), id, true);
     this.animated = animated;
     this.recipe = recipe;
+    this.requirement = requirement;
   }
 
   @Override
-  public void render(GuiGraphics guiGraphics, FluidComponent ingredient) {
-  }
+  public void render(GuiGraphics guiGraphics, FluidComponent ingredient) {}
 
   @Override
-  public void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent iComponent) {
-    if (!(iComponent instanceof FluidComponent component)) return;
-    FluidRequirement requirement = recipe.getRequirements().stream().filter(req -> req.getId().equals(component.getId())).map(req -> (FluidRequirement) req).findFirst().orElse(null);
-    if (requirement == null) return;
+  public void renderInJei(GuiGraphics guiGraphics, IRequirement<?> iRequirement, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent iComponent) {
+    FluidComponent component = requirement.getComponent();
+    if (component == null) return;
+    this.recipe = recipe;
     int total = requirement.getMode().isPerTick() ? requirement.getAmount() * recipe.getTime() : requirement.getAmount();
     component.setCapacity(total);
     if (animated) {
       int toIncrement = requirement.getMode().isPerTick() ? requirement.getAmount() : requirement.getAmount() / recipe.getTime();
       component.fill(new FluidStack(requirement.getFluid(), toIncrement), IFluidHandler.FluidAction.EXECUTE);
-      super.renderInJei(guiGraphics, recipe, mouseX, mouseY, iComponent);
+      super.renderInJei(guiGraphics, requirement, recipe, mouseX, mouseY, iComponent);
       if (component.getFluid().getAmount() >= component.getCapacity()) component.setFluid(FluidStack.EMPTY);
       return;
     }
     component.setFluid(new FluidStack(requirement.getFluid(), requirement.getAmount()));
-    super.renderInJei(guiGraphics, recipe, mouseX, mouseY, iComponent);
+    super.renderInJei(guiGraphics, requirement, recipe, mouseX, mouseY, iComponent);
   }
 
   @Override
   public List<Component> getTooltip(FluidComponent ingredient, TooltipFlag tooltipFlag) {
-    FluidRequirement requirement = recipe.getRequirements().stream().filter(req -> req.getId().equals(ingredient.getId())).map(req -> (FluidRequirement) req).findFirst().orElse(null);
     if (requirement == null) return List.of();
     List<Component> tooltips = new ArrayList<>();
     tooltips.add(
@@ -91,5 +92,15 @@ public class FluidWrapper extends FluidElement implements IIngredientRenderer<Fl
       );
     }
     return tooltips;
+  }
+
+  @Override
+  public String toString() {
+    return "FluidWrapper{" +
+      "id='" + getId() + '\'' +
+      ", texture=" + getTexture().toString() +
+      ", jei=" + isJei() +
+      ", animated=" + animated +
+      '}';
   }
 }

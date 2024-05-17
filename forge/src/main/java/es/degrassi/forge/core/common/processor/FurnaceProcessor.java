@@ -32,12 +32,12 @@ public class FurnaceProcessor extends MachineProcessor<FurnaceRecipe, FurnaceEnt
   }
 
   @Override
-  public void init() {
+  public FurnaceProcessor init() {
     initialized = true;
     Level level = entity == null ? Objects.requireNonNull(Minecraft.getInstance().level) : entity.getLevel();
     RecipeManager recipeManager = level == null ? Minecraft.getInstance().level.getRecipeManager() : level.getRecipeManager();
     recipes = new ArrayList<>();
-    Furnace tier = entity == null ? Furnace.IRON : entity.getTier();
+    Furnace tier = entity == null || entity.dummy() ? Furnace.IRON : entity.getTier();
     recipes.addAll(recipeManager.getAllRecipesFor(RecipeRegistration.FURNACE_TYPE.get()).stream().map(recipe -> {
       recipe = recipe.copy();
       recipe.setTime((int) (recipe.getTime() * tier.getSpeedModifier()));
@@ -59,10 +59,10 @@ public class FurnaceProcessor extends MachineProcessor<FurnaceRecipe, FurnaceEnt
       if (smeltingRecipe.getIngredients().get(0).getItems().length > 1) {
         List.of(smeltingRecipe.getIngredients().get(0).getItems()).forEach(input -> {
           List<IRequirement<?>> requirements = new RequirementManager()
-            .requireEnergyPerTick((int) (100 * tier.getEnergyModifier()), "energy")
-            .produceExperience(xp, "experience")
-            .requireItem(input.getItem(), input.getCount(), "input")
-            .produceItem(result.getItem(), result.getCount(), "output")
+            .requireEnergyPerTick((int) (100 * tier.getEnergyModifier()), "")
+            .produceExperience(xp, "")
+            .requireItem(input.getItem(), input.getCount(), "")
+            .produceItem(result.getItem(), result.getCount(), "")
             .get();
           String[] inputSA = input.getHoverName().getString().toLowerCase().split(" ");
           StringBuilder inputS = new StringBuilder();
@@ -77,10 +77,10 @@ public class FurnaceProcessor extends MachineProcessor<FurnaceRecipe, FurnaceEnt
       } else {
         ItemStack input = smeltingRecipe.getIngredients().get(0).getItems()[0];
         List<IRequirement<?>> requirements = new RequirementManager()
-          .requireEnergyPerTick((int) (100 * tier.getEnergyModifier()), "energy")
-          .produceExperience(xp, "experience")
-          .requireItem(input.getItem(), input.getCount(), "input")
-          .produceItem(result.getItem(), result.getCount(), "output")
+          .requireEnergyPerTick((int) (100 * tier.getEnergyModifier()), "")
+          .produceExperience(xp, "")
+          .requireItem(input.getItem(), input.getCount(), "")
+          .produceItem(result.getItem(), result.getCount(), "")
           .get();
         if (recipes.stream().filter(recipe -> recipe.getId().equals(recipeId)).toList().isEmpty())
           recipes.add(new FurnaceRecipe(recipeId, time, requirements));
@@ -94,10 +94,10 @@ public class FurnaceProcessor extends MachineProcessor<FurnaceRecipe, FurnaceEnt
       if (blastingRecipe.getIngredients().get(0).getItems().length > 1) {
         List.of(blastingRecipe.getIngredients().get(0).getItems()).forEach(input -> {
           List<IRequirement<?>> requirements = new RequirementManager()
-            .requireEnergyPerTick((int) (100 * tier.getEnergyModifier()), "energy")
-            .produceExperience(xp, "experience")
-            .requireItem(input.getItem(), input.getCount(), "input")
-            .produceItem(result.getItem(), result.getCount(), "output")
+            .requireEnergyPerTick((int) (100 * tier.getEnergyModifier()), "")
+            .produceExperience(xp, "")
+            .requireItem(input.getItem(), input.getCount(), "")
+            .produceItem(result.getItem(), result.getCount(), "")
             .get();
           String[] inputSA = input.getHoverName().getString().toLowerCase().split(" ");
           StringBuilder inputS = new StringBuilder();
@@ -112,10 +112,10 @@ public class FurnaceProcessor extends MachineProcessor<FurnaceRecipe, FurnaceEnt
       } else {
         ItemStack input = blastingRecipe.getIngredients().get(0).getItems()[0];
         List<IRequirement<?>> requirements = new RequirementManager()
-          .requireEnergyPerTick((int) (100 * tier.getEnergyModifier()), "energy")
-          .produceExperience(xp, "experience")
-          .requireItem(input.getItem(), input.getCount(), "input")
-          .produceItem(result.getItem(), result.getCount(), "output")
+          .requireEnergyPerTick((int) (100 * tier.getEnergyModifier()), "")
+          .produceExperience(xp, "")
+          .requireItem(input.getItem(), input.getCount(), "")
+          .produceItem(result.getItem(), result.getCount(), "")
           .get();
         if (recipes.stream().filter(recipe -> recipe.getId().equals(recipeId)).toList().isEmpty())
           recipes.add(new FurnaceRecipe(recipeId, time, requirements));
@@ -129,10 +129,10 @@ public class FurnaceProcessor extends MachineProcessor<FurnaceRecipe, FurnaceEnt
       if (smokingRecipe.getIngredients().get(0).getItems().length > 1) {
         List.of(smokingRecipe.getIngredients().get(0).getItems()).forEach(input -> {
           List<IRequirement<?>> requirements = new RequirementManager()
-            .requireEnergyPerTick(100, "energy")
-            .produceExperience(xp, "experience")
-            .requireItem(input.getItem(), input.getCount(), "input")
-            .produceItem(result.getItem(), result.getCount(), "output")
+            .requireEnergyPerTick(100, "")
+            .produceExperience(xp, "")
+            .requireItem(input.getItem(), input.getCount(), "")
+            .produceItem(result.getItem(), result.getCount(), "")
             .get();
           String[] inputSA = input.getHoverName().getString().toLowerCase().split(" ");
           StringBuilder inputS = new StringBuilder();
@@ -147,10 +147,10 @@ public class FurnaceProcessor extends MachineProcessor<FurnaceRecipe, FurnaceEnt
       } else {
         ItemStack input = smokingRecipe.getIngredients().get(0).getItems()[0];
         List<IRequirement<?>> requirements = new RequirementManager()
-          .requireEnergyPerTick(100, "energy")
-          .produceExperience(xp, "experience")
-          .requireItem(input.getItem(), input.getCount(), "input")
-          .produceItem(result.getItem(), result.getCount(), "output")
+          .requireEnergyPerTick(100, "")
+          .produceExperience(xp, "")
+          .requireItem(input.getItem(), input.getCount(), "")
+          .produceItem(result.getItem(), result.getCount(), "")
           .get();
         if (recipes.stream().filter(recipe -> recipe.getId().equals(recipeId)).toList().isEmpty())
           recipes.add(new FurnaceRecipe(recipeId, time, requirements));
@@ -163,5 +163,6 @@ public class FurnaceProcessor extends MachineProcessor<FurnaceRecipe, FurnaceEnt
       });
       this.futureRecipeID = null;
     }
+    return this;
   }
 }

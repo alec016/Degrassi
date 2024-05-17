@@ -14,6 +14,7 @@ import es.degrassi.forge.core.common.machines.multiblock.parts.block.FluidOutput
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.InputBus;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.MelterFrame;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.OutputBus;
+import es.degrassi.forge.core.common.machines.multiblock.parts.block.QuadrupleFluidInputTank;
 import es.degrassi.forge.core.common.storage.energy.block.EnergyCell;
 import es.degrassi.forge.core.common.storage.fluid.block.FluidTank;
 import es.degrassi.forge.core.tiers.Chest;
@@ -49,6 +50,7 @@ public class BlockRegistration {
   // Multiblock parts
   public static final VarReg<MultiblockPartStorage.Energy, Block> ENERGY_HATCH;
   public static final VarReg<MultiblockPartStorage.Fluid.Input, Block> FLUID_INPUT_TANK;
+  public static final VarReg<MultiblockPartStorage.Fluid.QuadrupleInput, Block> QUADRUPLE_FLUID_INPUT_TANK;
   public static final VarReg<MultiblockPartStorage.Fluid.Output, Block> FLUID_OUTPUT_TANK;
   public static final VarReg<MultiblockPartStorage.Item.Input, Block> INPUT_BUS;
   public static final VarReg<MultiblockPartStorage.Item.Output, Block> OUTPUT_BUS;
@@ -96,6 +98,10 @@ public class BlockRegistration {
       commonBlock(550),
       variant
     ), MultiblockPartStorage.Fluid.Input.getNormalVariants());
+    QUADRUPLE_FLUID_INPUT_TANK = new VarReg<>(BLOCKS, "quadruple_fluid_input_tank", variant -> new QuadrupleFluidInputTank(
+      commonBlock(550),
+      variant
+    ), MultiblockPartStorage.Fluid.QuadrupleInput.getNormalVariants());
     FLUID_OUTPUT_TANK = new VarReg<>(BLOCKS, "fluid_output_tank", variant -> new FluidOutputTank(
       commonBlock(550),
       variant

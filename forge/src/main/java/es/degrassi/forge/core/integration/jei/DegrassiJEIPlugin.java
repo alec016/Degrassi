@@ -51,8 +51,9 @@ public class DegrassiJEIPlugin implements IModPlugin {
 
   @Override
   public void registerCategories(IRecipeCategoryRegistration registration) {
-    registerFurnaceCategory(registration);
-    registerMelterCategory(registration);
+    IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
+    registerFurnaceCategory(registration, guiHelper);
+    registerMelterCategory(registration, guiHelper);
   }
 
   @Override
@@ -77,8 +78,7 @@ public class DegrassiJEIPlugin implements IModPlugin {
   private void registerFurnaceRecipe(IRecipeRegistration registration) {
     registration.addRecipes(DegrassiRecipeTypes.FURNACE, FurnaceCategory.defaultProcessor.getRecipes());
   }
-  private void registerFurnaceCategory(IRecipeCategoryRegistration registration) {
-    IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
+  private void registerFurnaceCategory(IRecipeCategoryRegistration registration, IGuiHelper guiHelper) {
     registration.addRecipeCategories(new FurnaceCategory(guiHelper, (FurnaceBlock) BlockRegistration.FURNACE.get(Furnace.IRON)));
   }
   private void registerFurnaceGuiHandler(IGuiHandlerRegistration registration) {
@@ -107,8 +107,7 @@ public class DegrassiJEIPlugin implements IModPlugin {
   private void registerMelterRecipe(IRecipeRegistration registration) {
     registration.addRecipes(DegrassiRecipeTypes.MELTER, MelterCategory.defaultProcessor.getRecipes());
   }
-  private void registerMelterCategory(IRecipeCategoryRegistration registration) {
-    IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
+  private void registerMelterCategory(IRecipeCategoryRegistration registration, IGuiHelper guiHelper) {
     registration.addRecipeCategories(new MelterCategory(guiHelper, BlockRegistration.MELTER_CONTROLLER.get()));
   }
   private void registerMelterGuiHandler(IGuiHandlerRegistration registration) {
@@ -130,31 +129,46 @@ public class DegrassiJEIPlugin implements IModPlugin {
       new ItemStack(BlockRegistration.MELTER_FRAME.get()),
       DegrassiRecipeTypes.MELTER
     );
-    addMultiblockPartCatalysts(registration, DegrassiRecipeTypes.MELTER);
+    addMultiblockPartCatalystsEnergy(registration, DegrassiRecipeTypes.MELTER);
+    addMultiblockPartCatalystFluid(registration, false, true, DegrassiRecipeTypes.MELTER);
+    addMultiblockPartCatalystItem(registration, true, false, DegrassiRecipeTypes.MELTER);
   }
 
-  private void addMultiblockPartCatalysts(IRecipeCatalystRegistration registration, RecipeType<?>... types) {
+  private void addMultiblockPartCatalystsEnergy(IRecipeCatalystRegistration registration, RecipeType<?>... types) {
     for (MultiblockPartStorage.Energy variant : MultiblockPartStorage.Energy.values())
       registration.addRecipeCatalyst(
         new ItemStack(BlockRegistration.ENERGY_HATCH.get(variant)),
         types
       );
-    for (MultiblockPartStorage.Fluid.Input variant : MultiblockPartStorage.Fluid.Input.values())
-      registration.addRecipeCatalyst(
-        new ItemStack(BlockRegistration.FLUID_INPUT_TANK.get(variant)),
-        types
-      );
-    for (MultiblockPartStorage.Fluid.Output variant : MultiblockPartStorage.Fluid.Output.values())
+  }
+
+  private void addMultiblockPartCatalystFluid(IRecipeCatalystRegistration registration, boolean input, boolean output, RecipeType<?>... types) {
+    if (input) {
+      for (MultiblockPartStorage.Fluid.Input variant : MultiblockPartStorage.Fluid.Input.values())
+        registration.addRecipeCatalyst(
+          new ItemStack(BlockRegistration.FLUID_INPUT_TANK.get(variant)),
+          types
+        );
+      for (MultiblockPartStorage.Fluid.QuadrupleInput variant : MultiblockPartStorage.Fluid.QuadrupleInput.values())
+        registration.addRecipeCatalyst(
+          new ItemStack(BlockRegistration.QUADRUPLE_FLUID_INPUT_TANK.get(variant)),
+          types
+        );
+    }
+    if (output) for (MultiblockPartStorage.Fluid.Output variant : MultiblockPartStorage.Fluid.Output.values())
       registration.addRecipeCatalyst(
         new ItemStack(BlockRegistration.FLUID_OUTPUT_TANK.get(variant)),
         types
       );
-    for (MultiblockPartStorage.Item.Input variant : MultiblockPartStorage.Item.Input.values())
+  }
+
+  private void addMultiblockPartCatalystItem(IRecipeCatalystRegistration registration, boolean input, boolean output, RecipeType<?>... types) {
+    if (input) for (MultiblockPartStorage.Item.Input variant : MultiblockPartStorage.Item.Input.values())
       registration.addRecipeCatalyst(
         new ItemStack(BlockRegistration.INPUT_BUS.get(variant)),
         types
       );
-    for (MultiblockPartStorage.Item.Output variant : MultiblockPartStorage.Item.Output.values())
+    if (output) for (MultiblockPartStorage.Item.Output variant : MultiblockPartStorage.Item.Output.values())
       registration.addRecipeCatalyst(
         new ItemStack(BlockRegistration.OUTPUT_BUS.get(variant)),
         types

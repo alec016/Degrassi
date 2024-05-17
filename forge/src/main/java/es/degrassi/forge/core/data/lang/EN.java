@@ -66,6 +66,7 @@ public class EN extends DegrassiLangProvider {
     addItem(() -> ItemRegistration.PHOTOVOLTAIC_CELL.get(PhotovoltaicCell.VIII), "Photovoltaic Cell VIII");
 
     addItem(ConduitItems.ENERGY, "Energy Cable");
+    addItem(ConduitItems.HEAT, "Heat Cable");
     addItem(ConduitItems.ITEM, "Item Cable");
     addItem(ConduitItems.REDSTONE, "Redstone Cable");
     addItem(ConduitItems.BASIC_FLUID, "Basic Fluid Cable");
@@ -119,6 +120,10 @@ public class EN extends DegrassiLangProvider {
     addBlock(() -> BlockRegistration.FLUID_INPUT_TANK.get(MultiblockPartStorage.Fluid.Input.BASIC), "Basic Fluid Input Tank");
     addBlock(() -> BlockRegistration.FLUID_INPUT_TANK.get(MultiblockPartStorage.Fluid.Input.ADVANCED), "Advanced Fluid Input Tank");
     addBlock(() -> BlockRegistration.FLUID_INPUT_TANK.get(MultiblockPartStorage.Fluid.Input.EXTREME), "Extreme Fluid Input Tank");
+
+    addBlock(() -> BlockRegistration.QUADRUPLE_FLUID_INPUT_TANK.get(MultiblockPartStorage.Fluid.QuadrupleInput.BASIC), "Basic Quadruple Fluid Input Tank");
+    addBlock(() -> BlockRegistration.QUADRUPLE_FLUID_INPUT_TANK.get(MultiblockPartStorage.Fluid.QuadrupleInput.ADVANCED), "Advanced Quadruple Fluid Input Tank");
+    addBlock(() -> BlockRegistration.QUADRUPLE_FLUID_INPUT_TANK.get(MultiblockPartStorage.Fluid.QuadrupleInput.EXTREME), "Extreme Quadruple Fluid Input Tank");
 
     addBlock(() -> BlockRegistration.FLUID_OUTPUT_TANK.get(MultiblockPartStorage.Fluid.Output.BASIC), "Basic Fluid Output Tank");
     addBlock(() -> BlockRegistration.FLUID_OUTPUT_TANK.get(MultiblockPartStorage.Fluid.Output.ADVANCED), "Advanced Fluid Output Tank");
@@ -183,6 +188,7 @@ public class EN extends DegrassiLangProvider {
     addInfo("mb.per.tick", "%s mB/t");
     addInfo("generation", "Generation");
     addInfo("sp.generation", "%s FE/t");
+    // chest info
     addInfo("chest.rows", "Rows");
     addInfo("chest.rows.number", "%s");
     addInfo("chest.cols", "Columns");

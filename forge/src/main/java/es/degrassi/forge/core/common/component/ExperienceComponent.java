@@ -1,5 +1,6 @@
 package es.degrassi.forge.core.common.component;
 
+import com.google.gson.JsonObject;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ComponentManager;
@@ -37,8 +38,9 @@ public class ExperienceComponent implements IComponent {
   @Override
   public void fill(IRequirement<?> requirement) {
     if (requirement instanceof ExperienceRequirement req) {
-      this.experience = this.capacity = req.getXp();
-      markDirty();
+      this.capacity = req.getXp();
+      if (req.getMode().isInput()) this.experience = capacity;
+        markDirty();
     }
   }
 
@@ -128,10 +130,19 @@ public class ExperienceComponent implements IComponent {
 
   @Override
   public String toString() {
-    return "ExperienceComponent{" +
-      "experience=" + experience +
-      ", capacity=" + capacity +
-      ", id='" + id + '\'' +
-      '}';
+    return asJson().toString();
+  }
+
+  public JsonObject asJson() {
+    JsonObject json = new JsonObject();
+    json.addProperty("experience", experience);
+    json.addProperty("capacity", capacity);
+    json.addProperty("id", id);
+    json.addProperty("type", "experience");
+    return json;
+  }
+
+  public ExperienceComponent copy(MachineEntity<?> entity, ComponentManager manager) {
+    return new ExperienceComponent(manager, capacity, entity, id, mode);
   }
 }

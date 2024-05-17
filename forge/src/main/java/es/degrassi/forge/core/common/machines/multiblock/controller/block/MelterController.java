@@ -42,7 +42,7 @@ public class MelterController extends BaseMultiblockControllerBlock {
   ) {
     BlockEntity tile = level.getBlockEntity(pos);
     if (tile instanceof MelterControllerEntity entity) {
-      if (!level.isClientSide()) {
+      if (!level.isClientSide() && entity.getBlockState().getValue(VALID)) {
         MenuRegistry.openExtendedMenu((ServerPlayer) player, new MenuProvider() {
           @Override
           public @NotNull Component getDisplayName() {

@@ -3,7 +3,6 @@ package es.degrassi.forge.core.common.requirement;
 import com.google.gson.JsonObject;
 import es.degrassi.forge.api.codec.NamedCodec;
 import es.degrassi.forge.api.core.common.CraftingResult;
-import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.api.core.common.RequirementMode;
 import es.degrassi.forge.api.core.common.RequirementType;
@@ -27,6 +26,9 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
   private int amount;
   private final RequirementMode mode;
   private final String id;
+
+  private EnergyComponent component;
+
   public EnergyRequirement(int amount, RequirementMode mode, String id) {
     this.amount = amount;
     this.mode = mode;
@@ -60,26 +62,24 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
   }
 
   @Override
-  public CraftingResult processStart(IComponent component) {
+  public CraftingResult processStart() {
     if (component == null || this.mode == null) return CraftingResult.error(Component.literal("Energy Component not found or invalid requirement mode"));
-    EnergyComponent comp = (EnergyComponent) component;
     if (this.mode.isInput() && !this.mode.isPerTick()) {
-      if(this.amount == comp.extractRecipeEnergy(this.amount, true)) {
-        comp.extractRecipeEnergy(this.amount, false);
+      if(this.amount == component.extractRecipeEnergy(this.amount, true)) {
+        component.extractRecipeEnergy(this.amount, false);
         return CraftingResult.success();
       }
-      return CraftingResult.error(Component.literal("Can not extract energy, expected " + this.amount + " FE, but only found " + comp.getEnergyStored() + " FE"));
+      return CraftingResult.error(Component.literal("Can not extract energy, expected " + this.amount + " FE, but only found " + component.getEnergyStored() + " FE"));
     }
     return CraftingResult.pass();
   }
 
   @Override
-  public CraftingResult processEnd(IComponent component) {
+  public CraftingResult processEnd() {
     if (component == null || this.mode == null) return CraftingResult.error(Component.literal("Energy Component not found or invalid requirement mode"));
-    EnergyComponent comp = (EnergyComponent) component;
     if(this.mode.isOutput() && !this.mode.isPerTick()) {
-      if (this.amount == comp.receiveRecipeEnergy(this.amount, true)) {
-        comp.receiveRecipeEnergy(this.amount, false);
+      if (this.amount == component.receiveRecipeEnergy(this.amount, true)) {
+        component.receiveRecipeEnergy(this.amount, false);
         return CraftingResult.success();
       }
       return CraftingResult.error(Component.literal("Can not receive energy, not enough space to store " + this.amount + " FE"));
@@ -88,19 +88,18 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
   }
 
   @Override
-  public CraftingResult processTick(IComponent component) {
+  public CraftingResult processTick() {
     if (component == null || this.mode == null) return CraftingResult.error(Component.literal("Energy Component not found or invalid requirement mode"));
-    EnergyComponent comp = (EnergyComponent) component;
     if (this.mode.isPerTick()) {
       if (this.mode.isInput()) {
-        if (this.amount == comp.extractRecipeEnergy(this.amount, true)) {
-          comp.extractRecipeEnergy(this.amount, false);
+        if (this.amount == component.extractRecipeEnergy(this.amount, true)) {
+          component.extractRecipeEnergy(this.amount, false);
           return CraftingResult.success();
         }
-        return CraftingResult.error(Component.literal("Can not extract energy, expected " + this.amount + " FE, but only found " + comp.getEnergyStored() + " FE"));
+        return CraftingResult.error(Component.literal("Can not extract energy, expected " + this.amount + " FE, but only found " + component.getEnergyStored() + " FE"));
       } else if(this.mode.isOutput()) {
-        if (this.amount == comp.receiveRecipeEnergy(this.amount, true)) {
-          comp.receiveRecipeEnergy(this.amount, false);
+        if (this.amount == component.receiveRecipeEnergy(this.amount, true)) {
+          component.receiveRecipeEnergy(this.amount, false);
           return CraftingResult.success();
         }
         return CraftingResult.error(Component.literal("Can not receive energy, not enough space to store " + this.amount + " FE"));
@@ -110,28 +109,27 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
   }
 
   @Override
-  public boolean componentMatches(IComponent component) {
+  public boolean componentMatches(EnergyComponent component) {
     return component instanceof EnergyComponent;
   }
 
   @Override
-  public boolean matches(IComponent component, int recipeTime) {
+  public boolean matches(EnergyComponent component, int recipeTime) {
     if (component == null || this.mode == null) return false;
     if (!componentMatches(component)) return false;
-    EnergyComponent comp = (EnergyComponent) component;
     return switch(getMode()) {
       case INPUT, INPUT_PER_TICK -> {
         if (getMode().isPerTick()) {
-          yield comp.extractRecipeEnergy(amount * recipeTime, true) == amount * recipeTime;
+          yield component.extractRecipeEnergy(amount * recipeTime, true) == amount * recipeTime;
         } else {
-          yield comp.extractRecipeEnergy(amount, true) == amount;
+          yield component.extractRecipeEnergy(amount, true) == amount;
         }
       }
       case OUTPUT, OUTPUT_PER_TICK -> {
         if (getMode().isPerTick()) {
-          yield comp.receiveRecipeEnergy(amount * recipeTime, true) == amount * recipeTime;
+          yield component.receiveRecipeEnergy(amount * recipeTime, true) == amount * recipeTime;
         } else {
-          yield comp.receiveRecipeEnergy(amount, true) == amount;
+          yield component.receiveRecipeEnergy(amount, true) == amount;
         }
       }
     };
@@ -149,10 +147,15 @@ public class EnergyRequirement implements IRequirement<EnergyComponent> {
 
   @Override
   public String toString() {
-    return "EnergyRequirement{" +
-      "amount=" + amount +
-      ", mode=" + mode +
-      ", id='" + id + '\'' +
-      "}";
+    return asJson().toString();
+  }
+
+  public JsonObject asJson() {
+    JsonObject json = new JsonObject();
+    json.addProperty("type", getTypeString());
+    json.addProperty("amount", amount);
+    json.addProperty("mode", mode.toString());
+    json.addProperty("id", id);
+    return json;
   }
 }

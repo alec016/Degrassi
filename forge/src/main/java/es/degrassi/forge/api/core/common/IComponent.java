@@ -1,7 +1,9 @@
 package es.degrassi.forge.api.core.common;
 
+import com.google.gson.JsonObject;
 import es.degrassi.forge.core.common.ComponentManager;
 import es.degrassi.forge.core.common.component.ComponentIOMode;
+import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import net.minecraft.nbt.CompoundTag;
 
 public interface IComponent extends IType {
@@ -24,4 +26,6 @@ public interface IComponent extends IType {
   CompoundTag serialize();
 
   String getTypeString();
+
+  IComponent copy(MachineEntity<?> entity, ComponentManager manager);
 }

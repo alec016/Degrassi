@@ -1,5 +1,7 @@
 package es.degrassi.forge.core.common.component;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ComponentManager;
@@ -12,6 +14,8 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
@@ -22,8 +26,8 @@ import org.jetbrains.annotations.NotNull;
 public class FluidComponent extends FluidTank implements IComponent {
   private final ComponentManager manager;
   private final String id;
-  private final boolean whitelist;
-  private final List<Fluid> filter;
+  private boolean whitelist;
+  private List<Fluid> filter;
   private final MachineEntity<?> entity;
   private ComponentIOMode mode;
 
@@ -60,7 +64,11 @@ public class FluidComponent extends FluidTank implements IComponent {
   @Override
   public void fill(IRequirement<?> requirement) {
     if (requirement instanceof FluidRequirement req) {
-      this.fluid = new FluidStack(req.getFluid(), req.getAmount());
+      this.capacity = req.getAmount();
+      this.filter.add(req.getFluid());
+      this.whitelist = true;
+      if (req.getMode().isInput())
+        this.fluid = new FluidStack(req.getFluid(), req.getAmount());
       markDirty();
     }
   }
@@ -71,6 +79,10 @@ public class FluidComponent extends FluidTank implements IComponent {
     super.writeToNBT(tag);
     tag.putInt("capacity", capacity);
     tag.putString("mode", mode.serialize());
+    tag.putBoolean("whitelist", whitelist);
+    ListTag filterListTag = new ListTag();
+    filter.forEach(fluid -> filterListTag.add(new FluidStack(fluid, 0).writeToNBT(new CompoundTag())));
+    tag.put("filter", filterListTag);
     tag.putString("id", id);
     return tag;
   }
@@ -79,7 +91,11 @@ public class FluidComponent extends FluidTank implements IComponent {
   public void deserialize(CompoundTag nbt) {
     super.readFromNBT(nbt);
     capacity = nbt.getInt("capacity");
+    whitelist = nbt.getBoolean("whitelist");
     mode = ComponentIOMode.deserialize(nbt.getString("mode"));
+    filter.clear();
+    ListTag filterTagList = nbt.getList("filter", Tag.TAG_COMPOUND);
+    filterTagList.forEach(tag -> filter.add(FluidStack.loadFluidStackFromNBT((CompoundTag) tag).getFluid()));
   }
 
   public int toComparatorPower() {
@@ -128,5 +144,26 @@ public class FluidComponent extends FluidTank implements IComponent {
   @Override
   public String getTypeString() {
     return "fluid";
+  }
+
+  @Override
+  public String toString() {
+    return asJson().toString();
+  }
+
+  public JsonObject asJson() {
+    JsonObject json = new JsonObject();
+    json.addProperty("id", id);
+    json.addProperty("whitelist", whitelist);
+    json.addProperty("mode", mode.serialize());
+    JsonArray filter = new JsonArray();
+    this.filter.forEach(fluid -> filter.add(fluid.getFluidType().getDescription().getString()));
+    json.add("filter", filter);
+    json.addProperty("type", "fluid");
+    return json;
+  }
+
+  public FluidComponent copy(MachineEntity<?> entity, ComponentManager manager) {
+    return new FluidComponent(manager, id, whitelist, capacity, entity, mode, filter.toArray(Fluid[]::new));
   }
 }

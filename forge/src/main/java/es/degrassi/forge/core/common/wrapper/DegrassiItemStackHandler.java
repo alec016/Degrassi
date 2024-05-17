@@ -1,12 +1,13 @@
 package es.degrassi.forge.core.common.wrapper;
 
-import es.degrassi.common.utils.DegrassiLogger;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ComponentManager;
 import es.degrassi.forge.core.common.component.ComponentIOMode;
 import es.degrassi.forge.core.common.component.ItemComponent;
-import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.InputBusEntity;
+import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.common.requirement.ItemRequirement;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -28,15 +29,16 @@ public class DegrassiItemStackHandler implements IItemHandlerModifiable, IItemHa
   private final List<ItemComponent> components;
   private final ComponentManager manager;
   private final AtomicInteger count = new AtomicInteger(0);
+  private final String id = "itemHandler";
+
+  public DegrassiItemStackHandler(ComponentManager manager) {
+    components = new LinkedList<>();
+    this.manager = manager;
+  }
 
   @Override
   public void markDirty() {
     components.forEach(IComponent::markDirty);
-  }
-
-  @Override
-  public String getId() {
-    return "itemHandler";
   }
 
   @Override
@@ -64,13 +66,7 @@ public class DegrassiItemStackHandler implements IItemHandlerModifiable, IItemHa
   public void setMode(ComponentIOMode mode) {}
 
   @Override
-  public void serialize(CompoundTag nbt) {
-  }
-
-  @Override
   public CompoundTag serialize() {
-    if (getManager().getEntity() instanceof InputBusEntity && !getManager().getEntity().dummy())
-      DegrassiLogger.INSTANCE.info("Serializing ItemStackHandler from {}", this);
     CompoundTag nbt = new CompoundTag();
     ListTag listTag = new ListTag();
     CompoundTag compound;
@@ -82,8 +78,6 @@ public class DegrassiItemStackHandler implements IItemHandlerModifiable, IItemHa
     nbt.put("list", listTag);
     nbt.putString("id", getId());
     nbt.putInt("Size", components.size());
-    if (getManager().getEntity() instanceof InputBusEntity && !getManager().getEntity().dummy())
-      DegrassiLogger.INSTANCE.info("Serialized ItemStackHandler to {} with nbt {}", this, nbt);
     return nbt;
   }
 
@@ -107,11 +101,6 @@ public class DegrassiItemStackHandler implements IItemHandlerModifiable, IItemHa
   @Override
   public String getTypeString() {
     return "itemHandler";
-  }
-
-  public DegrassiItemStackHandler(ComponentManager manager) {
-    components = new LinkedList<>();
-    this.manager = manager;
   }
 
   @Override
@@ -247,13 +236,28 @@ public class DegrassiItemStackHandler implements IItemHandlerModifiable, IItemHa
     while (components.size() < size) {
       components.add(null);
     }
+    count.set(components.size());
   }
 
   @Override
   public String toString() {
-    return "DegrassiItemStackHandler{" +
-      "components=" + components +
-      ", size=" + components.size() +
-      '}';
+    return asJson().toString();
+  }
+
+  public JsonObject asJson() {
+    JsonObject json = new JsonObject();
+    JsonArray components = new JsonArray();
+    this.components.forEach(component -> components.add(component.asJson()));
+    json.add("components", components);
+    json.addProperty("size", components.size());
+    json.addProperty("type", "itemHandler");
+    return json;
+  }
+
+  @Override
+  public DegrassiItemStackHandler copy(MachineEntity<?> entity, ComponentManager manager) {
+    DegrassiItemStackHandler handler = new DegrassiItemStackHandler(manager);
+    handler.addAll(components.stream().map(component -> component.copy(entity, manager)).toList());
+    return handler;
   }
 }

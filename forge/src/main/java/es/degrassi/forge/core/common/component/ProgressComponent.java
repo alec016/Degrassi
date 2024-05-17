@@ -1,5 +1,6 @@
 package es.degrassi.forge.core.common.component;
 
+import com.google.gson.JsonObject;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ComponentManager;
@@ -94,10 +95,19 @@ public class ProgressComponent implements IComponent {
 
   @Override
   public String toString() {
-    return "ProgressComponent{" +
-      "progress=" + getProgress() +
-      ", maxProgress=" + getMaxProgress() +
-      ", id='" + id + "'" +
-      '}';
+    return asJson().toString();
+  }
+
+  public JsonObject asJson() {
+    JsonObject json = new JsonObject();
+    json.addProperty("progress", getProgress());
+    json.addProperty("maxProgress", getMaxProgress());
+    json.addProperty("id", id);
+    json.addProperty("type", "progress");
+    return json;
+  }
+
+  public ProgressComponent copy(MachineEntity<?> entity, ComponentManager manager) {
+    return new ProgressComponent(manager, entity);
   }
 }

@@ -1,5 +1,7 @@
 package es.degrassi.forge.core.common.component;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ComponentManager;
@@ -23,7 +25,7 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
   private final ComponentManager manager;
   private final MachineEntity<?> entity;
   private final List<Item> filter;
-  private final boolean whitelist;
+  private boolean whitelist;
   private ComponentIOMode mode;
 
   public ItemComponent(ComponentManager manager, String id, MachineEntity<?> entity, ComponentIOMode mode) {
@@ -40,7 +42,8 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
     this.id = id;
     this.whitelist = whitelist;
     this.entity = entity;
-    this.filter = List.of(filter);
+    this.filter = new ArrayList<>();
+    this.filter.addAll(List.of(filter));
     this.mode = mode;
   }
 
@@ -55,7 +58,13 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
   @Override
   public void fill(IRequirement<?> requirement) {
     if (requirement instanceof ItemRequirement req) {
-      setStackInSlot(0, new ItemStack(req.getItem(), req.getAmount()));
+      if (!this.filter.isEmpty())
+        this.filter.clear();
+      this.filter.add(req.getItem());
+      this.whitelist = true;
+      if (req.getMode().isInput())
+        setStackInSlot(0, new ItemStack(req.getItem(), req.getAmount()));
+      markDirty();
     }
   }
 
@@ -130,10 +139,24 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
 
   @Override
   public String toString() {
-    return "ItemComponent{" +
-      "id='" + id + '\'' +
-      ", item=" + getStackInSlot(0).getHoverName().getString() +
-      ", amount=" + getStackInSlot(0).getCount() +
-      '}';
+    return asJson().toString();
+  }
+
+  public JsonObject asJson() {
+    JsonObject json = new JsonObject();
+    json.addProperty("id", id);
+    json.addProperty("whitelist", whitelist);
+    json.addProperty("mode", mode.serialize());
+    json.addProperty("item", getStackInSlot(0).getHoverName().getString());
+    json.addProperty("amount", getStackInSlot(0).getCount());
+    JsonArray filter = new JsonArray();
+    this.filter.forEach(item -> filter.add(item.getDefaultInstance().getHoverName().getString()));
+    json.add("filter", filter);
+    json.addProperty("type", "item");
+    return json;
+  }
+
+  public ItemComponent copy(MachineEntity<?> entity, ComponentManager manager) {
+    return new ItemComponent(manager, id, whitelist, entity, mode, filter.toArray(Item[]::new));
   }
 }

@@ -3,7 +3,6 @@ package es.degrassi.forge.core.common.requirement;
 import com.google.gson.JsonObject;
 import es.degrassi.forge.api.codec.NamedCodec;
 import es.degrassi.forge.api.core.common.CraftingResult;
-import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.api.core.common.RequirementMode;
 import es.degrassi.forge.api.core.common.RequirementType;
@@ -12,13 +11,14 @@ import es.degrassi.forge.core.common.component.ItemComponent;
 import es.degrassi.forge.core.init.RequirementRegistration;
 import java.util.Objects;
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
-
 @Getter
+@Setter
 public class ItemRequirement implements IRequirement<ItemComponent> {
   public static final NamedCodec<ItemRequirement> CODEC = NamedCodec.record(
     instance -> instance.group(
@@ -34,6 +34,8 @@ public class ItemRequirement implements IRequirement<ItemComponent> {
   private final int amount;
   private final String id;
   private final RequirementMode mode;
+
+  private ItemComponent component;
 
   public ItemRequirement(Item item, int amount, String id, RequirementMode mode) {
     this.item = item;
@@ -63,20 +65,19 @@ public class ItemRequirement implements IRequirement<ItemComponent> {
   }
 
   @Override
-  public boolean componentMatches(IComponent component) {
+  public boolean componentMatches(ItemComponent component) {
     return component instanceof ItemComponent;
   }
 
   @Override
-  public boolean matches(IComponent component, int recipeTime) {
+  public boolean matches(ItemComponent component, int recipeTime) {
     if (component == null || mode == null) return false;
     if (!componentMatches(component)) return false;
-    ItemComponent item = (ItemComponent) component;
     return switch (getMode()) {
-      case INPUT -> item.getStackInSlot(0).is(this.item) && item.extractRecipeItem(0, amount, true).getCount() == amount;
+      case INPUT -> component.getStackInSlot(0).is(this.item) && component.extractRecipeItem(0, amount, true).getCount() == amount;
       case OUTPUT -> {
         ItemStack toInsert = new ItemStack(this.item, this.amount);
-        ItemStack inserted = item.insertRecipeItem(0, toInsert.copy(), true);
+        ItemStack inserted = component.insertRecipeItem(0, toInsert.copy(), true);
         yield inserted.getCount() + this.amount == toInsert.getCount();
       }
       default -> false;
@@ -84,7 +85,7 @@ public class ItemRequirement implements IRequirement<ItemComponent> {
   }
 
   @Override
-  public CraftingResult processTick(IComponent component) {
+  public CraftingResult processTick() {
     if (component == null || mode == null) return CraftingResult.error(Component.literal("No component found or invalid mode"));
     if (!componentMatches(component)) return CraftingResult.error(Component.literal("Component miss match"));
     if (getMode().isPerTick()) return CraftingResult.error(Component.literal("Item requirement can not be per tick"));
@@ -92,26 +93,24 @@ public class ItemRequirement implements IRequirement<ItemComponent> {
   }
 
   @Override
-  public CraftingResult processStart(IComponent component) {
+  public CraftingResult processStart() {
     if (component == null || mode == null) return CraftingResult.error(Component.literal("No component found or invalid mode"));
     if (!componentMatches(component)) return CraftingResult.error(Component.literal("Component miss match"));
-    ItemComponent item = (ItemComponent) component;
     if (getMode().isPerTick()) return CraftingResult.error(Component.literal("Item requirement can not be per tick"));
     else if (getMode().isInput()) {
-      item.extractRecipeItem(0, amount, false);
+      component.extractRecipeItem(0, amount, false);
       return CraftingResult.success();
     }
     return CraftingResult.pass();
   }
 
   @Override
-  public CraftingResult processEnd(IComponent component) {
+  public CraftingResult processEnd() {
     if (component == null || mode == null) return CraftingResult.error(Component.literal("No component found or invalid mode"));
     if (!componentMatches(component)) return CraftingResult.error(Component.literal("Component miss match"));
-    ItemComponent item = (ItemComponent) component;
     if (getMode().isPerTick()) return CraftingResult.error(Component.literal("Item requirement can not be per tick"));
     else if (getMode().isOutput()) {
-      item.insertRecipeItem(0, new ItemStack(this.item, amount), false);
+      component.insertRecipeItem(0, new ItemStack(this.item, amount), false);
       return CraftingResult.success();
     }
     return CraftingResult.pass();
@@ -132,13 +131,19 @@ public class ItemRequirement implements IRequirement<ItemComponent> {
     return "item";
   }
 
+
   @Override
   public String toString() {
-    return "ItemRequirement{" +
-      "item=" + item.getDefaultInstance().getHoverName().getString() +
-      ", amount=" + amount +
-      ", id='" + id + '\'' +
-      ", mode=" + mode +
-      "}";
+    return asJson().toString();
+  }
+
+  public JsonObject asJson() {
+    JsonObject json = new JsonObject();
+    json.addProperty("type", getTypeString());
+    json.addProperty("amount", amount);
+    json.addProperty("mode", mode.toString());
+    json.addProperty("id", id);
+    json.addProperty("item", item.getDefaultInstance().getHoverName().getString());
+    return json;
   }
 }

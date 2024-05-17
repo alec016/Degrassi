@@ -1,5 +1,7 @@
 package es.degrassi.forge.core.common;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import es.degrassi.forge.api.core.common.IManager;
 import es.degrassi.forge.api.core.common.IType;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
@@ -39,10 +41,17 @@ public abstract class Manager<T extends IType> implements IManager<T> {
     get().clear();
     return this;
   }
+
   @Override
   public String toString() {
-    return "Manager{" +
-      "list=" + list +
-      '}';
+    return asJson().toString();
+  }
+
+  public JsonObject asJson() {
+    JsonObject json = new JsonObject();
+    JsonArray list = new JsonArray();
+    this.list.forEach(item -> list.add(item.asJson()));
+    json.add("list", list);
+    return json;
   }
 }

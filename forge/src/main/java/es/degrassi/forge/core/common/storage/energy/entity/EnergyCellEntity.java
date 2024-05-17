@@ -110,4 +110,12 @@ public class EnergyCellEntity extends StorageEntity<Storage.Energy> {
     super.invalidateCaps();
     lazyEnergyHandler.invalidate();
   }
+
+  public EnergyCellEntity copy(boolean dummy) {
+    return new EnergyCellEntity(getBlockPos(), getBlockState(), getTier()) {
+      public boolean dummy() {
+        return dummy;
+      }
+    };
+  }
 }

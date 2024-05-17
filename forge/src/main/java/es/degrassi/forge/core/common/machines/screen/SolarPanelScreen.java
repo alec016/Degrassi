@@ -36,7 +36,7 @@ public class SolarPanelScreen extends MachineScreen<SolarPanelContainer> {
         ),
         95,
         35,
-        4210752,
+        defaultColor,
         false
       );
       guiGraphics.drawString(
@@ -47,7 +47,7 @@ public class SolarPanelScreen extends MachineScreen<SolarPanelContainer> {
         ),
         95,
         55,
-        4210752,
+        defaultColor,
         false
       );
       guiGraphics.drawString(
@@ -58,7 +58,7 @@ public class SolarPanelScreen extends MachineScreen<SolarPanelContainer> {
         ),
         95,
         95,
-        4210752,
+        defaultColor,
         false
       );
     });
@@ -75,7 +75,7 @@ public class SolarPanelScreen extends MachineScreen<SolarPanelContainer> {
         ),
         95,
         75,
-        4210752,
+        defaultColor,
         false
       )
     );

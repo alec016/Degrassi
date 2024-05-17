@@ -2,7 +2,9 @@ package es.degrassi.forge.api.core.common;
 
 import es.degrassi.forge.api.codec.NamedCodec;
 import java.util.Locale;
+import lombok.Getter;
 
+@Getter
 public enum RequirementMode {
   INPUT("input"),
   INPUT_PER_TICK(true, "input_per_tick"),
@@ -13,16 +15,14 @@ public enum RequirementMode {
 
   private final boolean perTick;
   private final String string;
+
   RequirementMode(String string) {
     this(false, string);
   }
+
   RequirementMode(boolean perTick, String string) {
     this.perTick = perTick;
     this.string = string;
-  }
-
-  public boolean isPerTick() {
-    return perTick;
   }
 
   public boolean isOutput() {

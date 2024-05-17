@@ -1,8 +1,6 @@
 package es.degrassi.forge.core.common.machines.multiblock.controller.block.entity;
 
 import es.degrassi.common.DegrassiLocation;
-import es.degrassi.forge.core.common.ComponentManager;
-import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.machines.multiblock.controller.block.BaseMultiblockControllerBlock;
 import es.degrassi.forge.core.common.machines.multiblock.controller.block.MelterController;
 import es.degrassi.forge.core.common.machines.multiblock.controller.block.entity.recipe.MelterRecipe;
@@ -10,9 +8,6 @@ import es.degrassi.forge.core.common.machines.multiblock.controller.block.entity
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.EnergyHatch;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.FluidOutputTank;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.InputBus;
-import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.EnergyHatchEntity;
-import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.FluidOutputTankEntity;
-import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.InputBusEntity;
 import es.degrassi.forge.core.common.machines.multiblock.uils.StateMatcher;
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.EntityRegistration;
@@ -25,28 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import oshi.util.tuples.Pair;
 
 public class MelterControllerEntity extends BaseMultiblockControllerEntity<MelterRecipe, MelterController, MelterControllerEntity> {
-  public static final MelterControllerEntity DUMMY = new MelterControllerEntity(BlockPos.ZERO, BlockRegistration.MELTER_CONTROLLER.get().defaultBlockState(), BlockRegistration.MELTER_CONTROLLER.get()) {
-    @Override
-    public ComponentManager getComponentManager() {
-      return componentManager
-        .mergeWith(InputBusEntity.DUMMY.getComponentManager())
-        .mergeWith(EnergyHatchEntity.DUMMY.getComponentManager())
-        .mergeWith(FluidOutputTankEntity.DUMMY.getComponentManager());
-    }
-
-    @Override
-    public ElementManager getElementManager() {
-      ElementManager manager = new ElementManager(this)
-        .addEnergy(10, 10, Component.literal("energy"), new DegrassiLocation("textures/gui/multiblock/parts/energy_hatch_empty.png"), new DegrassiLocation("textures/gui/multiblock/parts/energy_hatch_filled.png"), "energy")
-        .addItem(35, 33, Component.literal("itemInput"), new DegrassiLocation("textures/gui/base_slot.png"), "input")
-        .addFluid(115, 6, Component.literal("fluidOutput"), new DegrassiLocation("textures/gui/base_fluid_storage.png"), "fluid_output");
-      return elementManager.mergeWith(manager);
-    }
-
-    public boolean dummy() {
-      return true;
-    }
-  };
+  public static final MelterControllerEntity DUMMY = dummyController();
 
   public MelterControllerEntity(BlockPos blockPos, BlockState blockState, BaseMultiblockControllerBlock block) {
     super(EntityRegistration.MELTER.get(), blockPos, blockState, block);
@@ -128,7 +102,6 @@ public class MelterControllerEntity extends BaseMultiblockControllerEntity<Melte
        * "frame,air,frame
      * }
      */
-    init();
 
     elementManager
       .addPlayerInventory(
@@ -136,14 +109,51 @@ public class MelterControllerEntity extends BaseMultiblockControllerEntity<Melte
         97,
         Component.literal("player_inventory"),
         new DegrassiLocation("textures/gui/base_inventory.png")
+      );
+
+    jeiComponentManager
+      .addEnergy(0, "energy")
+      .addItem("input")
+      .addFluid(0, "output");
+
+    jeiElementManager
+      .addEnergy(
+        10, 10,
+        Component.literal("energy"),
+        new DegrassiLocation("textures/gui/jei/melter_energy_empty.png"),
+        new DegrassiLocation("textures/gui/jei/melter_energy_filled.png"),
+        "energy"
+      ).addItem(
+        35, 33,
+        Component.literal("item_input"),
+        new DegrassiLocation("textures/gui/base_slot.png"),
+        "input"
+      ).addFluid(
+        115, 6,
+        Component.literal("fluid_output"),
+        new DegrassiLocation("textures/gui/jei/melter_fluid.png"),
+        "output"
       ).addProgress(
-        66,
-        33,
+        62, 33,
         Component.literal("progress"),
-        new DegrassiLocation("textures/gui/melter_progress_empty.png"),
-        new DegrassiLocation("textures/gui/melter_progress_filled.png")
+        new DegrassiLocation("textures/gui/jei/melter_progress_empty.png"),
+        new DegrassiLocation("textures/gui/jei/melter_progress_filled.png")
       );
 
     this.processor = new MelterProcessor(this, false);
+    init();
+  }
+
+  public MelterControllerEntity copy(boolean dummy) {
+    return dummy ? dummyController() : new MelterControllerEntity(getBlockPos(), getBlockState(), getBlock());
+  }
+
+  public static MelterControllerEntity dummyController() {
+    return new MelterControllerEntity(BlockPos.ZERO, BlockRegistration.MELTER_CONTROLLER.get().defaultBlockState(), BlockRegistration.MELTER_CONTROLLER.get()) {
+      @Override
+      public boolean dummy() {
+        return true;
+      }
+    };
   }
 }

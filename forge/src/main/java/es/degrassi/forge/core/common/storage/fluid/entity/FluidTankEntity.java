@@ -157,4 +157,12 @@ public class FluidTankEntity extends StorageEntity<Storage.Fluid> {
     super.invalidateCaps();
     lazyFluidHandler.invalidate();
   }
+
+  public FluidTankEntity copy(boolean dummy) {
+    return new FluidTankEntity(getBlockPos(), getBlockState(), getTier()) {
+      public boolean dummy() {
+        return dummy;
+      }
+    };
+  }
 }

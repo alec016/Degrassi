@@ -1,6 +1,7 @@
 package es.degrassi.forge.core.common.machines.multiblock.parts.block.entity;
 
-import es.degrassi.forge.core.common.component.ComponentIOMode;
+import es.degrassi.common.DegrassiLocation;
+import es.degrassi.common.utils.TextureSizeHelper;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.FluidInputTank;
 import es.degrassi.forge.core.common.machines.multiblock.uils.handler.FluidSidedHandler;
 import es.degrassi.forge.core.common.wrapper.DegrassiFluidHandler;
@@ -13,6 +14,7 @@ import lombok.Setter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -23,65 +25,43 @@ import org.jetbrains.annotations.Nullable;
 @Getter
 @Setter
 public class FluidOutputTankEntity extends BaseMultiblockPartEntity<MultiblockPartStorage.Fluid.Output> {
-  public static final FluidOutputTankEntity DUMMY = new FluidOutputTankEntity(BlockPos.ZERO, BlockRegistration.FLUID_OUTPUT_TANK.get(MultiblockPartStorage.Fluid.Output.BASIC).defaultBlockState(), MultiblockPartStorage.Fluid.Output.BASIC) {
-    @Override
-    public boolean dummy() {
-      return true;
-    }
-  };
+  public static final FluidOutputTankEntity DUMMY = dummyEntity();
+
   private final DegrassiFluidHandler fluid;
   private final Map<Direction, LazyOptional<FluidSidedHandler>> fluidWrapperHandlerMap;
 
   public FluidOutputTankEntity(BlockPos pos, BlockState blockState, MultiblockPartStorage.Fluid.Output variant) {
     super(EntityRegistration.FLUID_OUTPUT_TANK.get(), pos, blockState, variant);
 
-    getComponentManager().addFluid(variant.getCapacity(), "fluid_output", ComponentIOMode.OUTPUT);
-
-    fluid = getComponentManager().getFluidHandler();
-    fluidWrapperHandlerMap = Map.of(
-      Direction.UP, LazyOptional.of(() -> new FluidSidedHandler(
-        getComponentManager(),
-        fluid,
-        getBlockState().getValue(FluidInputTank.FACING),
-        null,
-        Direction.UP
-      )),
-      Direction.DOWN, LazyOptional.of(() -> new FluidSidedHandler(
-        getComponentManager(),
-        fluid,
-        getBlockState().getValue(FluidInputTank.FACING),
-        null,
-        Direction.DOWN
-      )),
-      Direction.NORTH, LazyOptional.of(() -> new FluidSidedHandler(
-        getComponentManager(),
-        fluid,
-        getBlockState().getValue(FluidInputTank.FACING),
-        null,
-        Direction.NORTH
-      )),
-      Direction.SOUTH, LazyOptional.of(() -> new FluidSidedHandler(
-        getComponentManager(),
-        fluid,
-        getBlockState().getValue(FluidInputTank.FACING),
-        null,
-        Direction.SOUTH
-      )),
-      Direction.EAST, LazyOptional.of(() -> new FluidSidedHandler(
-        getComponentManager(),
-        fluid,
-        getBlockState().getValue(FluidInputTank.FACING),
-        null,
-        Direction.EAST
-      )),
-      Direction.WEST, LazyOptional.of(() -> new FluidSidedHandler(
-        getComponentManager(),
-        fluid,
-        getBlockState().getValue(FluidInputTank.FACING),
-        null,
-        Direction.WEST
-      ))
+    String id = "fluid_output";
+    ResourceLocation fluidLocation = new DegrassiLocation("textures/gui/base_fluid_storage.png");
+    componentManager.addFluid(variant.getCapacity(), id);
+    jeiComponentManager.addFluid(variant.getCapacity(), id);
+    elementManager.addFluid(
+      7,
+      20,
+      Component.literal(id),
+      fluidLocation,
+      id
     );
+    jeiElementManager.addFluid(
+      7,
+      20,
+      Component.literal(id),
+      fluidLocation,
+      id
+    );
+
+    elementManager.addPlayerInventory(
+      7,
+      20 + TextureSizeHelper.getTextureHeight(fluidLocation) + 5,
+      Component.literal("player_inventory"),
+      new DegrassiLocation("textures/gui/base_inventory.png")
+    );
+
+    fluid = componentManager.getFluidHandler();
+
+    fluidWrapperHandlerMap = FluidSidedHandler.DEFAULT_ALL_EXTRACT(componentManager, fluid, getBlockState().getValue(FluidInputTank.FACING));
   }
 
   @Override
@@ -101,5 +81,18 @@ public class FluidOutputTankEntity extends BaseMultiblockPartEntity<MultiblockPa
   @Override
   public Component getName() {
     return Component.translatable(getBlockState().getBlock().getDescriptionId());
+  }
+
+  public FluidOutputTankEntity copy(boolean dummy) {
+    return dummy ? dummyEntity() : new FluidOutputTankEntity(getBlockPos(), getBlockState(), getVariant());
+  }
+
+  public static FluidOutputTankEntity dummyEntity() {
+    return new FluidOutputTankEntity(BlockPos.ZERO, BlockRegistration.FLUID_OUTPUT_TANK.get(MultiblockPartStorage.Fluid.Output.BASIC).defaultBlockState(), MultiblockPartStorage.Fluid.Output.BASIC) {
+      @Override
+      public boolean dummy() {
+        return true;
+      }
+    };
   }
 }

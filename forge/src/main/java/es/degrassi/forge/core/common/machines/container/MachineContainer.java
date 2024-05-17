@@ -54,7 +54,7 @@ public abstract class MachineContainer<T extends MachineEntity<?>> extends Abstr
         }
       }
     });
-    int te_inventory_first_slot_index = index.get();
+    TE_INVENTORY_FIRST_SLOT_INDEX = index.get();
     entity.getComponentManager().getItemHandler().getComponents()
       .forEach(
         component -> entity
@@ -72,7 +72,6 @@ public abstract class MachineContainer<T extends MachineEntity<?>> extends Abstr
             )
           )
       );
-    TE_INVENTORY_FIRST_SLOT_INDEX = te_inventory_first_slot_index;
   }
 
   @Override

@@ -1,14 +1,16 @@
 package es.degrassi.forge.core.common.element;
 
-import es.degrassi.common.utils.DegrassiLogger;
+import com.google.gson.JsonObject;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IElement;
 import es.degrassi.common.utils.TextureSizeHelper;
+import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.component.ItemComponent;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import java.util.List;
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -22,11 +24,14 @@ import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
+@Setter
 public class ItemElement extends AbstractWidget implements IElement<ItemComponent> {
   private final ElementManager manager;
   private final String id;
   private ResourceLocation texture;
   private final boolean jei;
+
+  private IRequirement<ItemComponent> requirement;
 
   public ItemElement(
     ElementManager manager,
@@ -101,24 +106,27 @@ public class ItemElement extends AbstractWidget implements IElement<ItemComponen
   }
 
   @Override
-  public void renderInJei(GuiGraphics guiGraphics, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent component) {
+  public void renderInJei(GuiGraphics guiGraphics, IRequirement<?> requirement, MachineRecipe<?> recipe, double mouseX, double mouseY, IComponent component) {
     if (!jei) return;
     renderTexture(guiGraphics, texture, getX(), getY(), 0, 0, 0, getWidth(), getHeight(), getWidth(), getHeight());
   }
 
   @Override
   public String toString() {
-    return "ItemElement{" +
-      "x=" + getX() +
-      ", y=" + getY() +
-      ", id='" + id + '\'' +
-      ", texture=" + texture +
-      ", width=" + width +
-      ", height=" + height +
-      '}';
+    return asJson().toString();
   }
 
-  public boolean jei() {
-    return jei;
+  public JsonObject asJson() {
+    JsonObject json = new JsonObject();
+    asJson(json);
+    json.addProperty("width", width);
+    json.addProperty("height", height);
+    json.addProperty("texture", texture.toString());
+    return json;
+  }
+
+  @Override
+  public ItemElement copy(ElementManager manager) {
+    return new ItemElement(manager, getX(), getY(), getMessage(), id, texture, jei);
   }
 }

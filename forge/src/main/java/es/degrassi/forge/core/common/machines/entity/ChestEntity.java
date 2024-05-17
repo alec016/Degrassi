@@ -33,7 +33,7 @@ public class ChestEntity extends MachineEntity<ChestRecipe> implements LidBlockE
 
     this.tier = tier;
 
-    getElementManager().addPlayerInventory(
+    elementManager.addPlayerInventory(
       tier.getInvX(),
       tier.getInvY(),
       Component.literal("player_inventory"),
@@ -45,8 +45,8 @@ public class ChestEntity extends MachineEntity<ChestRecipe> implements LidBlockE
     for (int i = 0; i < tier.getRows(); i++) {
       for (j = 0; j < tier.getCols(); j++) {
         id = "item_" + k;
-        getComponentManager().addItem(id);
-        getElementManager().addItem(
+        componentManager.addItem(id);
+        elementManager.addItem(
           7 + j * 18,
           15 + i * 18,
           Component.literal(id),
@@ -156,5 +156,13 @@ public class ChestEntity extends MachineEntity<ChestRecipe> implements LidBlockE
   @Override
   public float getOpenNess(float partialTicks) {
     return this.chestLidController.getOpenness(partialTicks);
+  }
+
+  public ChestEntity copy(boolean dummy) {
+    return new ChestEntity(getBlockPos(), getBlockState(), getTier()) {
+      public boolean dummy() {
+        return dummy;
+      }
+    };
   }
 }

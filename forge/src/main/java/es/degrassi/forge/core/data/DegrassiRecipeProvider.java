@@ -377,19 +377,40 @@ public class DegrassiRecipeProvider extends RecipeProvider implements ICondition
   }
 
   private void addMachineRecipes(@NotNull Consumer<FinishedRecipe> writer) {
-    MachineRecipeGeneratorBuilder furnace1 = MachineRecipeGeneratorBuilder.furnace(100);
-    furnace1
+    MachineRecipeGeneratorBuilder furnace = MachineRecipeGeneratorBuilder.furnace(100);
+    furnace
       .requireEnergy(500, "energy")
       .produceExperience(0.8f, "experience")
       .requireItem(Items.COAL, "input")
       .produceItem(Items.DIAMOND, "output");
-    furnace1.save(writer, new DegrassiLocation("coal_to_diamond"));
+    furnace.save(writer, new DegrassiLocation("coal_to_diamond"));
 
-    MachineRecipeGeneratorBuilder melter1 = MachineRecipeGeneratorBuilder.melter(100);
-    melter1
+    MachineRecipeGeneratorBuilder melter = MachineRecipeGeneratorBuilder.melter(100);
+    melter
       .requireEnergyPerTick(500, "energy")
       .requireItem(Items.DIAMOND, "")
       .produceFluid(Fluids.LAVA, 1000, "");
-    melter1.save(writer, new DegrassiLocation("diamond_to_lava"));
+    melter.save(writer, new DegrassiLocation("diamond_to_lava"));
+
+    melter = MachineRecipeGeneratorBuilder.melter(300);
+    melter
+      .requireEnergyPerTick(500, "energy")
+      .requireItem(Items.COBBLESTONE, "")
+      .produceFluid(Fluids.LAVA, 500, "");
+    melter.save(writer, new DegrassiLocation("cobblestone_to_lava"));
+
+    melter = MachineRecipeGeneratorBuilder.melter(200);
+    melter
+      .requireEnergyPerTick(500, "energy")
+      .requireItem(Items.STONE, "")
+      .produceFluid(Fluids.LAVA, 1000, "");
+    melter.save(writer, new DegrassiLocation("stone_to_lava"));
+
+    melter = MachineRecipeGeneratorBuilder.melter(1000);
+    melter
+      .requireEnergyPerTick(500, "energy")
+      .requireItem(Items.OBSIDIAN, "")
+      .produceFluid(Fluids.LAVA, 1000, "");
+    melter.save(writer, new DegrassiLocation("obsidian_to_lava"));
   }
 }

@@ -11,6 +11,7 @@ import java.util.concurrent.CompletableFuture;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +24,6 @@ public class DegrassiItemTagProvider extends ItemTagsProvider {
 
   @Override
   public void addTags(HolderLookup.@NotNull Provider provider) {
-
     for (Furnace tier : Furnace.values()) {
       this.tag(DegrassiTags.Items.FURNACE.get()).add(BlockRegistration.FURNACE.get(tier).asItem());
     }
@@ -48,6 +48,25 @@ public class DegrassiItemTagProvider extends ItemTagsProvider {
       .addTag(DegrassiTags.Items.FURNACE.get())
       .addTag(DegrassiTags.Items.SP.get())
       .addTag(DegrassiTags.Items.CHEST.get());
+
+    this.tag(DegrassiTags.Items.FRAME.get())
+      .add(BlockRegistration.MELTER_FRAME.get().asItem());
+
+    this.tag(DegrassiTags.Items.MBPARTS.get())
+      .add(BlockRegistration.ENERGY_HATCH.getAll().stream().map(Block::asItem).toArray(Item[]::new))
+      .add(BlockRegistration.FLUID_INPUT_TANK.getAll().stream().map(Block::asItem).toArray(Item[]::new))
+      .add(BlockRegistration.QUADRUPLE_FLUID_INPUT_TANK.getAll().stream().map(Block::asItem).toArray(Item[]::new))
+      .add(BlockRegistration.FLUID_OUTPUT_TANK.getAll().stream().map(Block::asItem).toArray(Item[]::new))
+      .add(BlockRegistration.INPUT_BUS.getAll().stream().map(Block::asItem).toArray(Item[]::new))
+      .add(BlockRegistration.OUTPUT_BUS.getAll().stream().map(Block::asItem).toArray(Item[]::new));
+
+    this.tag(DegrassiTags.Items.CONTROLLER.get())
+      .add(BlockRegistration.MELTER_CONTROLLER.get().asItem());
+
+    this.tag(DegrassiTags.Items.MULTIBLOCK.get())
+      .addTag(DegrassiTags.Items.CONTROLLER.get())
+      .addTag(DegrassiTags.Items.MBPARTS.get())
+      .addTag(DegrassiTags.Items.FRAME.get());
 
     this.tag(DegrassiTags.Items.WRENCH.get())
       .add(ItemRegistration.WRENCH.get());

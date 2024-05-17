@@ -1,5 +1,6 @@
 package es.degrassi.forge.core.common.component;
 
+import com.google.gson.JsonObject;
 import es.degrassi.forge.api.core.capability.IHeatStorage;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IRequirement;
@@ -118,5 +119,28 @@ public class HeatComponent implements IComponent, IHeatStorage {
 
   public boolean canInsert() {
     return mode.inputWillAll();
+  }
+
+  public double getFilledPercentage() {
+    return getHeat() / getHeatCapacity();
+  }
+
+  public HeatComponent copy(MachineEntity<?> entity, ComponentManager manager) {
+    return new HeatComponent(manager, heatCapacity, id, mode, entity);
+  }
+
+  @Override
+  public String toString() {
+    return asJson().toString();
+  }
+
+  public JsonObject asJson() {
+    JsonObject json = new JsonObject();
+    json.addProperty("id", id);
+    json.addProperty("mode", mode.serialize());
+    json.addProperty("heat", heat);
+    json.addProperty("heatCapacity", heatCapacity);
+    json.addProperty("type", "heat");
+    return json;
   }
 }
