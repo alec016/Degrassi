@@ -148,7 +148,6 @@ public abstract class BaseMultiblockControllerEntity<
       unifiedComponentManager = componentManager.get();
     }
     if (element) unifiedElementManager = elementManager.get();
-//    DegrassiLogger.INSTANCE.info("Entity: {}", this.asJson());
   }
 
   @Override

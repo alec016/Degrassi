@@ -97,11 +97,8 @@ public abstract class MachineProcessor<T extends MachineRecipe<T>, E extends Mac
             component.setMaxProgress(0);
             entity.resetErrorMessage();
             setPhase(Phase.NONE);
-            T recipe = searchForRecipe(entity.getComponentManager().get(), false);
-            if (recipe == null) {
-              entity.setIdle();
-            }
-            setRecipe(recipe);
+            entity.setIdle();
+            searchForRecipe(entity.getComponentManager().get(), true);
           });
         }
       }
@@ -167,21 +164,10 @@ public abstract class MachineProcessor<T extends MachineRecipe<T>, E extends Mac
 
   @Override
   public void searchForRecipe(List<? extends IComponent> components) {
-    if (!initialized) init();
-    AtomicReference<T> r = new AtomicReference<>(null);
-    recipes.forEach(recipe -> {
-      if (r.get() != null) return;
-      if (recipe.matches(components)) r.set(recipe);
-    });
-    if (r.get() != null) {
-      setRecipe(r.get());
-      entity.setRunning();
-      return;
-    }
-    setRecipe(null);
+    searchForRecipe(components, true);
   }
 
-  public T searchForRecipe(List<? extends IComponent> components, boolean update) {
+  public void searchForRecipe(List<? extends IComponent> components, boolean update) {
     if (!initialized) init();
     AtomicReference<T> r = new AtomicReference<>(null);
     recipes.forEach(recipe -> {
@@ -192,10 +178,10 @@ public abstract class MachineProcessor<T extends MachineRecipe<T>, E extends Mac
       if (r.get() != null) {
         setRecipe(r.get());
         entity.setRunning();
-      } else
-        setRecipe(null);
+        return;
+      }
+      setRecipe(null);
     }
-    return r.get();
   }
 
   public int getProgress() {

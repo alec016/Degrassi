@@ -74,9 +74,8 @@ public class FluidSidedHandler extends DegrassiFluidHandler {
   }
 
   private final DegrassiFluidHandler handler;
-  private final Direction extract;
-  private final Direction insert;
-  private final Direction from;
+  private final Direction extract, insert, from;
+
   public FluidSidedHandler(
     ComponentManager manager,
     DegrassiFluidHandler handler,

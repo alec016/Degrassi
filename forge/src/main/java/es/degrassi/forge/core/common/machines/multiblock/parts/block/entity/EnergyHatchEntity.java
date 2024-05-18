@@ -55,12 +55,12 @@ public class EnergyHatchEntity extends BaseMultiblockPartEntity<MultiblockPartSt
   public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
     if (cap == ForgeCapabilities.ENERGY) {
       if (side == null) return lazyEnergyHandler.cast();
-      if (energyWrapperHandlerMap.containsKey(side)) {
-        Direction localDir = this.getBlockState().getValue(EnergyHatch.FACING);
-        if (side == localDir)
-          return energyWrapperHandlerMap.get(localDir).cast();
-        return LazyOptional.empty();
+      if (side == this.getBlockState().getValue(EnergyHatch.FACING)) {
+        if (energyWrapperHandlerMap.containsKey(side)) {
+          return energyWrapperHandlerMap.get(side).cast();
+        }
       }
+      return LazyOptional.empty();
     }
     return super.getCapability(cap, side);
   }

@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "degrassi:block/quadruple_fluid_input_tank_advanced"
+    },
+    "facing=south": {
+      "model": "degrassi:block/quadruple_fluid_input_tank_advanced",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "degrassi:block/quadruple_fluid_input_tank_advanced",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "degrassi:block/quadruple_fluid_input_tank_advanced",
+      "y": 90
+    },
+    "facing=up": {
+      "model": "degrassi:block/quadruple_fluid_input_tank_advanced",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "degrassi:block/quadruple_fluid_input_tank_advanced",
+      "x": 90
+    }
+  }
+}

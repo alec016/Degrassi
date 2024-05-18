@@ -75,6 +75,7 @@ public class ItemSidedHandler extends DegrassiItemStackHandler {
 
   private final DegrassiItemStackHandler handler;
   private final Direction extract, insert, from;
+
   public ItemSidedHandler(
     ComponentManager manager,
     DegrassiItemStackHandler handler,

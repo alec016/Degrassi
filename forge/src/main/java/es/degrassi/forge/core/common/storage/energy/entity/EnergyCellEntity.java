@@ -76,10 +76,11 @@ public class EnergyCellEntity extends StorageEntity<Storage.Energy> {
 
   @Override
   public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap , @Nullable Direction side) {
-    if (cap == ForgeCapabilities.ENERGY) {
-      return lazyEnergyHandler.cast();
-    }
-    return super.getCapability(cap , side);
+    return ForgeCapabilities.ENERGY.orEmpty(cap, lazyEnergyHandler.cast());
+//    if (cap == ForgeCapabilities.ENERGY) {
+//      return lazyEnergyHandler.cast();
+//    }
+//    return super.getCapability(cap , side);
   }
 
   @Override

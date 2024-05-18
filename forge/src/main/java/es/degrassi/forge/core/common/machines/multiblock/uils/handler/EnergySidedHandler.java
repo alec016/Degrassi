@@ -72,9 +72,7 @@ public class EnergySidedHandler extends EnergyComponent {
   }
 
   private final EnergyComponent handler;
-  private final Direction extract;
-  private final Direction insert;
-  private final Direction from;
+  private final Direction extract, insert, from;
 
   public EnergySidedHandler(
     ComponentManager manager,

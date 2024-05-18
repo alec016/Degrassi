@@ -38,12 +38,15 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
   protected LazyOptional<EnergyComponent> lazyEnergyHandler = LazyOptional.empty();
   protected LazyOptional<DegrassiFluidHandler> lazyFluidHandler = LazyOptional.empty();
   protected LazyOptional<HeatComponent> lazyHeatHandler = LazyOptional.empty();
+
   protected DegrassiFluidHandler fluidHandler;
   protected DegrassiItemStackHandler itemHandler;
+
   @Getter
   protected final ComponentManager componentManager, jeiComponentManager;
   @Getter
   protected final ElementManager elementManager, jeiElementManager;
+
   @Getter
   @Nullable
   protected MachineProcessor<R, ? extends MachineEntity<R>> processor = null;
@@ -134,6 +137,7 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
   @Override
   public void onLoad() {
     super.onLoad();
+
     componentManager
       .get()
       .stream()
@@ -141,7 +145,6 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
       .map(component -> (EnergyComponent) component)
       .findFirst()
       .ifPresent(energy -> lazyEnergyHandler = LazyOptional.of(() -> energy));
-
 
     componentManager
       .get()

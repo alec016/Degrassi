@@ -125,10 +125,11 @@ public class FluidTankEntity extends StorageEntity<Storage.Fluid> {
 
   @Override
   public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-    if (cap == ForgeCapabilities.FLUID_HANDLER) {
-      return lazyFluidHandler.cast();
-    }
-    return super.getCapability(cap, side);
+    return ForgeCapabilities.FLUID_HANDLER.orEmpty(cap, lazyFluidHandler.cast());
+//    if (cap == ForgeCapabilities.FLUID_HANDLER) {
+//      return lazyFluidHandler.cast();
+//    }
+//    return super.getCapability(cap, side);
   }
 
   public FluidStack getFluidStack() {

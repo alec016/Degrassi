@@ -71,12 +71,11 @@ public class QuadrupleFluidInputTankEntity extends BaseMultiblockPartEntity<Mult
   public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
     if (cap == ForgeCapabilities.FLUID_HANDLER) {
       if (side == null) return lazyFluidHandler.cast();
-      if (fluidWrapperHandlerMap.containsKey(side)) {
-        Direction localDir = this.getBlockState().getValue(FluidInputTank.FACING);
-        if (side == localDir)
-          return fluidWrapperHandlerMap.get(localDir).cast();
-        return LazyOptional.empty();
+      if (side == this.getBlockState().getValue(FluidInputTank.FACING)) {
+        if (fluidWrapperHandlerMap.containsKey(side))
+          return fluidWrapperHandlerMap.get(side).cast();
       }
+      return LazyOptional.empty();
     }
     return super.getCapability(cap, side);
   }

@@ -75,12 +75,11 @@ public class InputBusEntity extends BaseMultiblockPartEntity<MultiblockPartStora
   public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
     if (cap == ForgeCapabilities.ITEM_HANDLER) {
       if (side == null) return lazyItemHandler.cast();
-      if (itemWrapperHandlerMap.containsKey(side)) {
-        Direction localDir = this.getBlockState().getValue(InputBus.FACING);
-        if (side == localDir)
-          return itemWrapperHandlerMap.get(localDir).cast();
-        return LazyOptional.empty();
+      if (side == this.getBlockState().getValue(InputBus.FACING)) {
+        if (itemWrapperHandlerMap.containsKey(side))
+          return itemWrapperHandlerMap.get(side).cast();
       }
+      return LazyOptional.empty();
     }
     return super.getCapability(cap, side);
   }

@@ -1,5 +1,6 @@
 package es.degrassi.forge.core.common.machines.multiblock.controller.client.screen;
 
+import es.degrassi.common.utils.DegrassiLogger;
 import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.api.core.common.RequirementMode;
 import es.degrassi.forge.core.common.machines.MachineStatus;
@@ -68,8 +69,9 @@ public abstract class MultiblockControllerScreen<C extends MachineContainer<? ex
     switch (entity.getStatus()) {
       case RUNNING -> {
         MachineProcessor<?, ? extends MachineEntity<?>> processor = entity.getProcessor();
-        if (processor == null || processor.getCurrentRecipe() == null) return;
+        if (processor == null) return;
         processor.init();
+        if (processor.getCurrentRecipe() == null) return;
         String progressString = processor.getProgressPercentage();
         int progress = processor.getProgress();
         int recipeTime = processor.getRecipeTime();
