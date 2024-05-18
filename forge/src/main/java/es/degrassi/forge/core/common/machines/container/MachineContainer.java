@@ -2,7 +2,10 @@ package es.degrassi.forge.core.common.machines.container;
 
 import es.degrassi.forge.core.common.element.ItemElement;
 import es.degrassi.forge.core.common.element.PlayerInventoryElement;
+import es.degrassi.forge.core.common.machines.container.slot.SlotItemComponent;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.Getter;
 import net.minecraft.world.entity.player.Inventory;
@@ -12,21 +15,14 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.items.SlotItemHandler;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
 public abstract class MachineContainer<T extends MachineEntity<?>> extends AbstractContainerMenu {
-  int HOTBAR_SLOT_COUNT = 9;
-  int PLAYER_INVENTORY_ROW_COUNT = 3;
-  int PLAYER_INVENTORY_COLUMN_COUNT = 9;
-  int PLAYER_INVENTORY_SLOT_COUNT = PLAYER_INVENTORY_COLUMN_COUNT * PLAYER_INVENTORY_ROW_COUNT;
-  int VANILLA_SLOT_COUNT = HOTBAR_SLOT_COUNT + PLAYER_INVENTORY_SLOT_COUNT;
-  int VANILLA_FIRST_SLOT_INDEX = 0;
-  int TE_INVENTORY_FIRST_SLOT_INDEX;
-  // THIS YOU HAVE TO DEFINE!
-  protected int TE_INVENTORY_SLOT_COUNT;  // must be the number of slots you have!
+  private final int firstComponentSlotIndex;
+  private boolean hasPlayerInventory = false;
 
   @Getter
   private final T entity;
@@ -34,14 +30,17 @@ public abstract class MachineContainer<T extends MachineEntity<?>> extends Abstr
   private final Level level;
   @Getter
   private final Inventory playerInv;
+
+  private final List<SlotItemComponent> inputSlots = new ArrayList<>();
+
   protected MachineContainer(@Nullable MenuType<?> menuType, int containerId, T entity, Inventory inventory) {
     super(menuType, containerId);
     this.entity = entity;
     this.playerInv = inventory;
     this.level = inventory.player.level();
-    TE_INVENTORY_SLOT_COUNT = entity.getComponentManager().getItemHandler().getComponents().size();
     AtomicInteger index = new AtomicInteger(0);
     entity.getElementManager().getElement("player_inventory").map(element -> (PlayerInventoryElement) element).ifPresent(element -> {
+      this.hasPlayerInventory = true;
       int x = element.getX() + 1;
       int y = element.getY() + 1;
       int i;
@@ -54,7 +53,7 @@ public abstract class MachineContainer<T extends MachineEntity<?>> extends Abstr
         }
       }
     });
-    TE_INVENTORY_FIRST_SLOT_INDEX = index.get();
+    firstComponentSlotIndex = index.get();
     entity.getComponentManager().getItemHandler().getComponents()
       .forEach(
         component -> entity
@@ -62,53 +61,63 @@ public abstract class MachineContainer<T extends MachineEntity<?>> extends Abstr
           .getElement(component.getId())
           .map(element -> (ItemElement) element)
           .ifPresent(
-            element -> addSlot(
-              new SlotItemHandler(
+            element -> {
+              SlotItemComponent slot = new SlotItemComponent(
                 component,
                 index.getAndIncrement(),
                 element.getX() + 1,
                 element.getY() + 1
-              )
-            )
+              );
+              addSlot(slot);
+              if (component.getMode().inputWillAll())
+                inputSlots.add(slot);
+            }
           )
       );
   }
 
   @Override
   public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
-    Slot sourceSlot = slots.get(index);
-    if (!sourceSlot.hasItem()) return ItemStack.EMPTY;  //EMPTY_ITEM
-    ItemStack sourceStack = sourceSlot.getItem();
-    ItemStack copyOfSourceStack = sourceStack.copy();
-
-    // Check if the slot clicked is one of the vanilla container slots
-    if (index < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
-      // This is a vanilla container slot so merge the stack into the tile inventory
-      if (!moveItemStackTo(sourceStack, TE_INVENTORY_FIRST_SLOT_INDEX, TE_INVENTORY_FIRST_SLOT_INDEX
-        + TE_INVENTORY_SLOT_COUNT, false)) {
-        return ItemStack.EMPTY;  // EMPTY_ITEM
-      }
-    } else if (index < TE_INVENTORY_FIRST_SLOT_INDEX + TE_INVENTORY_SLOT_COUNT) {
-      // This is a TE slot so merge the stack into the players inventory
-      if (!moveItemStackTo(sourceStack, VANILLA_FIRST_SLOT_INDEX, VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT, false)) {
-        return ItemStack.EMPTY;
-      }
-    } else {
-      System.out.println("Invalid slotIndex:" + index);
+    if(!this.hasPlayerInventory)
       return ItemStack.EMPTY;
-    }
-    // If stack size == 0 (the entire stack was moved) set slot contents to null
-    if (sourceStack.getCount() == 0) {
-      sourceSlot.set(ItemStack.EMPTY);
+
+    Slot clickedSlot = this.slots.get(index);
+    if(clickedSlot.getItem().isEmpty())
+      return ItemStack.EMPTY;
+
+    if (clickedSlot.container == this.playerInv) {
+      ItemStack stack = clickedSlot.getItem().copy();
+      for (SlotItemComponent slotComponent : this.inputSlots) {
+        int maxInput = slotComponent.getComponent().insert(stack.getItem(), stack.getCount(), true);
+        if (maxInput > 0) {
+          int toInsert = Math.min(maxInput, stack.getCount());
+          slotComponent.getComponent().insert(stack.getItem(), toInsert, false);
+          stack.shrink(toInsert);
+        }
+        if (stack.isEmpty())
+          break;
+      }
+      if (stack.isEmpty())
+        clickedSlot.remove(clickedSlot.getItem().getCount());
+      else
+        clickedSlot.remove(clickedSlot.getItem().getCount() - stack.getCount());
     } else {
-      sourceSlot.setChanged();
+      if (!(clickedSlot instanceof SlotItemComponent slotComponent))
+        return ItemStack.EMPTY;
+
+      ItemStack removed = slotComponent.getItem();
+      if (!moveItemStackTo(removed, 0, this.firstComponentSlotIndex - 1, false))
+        return ItemStack.EMPTY;
+      slotComponent.setChanged();
     }
-    sourceSlot.onTake(player, sourceStack);
-    return copyOfSourceStack;
+
+    return ItemStack.EMPTY;
   }
 
   @Override
   public boolean stillValid(@NotNull Player player) {
-    return true;
+    return player.level.getBlockState(this.entity.getBlockPos()) == this.entity.getBlockState() &&
+      player.level.getBlockEntity(this.entity.getBlockPos()) == this.entity &&
+      player.position().distanceToSqr(Vec3.atCenterOf(this.entity.getBlockPos())) <= 64;
   }
 }

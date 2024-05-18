@@ -15,6 +15,7 @@ import lombok.Setter;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,6 +46,20 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
     this.filter = new ArrayList<>();
     this.filter.addAll(List.of(filter));
     this.mode = mode;
+  }
+
+  public ItemStack getItem() {
+    return this.stacks.get(0);
+  }
+
+  public int getCapacity() {
+    return 64;
+  }
+
+  public int getRemainingSpace() {
+    if(!this.getItem().isEmpty())
+      return this.getCapacity() - this.getItem().getCount();
+    return this.getCapacity();
   }
 
   @Override
@@ -107,10 +122,52 @@ public class ItemComponent extends ItemStackHandler implements IComponent {
     return super.insertItem(0, stack, simulate);
   }
 
+
+  public int insert(Item item, int amount, boolean simulate) {
+    if (amount <= 0 || mode.output() || item == Items.AIR) return 0;
+
+    //Check the inserted stack max size, in case a mod like AE2 try to insert a stack of non-stackable items
+    amount = Math.min(amount, new ItemStack(item, amount).getMaxStackSize());
+
+    //Check the current stack limit
+    amount = Math.min(amount, this.getItem().getMaxStackSize() - this.getItem().getCount());
+
+    //Check the slot capacity
+    amount = Math.min(amount, this.getCapacity() - this.getItem().getCount());
+
+    if (getItem().isEmpty()) {
+      if (!simulate) {
+        setItem(new ItemStack(item, amount));
+        markDirty();
+      }
+      return amount;
+    } else if (this.getItem().is(item)) {
+      amount = Math.min(getRemainingSpace(), amount);
+      if (!simulate) {
+        this.getItem().grow(amount);
+        markDirty();
+      }
+      return amount;
+    }
+    return 0;
+  }
+
   @Override
   public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
     if (mode.input()) return ItemStack.EMPTY;
     return super.extractItem(0, amount, simulate);
+  }
+
+  public ItemStack extract(int amount, boolean simulate) {
+    if (amount <= 0 || this.getItem().isEmpty() || mode.input())
+      return ItemStack.EMPTY;
+    amount = Math.min(amount, getItem().getCount());
+    ItemStack removed = new ItemStack(getItem().getItem(), amount);
+    if (!simulate) {
+      this.getItem().shrink(amount);
+      markDirty();
+    }
+    return removed;
   }
 
   @Override

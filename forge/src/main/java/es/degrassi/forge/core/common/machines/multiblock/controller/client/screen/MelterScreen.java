@@ -1,6 +1,7 @@
 package es.degrassi.forge.core.common.machines.multiblock.controller.client.screen;
 
 import es.degrassi.common.DegrassiLocation;
+import es.degrassi.forge.api.core.common.RequirementMode;
 import es.degrassi.forge.core.common.machines.multiblock.controller.client.container.MelterContainer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

@@ -176,6 +176,7 @@ public class ES extends DegrassiLangProvider {
     addInfo("ignore", "Ignore");
     addInfo("capacity.energy", "Capacidad de Energía");
     addInfo("capacity.fluid", "Capacidad de Líquidos");
+    addInfo("capacity.fluid.quadruple", "Capacidad de Líquidos Por Tanque");
     addInfo("capacity.xp", "Capacidad de Experiencia");
     addInfo("fe", "%s FE");
     addInfo("xp", "%s XP");

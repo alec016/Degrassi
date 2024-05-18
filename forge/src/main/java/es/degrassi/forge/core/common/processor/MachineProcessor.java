@@ -65,13 +65,11 @@ public abstract class MachineProcessor<T extends MachineRecipe<T>, E extends Mac
     if (!initialized) init();
     if (currentRecipe != null)
       switch (phase) {
-        case NONE -> {
-          entity.getProgress().ifPresent(component -> {
-            component.setMaxProgress(currentRecipe.getTime());
-            processStart();
-            setPhase(Phase.STARTED);
-          });
-        }
+        case NONE -> entity.getProgress().ifPresent(component -> {
+          component.setMaxProgress(currentRecipe.getTime());
+          processStart();
+          setPhase(Phase.STARTED);
+        });
         case STARTED -> {
           if (entity.getStatus().isError()) return;
           entity.getProgress().ifPresent(component -> {
@@ -99,8 +97,11 @@ public abstract class MachineProcessor<T extends MachineRecipe<T>, E extends Mac
             component.setMaxProgress(0);
             entity.resetErrorMessage();
             setPhase(Phase.NONE);
-//            searchForRecipe(entity.getComponentManager().get());
-            entity.setIdle();
+            T recipe = searchForRecipe(entity.getComponentManager().get(), false);
+            if (recipe == null) {
+              entity.setIdle();
+            }
+            setRecipe(recipe);
           });
         }
       }
@@ -175,7 +176,26 @@ public abstract class MachineProcessor<T extends MachineRecipe<T>, E extends Mac
     if (r.get() != null) {
       setRecipe(r.get());
       entity.setRunning();
+      return;
     }
+    setRecipe(null);
+  }
+
+  public T searchForRecipe(List<? extends IComponent> components, boolean update) {
+    if (!initialized) init();
+    AtomicReference<T> r = new AtomicReference<>(null);
+    recipes.forEach(recipe -> {
+      if (r.get() != null) return;
+      if (recipe.matches(components)) r.set(recipe);
+    });
+    if (update) {
+      if (r.get() != null) {
+        setRecipe(r.get());
+        entity.setRunning();
+      } else
+        setRecipe(null);
+    }
+    return r.get();
   }
 
   public int getProgress() {

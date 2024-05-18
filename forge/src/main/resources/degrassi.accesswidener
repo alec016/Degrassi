@@ -47,3 +47,5 @@ mutable field net/minecraft/world/inventory/Slot x I
 accessible method net/minecraftforge/items/ItemStackHandler getStackLimit (ILnet/minecraft/world/item/ItemStack;)I
 accessible method net/minecraftforge/items/ItemStackHandler onContentsChanged (I)V
 accessible method net/minecraftforge/items/ItemStackHandler validateSlotIndex (I)V
+
+accessible field net/minecraft/world/entity/Entity level Lnet/minecraft/world/level/Level;

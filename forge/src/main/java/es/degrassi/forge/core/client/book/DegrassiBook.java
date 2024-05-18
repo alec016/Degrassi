@@ -58,6 +58,14 @@ public class DegrassiBook {
                 )
               )
             ).e(
+              "heat_conduit",
+              e -> e.s(
+                s -> s.p(
+                  new Info(IMG.ENERGY_CABLE, s),
+                  new RedstonePanel<>(s).next(new CraftingPanel<>(s))
+                )
+              )
+            ).e(
               "redstone_conduit",
               e -> e.s(
                 s -> s.p(
@@ -186,6 +194,14 @@ public class DegrassiBook {
               )
             ).e(
               "fluid_input_tank",
+              e -> e.s(
+                s -> s.p(
+                  new Info(s),
+                  new FluidPanel<>(s).next(new CraftingPanel<>(s))
+                )
+              )
+            ).e(
+              "quadruple_fluid_input_tank",
               e -> e.s(
                 s -> s.p(
                   new Info(s),

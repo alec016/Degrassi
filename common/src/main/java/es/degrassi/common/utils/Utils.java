@@ -22,8 +22,16 @@ public class Utils {
     return decimalFormat.format(value).replaceAll(",", ".");
   }
 
+  public static String format(int value) {
+    return format((long) value);
+  }
+
   public static String format(double value) {
     return decimalFormat.format(value).replaceAll(",", ".");
+  }
+
+  public static String format(float value) {
+    return format((double) value);
   }
 
   public static String formatWithPercent(long value) {

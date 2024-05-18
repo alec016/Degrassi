@@ -1,5 +1,5 @@
 {
-  "parent": "degrassi:item/chest_iron",
+  "parent": "degrassi:item/chest",
   "textures": {
     "1": "degrassi:block/chest/chest_gold"
   }

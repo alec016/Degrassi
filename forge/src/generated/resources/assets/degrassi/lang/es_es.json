@@ -90,6 +90,7 @@
   "gui.degrassi.self_feed.enabled": "Self Feed Enabled",
   "info.degrassi.capacity.energy": "Capacidad de Energía",
   "info.degrassi.capacity.fluid": "Capacidad de Líquidos",
+  "info.degrassi.capacity.fluid.quadruple": "Capacidad de Líquidos Por Tanque",
   "info.degrassi.capacity.xp": "Capacidad de Experiencia",
   "info.degrassi.chest.cols": "Columns",
   "info.degrassi.chest.cols.number": "%s",

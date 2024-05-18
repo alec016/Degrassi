@@ -55,7 +55,7 @@ public abstract class MachineScreen<T extends MachineContainer<?>> extends Abstr
     guiGraphics.pose().popPose();
 
     guiGraphics.pose().pushPose();
-    guiGraphics.pose().translate(0, 0, -100);
+    guiGraphics.pose().translate(0, 0, 100);
     super.renderTooltip(guiGraphics, x, y);
     guiGraphics.pose().popPose();
   }

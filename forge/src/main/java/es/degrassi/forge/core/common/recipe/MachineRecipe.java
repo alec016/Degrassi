@@ -2,12 +2,10 @@ package es.degrassi.forge.core.common.recipe;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import es.degrassi.common.utils.DegrassiLogger;
 import es.degrassi.forge.api.core.common.IComponent;
 import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.component.EnergyComponent;
 import es.degrassi.forge.core.common.component.ExperienceComponent;
-import es.degrassi.forge.core.common.machines.multiblock.controller.block.entity.recipe.MelterRecipe;
 import es.degrassi.forge.core.common.requirement.EnergyRequirement;
 import es.degrassi.forge.core.common.requirement.ExperienceRequirement;
 import es.degrassi.forge.core.common.requirement.FluidRequirement;
@@ -212,31 +210,14 @@ public abstract class MachineRecipe<T extends MachineRecipe<T>> implements Recip
         components.stream().filter(component -> component instanceof EnergyComponent).map(component -> (EnergyComponent) component).forEach(component -> {
           if (match.get()) return;
           component.fill(requirement, recipe.getTime());
-          if (recipe instanceof MelterRecipe r) {
-            DegrassiLogger.INSTANCE.info("=========================================================================================");
-            DegrassiLogger.INSTANCE.info("recipe: {}", recipe);
-            DegrassiLogger.INSTANCE.info("component: {}", component);
-          }
           if (requirement.getId().isEmpty()) {
-            if (recipe instanceof MelterRecipe r) {
-              DegrassiLogger.INSTANCE.info("empty requirement id");
-            }
             if (requirement.matches(component, recipe.getTime())) {
-              if (recipe instanceof MelterRecipe r) {
-                DegrassiLogger.INSTANCE.info("component matches");
-              }
               count.getAndIncrement();
               requirement.setComponent(component);
               match.set(true);
             }
           } else if (component.getId().equals(requirement.getId())) {
-            if (recipe instanceof MelterRecipe r) {
-              DegrassiLogger.INSTANCE.info("requirement id: {}", requirement.getId());
-            }
             if (requirement.matches(component, recipe.getTime())) {
-              if (recipe instanceof MelterRecipe r) {
-                DegrassiLogger.INSTANCE.info("component matches");
-              }
               count.getAndIncrement();
               requirement.setComponent(component);
               match.set(true);

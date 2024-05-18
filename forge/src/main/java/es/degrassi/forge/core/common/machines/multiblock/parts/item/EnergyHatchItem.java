@@ -2,7 +2,7 @@ package es.degrassi.forge.core.common.machines.multiblock.parts.item;
 
 import es.degrassi.common.registry.IVariantEntry;
 import es.degrassi.common.registry.ItemModelType;
-import static es.degrassi.common.utils.Utils.addCommas;
+import es.degrassi.common.utils.Utils;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.EnergyHatch;
 import es.degrassi.forge.core.tiers.MultiblockPartStorage;
 import es.degrassi.forge.lib.client.wiki.page.panel.InfoBox;
@@ -38,9 +38,9 @@ public class EnergyHatchItem extends BlockItem implements IVariantEntry<Multiblo
   @Override
   public InfoBox getInfoBox(ItemStack stack, InfoBox box) {
     box.set(Component.translatable("info.degrassi.capacity.energy"),
-      Component.translatable("info.degrassi.fe", addCommas(getVariant().getCapacity())));
+      Component.translatable("info.degrassi.fe", Utils.format(getVariant().getCapacity())));
     box.set(Component.translatable("info.degrassi.max.i"),
-      Component.translatable("info.degrassi.fe.per.tick", addCommas(getVariant().getCapacity())));
+      Component.translatable("info.degrassi.fe.per.tick", Utils.format(getVariant().getCapacity())));
     return box;
   }
 }
