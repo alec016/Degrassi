@@ -1,6 +1,7 @@
 package es.degrassi.forge.core.common.machines.multiblock.controller.block.entity;
 
 import com.google.gson.JsonObject;
+import es.degrassi.common.utils.DegrassiLogger;
 import es.degrassi.forge.core.common.ComponentManager;
 import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
@@ -109,13 +110,6 @@ public abstract class BaseMultiblockControllerEntity<
     if (!isValid()) {
       unifiedComponentManager = null;
       if (!dummy()) unifiedElementManager = null;
-    } else {
-      pattern.forEach((pos, matcher) -> {
-        if (getLevel().getBlockEntity(getPos(pos)) instanceof BaseMultiblockPartEntity<?> entity) {
-          entity.setControllerEntity(this);
-          entity.setControllerBlock(this.getBlock());
-        }
-      });
     }
     this.level.setBlockAndUpdate(worldPosition, getBlockState().setValue(BaseMultiblockControllerBlock.VALID, isValid()));
     requestModelDataUpdate();
@@ -138,7 +132,6 @@ public abstract class BaseMultiblockControllerEntity<
     pattern.keySet().forEach(pos -> {
       BlockEntity possiblePart = level.getBlockEntity(getPos(pos));
       if (possiblePart instanceof BaseMultiblockPartEntity<?> entity) {
-        if (entity.getControllerEntity() == null || (!entity.getControllerEntity().equals(this) && !entity.getControllerPos().equals(getBlockPos()))) return;
         if (component) componentManager.set(componentManager.get().mergeWith(entity.getComponentManager(), false, this));
         if (element) elementManager.set(elementManager.get().mergeWith(entity.getElementManager(), false, this));
       }

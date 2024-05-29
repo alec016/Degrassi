@@ -41,7 +41,6 @@ public class FluidSidedHandler extends DegrassiFluidHandler {
     );
   }
 
-
   public static Map<Direction, LazyOptional<FluidSidedHandler>> DEFAULT_ALL_ENABLED(ComponentManager manager, DegrassiFluidHandler component, Direction from){
     return Map.of(
       Direction.UP, LazyOptional.of(() -> new FluidSidedHandler(manager, component, Direction.UP, Direction.UP, from)),

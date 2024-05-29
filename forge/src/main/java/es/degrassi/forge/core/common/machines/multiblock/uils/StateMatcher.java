@@ -1,5 +1,7 @@
 package es.degrassi.forge.core.common.machines.multiblock.uils;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -7,6 +9,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -17,8 +21,17 @@ import oshi.util.tuples.Pair;
 @Getter
 @AllArgsConstructor
 public class StateMatcher {
+  private final List<TagKey<Block>> possibleBlockTags = new LinkedList<>();
   private final List<BlockState> possibleStates = new LinkedList<>();
   private final List<Pair<Property<?>, List<?>>> props = new LinkedList<>();
+
+  public StateMatcher(TagKey<Block> tag) {
+    possibleBlockTags.add(tag);
+  }
+
+  public StateMatcher(List<TagKey<Block>> tags) {
+    possibleBlockTags.addAll(tags);
+  }
 
   /**
    * If no props defined then are used the default props defined in the state param
@@ -57,6 +70,12 @@ public class StateMatcher {
   private StateMatcher(List<BlockState> states, List<Pair<Property<?>, List<?>>> props) {
     this.possibleStates.addAll(states);
     this.props.addAll(props);
+  }
+
+  private StateMatcher(List<BlockState> states, List<Pair<Property<?>, List<?>>> props, List<TagKey<Block>> tags) {
+    this.possibleStates.addAll(states);
+    this.props.addAll(props);
+    this.possibleBlockTags.addAll(tags);
   }
 
   public StateMatcher rotate(Rotation rotation) {
@@ -108,12 +127,14 @@ public class StateMatcher {
         rotatedProps.add(new Pair<>(pair.getA(), pair.getB()));
     });
 
-    return new StateMatcher(rotatedStates, rotatedProps);
+    return new StateMatcher(rotatedStates, rotatedProps, possibleBlockTags);
   }
 
   public boolean matches(BlockState state) {
     if (state == null) return false;
     AtomicBoolean matches = new AtomicBoolean(true);
+    if (!possibleBlockTags.isEmpty()) return possibleBlockTags.stream().anyMatch(state::is);
+
     if (possibleStates.stream().noneMatch(s -> s.getBlock().equals(state.getBlock()))) return false;
     this.props.forEach(pair -> {
       if (!matches.get()) return;
@@ -137,10 +158,27 @@ public class StateMatcher {
     return matches.get();
   }
 
+  public JsonObject asJson() {
+    JsonObject json = new JsonObject();
+    JsonArray states = new JsonArray();
+    possibleStates.forEach(state -> states.add(state.toString()));
+    json.add("states", states);
+    JsonArray tags = new JsonArray();
+    possibleBlockTags.forEach(tag -> tags.add(tag.toString()));
+    json.add("tags", tags);
+    JsonArray props = new JsonArray();
+    this.props.forEach(prop -> {
+      JsonObject p = new JsonObject();
+      p.addProperty("property", prop.getA().getName());
+      JsonArray values = new JsonArray();
+      prop.getB().forEach(value -> values.add(value.toString()));
+      p.add("values", values);
+      props.add(p);
+    });
+    return json;
+  }
+
   public String toString() {
-    return "StateMatcher(states= " +
-      possibleStates + ", props=" +
-      props.stream().map(prop -> "prop=" + prop.getA().getName() + ", values=" + prop.getB()).toList() +
-      ")";
+    return asJson().toString();
   }
 }

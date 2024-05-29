@@ -126,18 +126,28 @@ public class DegrassiFluidHandler implements IFluidHandler, IComponent {
     FluidStack stack = FluidStack.EMPTY;
     if (resource.isEmpty()) return stack;
     for (FluidComponent component : components) {
-      if (!stack.isEmpty()) continue;
-      if (component.getFluid().isEmpty()) continue;
-      if (!component.getFluid().isFluidEqual(resource)) continue;
-      FluidStack drained = component.drain(resource, action);
-      if (!drained.isEmpty() && drained.getAmount() > 0)
-        stack = drained;
+      if (resource.isEmpty() || !resource.isFluidEqual(component.getFluid())) continue;
+      return component.drain(resource.getAmount(), action);
     }
     return stack;
   }
 
   @Override
   public @NotNull FluidStack drain(int maxDrain, FluidAction action) {
+    int drained = maxDrain;
+    for (FluidComponent component : components) {
+      if (component.getFluid().isEmpty()) continue;
+      if (component.getFluidAmount() < drained) {
+        drained = component.getFluidAmount();
+      }
+      FluidStack stack = new FluidStack(component.getFluid().getFluid(), drained);
+      if (action.execute() && drained > 0) {
+        component.getFluid().shrink(drained);
+        onContentsChanged();
+      }
+      if (stack.isEmpty()) continue;
+      return stack;
+    }
     return FluidStack.EMPTY;
   }
 

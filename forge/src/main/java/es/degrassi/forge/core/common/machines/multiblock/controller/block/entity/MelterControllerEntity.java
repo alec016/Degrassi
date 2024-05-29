@@ -9,6 +9,7 @@ import es.degrassi.forge.core.common.machines.multiblock.parts.block.EnergyHatch
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.FluidOutputTank;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.InputBus;
 import es.degrassi.forge.core.common.machines.multiblock.uils.StateMatcher;
+import es.degrassi.forge.core.data.DegrassiTags;
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.EntityRegistration;
 import es.degrassi.forge.core.utils.EnumUtils;
@@ -52,25 +53,18 @@ public class MelterControllerEntity extends BaseMultiblockControllerEntity<Melte
     ).addToPattern(
       pos.south().east(),
       new StateMatcher(BlockRegistration.MELTER_FRAME.get().defaultBlockState())
-    ).addToPattern(
+    )
+      .addToPattern(
       pos.south().south(),
-      new StateMatcher(
-        BlockRegistration.FLUID_OUTPUT_TANK.getAll().stream().map(Block::defaultBlockState).toList(),
-        new Pair<>(FluidOutputTank.FACING, List.of(EnumUtils.DIRECTION))
-      )
+      new StateMatcher(DegrassiTags.Blocks.MBPARTS.get())
     ).addToPattern(
       pos.south().south().west(),
-      new StateMatcher(
-        BlockRegistration.INPUT_BUS.getAll().stream().map(Block::defaultBlockState).toList(),
-        new Pair<>(InputBus.FACING, List.of(EnumUtils.DIRECTION))
-      )
+      new StateMatcher(DegrassiTags.Blocks.MBPARTS.get())
     ).addToPattern(
       pos.south().south().east(),
-      new StateMatcher(
-        BlockRegistration.ENERGY_HATCH.getAll().stream().map(Block::defaultBlockState).toList(),
-        new Pair<>(EnergyHatch.FACING, List.of(EnumUtils.DIRECTION))
-      )
-    ).addToPattern(
+      new StateMatcher(DegrassiTags.Blocks.MBPARTS.get())
+    )
+    .addToPattern(
       pos.south().south().west().above(),
       new StateMatcher(BlockRegistration.MELTER_FRAME.get().defaultBlockState())
     ).addToPattern(
