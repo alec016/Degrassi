@@ -66,10 +66,7 @@ public class OutputBusEntity extends BaseMultiblockPartEntity<MultiblockPartStor
       new DegrassiLocation("textures/gui/base_inventory.png")
     );
 
-    itemHandler = componentManager.getItemHandler();
-    lazyItemHandler = LazyOptional.of(() -> itemHandler);
-
-    itemWrapperHandlerMap = ItemSidedHandler.DEFAULT_ALL_EXTRACT(componentManager, itemHandler, getBlockState().getValue(FluidInputTank.FACING));
+    itemWrapperHandlerMap = ItemSidedHandler.DEFAULT_ALL_EXTRACT(componentManager, componentManager.getItemHandler(), getBlockState().getValue(FluidInputTank.FACING));
   }
 
   @Override

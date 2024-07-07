@@ -2,6 +2,7 @@
   "values": [
     "#degrassi:furnace",
     "#degrassi:panel/solar_panel",
+    "#degrassi:digital/controller",
     "#degrassi:chest"
   ]
 }

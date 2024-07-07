@@ -1,9 +1,9 @@
 {
-  "replace": false,
   "values": [
     "#degrassi:furnace",
     "#degrassi:solar_panel",
     "#degrassi:chest",
+    "#degrassi:digital",
     "#degrassi:multiblock"
   ]
 }

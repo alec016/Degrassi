@@ -3,6 +3,7 @@
     "#degrassi:furnace",
     "#degrassi:chest",
     "#degrassi:solar_panel",
+    "#degrassi:digital/controller",
     "#degrassi:multiblock/controller"
   ]
 }

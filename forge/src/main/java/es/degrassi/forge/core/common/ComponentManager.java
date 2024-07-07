@@ -258,4 +258,16 @@ public final class ComponentManager extends Manager<IComponent> implements INBTS
     List<IComponent> components = get().stream().map(component ->  copy ? component.copy(entity, this) : component).toList();
     return new ComponentManager(components, entity);
   }
+
+  public void remove(String id) {
+    IComponent toRemove = null;
+    for (IComponent component : get()) {
+      if (toRemove != null) break;
+      if(component.getId().equals(id))
+        toRemove = component;
+    }
+    if (toRemove != null)
+      get().remove(toRemove);
+    init();
+  }
 }

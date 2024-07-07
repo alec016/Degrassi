@@ -38,10 +38,17 @@ public class DegrassiBlockTagProvider extends BlockTagsProvider {
       this.tag(DegrassiTags.Blocks.SP.get()).add(BlockRegistration.SP.get(tier));
     }
 
+    this.tag(DegrassiTags.Blocks.DIGITAL_CONTROLLER.get())
+      .add(BlockRegistration.DIGITAL_CONTROLLER.get());
+
+    this.tag(DegrassiTags.Blocks.DIGITAL.get())
+      .addTag(DegrassiTags.Blocks.DIGITAL_CONTROLLER.get());
+
     this.tag(DegrassiTags.Blocks.MACHINE.get())
       .addTag(DegrassiTags.Blocks.FURNACE.get())
       .addTag(DegrassiTags.Blocks.CHEST.get())
       .addTag(DegrassiTags.Blocks.SP.get())
+      .addTag(DegrassiTags.Blocks.DIGITAL_CONTROLLER.get())
       .addTag(DegrassiTags.Blocks.CONTROLLER.get());
 
     this.tag(DegrassiTags.Blocks.FRAME.get())
@@ -63,6 +70,9 @@ public class DegrassiBlockTagProvider extends BlockTagsProvider {
       .addTag(DegrassiTags.Blocks.MBPARTS.get())
       .addTag(DegrassiTags.Blocks.FRAME.get());
 
+    this.tag(BlockTags.NEEDS_STONE_TOOL)
+      .addTag(DegrassiTags.Blocks.DIGITAL.get());
+
     this.tag(BlockTags.NEEDS_IRON_TOOL)
       .addTag(DegrassiTags.Blocks.FURNACE.get())
       .addTag(DegrassiTags.Blocks.CHEST.get())
@@ -73,6 +83,7 @@ public class DegrassiBlockTagProvider extends BlockTagsProvider {
       .addTag(DegrassiTags.Blocks.FURNACE.get())
       .addTag(DegrassiTags.Blocks.SP.get())
       .addTag(DegrassiTags.Blocks.CHEST.get())
+      .addTag(DegrassiTags.Blocks.DIGITAL.get())
       .addTag(DegrassiTags.Blocks.MULTIBLOCK.get());
 
     this.tag(BlockTags.MINEABLE_WITH_AXE)

@@ -31,6 +31,9 @@ public class ItemRegistration {
   // multiblock controller item
   public static final RegistrySupplier<BlockItem> MELTER_CONTROLLER = ITEMS.register("melter_controller", () -> new BlockItem(BlockRegistration.MELTER_CONTROLLER.get(), new Item.Properties()));
 
+  // Digital Storage
+  public static final RegistrySupplier<BlockItem> DIGITAL_CONTROLLER = ITEMS.register("controller", () -> new BlockItem(BlockRegistration.DIGITAL_CONTROLLER.get(), new Item.Properties()));
+
   private static <V extends Enum<V> & IVariant<V>> VarReg<V, Item> register(String name, VarReg.VariantConstructor<V, Item> ctor, V[] variants) {
     return new VarReg<>(ITEMS, name, ctor, variants);
   }

@@ -36,6 +36,7 @@ public class DegrassiItemModelProvider extends ItemModelProvider {
     simpleBlockItem(BlockRegistration.MACHINE_CASING);
     simpleBlockItem(BlockRegistration.MELTER_FRAME);
     simpleBlockItem(BlockRegistration.MELTER_CONTROLLER);
+    simpleBlockItem(BlockRegistration.DIGITAL_CONTROLLER);
   }
 
   private void registerTieredBlocks() {

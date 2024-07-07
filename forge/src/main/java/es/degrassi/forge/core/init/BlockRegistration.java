@@ -17,6 +17,7 @@ import es.degrassi.forge.core.common.machines.multiblock.parts.block.OutputBus;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.QuadrupleFluidInputTank;
 import es.degrassi.forge.core.common.storage.energy.block.EnergyCell;
 import es.degrassi.forge.core.common.storage.fluid.block.FluidTank;
+import es.degrassi.forge.core.digital.block.DigitalController;
 import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.MultiblockPartStorage;
@@ -57,6 +58,9 @@ public class BlockRegistration {
 
   // Multiblock controllers
   public static final RegistrySupplier<MelterController> MELTER_CONTROLLER = BLOCKS.register("melter_controller", () -> new MelterController(commonBlock(700)));
+
+  // Digital Storage
+  public static final RegistrySupplier<DigitalController> DIGITAL_CONTROLLER = BLOCKS.register("controller", DigitalController::new);
 
   // VarReg
   static {

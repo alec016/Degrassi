@@ -1,6 +1,5 @@
 package es.degrassi.forge.core.common.machines.multiblock.controller.client.screen;
 
-import es.degrassi.common.utils.DegrassiLogger;
 import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.api.core.common.RequirementMode;
 import es.degrassi.forge.core.common.machines.MachineStatus;

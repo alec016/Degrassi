@@ -92,7 +92,7 @@ public class DegrassiItemStackHandler implements IItemHandlerModifiable, IItemHa
       int slot = itemNbt.getInt("Slot");
       ItemComponent component = components.get(slot);
       if (component == null)
-        components.set(slot, new ItemComponent(getManager(), itemNbt.getString("id"), getManager().getEntity(), null));
+        components.set(slot, new ItemComponent(getManager(), itemNbt.getString("id"), getManager().getEntity(), ComponentIOMode.BOTH));
       component = components.get(slot);
       component.deserialize(itemNbt);
     }

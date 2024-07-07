@@ -1,5 +1,6 @@
 package es.degrassi.forge.core.common.machines.container;
 
+import es.degrassi.forge.core.common.component.ItemComponent;
 import es.degrassi.forge.core.common.element.ItemElement;
 import es.degrassi.forge.core.common.element.PlayerInventoryElement;
 import es.degrassi.forge.core.common.machines.container.slot.SlotItemComponent;
@@ -54,26 +55,30 @@ public abstract class MachineContainer<T extends MachineEntity<?>> extends Abstr
       }
     });
     firstComponentSlotIndex = index.get();
-    entity.getComponentManager().getItemHandler().getComponents()
-      .forEach(
-        component -> entity
-          .getElementManager()
-          .getElement(component.getId())
-          .map(element -> (ItemElement) element)
-          .ifPresent(
-            element -> {
-              SlotItemComponent slot = new SlotItemComponent(
-                component,
-                index.getAndIncrement(),
-                element.getX() + 1,
-                element.getY() + 1
-              );
-              addSlot(slot);
-              if (component.getMode().inputWillAll())
-                inputSlots.add(slot);
-            }
-          )
-      );
+
+    entity
+      .getElementManager()
+      .get()
+      .stream()
+      .filter(element -> element instanceof ItemElement)
+      .map(element -> (ItemElement) element)
+      .forEach(element -> {
+        entity.getComponentManager().getComponent(element.getId())
+          .filter(component -> component instanceof ItemComponent)
+          .map(component -> (ItemComponent) component)
+          .stream().findFirst()
+          .ifPresent(component -> {
+            SlotItemComponent slot = new SlotItemComponent(
+              component,
+              index.getAndIncrement(),
+              element.getX() + 1,
+              element.getY() + 1
+            );
+            addSlot(slot);
+            if (component.getMode().inputWillAll())
+              inputSlots.add(slot);
+          });
+      });
   }
 
   @Override

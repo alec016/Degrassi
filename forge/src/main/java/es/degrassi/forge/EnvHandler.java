@@ -14,6 +14,7 @@ import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.Outp
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.QuadrupleFluidInputTankEntity;
 import es.degrassi.forge.core.common.storage.energy.entity.EnergyCellEntity;
 import es.degrassi.forge.core.common.storage.fluid.entity.FluidTankEntity;
+import es.degrassi.forge.core.digital.block.entity.DigitalControllerEntity;
 import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.MultiblockPartStorage;
@@ -25,6 +26,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -112,5 +114,9 @@ public class EnvHandler {
         }
       }
     });
+  }
+
+  public DigitalControllerEntity createDigitalController(BlockPos pos, BlockState state) {
+    return new DigitalControllerEntity(pos, state);
   }
 }

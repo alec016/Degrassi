@@ -102,6 +102,7 @@ public class EN extends DegrassiLangProvider {
     addBlock(() -> BlockRegistration.SP.get(SolarPanel.T8), "Solar Panel VIII");
 
     addBlock(ConduitBlocks.CONDUIT, "Cable");
+    addBlock(BlockRegistration.DIGITAL_CONTROLLER, "Controller");
 
     addBlock(() -> BlockRegistration.ENERGY_CELL.get(Storage.Energy.BASIC), "Basic Energy Cell");
     addBlock(() -> BlockRegistration.ENERGY_CELL.get(Storage.Energy.ADVANCED), "Advanced Energy Cell");
@@ -206,6 +207,7 @@ public class EN extends DegrassiLangProvider {
   @Override
   protected void addItemGroups() {
     addItemGroup("machines", "Degrassi(Machines)");
+    addItemGroup("digital", "Degrassi(Digital Storage)");
     addItemGroup("items", "Degrassi(Items)");
   }
 

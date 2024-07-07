@@ -15,6 +15,7 @@ import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.Outp
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.entity.QuadrupleFluidInputTankEntity;
 import es.degrassi.forge.core.common.storage.energy.entity.EnergyCellEntity;
 import es.degrassi.forge.core.common.storage.fluid.entity.FluidTankEntity;
+import es.degrassi.forge.core.digital.block.entity.DigitalControllerEntity;
 import es.degrassi.forge.core.tiers.Chest;
 import es.degrassi.forge.core.tiers.Furnace;
 import es.degrassi.forge.core.tiers.MultiblockPartStorage;
@@ -46,6 +47,9 @@ public class EntityRegistration {
   // multiblock controller
   public static final Supplier<BlockEntityType<MelterControllerEntity>> MELTER;
 
+  // Digital Storage
+  public static final Supplier<BlockEntityType<DigitalControllerEntity>> DIGITAL_CONTROLLER;
+
   static {
     FURNACE = register("furnace", (pos, state) -> EnvHandler.INSTANCE.createFurnace(pos, state, Furnace.IRON), BlockRegistration.FURNACE::getAll);
     SP = register("sp", (pos, state) -> EnvHandler.INSTANCE.createSP(pos, state, SolarPanel.T1), BlockRegistration.SP::getAll);
@@ -64,6 +68,11 @@ public class EntityRegistration {
   // multiblock controllers
   static {
     MELTER = register("melter_controller", (pos, state) -> EnvHandler.INSTANCE.createMelterControllerEntity(pos, state, BlockRegistration.MELTER_CONTROLLER.get()), () -> List.of(BlockRegistration.MELTER_CONTROLLER.get()));
+  }
+
+  // Digital Storage
+  static {
+    DIGITAL_CONTROLLER = register("controller", EnvHandler.INSTANCE::createDigitalController, () -> List.of(BlockRegistration.DIGITAL_CONTROLLER.get()));
   }
 
   private static <BE extends BlockEntity> Supplier<BlockEntityType<BE>> register(String path, BlockEntityType.BlockEntitySupplier<BE> supplier, Supplier<List<Block>> blocks) {

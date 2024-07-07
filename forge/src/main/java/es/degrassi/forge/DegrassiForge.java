@@ -33,7 +33,6 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -47,6 +46,7 @@ import org.zeith.hammerlib.client.adapter.ResourcePackAdapter;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Degrassi.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DegrassiForge {
   public static final ResourceKey<CreativeModeTab> MACHINES = ResourceKey.create(Registries.CREATIVE_MODE_TAB, new DegrassiLocation("machines"));
+  public static final ResourceKey<CreativeModeTab> DIGITAL = ResourceKey.create(Registries.CREATIVE_MODE_TAB, new DegrassiLocation("digital"));
   public static final ResourceKey<CreativeModeTab> ITEMS = ResourceKey.create(Registries.CREATIVE_MODE_TAB, new DegrassiLocation("items"));
 
   public DegrassiForge() {
@@ -140,6 +140,7 @@ public class DegrassiForge {
             output.accept(new ItemStack(BlockRegistration.OUTPUT_BUS.get(variant)));
           }
         }).icon(() -> new ItemStack(ItemRegistration.MACHINE_CASING.get())).build());
+
       helper.register(ITEMS, CreativeModeTab.builder().title(Component.translatable("degrassi.tabs.items")).displayItems(
         (params, output) -> {
           output.accept(new ItemStack(ItemRegistration.WRENCH.get()));
@@ -151,58 +152,12 @@ public class DegrassiForge {
           }
         }
       ).icon(() -> new ItemStack(ItemRegistration.RED_MATTER.get())).build());
-    });
-  }
 
-  @SubscribeEvent
-  public static void registerTab(final @NotNull BuildCreativeModeTabContentsEvent event) {
-    var entries = event.getEntries();
-    var vis = CreativeModeTab.TabVisibility.PARENT_TAB_ONLY;
-    if (event.getTabKey() == MACHINES) {
-      entries.put(new ItemStack(BlockRegistration.MACHINE_CASING.get()), vis);
-      entries.put(new ItemStack(BlockRegistration.MELTER_FRAME.get()), vis);
-      entries.put(new ItemStack(BlockRegistration.MELTER_CONTROLLER.get()), vis);
-      for (Furnace tier : Furnace.values()) {
-        entries.put(new ItemStack(BlockRegistration.FURNACE.get(tier)), vis);
-      }
-      for (SolarPanel tier : SolarPanel.values()) {
-        entries.put(new ItemStack(BlockRegistration.SP.get(tier)), vis);
-      }
-      for (Chest tier : Chest.values()) {
-        entries.put(new ItemStack(BlockRegistration.CHEST.get(tier)), vis);
-      }
-      for (Storage.Energy tier : Storage.Energy.values()) {
-        entries.put(new ItemStack(BlockRegistration.ENERGY_CELL.get(tier)), vis);
-      }
-      for (Storage.Fluid tier : Storage.Fluid.values()) {
-        entries.put(new ItemStack(BlockRegistration.FLUID_TANK.get(tier)), vis);
-      }
-      for (MultiblockPartStorage.Energy variant : MultiblockPartStorage.Energy.values()) {
-        entries.put(new ItemStack(BlockRegistration.ENERGY_HATCH.get(variant)), vis);
-      }
-      for (MultiblockPartStorage.Fluid.Input variant : MultiblockPartStorage.Fluid.Input.values()) {
-        entries.put(new ItemStack(BlockRegistration.FLUID_INPUT_TANK.get(variant)), vis);
-      }
-      for (MultiblockPartStorage.Fluid.QuadrupleInput variant : MultiblockPartStorage.Fluid.QuadrupleInput.values()) {
-        entries.put(new ItemStack(BlockRegistration.QUADRUPLE_FLUID_INPUT_TANK.get(variant)), vis);
-      }
-      for (MultiblockPartStorage.Fluid.Output variant : MultiblockPartStorage.Fluid.Output.values()) {
-        entries.put(new ItemStack(BlockRegistration.FLUID_OUTPUT_TANK.get(variant)), vis);
-      }
-      for (MultiblockPartStorage.Item.Input variant : MultiblockPartStorage.Item.Input.values()) {
-        entries.put(new ItemStack(BlockRegistration.INPUT_BUS.get(variant)), vis);
-      }
-      for (MultiblockPartStorage.Item.Output variant : MultiblockPartStorage.Item.Output.values()) {
-        entries.put(new ItemStack(BlockRegistration.OUTPUT_BUS.get(variant)), vis);
-      }
-    } else if (event.getTabKey() == ITEMS) {
-      entries.put(new ItemStack(ItemRegistration.WRENCH.get()), vis);
-      entries.put(new ItemStack(ItemRegistration.BOOK.get()), vis);
-      entries.put(new ItemStack(ItemRegistration.RED_MATTER.get()), vis);
-      entries.put(new ItemStack(ItemRegistration.BLACK_PEARL.get()), vis);
-      for (PhotovoltaicCell cell : PhotovoltaicCell.values()) {
-        entries.put(new ItemStack(ItemRegistration.PHOTOVOLTAIC_CELL.get(cell)), vis);
-      }
-    }
+      helper.register(DIGITAL, CreativeModeTab.builder().title(Component.translatable("degrassi.tabs.digital")).displayItems(
+        (params, output) -> {
+          output.accept(new ItemStack(BlockRegistration.DIGITAL_CONTROLLER.get()));
+        }
+      ).icon(() -> new ItemStack(ItemRegistration.DIGITAL_CONTROLLER.get())).build());
+    });
   }
 }

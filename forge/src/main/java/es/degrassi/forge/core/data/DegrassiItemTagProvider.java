@@ -44,9 +44,16 @@ public class DegrassiItemTagProvider extends ItemTagsProvider {
       .addTag(DegrassiTags.Items.SP.get())
       .addTag(DegrassiTags.Items.PHOTOVOLTAIC_CELL.get());
 
+    this.tag(DegrassiTags.Items.DIGITAL_CONTROLLER.get())
+      .add(BlockRegistration.DIGITAL_CONTROLLER.get().asItem());
+
+    this.tag(DegrassiTags.Items.DIGITAL.get())
+      .addTag(DegrassiTags.Items.DIGITAL_CONTROLLER.get());
+
     this.tag(DegrassiTags.Items.MACHINE.get())
       .addTag(DegrassiTags.Items.FURNACE.get())
       .addTag(DegrassiTags.Items.SP.get())
+      .addTag(DegrassiTags.Items.DIGITAL_CONTROLLER.get())
       .addTag(DegrassiTags.Items.CHEST.get());
 
     this.tag(DegrassiTags.Items.FRAME.get())

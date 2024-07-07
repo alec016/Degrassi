@@ -39,9 +39,6 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
   protected LazyOptional<DegrassiFluidHandler> lazyFluidHandler = LazyOptional.empty();
   protected LazyOptional<HeatComponent> lazyHeatHandler = LazyOptional.empty();
 
-  protected DegrassiFluidHandler fluidHandler;
-  protected DegrassiItemStackHandler itemHandler;
-
   @Getter
   protected final ComponentManager componentManager, jeiComponentManager;
   @Getter
@@ -68,9 +65,6 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
       jeiComponentManager.addProgress();
       status = MachineStatus.IDLE;
     }
-
-    this.fluidHandler = componentManager.getFluidHandler();
-    this.itemHandler = componentManager.getItemHandler();
   }
 
   public abstract Component getName();
@@ -119,11 +113,11 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
         return lazyEnergyHandler.cast();
       }
     } else if (cap == ForgeCapabilities.ITEM_HANDLER) {
-      if (!componentManager.getComponentsByType("item").isEmpty()) {
+      if (!componentManager.getItemHandler().getComponents().isEmpty()) {
         return lazyItemHandler.cast();
       }
     } else if (cap == ForgeCapabilities.FLUID_HANDLER) {
-      if (!componentManager.getComponentsByType("fluid").isEmpty()) {
+      if (!componentManager.getFluidHandler().getComponents().isEmpty()) {
         return lazyFluidHandler.cast();
       }
     } else if (cap == DegrassiCaps.HEAT) {
@@ -155,11 +149,11 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
       .ifPresent(heat -> lazyHeatHandler = LazyOptional.of(() -> heat));
 
     if (!componentManager.getItemHandler().getComponents().isEmpty()) {
-      lazyItemHandler = LazyOptional.of(() -> itemHandler);
+      lazyItemHandler = LazyOptional.of(componentManager::getItemHandler);
     }
 
     if(!componentManager.getFluidHandler().getComponents().isEmpty()) {
-      lazyFluidHandler = LazyOptional.of(() -> fluidHandler);
+      lazyFluidHandler = LazyOptional.of(componentManager::getFluidHandler);
     }
   }
 
@@ -253,7 +247,6 @@ public abstract class MachineEntity<R extends MachineRecipe<R>> extends BlockEnt
   }
 
   public abstract MachineEntity<R> copy(boolean dummy);
-
 
   @Override
   public String toString() {

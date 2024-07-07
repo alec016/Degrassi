@@ -3,7 +3,6 @@ package es.degrassi.forge.core.common.machines.multiblock.parts.block.entity;
 import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.FluidInputTank;
 import es.degrassi.forge.core.common.machines.multiblock.parts.block.InputBus;
-import es.degrassi.forge.core.common.machines.multiblock.uils.handler.FluidSidedHandler;
 import es.degrassi.forge.core.common.machines.multiblock.uils.handler.ItemSidedHandler;
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.EntityRegistration;
@@ -65,9 +64,7 @@ public class InputBusEntity extends BaseMultiblockPartEntity<MultiblockPartStora
       new DegrassiLocation("textures/gui/base_inventory.png")
     );
 
-    itemHandler = componentManager.getItemHandler();
-    lazyItemHandler = LazyOptional.of(() -> itemHandler);
-    itemWrapperHandlerMap = ItemSidedHandler.DEFAULT_ALL_INSERT(componentManager, itemHandler, getBlockState().getValue(FluidInputTank.FACING));
+    itemWrapperHandlerMap = ItemSidedHandler.DEFAULT_ALL_INSERT(componentManager, componentManager.getItemHandler(), getBlockState().getValue(FluidInputTank.FACING));
 
   }
 

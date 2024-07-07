@@ -20,6 +20,7 @@ public class DegrassiBlockStateProvider extends BlockStateProvider {
   @Override
   public void registerStatesAndModels() {
     simpleBlock(BlockRegistration.MACHINE_CASING.get());
+    simpleBlock(BlockRegistration.DIGITAL_CONTROLLER.get());
     frame(BlockRegistration.MELTER_FRAME.get(), "melter_frame");
   }
 

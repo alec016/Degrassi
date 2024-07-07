@@ -5,20 +5,13 @@ import es.degrassi.forge.core.common.machines.multiblock.controller.block.BaseMu
 import es.degrassi.forge.core.common.machines.multiblock.controller.block.MelterController;
 import es.degrassi.forge.core.common.machines.multiblock.controller.block.entity.recipe.MelterRecipe;
 import es.degrassi.forge.core.common.machines.multiblock.controller.block.entity.recipe.processor.MelterProcessor;
-import es.degrassi.forge.core.common.machines.multiblock.parts.block.EnergyHatch;
-import es.degrassi.forge.core.common.machines.multiblock.parts.block.FluidOutputTank;
-import es.degrassi.forge.core.common.machines.multiblock.parts.block.InputBus;
 import es.degrassi.forge.core.common.machines.multiblock.uils.StateMatcher;
 import es.degrassi.forge.core.data.DegrassiTags;
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.EntityRegistration;
-import es.degrassi.forge.core.utils.EnumUtils;
-import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import oshi.util.tuples.Pair;
 
 public class MelterControllerEntity extends BaseMultiblockControllerEntity<MelterRecipe, MelterController, MelterControllerEntity> {
   public static final MelterControllerEntity DUMMY = dummyController();
@@ -77,25 +70,6 @@ public class MelterControllerEntity extends BaseMultiblockControllerEntity<Melte
       pos.south().south().east().above().above(),
       new StateMatcher(BlockRegistration.MELTER_FRAME.get().defaultBlockState())
     );
-    /*
-     * layers: 3
-     *
-     * layer 0 -> {
-       * "frame, controller, frame",
-       * "frame, frame, frame",
-       * "input_bus, fluid_output_tank, energy_hatch"
-     * },
-     * layer 1 -> {
-       * "frame,air,frame",
-       * "air,air,air",
-       * "frame,air,frame
-     * },
-     * layer 2 -> {
-       * "frame,,frame",
-       * "air,air,air",
-       * "frame,air,frame
-     * }
-     */
 
     elementManager
       .addPlayerInventory(

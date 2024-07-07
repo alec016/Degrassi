@@ -33,6 +33,8 @@ public class DegrassiTags {
     public static final Blocks SP = new Blocks(false, "solar_panel");
     public static final Blocks CHEST = new Blocks(false, "chest");
     public static final Blocks MACHINE = new Blocks(false, "machine");
+    public static final Blocks DIGITAL = new Blocks(false, "digital");
+    public static final Blocks DIGITAL_CONTROLLER = new Blocks(false, "digital/controller");
     public static final Blocks MULTIBLOCK = new Blocks(false, "multiblock");
     public static final Blocks FRAME = new Blocks(false, "multiblock/frame");
     public static final Blocks CONTROLLER = new Blocks(false, "multiblock/controller");
@@ -47,6 +49,8 @@ public class DegrassiTags {
     public static final Items SP = new Items(false, "panel/solar_panel");
     public static final Items CHEST = new Items(false, "chest");
     public static final Items MACHINE = new Items(false, "machine");
+    public static final Items DIGITAL = new Items(false, "digital");
+    public static final Items DIGITAL_CONTROLLER = new Items(false, "digital/controller");
     public static final Items MULTIBLOCK = new Items(false, "multiblock");
     public static final Items FRAME = new Items(false, "multiblock/frame");
     public static final Items CONTROLLER = new Items(false, "multiblock/controller");
