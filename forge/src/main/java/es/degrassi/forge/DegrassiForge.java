@@ -144,7 +144,7 @@ public class DegrassiForge {
       helper.register(ITEMS, CreativeModeTab.builder().title(Component.translatable("degrassi.tabs.items")).displayItems(
         (params, output) -> {
           output.accept(new ItemStack(ItemRegistration.WRENCH.get()));
-          output.accept(new ItemStack(ItemRegistration.BOOK.get()));
+//          output.accept(new ItemStack(ItemRegistration.BOOK.get()));
           output.accept(new ItemStack(ItemRegistration.RED_MATTER.get()));
           output.accept(new ItemStack(ItemRegistration.BLACK_PEARL.get()));
           for (PhotovoltaicCell cell : PhotovoltaicCell.values()) {

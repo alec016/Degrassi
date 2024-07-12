@@ -17,7 +17,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -92,12 +91,19 @@ public class EnergyElement extends AbstractWidget implements IElement<EnergyComp
 
   @Override
   public void renderHighlight(@NotNull GuiGraphics guiGraphics, int x, int y) {
-    guiGraphics.fillGradient(RenderType.gui(), getX() + 1, getY() + 1, getX() + getWidth() - 1, getY() + getHeight() - 1, -2130706433, -2130706433, 0);
+    guiGraphics.pose().pushPose();
+    guiGraphics.fillGradient(getX() + 1, getY() + 1, getX() + getWidth() - 1, getY() + getHeight() - 1, -2130706433, -2130706433);
+    guiGraphics.pose().popPose();
   }
 
   @Override
   protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
     narrationElementOutput.add(NarratedElementType.TITLE, getMessage());
+  }
+
+  @Override
+  protected boolean isValidClickButton(int button) {
+    return false;
   }
 
   @Override
@@ -111,8 +117,7 @@ public class EnergyElement extends AbstractWidget implements IElement<EnergyComp
   }
 
   @Override
-  public void serialize(CompoundTag nbt) {
-  }
+  public void serialize(CompoundTag nbt) {}
 
   @Override
   public CompoundTag serialize() {

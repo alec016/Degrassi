@@ -10,9 +10,8 @@ import es.degrassi.forge.core.common.element.HeatElement;
 import es.degrassi.forge.core.common.element.ItemElement;
 import es.degrassi.forge.core.common.element.PlayerInventoryElement;
 import es.degrassi.forge.core.common.element.ProgressElement;
+import es.degrassi.forge.core.common.element.TextureElement;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
-import es.degrassi.forge.core.common.wrapper.DegrassiFluidHandler;
-import es.degrassi.forge.core.common.wrapper.DegrassiItemStackHandler;
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.nbt.CompoundTag;
@@ -146,6 +145,15 @@ public final class ElementManager extends Manager<IElement<?>> implements INBTSe
 
   public ElementManager addHeat(int x, int y, Component message, ResourceLocation emptyTexture, ResourceLocation filledTexture, String id, ElementDirection direction, boolean jei) {
     get().add(new HeatElement(this, x, y, emptyTexture, filledTexture, message, id, direction, jei));
+    return this;
+  }
+
+  public ElementManager addTexture(int x, int y, ResourceLocation texture, Component message) {
+    return addTexture(x, y, message, texture, false);
+  }
+
+  public ElementManager addTexture(int x, int y, Component message, ResourceLocation texture, boolean jei) {
+    get().add(new TextureElement(this, x, y, texture, message, jei));
     return this;
   }
 

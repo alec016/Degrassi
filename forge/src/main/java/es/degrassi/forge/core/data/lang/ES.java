@@ -52,7 +52,7 @@ public class ES extends DegrassiLangProvider {
   protected void addItems() {
     addItem(ItemRegistration.WRENCH, "Wrench");
 
-    addItem(ItemRegistration.BOOK, "Degrassi Manual");
+//    addItem(ItemRegistration.BOOK, "Degrassi Manual");
     addItem(ItemRegistration.RED_MATTER, "Red Matter");
     addItem(ItemRegistration.BLACK_PEARL, "Black Pearl");
 
@@ -252,6 +252,12 @@ public class ES extends DegrassiLangProvider {
     addJeiRecipe("experience.output", "Produce");
     addJeiRecipe("experience", "%s %s %s/t");
     addJeiRecipe("experience.total", "%s XP");
+  }
+
+  @Override
+  protected void addScreenTitle() {
+    addTitleScreen("frequency_select", "Select Frequency");
+    addTitleScreen("digital_controller", "Controller");
   }
 
   @Override

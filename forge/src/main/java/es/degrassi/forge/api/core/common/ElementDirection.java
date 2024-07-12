@@ -1,8 +1,5 @@
 package es.degrassi.forge.api.core.common;
 
-import es.degrassi.forge.core.common.ComponentManager;
-import es.degrassi.forge.core.common.ElementManager;
-
 public enum ElementDirection {
   LEFT,
   RIGHT,

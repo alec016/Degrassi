@@ -34,6 +34,8 @@ public abstract class DegrassiLangProvider extends LanguageProvider {
     addInfos();
     addWiki();
 
+    addScreenTitle();
+
     add("unit.energy.forge", "FE");
   }
 
@@ -50,10 +52,15 @@ public abstract class DegrassiLangProvider extends LanguageProvider {
   protected abstract void addFluids();
   protected abstract void addInfos();
   protected abstract void addWiki();
+  protected abstract void addScreenTitle();
 
   protected void addJei() {
     addJeiGuiElements();
     addJeiRecipes();
+  }
+
+  protected void addTitleScreen(String name, String value) {
+    add("degrassi.screen.title." + name, value);
   }
 
   protected void addWiki(String name, String value) {

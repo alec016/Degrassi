@@ -2,6 +2,7 @@ package es.degrassi.forge.lib.client.wiki.page.panel;
 
 import es.degrassi.forge.lib.client.wiki.Text;
 import java.util.LinkedHashMap;
+import lombok.Getter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
@@ -9,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 public class InfoBox {
+  @Getter
   private final LinkedHashMap<MutableComponent, MutableComponent> lines = new LinkedHashMap<>();
   public static final InfoBox EMPTY = new InfoBox();
   @Nullable
@@ -55,10 +57,6 @@ public class InfoBox {
     this.valueStyle = valueStyle;
     return this;
   }
-
-  public LinkedHashMap<MutableComponent, MutableComponent> getLines() {
-        return this.lines;
-    }
 
   public interface IInfoBoxHolder {
     InfoBox getInfoBox(ItemStack stack, InfoBox box);

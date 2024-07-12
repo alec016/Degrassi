@@ -8,7 +8,6 @@ import es.degrassi.common.utils.TextureSizeHelper;
 import es.degrassi.forge.api.core.common.IRequirement;
 import es.degrassi.forge.core.common.ElementManager;
 import es.degrassi.forge.core.common.component.BarComponent;
-import es.degrassi.forge.core.common.machines.entity.MachineEntity;
 import es.degrassi.forge.core.common.recipe.MachineRecipe;
 import java.util.List;
 import lombok.Getter;

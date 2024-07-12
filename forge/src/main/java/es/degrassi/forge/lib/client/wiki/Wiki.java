@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.crafting.Recipe;
@@ -20,6 +21,7 @@ import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 import org.jetbrains.annotations.Nullable;
 
+@Getter
 public class Wiki {
   private static boolean initialized = false;
   public static final Marker MARKER = new MarkerManager.Log4jMarker("Wiki");
@@ -50,21 +52,6 @@ public class Wiki {
   public Entry register(Entry entry) {
     this.categories.add(entry);
     return entry;
-  }
-
-  public List<Entry> getCategories() {
-    return this.categories;
-  }
-
-  public Map<ItemLike, List<Recipe<?>>> getCrafting() {
-    return this.crafting;
-  }
-  public Map<ItemLike, List<Recipe<?>>> getSmelting() {
-    return this.smelting;
-  }
-
-  public String getModId() {
-    return this.modId;
   }
 
   public String getModName() {

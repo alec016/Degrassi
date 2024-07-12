@@ -6,12 +6,14 @@ import es.degrassi.forge.lib.client.screen.wiki.WikiScreen;
 import es.degrassi.forge.lib.client.wiki.page.panel.Panel;
 import java.util.List;
 import java.util.Objects;
+import lombok.Getter;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
 public class Page {
+  @Getter
   private final String name;
   private final Section parent;
   @Nullable
@@ -104,10 +106,6 @@ public class Page {
       next.prev = this;
     }
     return this;
-  }
-
-  public String getName() {
-    return this.name;
   }
 
   public Wiki getWiki() {

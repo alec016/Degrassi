@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import javax.annotation.Nullable;
+import lombok.Getter;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -50,6 +51,7 @@ public class EnumIconWidget<T extends Enum<T> & IIcon, U extends Screen & IScree
   private final SelectionScreen selection;
 
   // TODO: I don't like that this is separate, maybe we need an IOptionIcon for holding the option name?
+  @Getter
   private final Component optionName;
 
   public EnumIconWidget(U addedOn, int pX, int pY, Supplier<T> getter, Consumer<T> setter, Component optionName) {
@@ -175,10 +177,6 @@ public class EnumIconWidget<T extends Enum<T> & IIcon, U extends Screen & IScree
   public void setExpanded(Boolean expanded) {
     expandNext = expanded;
     isExpanded = expanded;
-  }
-
-  public Component getOptionName() {
-    return optionName;
   }
 
   private class SelectionScreen extends Screen implements IScreen {

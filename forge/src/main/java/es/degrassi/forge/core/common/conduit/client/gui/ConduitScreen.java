@@ -87,38 +87,38 @@ public class ConduitScreen extends DegrassiScreen<ConduitMenu> {
       Vector2i pos = new Vector2i(22, 7).add(getGuiLeft(), getGuiTop());
       addTypedButton(
         new CheckBox(pos,
-          () -> getOnDynamic(dyn -> dyn.isInsert(), false),
+          () -> getOnDynamic(DynamicConnectionState::isInsert, false),
           bool -> actOnDynamic(dyn -> dyn.withEnabled(false, bool))));
 
       if (data.showBothEnable()) {
         addTypedButton(
           new CheckBox(pos.add(90, 0),
-            () -> getOnDynamic(dyn -> dyn.isExtract(), false),
+            () -> getOnDynamic(DynamicConnectionState::isExtract, false),
             bool -> actOnDynamic(dyn -> dyn.withEnabled(true, bool))));
       }
       if (data.showColorInsert()) {
         addTypedButton(
           new EnumIconWidget<>(this, pos.x(), pos.y() + 20,
-            () -> getOnDynamic(dyn -> dyn.insert(), ColorControl.GREEN),
+            () -> getOnDynamic(DynamicConnectionState::insert, ColorControl.GREEN),
             color -> actOnDynamic(dyn -> dyn.withColor(false, color)),
             DegrassiLang.CONDUIT_CHANNEL));
       }
       if (data.showColorExtract()) {
         addTypedButton(
           new EnumIconWidget<>(this, pos.x() + 90, pos.y() + 20,
-            () -> getOnDynamic(dyn -> dyn.extract(), ColorControl.GREEN),
+            () -> getOnDynamic(DynamicConnectionState::extract, ColorControl.GREEN),
             color -> actOnDynamic(dyn -> dyn.withColor(true, color)),
             DegrassiLang.CONDUIT_CHANNEL));
       }
       if (data.showRedstoneExtract()) {
         addTypedButton(
           new EnumIconWidget<>(this, pos.x() + 90, pos.y() + 40,
-            () -> getOnDynamic(dyn -> dyn.control(), RedstoneControl.ACTIVE_WITH_SIGNAL),
+            () -> getOnDynamic(DynamicConnectionState::control, RedstoneControl.ACTIVE_WITH_SIGNAL),
             mode -> actOnDynamic(dyn -> dyn.withRedstoneMode(mode)),
             DegrassiLang.REDSTONE_MODE));
         addTypedButton(
           new EnumIconWidget<>(this, pos.x() + 90 + 20, pos.y() + 40,
-            () -> getOnDynamic(dyn -> dyn.redstoneChannel(), ColorControl.GREEN),
+            () -> getOnDynamic(DynamicConnectionState::redstoneChannel, ColorControl.GREEN),
             color -> actOnDynamic(dyn -> dyn.withRedstoneChannel(color)),
             DegrassiLang.REDSTONE_CHANNEL));
       }

@@ -3,8 +3,8 @@ package es.degrassi.forge.core.init;
 import dev.architectury.registry.menu.MenuRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
+import es.degrassi.common.DegrassiLocation;
 import es.degrassi.forge.Degrassi;
-import es.degrassi.forge.core.client.book.DegrassiBook;
 import es.degrassi.forge.core.common.machines.container.ChestContainer;
 import es.degrassi.forge.core.common.machines.container.FurnaceContainer;
 import es.degrassi.forge.core.common.machines.container.MachineContainer;
@@ -26,20 +26,29 @@ import es.degrassi.forge.core.common.machines.multiblock.parts.client.screen.Out
 import es.degrassi.forge.core.common.machines.screen.ChestScreen;
 import es.degrassi.forge.core.common.machines.screen.FurnaceScreen;
 import es.degrassi.forge.core.common.machines.screen.SolarPanelScreen;
+import es.degrassi.forge.core.digital.client.container.DigitalControllerContainer;
+import es.degrassi.forge.core.digital.client.screen.DigitalControllerScreen;
+import es.degrassi.forge.core.digital.client.screen.controller.SelectFrequencyScreen;
+import es.degrassi.forge.core.init._temp.DegrassiBook;
 import es.degrassi.forge.lib.client.screen.wiki.WikiScreen;
 import es.degrassi.forge.lib.client.wiki.Wiki;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.MenuType;
+import vazkii.patchouli.common.book.BookRegistry;
+import vazkii.patchouli.xplat.IXplatAbstractions;
+import vazkii.patchouli.xplat.XplatModContainer;
 
 public class ContainerRegistration {
   public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(Degrassi.MODID, Registries.MENU);
 
-  public static final RegistrySupplier<MenuType<FurnaceContainer>> FURNACE = registerMenuType("furnace", FurnaceContainer::new)
-    ;
+  public static final RegistrySupplier<MenuType<FurnaceContainer>> FURNACE = registerMenuType("furnace", FurnaceContainer::new);
+
   public static final RegistrySupplier<MenuType<SolarPanelContainer>> SOLAR_PANEL = registerMenuType("solar_panel", SolarPanelContainer::new);
 
   public static final RegistrySupplier<MenuType<ChestContainer>> CHEST = registerMenuType("chest", ChestContainer::new);
   public static final RegistrySupplier<MenuType<MelterContainer>> MELTER = registerMenuType("melter", MelterContainer::new);
+
+  public static final RegistrySupplier<MenuType<DigitalControllerContainer>> DIGITAL_CONTROLLER = registerMenuType("controller", DigitalControllerContainer::new);
 
   public static final RegistrySupplier<MenuType<InputBusContainer>> INPUT_BUS = registerMenuType("input_bus", InputBusContainer::new);
 
@@ -69,6 +78,14 @@ public class ContainerRegistration {
       MelterScreen::new
     );
     MenuRegistry.registerScreenFactory(
+      ContainerRegistration.DIGITAL_CONTROLLER.get(),
+      DigitalControllerScreen::new
+    );
+//    MenuRegistry.registerScreenFactory(
+//      ContainerRegistration.DIGITAL_CONTROLLER.get(),
+//      SelectFrequencyScreen::new
+//    );
+    MenuRegistry.registerScreenFactory(
       ContainerRegistration.INPUT_BUS.get(),
       InputBusScreen::new
     );
@@ -92,7 +109,14 @@ public class ContainerRegistration {
       ContainerRegistration.FLUID_QUADRUPLE_INPUT_TANK.get(),
       FluidQuadrupleInputTankScreen::new
     );
-    DegrassiBook.register();
+//    DegrassiBook.register();
+
+    XplatModContainer mod = IXplatAbstractions.INSTANCE.getAllMods().stream().filter(m -> m.getId().equals(Degrassi.MODID)).findFirst().orElse(null);
+    if (mod != null)
+      BookRegistry.INSTANCE.books.put(
+        new DegrassiLocation("book"),
+        new DegrassiBook(mod, new DegrassiLocation("book"), true)
+      );
   }
 
   private static <T extends MachineContainer<?>> RegistrySupplier<MenuType<T>> registerMenuType(String id, MenuRegistry.ExtendedMenuTypeFactory<T> factory) {

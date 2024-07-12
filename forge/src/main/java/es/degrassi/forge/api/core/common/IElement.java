@@ -11,6 +11,8 @@ import oshi.util.tuples.Pair;
 public interface IElement<E extends IComponent> extends IType {
   String EMPTY_TEXTURE_KEY = "emptyTexture";
   String FILLED_TEXTURE_KEY = "filledTexture";
+  String HOVERED_TEXTURE_KEY = "hoveredTexture";
+  String TEXTURE_KEY = "texture";
   ElementManager getManager();
 
   void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick);

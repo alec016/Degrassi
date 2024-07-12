@@ -18,17 +18,17 @@ public class WelcomePanel extends Panel {
 //    private IconButton twitter = IconButton.EMPTY;
 //    private IconButton patreon = IconButton.EMPTY;
 
-    public WelcomePanel(Section parent) {
-        super(parent);
-    }
+  public WelcomePanel(Section parent) {
+    super(parent);
+  }
 
-    public WelcomePanel(String name, Section parent) {
-        super(name, parent);
-    }
+  public WelcomePanel(String name, Section parent) {
+    super(name, parent);
+  }
 
-    @Override
-    public void init(int x, int y, WikiScreen screen) {
-        super.init(x, y, screen);
+  @Override
+  public void init(int x, int y, WikiScreen screen) {
+    super.init(x, y, screen);
 //        this.twitter = screen.addButton2(new IconButton(x + 8, y - 22 + screen.h, Texture.WIKI_TWITTER, button -> {
 //            MC.get().setScreen(new ConfirmLinkScreen((b) -> {
 //                if (b) {
@@ -45,29 +45,29 @@ public class WelcomePanel extends Panel {
 //                MC.get().setScreen(screen);
 //            }, "https://www.patreon.com/owmii", true));
 //        }, screen).setTooltipSupplier(() -> List.of(Component.literal("Support me on Patreon! <3"))));
+  }
+
+  @Override
+  public void render(GuiGraphics gui, int x, int y, int mx, int my, float pt, Font font, WikiScreen screen) {
+    var globalStack = RenderSystem.getModelViewStack();
+    globalStack.pushPose();
+    globalStack.translate(x, y, 0.0F);
+    globalStack.scale(2.0F, 2.0F, 1.0F);
+    String s = getWiki().getModName();
+    gui.drawString(font, s, Math.round((161 / 4.0F) - font.width(s) / 2.0F), 10, 0x444444, false);
+    globalStack.popPose();
+
+    globalStack.pushPose();
+    String s2 = "v" + getWiki().getModVersion();
+    gui.drawString(font, s2, Math.round(x + 161 / 2.0F - font.width(s2) / 2.0F), y + 45, 0x999999, false);
+
+    if (screen.mc.player != null) {
+      String s3 = I18n.get("wiki.degrassi.welcome_back", ":)");
+      gui.drawString(font, s3, Math.round(x + 161 / 2.0F - font.width(s3) / 2.0F), y + 100, 0x777777, false);
+      String s4 = screen.mc.player.getName().getString();
+      gui.drawString(font, s4, Math.round(x + 161 / 2.0F - font.width(s4) / 2.0F), y + 115, 0x777777, false);
     }
-
-    @Override
-    public void render(GuiGraphics gui, int x, int y, int mx, int my, float pt, Font font, WikiScreen screen) {
-        var globalStack = RenderSystem.getModelViewStack();
-        globalStack.pushPose();
-        globalStack.translate(x, y, 0.0F);
-        globalStack.scale(2.0F, 2.0F, 1.0F);
-        String s = getWiki().getModName();
-        gui.drawString(font, s, Math.round((161 / 4.0F) - font.width(s) / 2.0F), 10, 0x444444, false);
-        globalStack.popPose();
-
-        globalStack.pushPose();
-        String s2 = "v" + getWiki().getModVersion();
-        gui.drawString(font, s2, Math.round(x + 161 / 2.0F - font.width(s2) / 2.0F), y + 45, 0x999999, false);
-
-        if (screen.mc.player != null) {
-            String s3 = I18n.get("wiki.degrassi.welcome_back", ":)");
-            gui.drawString(font, s3, Math.round(x + 161 / 2.0F - font.width(s3) / 2.0F), y + 100, 0x777777, false);
-            String s4 = screen.mc.player.getName().getString();
-            gui.drawString(font, s4, Math.round(x + 161 / 2.0F - font.width(s4) / 2.0F), y + 115, 0x777777, false);
-        }
-        globalStack.popPose();
-        RenderSystem.applyModelViewMatrix();
-    }
+    globalStack.popPose();
+    RenderSystem.applyModelViewMatrix();
+  }
 }

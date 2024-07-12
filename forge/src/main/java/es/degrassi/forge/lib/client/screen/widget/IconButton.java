@@ -3,6 +3,7 @@ package es.degrassi.forge.lib.client.screen.widget;
 import es.degrassi.forge.lib.client.screen.Texture;
 import java.util.List;
 import java.util.function.Supplier;
+import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -23,8 +24,11 @@ public class IconButton extends Button {
   protected final Minecraft mc = Minecraft.getInstance();
   @Nullable
   private Supplier<List<Component>> tooltipSupplier;
+  @Getter
   private Screen screen;
+  @Getter
   private Texture texture;
+  @Getter
   private Texture hovering;
   private ItemStack stack;
   private float xOffset;
@@ -114,26 +118,14 @@ public class IconButton extends Button {
     gui.blit(texture.getLocation(), x, y, texture.getU(), texture.getV(), texture.getWidth(), texture.getHeight());
   }
 
-  public Screen getScreen() {
-    return this.screen;
-  }
-
   public IconButton setScreen(Screen screen) {
     this.screen = screen;
     return this;
   }
 
-  public Texture getTexture() {
-    return this.texture;
-  }
-
   public IconButton setTexture(Texture texture) {
     this.texture = texture;
     return this;
-  }
-
-  public Texture getHovering() {
-    return this.hovering;
   }
 
   public IconButton setHovering(Texture hovering) {

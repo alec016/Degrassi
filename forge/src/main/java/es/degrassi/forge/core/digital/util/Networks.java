@@ -2,10 +2,14 @@ package es.degrassi.forge.core.digital.util;
 
 import es.degrassi.common.utils.DegrassiLogger;
 import es.degrassi.forge.Degrassi;
+import es.degrassi.forge.core.digital.block.entity.DigitalControllerEntity;
+import es.degrassi.forge.core.digital.client.container.DigitalControllerContainer;
 import es.degrassi.forge.core.digital.network.Network;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -18,22 +22,26 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+@Getter
 @Mod.EventBusSubscriber
 public class Networks extends SavedData {
   private static final String KEY_NETWORKS = "Networks";
   private static final String KEY_NETWORK_CONTROLLER = "NetworkController";
+  private static final String KEY_NETWORK_LEVEL = "NetworkLevel";
   private static final String KEY_NETWORK_CONNECTIONS = "NetworkConnections";
   private static final String KEY_NETWORK_FREQUENCY = "NetworkFrequency";
 
-  private final List<Network> NETWORKS = new LinkedList<>();
+  public final List<Network> NETWORKS = new LinkedList<>();
 
   private Networks() {}
   private Networks(Level level, CompoundTag nbt) {
+    if (!level.dimension().location().toString().equals(level.getServer().overworld().dimension().location().toString())) return;
     /* NBT layout
     data
     ┖ Networks (list)
       ┠ NetworkController
       ┠ NetworkFrequency
+      ┠ NetworkLevel
       ┖ NetworkConnections (list)
      */
     ListTag networksTag = nbt.getList(KEY_NETWORKS, Tag.TAG_COMPOUND);
@@ -42,62 +50,79 @@ public class Networks extends SavedData {
       ListTag connectionsTag = networkTag.getList(KEY_NETWORK_CONNECTIONS, Tag.TAG_LONG);
       long controllerLongPos = networkTag.getLong(KEY_NETWORK_CONTROLLER);
       String frequency = networkTag.getString(KEY_NETWORK_FREQUENCY);
+      String networkLevelId = networkTag.getString(KEY_NETWORK_LEVEL);
+      AtomicBoolean added = new AtomicBoolean(false);
+      if (added.get()) return;
       Network network = new Network(frequency);
-      network.setController(BlockPos.of(controllerLongPos), (ServerLevel) level);
+      network.setController(BlockPos.of(controllerLongPos));
       for (Tag t : connectionsTag) {
         network.addConnection(BlockPos.of(((LongTag) t).getAsLong()));
       }
       NETWORKS.add(network);
+      BlockPos controllerPos = network.getControllerPos();
+      if (controllerPos != null && level.getBlockEntity(controllerPos) instanceof DigitalControllerEntity entity) {
+        entity.setCurrentNetwork(network);
+      }
+      added.set(true);
     }
 
-    DegrassiLogger.INSTANCE.info(NETWORKS);
+    if (NETWORKS.isEmpty()) {
+      createNetwork("testing", level.getServer().overworld());
+      createNetwork("testing 2", level.getServer().overworld());
+      createNetwork("testing 3", level.getServer().overworld());
+    }
+
+    DegrassiLogger.INSTANCE.info("Networks in level: {} {}", NETWORKS, level.dimension().location());
+
+    DigitalControllerContainer.networks = NETWORKS;
   }
 
   public static Networks get(ServerLevel level) {
-    return level.getDataStorage().computeIfAbsent(nbt -> new Networks(level, nbt), Networks::new, "degrassi_networks");
+    return level.getServer().overworld().getDataStorage().computeIfAbsent(nbt -> new Networks(level.getServer().overworld(), nbt), Networks::new, "degrassi_networks");
   }
 
-  public Network getOrCreateNetwork(String frequency, Level level) {
-    for (Network net : NETWORKS)
+  public Network getOrCreateNetwork(String frequency, ServerLevel level) {
+    level = level.getServer().overworld();
+    for (Network net : get(level).NETWORKS)
       if (net.getFrequency().equals(frequency)) return net;
     if (createNetwork(frequency, level))
       return getNetwork(frequency, level);
     return null;
   }
 
-  public Network getNetwork(String frequency, Level level) {
-    for (Network net : NETWORKS)
+  public static Network getNetwork(String frequency, ServerLevel level) {
+    level = level.getServer().overworld();
+    for (Network net : get(level).NETWORKS)
       if (net.getFrequency().equals(frequency)) return net;
     return null;
   }
 
-  public boolean addNetwork(Network net, Level level) {
-    if (NETWORKS.stream().anyMatch(network -> network.getFrequency().equals(net.getFrequency()))) return false;
-    NETWORKS.add(net);
-    return true;
+  public static void addNetwork(Network net, ServerLevel level) {
+    level = level.getServer().overworld();
+    if (get(level).NETWORKS.stream().anyMatch(network -> network.getFrequency().equals(net.getFrequency()))) return;
+    get(level).NETWORKS.add(net);
   }
 
-  public boolean removeNetwork(String frequency, Level level) {
+  public static void removeNetwork(String frequency, ServerLevel level) {
+    level = level.getServer().overworld();
     frequency = frequency.replaceAll(" ", "_");
     String finalFrequency = frequency;
-    if (NETWORKS.stream().noneMatch(network -> network.getFrequency().equals(finalFrequency))) return false;
+    if (get(level).NETWORKS.stream().noneMatch(network -> network.getFrequency().equals(finalFrequency))) return;
     final Network[] toRemove = { null };
 
-    NETWORKS.forEach(net -> {
+    get(level).NETWORKS.forEach(net -> {
       if (toRemove[0] != null) return;
       if (net.getFrequency().equals(finalFrequency))
         toRemove[0] = net;
     });
 
-    if (toRemove[0] == null) return false;
+    if (toRemove[0] == null) return;
 
-    NETWORKS.remove(toRemove[0]);
-    return true;
+    get(level).NETWORKS.remove(toRemove[0]);
   }
 
-  public boolean createNetwork(String frequency, Level level) {
-    frequency = frequency.replaceAll(" ", "_");
-    String finalFrequency = frequency;
+  public boolean createNetwork(String frequency, ServerLevel level) {
+    String finalFrequency = frequency.replaceAll(" ", "_");
     if (NETWORKS.stream().anyMatch(network -> network.getFrequency().equals(finalFrequency))) return false;
 
     Network created = new Network(finalFrequency);
@@ -133,17 +158,18 @@ public class Networks extends SavedData {
         List<BlockPos> connections = network.getConnections();
         ListTag connectionsTag = new ListTag();
         for (BlockPos pos :  connections) {
+          if (pos == null) continue;
           long longPos = pos.asLong();
           connectionsTag.add(LongTag.valueOf(longPos));
         }
         networkTag.put(KEY_NETWORK_CONNECTIONS, connectionsTag);
       }
-      networkTag.putLong(KEY_NETWORK_CONTROLLER, network.getControllerPos().asLong());
+      BlockPos controllerPos = network.getControllerPos();
+      if (controllerPos != null) networkTag.putLong(KEY_NETWORK_CONTROLLER, controllerPos.asLong());
       networkTag.putString(KEY_NETWORK_FREQUENCY, network.getFrequency());
       networksTag.add(networkTag);
     }
     nbt.put(KEY_NETWORKS, networksTag);
-    DegrassiLogger.INSTANCE.info("NetworksSavedData: {}", nbt);
     return nbt;
   }
 
@@ -154,13 +180,15 @@ public class Networks extends SavedData {
     }
 
     if (event.level instanceof ServerLevel serverLevel) {
-      get(serverLevel).tick(serverLevel);
+      if (serverLevel.dimension().location().toString().equals(serverLevel.getServer().overworld().dimension().location().toString()))
+        tick(serverLevel);
     }
   }
 
-  private void tick(ServerLevel level) {
-    setDirty();
-    for (Network network : NETWORKS) {
+  private static void tick(ServerLevel level) {
+    DigitalControllerContainer.networks = get(level).NETWORKS;
+    for (Network network : get(level).NETWORKS) {
+      // TODO: remove unreachable controllers or duplicated controllers(keep one connection), on change frequency, remove any other frequency connection
       network.passiveDrain(level);
     }
   }

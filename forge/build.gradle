@@ -74,6 +74,9 @@ dependencies {
     // graphlib
     modImplementation "dev.gigaherz.graph:GraphLib3:${project.graph_version}"
 
+    // patchouli
+    modImplementation "vazkii.patchouli:Patchouli:${project.patchouli_version}"
+
     // hammer lib
     modImplementation "org.zeith.hammerlib:HammerLib-${project.minecraft_version}:${project.hammerlib_version}"
 

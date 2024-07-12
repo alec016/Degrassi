@@ -2,18 +2,15 @@ package es.degrassi.forge.core.digital.network;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import es.degrassi.common.utils.DegrassiLogger;
 import es.degrassi.forge.core.common.component.EnergyComponent;
 import es.degrassi.forge.core.digital.block.DigitalController;
 import es.degrassi.forge.core.digital.block.entity.DigitalControllerEntity;
-import es.degrassi.forge.core.digital.util.Networks;
 import es.degrassi.forge.core.digital.util.PassiveDrains;
 import java.util.LinkedList;
 import java.util.List;
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 @Getter
@@ -21,46 +18,45 @@ public class Network {
   private final String frequency;
   private final List<BlockPos> connections;
   private BlockPos controllerPos;
+  private boolean changed = false;
 
   public Network(String frequency) {
     this.frequency = frequency;
     this.connections = new LinkedList<>();
   }
 
-  public boolean setController(BlockPos pos, ServerLevel level) {
-    if (level.getBlockState(pos).getBlock() instanceof DigitalController controller) {
-      this.controllerPos = pos;
-      return true;
-    }
-    return false;
+  public void setController(BlockPos pos) {
+    this.controllerPos = pos;
+    onChanged();
   }
 
-  public boolean removeController(BlockPos pos, ServerLevel level) {
+  public void removeController() {
+    this.controllerPos = null;
+    onChanged();
+  }
+
+  public void removeController(BlockPos pos) {
     if (controllerPos.equals(pos)) {
-      if (level.getBlockState(pos).getBlock() instanceof DigitalController controller) {
-        this.controllerPos = null;
-        if (connections.isEmpty())
-          return Networks.get(level).removeNetwork(frequency, level);
-        return true;
-      }
+      removeController();
+      onChanged();
     }
-    return false;
   }
 
-  public boolean addConnection(BlockPos pos) {
-    if (connections.stream().anyMatch(pos::equals)) return false;
+  public void addConnection(BlockPos pos) {
+    if (connections.stream().anyMatch(pos::equals)) return;
     connections.add(pos);
-    return true;
+    onChanged();
   }
 
   public boolean removeConnection(BlockPos pos) {
     if (connections.stream().noneMatch(pos::equals)) return false;
     connections.remove(pos);
+    onChanged();
     return true;
   }
 
-  public void onChanged(Level level) {
-
+  public void onChanged() {
+    changed = true;
   }
 
   public void passiveDrain(ServerLevel level) {
@@ -73,13 +69,11 @@ public class Network {
     if (entity == null) return;
 
     if (entity.getBlockState().getValue(DigitalController.ACTIVE)) {
-      int toDrain = PassiveDrains.CONTROLLER + PassiveDrains.getTotalFromConnections(getConnections(), level);
       entity.getComponentManager().getComponent("energy").map(component -> (EnergyComponent) component).ifPresent(component -> {
-        if (component.getCapacity() < toDrain) {
-          component.setCapacity(toDrain + 100);
-          component.setMaxInput(Integer.MAX_VALUE);
-          component.setMaxOutput(Integer.MAX_VALUE);
-        }
+        int toDrain = PassiveDrains.CONTROLLER + PassiveDrains.getTotalFromConnections(getConnections(), level);
+        component.setCapacity(toDrain + 100);
+        component.setMaxInput(Integer.MAX_VALUE);
+        component.setMaxOutput(Integer.MAX_VALUE);
         int drained = component.extractRecipeEnergy(toDrain, true);
         if (drained == toDrain)
           component.extractRecipeEnergy(toDrain, false);
@@ -89,8 +83,9 @@ public class Network {
         }
       });
     } else {
-      int toDrain = PassiveDrains.CONTROLLER + PassiveDrains.getTotalFromConnections(getConnections(), level);
+      entity.setCurrentNetwork(this);
       entity.getComponentManager().getComponent("energy").map(component -> (EnergyComponent) component).ifPresent(component -> {
+        int toDrain = PassiveDrains.CONTROLLER + PassiveDrains.getTotalFromConnections(getConnections(), level);
         if (component.getEnergy() >= toDrain) {
           BlockState active = entity.getBlockState().setValue(DigitalController.ACTIVE, true);
           level.setBlockAndUpdate(getControllerPos(), active);
@@ -110,10 +105,10 @@ public class Network {
     json.addProperty("frequency", frequency);
     JsonArray connectionsList = new JsonArray();
     for (BlockPos pos : connections) {
-      connectionsList.add(pos.toString());
+      connectionsList.add(pos != null ? pos.toShortString() : "null");
     }
     json.add("connections", connectionsList);
-    json.addProperty("controllerPos", controllerPos.toString());
+    json.addProperty("controllerPos", controllerPos != null ? controllerPos.toString() : "null");
     return json;
   }
 }

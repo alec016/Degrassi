@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import es.degrassi.common.misc.IIcon;
 import es.degrassi.common.misc.Vector2i;
 import java.util.List;
+import lombok.Getter;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -42,6 +43,7 @@ public interface IScreen {
 
   void addTooltip(LateTooltipData data);
 
+  @Getter
   class LateTooltipData {
     private final GuiGraphics guiGraphics;
     private final List<Component> text;
@@ -55,20 +57,5 @@ public interface IScreen {
       this.mouseY = mouseY;
     }
 
-    public GuiGraphics getGuiGraphics() {
-      return guiGraphics;
-    }
-
-    public List<Component> getText() {
-      return text;
-    }
-
-    public int getMouseX() {
-      return mouseX;
-    }
-
-    public int getMouseY() {
-      return mouseY;
-    }
   }
 }

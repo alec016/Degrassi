@@ -1,10 +1,13 @@
 package es.degrassi.forge.lib.client.wiki;
 
 import es.degrassi.forge.lib.client.wiki.page.panel.Panel;
+import lombok.Getter;
 
 public class Section {
   private final Entry parent;
+  @Getter
   private Page page;
+  @Getter
   private Page panel;
   public Section(Entry parent) {
     this.parent = parent;
@@ -20,11 +23,4 @@ public class Section {
     return parent;
   }
 
-  public Page getPage() {
-    return this.page;
-  }
-
-  public Page getPanel() {
-    return this.panel;
-  }
 }

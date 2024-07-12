@@ -5,12 +5,14 @@ import es.degrassi.common.conduit.IConduitType;
 import es.degrassi.common.misc.Vector2i;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import lombok.Getter;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 
 public class ConduitSelectionButton extends AbstractButton {
+  @Getter
   private final IConduitType type;
   private final Supplier<IConduitType> getter;
   private final Consumer<IConduitType> setter;
@@ -48,9 +50,5 @@ public class ConduitSelectionButton extends AbstractButton {
 
   @Override
   protected void updateWidgetNarration(NarrationElementOutput pNarrationElementOutput) {
-  }
-
-  public IConduitType getType() {
-    return type;
   }
 }

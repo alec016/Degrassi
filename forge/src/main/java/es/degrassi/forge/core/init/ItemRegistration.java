@@ -19,7 +19,7 @@ public class ItemRegistration {
 
   // ITEMS
   public static final RegistrySupplier<WrenchItem> WRENCH = ITEMS.register("wrench", WrenchItem::new);
-  public static final RegistrySupplier<BookItem> BOOK = ITEMS.register("book", () -> new BookItem(new Item.Properties().stacksTo(1)));
+//  public static final RegistrySupplier<BookItem> BOOK = ITEMS.register("book", () -> new BookItem(new Item.Properties().stacksTo(1)));
   public static final RegistrySupplier<Item> RED_MATTER = ITEMS.register("red_matter", () -> new Item(new Item.Properties()));
   public static final RegistrySupplier<Item> BLACK_PEARL = ITEMS.register("black_pearl", () -> new Item(new Item.Properties()));
   public static final VarReg<PhotovoltaicCell, Item> PHOTOVOLTAIC_CELL = register("photovoltaic_cell", PhotovoltaicCellItem::new, PhotovoltaicCell.getNormalizedVariants());

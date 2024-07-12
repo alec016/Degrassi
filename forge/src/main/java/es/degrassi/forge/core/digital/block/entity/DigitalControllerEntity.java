@@ -1,5 +1,7 @@
 package es.degrassi.forge.core.digital.block.entity;
 
+import com.google.gson.JsonObject;
+import es.degrassi.common.utils.DegrassiLogger;
 import es.degrassi.forge.core.common.component.ComponentIOMode;
 import es.degrassi.forge.core.common.component.EnergyComponent;
 import es.degrassi.forge.core.common.machines.entity.MachineEntity;
@@ -10,6 +12,7 @@ import es.degrassi.forge.core.digital.util.Networks;
 import es.degrassi.forge.core.digital.util.PassiveDrains;
 import es.degrassi.forge.core.init.BlockRegistration;
 import es.degrassi.forge.core.init.EntityRegistration;
+import es.degrassi.forge.core.network.NetworkSelectionPacket;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.core.BlockPos;
@@ -27,7 +30,7 @@ public class DigitalControllerEntity extends MachineEntity<DigitalControllerReci
 
   public DigitalControllerEntity(BlockPos pos, BlockState blockState) {
     super(EntityRegistration.DIGITAL_CONTROLLER.get(), pos, blockState);
-    componentManager.addEnergy(0, Integer.MAX_VALUE, 0, "energy", ComponentIOMode.INPUT);
+    componentManager.addEnergy(100, Integer.MAX_VALUE, Integer.MAX_VALUE, "energy", ComponentIOMode.INPUT);
   }
 
   @Override
@@ -65,18 +68,17 @@ public class DigitalControllerEntity extends MachineEntity<DigitalControllerReci
     BlockState state,
     @NotNull DigitalControllerEntity entity
   ) {
-
+    entity.getComponentManager().serverTick();
+    entity.getElementManager().serverTick();
     setChanged(level, pos, state);
   }
 
-  public void onNetworkSelected(String frequency) {
-    if (getLevel().isClientSide()) return;
-    this.currentNetwork = Networks.get((ServerLevel) getLevel()).getOrCreateNetwork(frequency, getLevel());
+  public void onNetworkSelected(Network network, BlockPos pos) {
+//    network.setController(pos);
+    this.setCurrentNetwork(network);
     BlockState state = getBlockState().setValue(DigitalController.ACTIVE, true);
-    this.currentNetwork.setController(getBlockPos(), (ServerLevel) getLevel());
-    int capacity = PassiveDrains.CONTROLLER + PassiveDrains.getTotalFromConnections(currentNetwork.getConnections(), getLevel());
     componentManager.getComponent("energy").map(component -> (EnergyComponent) component).ifPresent(component -> {
-      component.setCapacity(capacity + 100);
+      component.setCapacity(100 + PassiveDrains.CONTROLLER + PassiveDrains.getTotalFromConnections(network.getConnections(), getLevel()));
       component.setMaxInput(Integer.MAX_VALUE);
       component.setMaxOutput(Integer.MAX_VALUE);
     });
@@ -84,15 +86,18 @@ public class DigitalControllerEntity extends MachineEntity<DigitalControllerReci
     setChanged();
   }
 
+  public void onNetworkSelected(String frequency) {
+    DegrassiLogger.INSTANCE.info("Trying to select network...");
+    new NetworkSelectionPacket(frequency, this.getBlockPos()).sendToServer();
+  }
+
   public void onNetworkRemove(String frequency) {
-    if (getLevel().isClientSide()) return;
+    if (level.isClientSide()) return;
     this.currentNetwork = null;
-    Networks.get((ServerLevel) getLevel()).getNetwork(frequency, getLevel()).removeController(getBlockPos(), (ServerLevel) getLevel());
+    Networks.getNetwork(frequency, (ServerLevel) level).removeController();
     BlockState state = getBlockState().setValue(DigitalController.ACTIVE, false);
     componentManager.getComponent("energy").map(component -> (EnergyComponent) component).ifPresent(component -> {
-      component.setCapacity(0);
-      component.setMaxInput(0);
-      component.setMaxOutput(0);
+      component.setCapacity(100);
     });
     level.setBlockAndUpdate(getBlockPos(), state);
     setChanged();
@@ -109,6 +114,12 @@ public class DigitalControllerEntity extends MachineEntity<DigitalControllerReci
     super.load(tag);
     if (getLevel().isClientSide()) return;
     if (tag.contains("network_frequency"))
-      this.currentNetwork = Networks.get((ServerLevel) getLevel()).getOrCreateNetwork(tag.getString("network_frequency"), getLevel());
+      this.currentNetwork = Networks.get((ServerLevel) getLevel()).getOrCreateNetwork(tag.getString("network_frequency"), (ServerLevel) getLevel());
+  }
+
+  public JsonObject asJson() {
+    JsonObject json = super.asJson();
+    if (currentNetwork != null) json.add("network", currentNetwork.asJson());
+    return json;
   }
 }
